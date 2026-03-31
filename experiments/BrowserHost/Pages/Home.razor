@@ -1,0 +1,784 @@
+@page "/"
+@inject BrowserHost.Services.EnvironmentProbeService ProbeService
+@inject BrowserHost.Services.BrowserStorageService StorageService
+@inject BrowserHost.Services.TileDataProbeService TileDataProbeService
+@inject BrowserHost.Services.BrowserVirtualFileBridgeService BridgeService
+
+<PageTitle>ClassicUO Browser Spike</PageTitle>
+
+<h1>ClassicUO Browser Spike</h1>
+
+<p>This page verifies the first browser-hosting layer for the custom ClassicUO port.</p>
+
+<div class="status-grid">
+    <div class="status-card">
+        <h2>Runtime</h2>
+        <p><strong>.NET browser runtime:</strong> @FormatBool(_probe?.IsBrowserRuntime)</p>
+        <p><strong>Window object:</strong> @FormatBool(_probe?.HasWindow)</p>
+        <p><strong>Origin:</strong> @(_probe?.Origin ?? "not checked")</p>
+    </div>
+
+    <div class="status-card">
+        <h2>Storage</h2>
+        <p><strong>IndexedDB:</strong> @FormatBool(_probe?.HasIndexedDb)</p>
+        <p><strong>File System Access API:</strong> @FormatBool(_probe?.HasFileSystemAccessApi)</p>
+        <p><strong>OPFS API:</strong> @FormatBool(_probe?.HasOpfsApi)</p>
+        <p><strong>Smoke write:</strong> @FormatBool(_storage?.WriteSucceeded)</p>
+        <p><strong>Smoke read:</strong> @FormatBool(_storage?.ReadSucceeded)</p>
+        <p><strong>Imported files:</strong> @(_storedFiles?.FileNames.Length ?? 0)</p>
+    </div>
+
+    <div class="status-card">
+        <h2>Platform</h2>
+        <p><strong>SharedArrayBuffer:</strong> @FormatBool(_probe?.HasSharedArrayBuffer)</p>
+        <p><strong>User agent:</strong> @(_probe?.UserAgent ?? "not checked")</p>
+    </div>
+</div>
+
+<div class="actions">
+    <button class="btn btn-primary" @onclick="RunProbe" disabled="@_isBusy">@(_isBusy ? "Running..." : "Run environment probe")</button>
+    <button class="btn btn-secondary ms-2" @onclick="RunStorageSmokeTest" disabled="@_storageBusy">@(_storageBusy ? "Testing..." : "Run OPFS smoke test")</button>
+    <button class="btn btn-success ms-2" @onclick="ImportFiles" disabled="@_importBusy">@(_importBusy ? "Importing..." : "Import files to /uo")</button>
+    <button class="btn btn-success ms-2" @onclick="ImportDirectory" disabled="@_directoryImportBusy">@(_directoryImportBusy ? "Importing..." : "Import folder to /uo")</button>
+    <button class="btn btn-success ms-2" @onclick="ImportHostedSeed" disabled="@_hostedSeedImportBusy">@(_hostedSeedImportBusy ? "Importing..." : "Import local seed to /uo")</button>
+    <button class="btn btn-success ms-2" @onclick="ImportHostedRecommendedSeed" disabled="@_hostedSeedRecommendedImportBusy">@(_hostedSeedRecommendedImportBusy ? "Importing..." : "Import recommended seed to /uo")</button>
+    <button class="btn btn-danger ms-2" @onclick="ResetStorage" disabled="@_resetBusy">@(_resetBusy ? "Resetting..." : "Reset OPFS storage")</button>
+    <button class="btn btn-outline-secondary ms-2" @onclick="RefreshFiles" disabled="@_refreshBusy">@(_refreshBusy ? "Refreshing..." : "Refresh stored files")</button>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(_message))
+{
+    <p class="message">@_message</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(_storageMessage))
+{
+    <p class="message">@_storageMessage</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(_importMessage))
+{
+    <p class="message">@_importMessage</p>
+}
+
+@if (_storage is not null)
+{
+    <div class="next-steps">
+        <h2>Storage smoke test</h2>
+        <p><strong>Read text:</strong> @(_storage.ReadText.Length == 0 ? "none" : _storage.ReadText)</p>
+        <p><strong>Files:</strong> @(string.Join(", ", _storage.FileNames))</p>
+        @if (!string.IsNullOrWhiteSpace(_storage.Error))
+        {
+            <p><strong>Error:</strong> @_storage.Error</p>
+        }
+    </div>
+}
+
+@if (_storedFiles is not null)
+{
+    <div class="next-steps">
+        <h2>Stored browser files</h2>
+        @if (_storedFiles.FileNames.Length == 0)
+        {
+            <p>No files are stored in OPFS yet.</p>
+        }
+        else
+        {
+            <ul>
+                @foreach (var fileName in _storedFiles.FileNames)
+                {
+                    <li>@fileName</li>
+                }
+            </ul>
+        }
+        @if (!string.IsNullOrWhiteSpace(_storedFiles.Error))
+        {
+            <p><strong>Error:</strong> @_storedFiles.Error</p>
+        }
+    </div>
+}
+
+@if (_rootSummaries is not null)
+{
+    <div class="next-steps">
+        <h2>Root summary</h2>
+        @foreach (var summary in _rootSummaries)
+        {
+            <p><strong>@summary.Name (@summary.RootPath):</strong> @summary.FileCount file(s)</p>
+
+            @if (summary.SampleFiles.Length > 0)
+            {
+                <p><strong>Sample:</strong> @string.Join(", ", summary.SampleFiles)</p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(summary.Error))
+            {
+                <p><strong>Error:</strong> @summary.Error</p>
+            }
+        }
+    </div>
+}
+
+@if (_hostedSeedManifest is not null)
+{
+    <div class="next-steps">
+        <h2>Hosted local seed</h2>
+        <p>This is the local disk staging area for bulk asset imports without browser file picking.</p>
+        <p><strong>Available:</strong> @FormatBool(_hostedSeedManifest.Available)</p>
+        <p><strong>Files:</strong> @_hostedSeedManifest.FileCount</p>
+        <p><strong>Total bytes:</strong> @_hostedSeedManifest.TotalBytes</p>
+
+        @if (_hostedSeedManifest.Entries.Length > 0)
+        {
+            <p><strong>Sample:</strong> @string.Join(", ", _hostedSeedManifest.Entries.Take(8).Select(x => x.RelativePath))</p>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(_hostedSeedManifest.Error))
+        {
+            <p><strong>Error:</strong> @_hostedSeedManifest.Error</p>
+        }
+    </div>
+}
+
+@if (_assetManifest is not null)
+{
+    <div class="next-steps">
+        <h2>Asset manifest</h2>
+        <p>This is the first structured view of imported `/uo` files for future browser runtime loading.</p>
+        <p><strong>Root:</strong> @_assetManifest.RootPath</p>
+        <p><strong>Files:</strong> @_assetManifest.FileCount</p>
+        <p><strong>Total bytes:</strong> @_assetManifest.TotalBytes</p>
+
+        @if (_assetManifest.Extensions.Length > 0)
+        {
+            <p><strong>Extensions:</strong> @string.Join(", ", _assetManifest.Extensions)</p>
+        }
+
+        @if (_assetManifest.Entries.Length == 0)
+        {
+            <p>No `/uo` assets are imported yet.</p>
+        }
+        else
+        {
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Path</th>
+                        <th>Extension</th>
+                        <th>Bytes</th>
+                        <th>Preloaded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var entry in _assetManifest.Entries.Take(12))
+                    {
+                        <tr>
+                            <td>@entry.Path</td>
+                            <td>@entry.Extension</td>
+                            <td>@entry.Size</td>
+                            <td>@FormatBool(entry.IsPreloaded)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (_assetManifest.Entries.Length > 12)
+            {
+                <p>Showing first 12 of @_assetManifest.Entries.Length entries.</p>
+            }
+        }
+
+        @if (!string.IsNullOrWhiteSpace(_assetManifest.Error))
+        {
+            <p><strong>Error:</strong> @_assetManifest.Error</p>
+        }
+    </div>
+}
+
+@if (_assetManifest?.Bootstrap is not null)
+{
+    <div class="next-steps">
+        <h2>Bootstrap readiness</h2>
+        <p>This is a stricter browser-port check than the current desktop startup guard, intended to tell us whether `/uo` looks usable for a first real asset-read path.</p>
+        <p><strong>Ready:</strong> @FormatBool(_assetManifest.Bootstrap.IsReady)</p>
+        <p><strong>Checks passed:</strong> @_assetManifest.Bootstrap.PassedChecks / @_assetManifest.Bootstrap.TotalChecks</p>
+        <p><strong>Primary read target:</strong> @(string.IsNullOrWhiteSpace(_assetManifest.Bootstrap.PrimaryReadTargetPath) ? "not ready" : _assetManifest.Bootstrap.PrimaryReadTargetPath)</p>
+        <p><strong>Reason:</strong> @_assetManifest.Bootstrap.PrimaryReadTargetReason</p>
+        <p><strong>Recommended minimal import set:</strong> @string.Join(", ", _assetManifest.Bootstrap.RecommendedImportSet)</p>
+
+        @if (_assetManifest.Bootstrap.MissingRecommendedFiles.Length > 0)
+        {
+            <p><strong>Missing recommended files:</strong> @string.Join(", ", _assetManifest.Bootstrap.MissingRecommendedFiles)</p>
+        }
+        else
+        {
+            <p><strong>Missing recommended files:</strong> none</p>
+        }
+
+        @foreach (var check in _assetManifest.Bootstrap.Checks)
+        {
+            <p><strong>@check.Name:</strong> @FormatBool(check.IsSatisfied)</p>
+            <p>@check.Description</p>
+            <p><strong>Accepted:</strong> @string.Join(", ", check.AcceptedPatterns)</p>
+            <p><strong>Matches:</strong> @(check.Matches.Length == 0 ? "none" : string.Join(", ", check.Matches))</p>
+        }
+    </div>
+}
+
+<div class="next-steps">
+    <h2>Tiledata probe</h2>
+    <p>This is the first structured binary asset read, using the same file the desktop client currently validates at startup.</p>
+
+    <div class="mb-2">
+        <label><strong>Tiledata path:</strong></label>
+        <input class="form-control" @bind="_tileDataPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="ProbeTileData" disabled="@_tileDataBusy">@(_tileDataBusy ? "Reading..." : "Probe tiledata.mul")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_tileDataMessage))
+    {
+        <p class="message">@_tileDataMessage</p>
+    }
+
+    @if (_tileDataProbe is not null)
+    {
+        <p><strong>Exists:</strong> @FormatBool(_tileDataProbe.Exists)</p>
+        <p><strong>Bytes:</strong> @_tileDataProbe.Length</p>
+        <p><strong>Old format:</strong> @FormatBool(_tileDataProbe.IsOldFormat)</p>
+        <p><strong>First group header:</strong> @_tileDataProbe.Header</p>
+        <p><strong>First land flags:</strong> @_tileDataProbe.FirstLandFlags</p>
+        <p><strong>First land texture id:</strong> @_tileDataProbe.FirstLandTextureId</p>
+        <p><strong>First land name:</strong> @(string.IsNullOrWhiteSpace(_tileDataProbe.FirstLandName) ? "(empty)" : _tileDataProbe.FirstLandName)</p>
+        <p><strong>Total ms:</strong> @_tileDataProbe.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_tileDataProbe.Error))
+        {
+            <p><strong>Error:</strong> @_tileDataProbe.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Virtual path bridge probe</h2>
+    <p>This exercises the same kind of virtual-path reads and writes the future browser filesystem provider will need.</p>
+    <p><strong>Asset root:</strong> `/uo`</p>
+
+    <div class="mb-2">
+        <label><strong>Probe path:</strong></label>
+        <input class="form-control" @bind="_bridgePath" />
+    </div>
+
+    <div class="mb-2">
+        <label><strong>Write text:</strong></label>
+        <textarea class="form-control" rows="4" @bind="_bridgeWriteText"></textarea>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-info" @onclick="ProbeBridgePath" disabled="@_bridgeBusy">@(_bridgeBusy ? "Reading..." : "Probe virtual path")</button>
+        <button class="btn btn-warning ms-2" @onclick="WriteBridgeProbe" disabled="@_bridgeWriteBusy">@(_bridgeWriteBusy ? "Writing..." : "Write probe file")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_bridgeMessage))
+    {
+        <p class="message">@_bridgeMessage</p>
+    }
+
+    @if (_bridgeProbe is not null)
+    {
+        <p><strong>Exists:</strong> @FormatBool(_bridgeProbe.Exists)</p>
+        <p><strong>Bytes:</strong> @_bridgeProbe.ByteLength</p>
+        <p><strong>Exists ms:</strong> @_bridgeProbe.ExistsMs</p>
+        <p><strong>Text read ms:</strong> @_bridgeProbe.TextReadMs</p>
+        <p><strong>Bytes read ms:</strong> @_bridgeProbe.BytesReadMs</p>
+        <p><strong>Total probe ms:</strong> @_bridgeProbe.TotalMs</p>
+        <p><strong>Preview:</strong> @(string.IsNullOrWhiteSpace(_bridgeProbe.TextPreview) ? "none" : _bridgeProbe.TextPreview)</p>
+
+        @if (!string.IsNullOrWhiteSpace(_bridgeProbe.Error))
+        {
+            <p><strong>Error:</strong> @_bridgeProbe.Error</p>
+        }
+    }
+
+    @if (_bridgeWriteResult is not null)
+    {
+        <p><strong>Last write path:</strong> @_bridgeWriteResult.Path</p>
+        <p><strong>Write succeeded:</strong> @FormatBool(_bridgeWriteResult.Succeeded)</p>
+        <p><strong>Bytes written:</strong> @_bridgeWriteResult.ByteLength</p>
+        <p><strong>Write ms:</strong> @_bridgeWriteResult.WriteMs</p>
+
+        @if (!string.IsNullOrWhiteSpace(_bridgeWriteResult.Error))
+        {
+            <p><strong>Error:</strong> @_bridgeWriteResult.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Read benchmark</h2>
+    <p>This measures repeated reads against a single `/uo/...` path to estimate browser-side asset access cost.</p>
+
+    <div class="mb-2">
+        <label><strong>Benchmark path:</strong></label>
+        <input class="form-control" @bind="_benchmarkPath" />
+    </div>
+
+    <div class="mb-2">
+        <label><strong>Iterations:</strong></label>
+        <input class="form-control" type="number" min="1" @bind="_benchmarkIterations" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="RunBenchmark" disabled="@_benchmarkBusy">@(_benchmarkBusy ? "Benchmarking..." : "Run read benchmark")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_benchmarkMessage))
+    {
+        <p class="message">@_benchmarkMessage</p>
+    }
+
+    @if (_benchmarkResult is not null)
+    {
+        <p><strong>Path:</strong> @_benchmarkResult.Path</p>
+        <p><strong>Exists:</strong> @FormatBool(_benchmarkResult.Exists)</p>
+        <p><strong>Iterations:</strong> @_benchmarkResult.Iterations</p>
+        <p><strong>Bytes:</strong> @_benchmarkResult.Length</p>
+        <p><strong>Total ms:</strong> @_benchmarkResult.TotalMs.ToString("0.00")</p>
+        <p><strong>Average ms:</strong> @_benchmarkResult.AverageMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_benchmarkResult.Error))
+        {
+            <p><strong>Error:</strong> @_benchmarkResult.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Asset preload cache</h2>
+    <p>This is the first browser-memory layer for hot `/uo` files so future provider reads can avoid repeated OPFS access.</p>
+
+    <div class="mb-2">
+        <label><strong>Preload path:</strong></label>
+        <input class="form-control" @bind="_preloadPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-secondary" @onclick="PreloadPath" disabled="@_preloadBusy">@(_preloadBusy ? "Preloading..." : "Preload file")</button>
+        <button class="btn btn-outline-danger ms-2" @onclick="ClearPreloadCache" disabled="@_preloadClearBusy">@(_preloadClearBusy ? "Clearing..." : "Clear preload cache")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_preloadMessage))
+    {
+        <p class="message">@_preloadMessage</p>
+    }
+
+    @if (_preloadResult is not null)
+    {
+        <p><strong>Path:</strong> @_preloadResult.Path</p>
+        <p><strong>Succeeded:</strong> @FormatBool(_preloadResult.Succeeded)</p>
+        <p><strong>Bytes:</strong> @_preloadResult.Length</p>
+        <p><strong>Preload ms:</strong> @_preloadResult.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_preloadResult.Error))
+        {
+            <p><strong>Error:</strong> @_preloadResult.Error</p>
+        }
+    }
+
+    @if (_preloadSummary is not null)
+    {
+        <p><strong>Cached entries:</strong> @_preloadSummary.EntryCount</p>
+        <p><strong>Total cached bytes:</strong> @_preloadSummary.TotalBytes</p>
+
+        @if (_preloadSummary.Paths.Length > 0)
+        {
+            <p><strong>Cached paths:</strong> @string.Join(", ", _preloadSummary.Paths)</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>What success looks like</h2>
+    <ul>
+        <li>The page opens in your browser.</li>
+        <li>The probe reports `.NET browser runtime: yes`.</li>
+        <li>The storage section reports whether OPFS is available.</li>
+        <li>The OPFS smoke test can create and read a small file.</li>
+        <li>The import flow stores selected files in browser OPFS and lists them on the page.</li>
+        <li>The virtual path probe can read or write a file by path from C# through the browser storage bridge.</li>
+    </ul>
+</div>
+
+@code {
+    private BrowserHost.Services.BrowserProbeResult? _probe;
+    private BrowserHost.Services.BrowserStorageSmokeTestResult? _storage;
+    private BrowserHost.Services.BrowserAssetImportResult? _importResult;
+    private BrowserHost.Services.BrowserStoredFilesResult? _storedFiles;
+    private BrowserHost.Services.BrowserVirtualFileProbeResult? _bridgeProbe;
+    private BrowserHost.Services.BrowserVirtualFileWriteProbeResult? _bridgeWriteResult;
+    private BrowserHost.Services.BrowserReadBenchmarkResult? _benchmarkResult;
+    private BrowserHost.Services.BrowserPreloadResult? _preloadResult;
+    private BrowserHost.Services.BrowserPreloadCacheSummary? _preloadSummary;
+    private BrowserHost.Services.BrowserAssetManifestResult? _assetManifest;
+    private BrowserHost.Services.BrowserHostedSeedManifestResult? _hostedSeedManifest;
+    private BrowserHost.Services.BrowserTileDataProbeResult? _tileDataProbe;
+    private BrowserHost.Services.BrowserVirtualRootSummary[]? _rootSummaries;
+    private bool _isBusy;
+    private bool _storageBusy;
+    private bool _importBusy;
+    private bool _directoryImportBusy;
+    private bool _resetBusy;
+    private bool _refreshBusy;
+    private bool _bridgeBusy;
+    private bool _bridgeWriteBusy;
+    private bool _benchmarkBusy;
+    private bool _tileDataBusy;
+    private bool _preloadBusy;
+    private bool _preloadClearBusy;
+    private bool _hostedSeedImportBusy;
+    private bool _hostedSeedRecommendedImportBusy;
+    private string _message = "Click the probe button to test the browser host.";
+    private string _storageMessage = "Run the OPFS smoke test after the environment probe succeeds.";
+    private string _importMessage = "Import files after the storage checks succeed.";
+    private string _bridgeMessage = "Use the virtual path probe after importing a file or writing a probe file.";
+    private string _bridgePath = "/uo/probe.txt";
+    private string _bridgeWriteText = "classicuo bridge probe";
+    private string _benchmarkPath = "/uo/TestDoc.txt";
+    private int _benchmarkIterations = 25;
+    private string _benchmarkMessage = "Import a `/uo` file and run the benchmark to measure repeated read cost.";
+    private string _tileDataPath = "/uo/tiledata.mul";
+    private string _tileDataMessage = "Probe tiledata.mul to validate the first structured browser-side asset read.";
+    private string _preloadPath = "/uo/TestDoc.txt";
+    private string _preloadMessage = "Preload a `/uo` file into browser memory to simulate a hot asset cache.";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RunProbe();
+        await RefreshFiles();
+    }
+
+    private async Task RunProbe()
+    {
+        _isBusy = true;
+        _message = "Running browser environment probe...";
+
+        try
+        {
+            _probe = await ProbeService.ProbeAsync();
+            _message = "Probe completed successfully.";
+        }
+        catch (Exception ex)
+        {
+            _message = $"Probe failed: {ex.Message}";
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private async Task RunStorageSmokeTest()
+    {
+        _storageBusy = true;
+        _storageMessage = "Running OPFS smoke test...";
+
+        try
+        {
+            _storage = await StorageService.RunSmokeTestAsync();
+            _storageMessage = string.IsNullOrWhiteSpace(_storage.Error)
+                ? "OPFS smoke test completed successfully."
+                : $"OPFS smoke test completed with error: {_storage.Error}";
+            await RefreshFiles();
+        }
+        catch (Exception ex)
+        {
+            _storageMessage = $"OPFS smoke test failed: {ex.Message}";
+        }
+        finally
+        {
+            _storageBusy = false;
+        }
+    }
+
+    private async Task ImportFiles()
+    {
+        _importBusy = true;
+        _importMessage = "Opening file picker for /uo import...";
+
+        try
+        {
+            _importResult = await StorageService.ImportFilesAsync();
+            _importMessage = string.IsNullOrWhiteSpace(_importResult.Error)
+                ? $"Imported {_importResult.ImportedCount} file(s) under /uo: {string.Join(", ", _importResult.ImportedFileNames)}"
+                : $"Import finished with error: {_importResult.Error}";
+            await RefreshFiles();
+        }
+        catch (Exception ex)
+        {
+            _importMessage = $"Import failed: {ex.Message}";
+        }
+        finally
+        {
+            _importBusy = false;
+        }
+    }
+
+    private async Task RefreshFiles()
+    {
+        _refreshBusy = true;
+
+        try
+        {
+            _storedFiles = await StorageService.ListFilesAsync();
+            _rootSummaries = await BridgeService.GetRootSummariesAsync();
+            _preloadSummary = await StorageService.GetPreloadCacheSummaryAsync();
+            _assetManifest = await StorageService.GetAssetManifestAsync();
+            _hostedSeedManifest = await StorageService.GetHostedSeedManifestAsync();
+        }
+        finally
+        {
+            _refreshBusy = false;
+        }
+    }
+
+    private async Task ImportDirectory()
+    {
+        _directoryImportBusy = true;
+        _importMessage = "Opening folder picker for /uo import...";
+
+        try
+        {
+            _importResult = await StorageService.ImportDirectoryAsync();
+            _importMessage = string.IsNullOrWhiteSpace(_importResult.Error)
+                ? $"Imported {_importResult.ImportedCount} file(s) under /uo: {string.Join(", ", _importResult.ImportedFileNames.Take(10))}{(_importResult.ImportedFileNames.Length > 10 ? " ..." : string.Empty)}"
+                : $"Folder import finished with error: {_importResult.Error}";
+            await RefreshFiles();
+        }
+        catch (Exception ex)
+        {
+            _importMessage = $"Folder import failed: {ex.Message}";
+        }
+        finally
+        {
+            _directoryImportBusy = false;
+        }
+    }
+
+    private async Task ImportHostedSeed()
+    {
+        _hostedSeedImportBusy = true;
+        _importMessage = "Importing hosted local seed into /uo...";
+
+        try
+        {
+            _importResult = await StorageService.ImportHostedSeedAsync();
+            _importMessage = string.IsNullOrWhiteSpace(_importResult.Error)
+                ? $"Imported {_importResult.ImportedCount} hosted seed file(s) under /uo: {string.Join(", ", _importResult.ImportedFileNames.Take(10))}{(_importResult.ImportedFileNames.Length > 10 ? " ..." : string.Empty)}"
+                : $"Hosted seed import finished with error: {_importResult.Error}";
+            await RefreshFiles();
+        }
+        catch (Exception ex)
+        {
+            _importMessage = $"Hosted seed import failed: {ex.Message}";
+        }
+        finally
+        {
+            _hostedSeedImportBusy = false;
+        }
+    }
+
+    private async Task ImportHostedRecommendedSeed()
+    {
+        _hostedSeedRecommendedImportBusy = true;
+        _importMessage = "Importing recommended hosted seed files into /uo...";
+
+        try
+        {
+            _importResult = await StorageService.ImportHostedRecommendedSeedAsync();
+            _importMessage = string.IsNullOrWhiteSpace(_importResult.Error)
+                ? $"Imported {_importResult.ImportedCount} recommended hosted seed file(s) under /uo: {string.Join(", ", _importResult.ImportedFileNames)}"
+                : $"Recommended hosted seed import finished with error: {_importResult.Error}";
+            await RefreshFiles();
+        }
+        catch (Exception ex)
+        {
+            _importMessage = $"Recommended hosted seed import failed: {ex.Message}";
+        }
+        finally
+        {
+            _hostedSeedRecommendedImportBusy = false;
+        }
+    }
+
+    private async Task ProbeBridgePath()
+    {
+        _bridgeBusy = true;
+        _bridgeMessage = $"Reading virtual path '{_bridgePath}'...";
+
+        try
+        {
+            _bridgeProbe = await BridgeService.ProbePathAsync(_bridgePath);
+            _bridgeMessage = string.IsNullOrWhiteSpace(_bridgeProbe.Error)
+                ? $"Bridge probe completed for {_bridgeProbe.Path}."
+                : $"Bridge probe finished with error: {_bridgeProbe.Error}";
+        }
+        catch (Exception ex)
+        {
+            _bridgeMessage = $"Bridge probe failed: {ex.Message}";
+        }
+        finally
+        {
+            _bridgeBusy = false;
+        }
+    }
+
+    private async Task ResetStorage()
+    {
+        _resetBusy = true;
+        _importMessage = "Resetting browser OPFS storage...";
+
+        try
+        {
+            var result = await StorageService.ResetStorageAsync();
+            _importMessage = string.IsNullOrWhiteSpace(result.Error)
+                ? $"Reset completed. Removed {result.DeletedEntries} stored item(s)."
+                : $"Reset finished with error: {result.Error}";
+
+            _bridgeProbe = null;
+            _bridgeWriteResult = null;
+            await RefreshFiles();
+        }
+        catch (Exception ex)
+        {
+            _importMessage = $"Reset failed: {ex.Message}";
+        }
+        finally
+        {
+            _resetBusy = false;
+        }
+    }
+
+    private async Task WriteBridgeProbe()
+    {
+        _bridgeWriteBusy = true;
+        _bridgeMessage = $"Writing probe file to '{_bridgePath}'...";
+
+        try
+        {
+            _bridgeWriteResult = await BridgeService.WriteTextProbeAsync(_bridgePath, _bridgeWriteText);
+            _bridgeMessage = string.IsNullOrWhiteSpace(_bridgeWriteResult.Error)
+                ? $"Bridge write completed for {_bridgeWriteResult.Path}."
+                : $"Bridge write finished with error: {_bridgeWriteResult.Error}";
+            await RefreshFiles();
+            _bridgeProbe = await BridgeService.ProbePathAsync(_bridgePath);
+        }
+        catch (Exception ex)
+        {
+            _bridgeMessage = $"Bridge write failed: {ex.Message}";
+        }
+        finally
+        {
+            _bridgeWriteBusy = false;
+        }
+    }
+
+    private async Task RunBenchmark()
+    {
+        _benchmarkBusy = true;
+        _benchmarkMessage = $"Benchmarking {_benchmarkPath} for {_benchmarkIterations} read(s)...";
+
+        try
+        {
+            _benchmarkResult = await StorageService.BenchmarkReadPathAsync(_benchmarkPath, _benchmarkIterations);
+            _benchmarkMessage = string.IsNullOrWhiteSpace(_benchmarkResult.Error)
+                ? $"Benchmark completed for {_benchmarkResult.Path}."
+                : $"Benchmark finished with error: {_benchmarkResult.Error}";
+        }
+        catch (Exception ex)
+        {
+            _benchmarkMessage = $"Benchmark failed: {ex.Message}";
+        }
+        finally
+        {
+            _benchmarkBusy = false;
+        }
+    }
+
+    private async Task ProbeTileData()
+    {
+        _tileDataBusy = true;
+        _tileDataMessage = $"Reading structured tiledata from {_tileDataPath}...";
+
+        try
+        {
+            _tileDataProbe = await TileDataProbeService.ProbeAsync(_tileDataPath);
+            _tileDataMessage = string.IsNullOrWhiteSpace(_tileDataProbe.Error)
+                ? $"Tiledata probe completed for {_tileDataProbe.Path}."
+                : $"Tiledata probe finished with error: {_tileDataProbe.Error}";
+        }
+        catch (Exception ex)
+        {
+            _tileDataMessage = $"Tiledata probe failed: {ex.Message}";
+        }
+        finally
+        {
+            _tileDataBusy = false;
+        }
+    }
+
+    private async Task PreloadPath()
+    {
+        _preloadBusy = true;
+        _preloadMessage = $"Preloading {_preloadPath} into browser memory...";
+
+        try
+        {
+            _preloadResult = await StorageService.PreloadPathAsync(_preloadPath);
+            _preloadSummary = await StorageService.GetPreloadCacheSummaryAsync();
+            _preloadMessage = string.IsNullOrWhiteSpace(_preloadResult.Error)
+                ? $"Preload completed for {_preloadResult.Path}."
+                : $"Preload finished with error: {_preloadResult.Error}";
+        }
+        catch (Exception ex)
+        {
+            _preloadMessage = $"Preload failed: {ex.Message}";
+        }
+        finally
+        {
+            _preloadBusy = false;
+        }
+    }
+
+    private async Task ClearPreloadCache()
+    {
+        _preloadClearBusy = true;
+        _preloadMessage = "Clearing preload cache...";
+
+        try
+        {
+            _preloadResult = await StorageService.ClearPreloadCacheAsync();
+            _preloadSummary = await StorageService.GetPreloadCacheSummaryAsync();
+            _preloadMessage = "Preload cache cleared.";
+        }
+        catch (Exception ex)
+        {
+            _preloadMessage = $"Clear preload cache failed: {ex.Message}";
+        }
+        finally
+        {
+            _preloadClearBusy = false;
+        }
+    }
+
+    private static string FormatBool(bool? value)
+    {
+        return value switch
+        {
+            true => "yes",
+            false => "no",
+            _ => "not checked"
+        };
+    }
+}

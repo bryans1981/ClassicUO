@@ -1,6 +1,7 @@
 ﻿using ClassicUO.Assets;
 using ClassicUO.Game.Data;
 using ClassicUO.IO;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,14 @@ namespace ClassicUO.Game.Managers
         {
             var filePath = fileManager.GetUOFilePath("stitchin.def");
 
-            if (!File.Exists(filePath))
+            if (!FileSystemHelper.FileExists(filePath))
             {
                 return;
             }
 
             const string END_DEF = "# enddef";
 
-            using (var reader = new StreamReader(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            using (var reader = new StreamReader(FileSystemHelper.OpenRead(filePath)))
             {
                 var list = new List<string>();
                 var started = false;

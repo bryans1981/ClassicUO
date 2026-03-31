@@ -30,7 +30,7 @@ namespace ClassicUO.Assets
             _file.FillEntries();
             string pathdef = FileManager.GetUOFilePath("TexTerr.def");
 
-            if (System.IO.File.Exists(pathdef))
+            if (FileSystemHelper.FileExists(pathdef))
             {
                 using (DefReader defReader = new DefReader(pathdef))
                 {

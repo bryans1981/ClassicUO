@@ -80,7 +80,7 @@ public sealed class TileArtLoader : UOFileLoader
     public override void Load()
     {
         var path = FileManager.GetUOFilePath("tileart.uop");
-        if (!File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             return;
 
         _file = new UOFileUop(path, "build/tileart/{0:D8}.bin");

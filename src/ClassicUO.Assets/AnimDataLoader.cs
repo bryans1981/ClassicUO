@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: BSD-2-Clause
 
 using ClassicUO.IO;
+using ClassicUO.Utility;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -23,7 +24,7 @@ namespace ClassicUO.Assets
         {
             var path = FileManager.GetUOFilePath("animdata.mul");
 
-            if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
             {
                 _file = new UOFileMul(path);
             }

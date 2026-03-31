@@ -275,7 +275,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void AddNewMarker()
         {
-            if (!File.Exists(_userMarkersFilePath))
+            if (!FileSystemHelper.FileExists(_userMarkersFilePath))
             {
                 return;
             }
@@ -288,7 +288,11 @@ namespace ClassicUO.Game.UI.Gumps
 
             var newLine = $"{newMarker.X},{newMarker.Y},{newMarker.MapId},{newMarker.Name},{newMarker.MarkerIconName},{newMarker.ColorName},4\r";
 
-            File.AppendAllText(_userMarkersFilePath, newLine);
+            using (var stream = FileSystemHelper.OpenAppend(_userMarkersFilePath))
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write(newLine);
+            }
 
             _markers.Add(newMarker);
 

@@ -13,6 +13,7 @@ using ClassicUO.IO;
 using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using ClassicUO.Renderer.Batching;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using ClassicUO.Utility.Platforms;
 using CUO_API;
@@ -127,7 +128,7 @@ namespace ClassicUO.Network
                 Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins", path)
             );
 
-            if (!File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             {
                 Log.Error($"Plugin '{path}' not found.");
 

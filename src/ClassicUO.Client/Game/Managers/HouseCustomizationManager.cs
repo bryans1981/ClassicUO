@@ -11,6 +11,7 @@ using ClassicUO.Game.Scenes;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.IO;
 using ClassicUO.Network;
+using ClassicUO.Utility;
 using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.Managers
@@ -1909,14 +1910,13 @@ namespace ClassicUO.Game.Managers
 
         private void ParseFile<T>(List<T> list, string path) where T : CustomHouseObject, new()
         {
-            FileInfo file = new FileInfo(path);
-
-            if (!file.Exists)
+            if (!FileSystemHelper.FileExists(path))
             {
                 return;
             }
 
-            using (StreamReader reader = File.OpenText(file.FullName))
+            using (Stream stream = FileSystemHelper.OpenRead(path))
+            using (StreamReader reader = new StreamReader(stream))
             {
                 while (!reader.EndOfStream)
                 {
@@ -1942,14 +1942,13 @@ namespace ClassicUO.Game.Managers
 
         private void ParseFileWithCategory<T, U>(List<U> list, string path) where T : CustomHouseObject, new() where U : CustomHouseObjectCategory<T>, new()
         {
-            FileInfo file = new FileInfo(path);
-
-            if (!file.Exists)
+            if (!FileSystemHelper.FileExists(path))
             {
                 return;
             }
 
-            using (StreamReader reader = File.OpenText(file.FullName))
+            using (Stream stream = FileSystemHelper.OpenRead(path))
+            using (StreamReader reader = new StreamReader(stream))
             {
                 while (!reader.EndOfStream)
                 {

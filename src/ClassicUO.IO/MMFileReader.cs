@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 
@@ -10,37 +10,49 @@ namespace ClassicUO.IO
         private readonly MemoryMappedFile _mmf;
         private readonly BinaryReader _file;
 
-        public MMFileReader(FileStream stream) : base(stream)
+        public MMFileReader(Stream stream, string filePath = null) : base(stream, filePath)
         {
             if (Length <= 0)
                 return;
 
-            _mmf = MemoryMappedFile.CreateFromFile
-            (
-                stream,
-                null,
-                0,
-                MemoryMappedFileAccess.Read,
-                HandleInheritability.None,
-                false
-            );
-
-            _accessor = _mmf.CreateViewAccessor(0, Length, MemoryMappedFileAccess.Read);
-
-            try
+            if (stream is FileStream fileStream)
             {
-                unsafe
+                _mmf = MemoryMappedFile.CreateFromFile
+                (
+                    fileStream,
+                    null,
+                    0,
+                    MemoryMappedFileAccess.Read,
+                    HandleInheritability.None,
+                    false
+                );
+
+                _accessor = _mmf.CreateViewAccessor(0, Length, MemoryMappedFileAccess.Read);
+
+                try
                 {
-                    byte* ptr = null;
-                    _accessor.SafeMemoryMappedViewHandle.AcquirePointer(ref ptr);
-                    _file = new BinaryReader(new UnmanagedMemoryStream(ptr, Length));
+                    unsafe
+                    {
+                        byte* ptr = null;
+                        _accessor.SafeMemoryMappedViewHandle.AcquirePointer(ref ptr);
+                        _file = new BinaryReader(new UnmanagedMemoryStream(ptr, Length));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _accessor.SafeMemoryMappedViewHandle.ReleasePointer();
+
+                    throw new InvalidOperationException("Failed to acquire memory-mapped file pointer.", ex);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _accessor.SafeMemoryMappedViewHandle.ReleasePointer();
+                if (stream.CanSeek)
+                {
+                    stream.Seek(0, SeekOrigin.Begin);
+                }
 
-                throw new InvalidOperationException("Failed to acquire memory-mapped file pointer.", ex);
+                _file = new BinaryReader(stream);
             }
         }
 

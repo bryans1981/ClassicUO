@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: BSD-2-Clause
+// SPDX-License-Identifier: BSD-2-Clause
 
 using ClassicUO.Configuration;
 using ClassicUO.Game;
@@ -45,7 +45,10 @@ namespace ClassicUO
 
             Log.Start(LogTypes.All);
 
-            DllMap.Init();
+            if (!PlatformHelper.IsBrowser)
+            {
+                DllMap.Init();
+            }
 
             CUOEnviroment.GameThread = Thread.CurrentThread;
             CUOEnviroment.GameThread.Name = "CUO_MAIN_THREAD";
@@ -82,8 +85,8 @@ namespace ClassicUO
                 Log.Panic(e.ExceptionObject.ToString());
                 string path = Path.Combine(CUOEnviroment.ExecutablePath, "Logs");
 
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
+                if (!FileSystemHelper.DirectoryExists(path))
+                    FileSystemHelper.CreateDirectory(path);
 
                 using (LogFile crashfile = new LogFile(path, "crash.txt"))
                 {
@@ -93,21 +96,24 @@ namespace ClassicUO
 #endif
             ReadSettingsFromArgs(args);
 
-            if (CUOEnviroment.IsHighDPI)
+            if (!PlatformHelper.IsBrowser)
             {
-                Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "1");
-            }
+                if (CUOEnviroment.IsHighDPI)
+                {
+                    Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "1");
+                }
 
-            // NOTE: this is a workaroud to fix d3d11 on windows 11 + scale windows
-            Environment.SetEnvironmentVariable("FNA3D_D3D11_FORCE_BITBLT", "1");
-            Environment.SetEnvironmentVariable("FNA3D_BACKBUFFER_SCALE_NEAREST", "1");
-            Environment.SetEnvironmentVariable("FNA3D_OPENGL_FORCE_COMPATIBILITY_PROFILE", "1");
-            Environment.SetEnvironmentVariable(SDL.SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
-            Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins"));
+                // NOTE: this is a workaroud to fix d3d11 on windows 11 + scale windows
+                Environment.SetEnvironmentVariable("FNA3D_D3D11_FORCE_BITBLT", "1");
+                Environment.SetEnvironmentVariable("FNA3D_BACKBUFFER_SCALE_NEAREST", "1");
+                Environment.SetEnvironmentVariable("FNA3D_OPENGL_FORCE_COMPATIBILITY_PROFILE", "1");
+                Environment.SetEnvironmentVariable(SDL.SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
+                Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins"));
+            }
 
             string globalSettingsPath = Settings.GetSettingsFilepath();
 
-            if (!Directory.Exists(Path.GetDirectoryName(globalSettingsPath)) || !File.Exists(globalSettingsPath))
+            if (!FileSystemHelper.DirectoryExists(Path.GetDirectoryName(globalSettingsPath)) || !FileSystemHelper.FileExists(globalSettingsPath))
             {
                 // settings specified in path does not exists, make new one
                 {
@@ -161,7 +167,7 @@ namespace ClassicUO
 
             uint flags = 0;
 
-            if (!Directory.Exists(Settings.GlobalSettings.UltimaOnlineDirectory) || !File.Exists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
+            if (!FileSystemHelper.DirectoryExists(Settings.GlobalSettings.UltimaOnlineDirectory) || !FileSystemHelper.FileExists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
             {
                 flags |= INVALID_UO_DIRECTORY;
             }
@@ -203,17 +209,20 @@ namespace ClassicUO
             }
             else
             {
-                switch (Settings.GlobalSettings.ForceDriver)
+                if (!PlatformHelper.IsBrowser)
                 {
-                    case 1: // OpenGL
-                        Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "OpenGL");
+                    switch (Settings.GlobalSettings.ForceDriver)
+                    {
+                        case 1: // OpenGL
+                            Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "OpenGL");
 
-                        break;
+                            break;
 
-                    case 2: // Vulkan
-                        Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "Vulkan");
+                        case 2: // Vulkan
+                            Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "Vulkan");
 
-                        break;
+                            break;
+                    }
                 }
 
                 Client.Run(pluginHost);
@@ -487,3 +496,7 @@ namespace ClassicUO
         }
     }
 }
+
+
+
+

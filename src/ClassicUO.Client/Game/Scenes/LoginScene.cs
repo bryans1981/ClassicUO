@@ -786,7 +786,7 @@ namespace ClassicUO.Game.Scenes
         {
             string path = Client.Game.UO.FileManager.GetUOFilePath("citytext.enu");
 
-            if (!File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             {
                 return null;
             }
@@ -799,7 +799,7 @@ namespace ClassicUO.Game.Scenes
             StringBuilder name = new StringBuilder();
             StringBuilder text = new StringBuilder();
 
-            using (FileStream stream = File.OpenRead(path))
+            using (Stream stream = FileSystemHelper.OpenRead(path))
             {
                 int cityIndex = 0;
 

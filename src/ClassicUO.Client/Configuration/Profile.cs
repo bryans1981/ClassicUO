@@ -14,6 +14,7 @@ using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Gumps;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework;
 
@@ -499,13 +500,14 @@ namespace ClassicUO.Configuration
             // load gumps
             string gumpsXmlPath = Path.Combine(path, "gumps.xml");
 
-            if (File.Exists(gumpsXmlPath))
+            if (FileSystemHelper.FileExists(gumpsXmlPath))
             {
                 XmlDocument doc = new XmlDocument();
 
                 try
                 {
-                    doc.Load(gumpsXmlPath);
+                    using Stream stream = FileSystemHelper.OpenRead(gumpsXmlPath);
+                    doc.Load(stream);
                 }
                 catch (Exception ex)
                 {

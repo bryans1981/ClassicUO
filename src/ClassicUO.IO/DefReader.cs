@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace ClassicUO.IO
         public DefReader(string file, int minsize = 2)
         {
             _file = file;
-            _reader = new StreamReader(File.OpenRead(file));
+            _reader = new StreamReader(FileSystemHelper.OpenRead(file));
             Line = -1;
             Position = 0;
             _minSize = minsize;

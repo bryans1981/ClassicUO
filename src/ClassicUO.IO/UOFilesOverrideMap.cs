@@ -1,4 +1,5 @@
 using ClassicUO.Utility.Logging;
+using ClassicUO.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ namespace ClassicUO.IO
         
         public void Load()
         {
-            if (!File.Exists(_OverrideFile))
+            if (!FileSystemHelper.FileExists(_OverrideFile))
             {
                 Log.Trace($"No Override File found, ignoring.");
                 return; // if the file doesn't exist then we ignore
@@ -23,7 +24,7 @@ namespace ClassicUO.IO
 
             Log.Trace($"Loading Override File:\t\t{_OverrideFile}");
 
-            using (FileStream stream = new FileStream(_OverrideFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (Stream stream = FileSystemHelper.OpenRead(_OverrideFile))
             using (StreamReader reader = new StreamReader(stream))
             {
                 // we will gracefully ignore any failures when trying to read

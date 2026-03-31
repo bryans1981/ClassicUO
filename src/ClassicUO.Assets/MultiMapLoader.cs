@@ -30,7 +30,7 @@ namespace ClassicUO.Assets
         {
             string path = FileManager.GetUOFilePath("Multimap.rle");
 
-            if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
             {
                 _file = new UOFile(path);
             }

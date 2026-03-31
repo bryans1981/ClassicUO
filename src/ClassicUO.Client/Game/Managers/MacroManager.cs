@@ -59,7 +59,7 @@ namespace ClassicUO.Game.Managers
         {
             string path = Path.Combine(ProfileManager.ProfilePath, "macros.xml");
 
-            if (!File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             {
                 Log.Trace("No macros.xml file. Creating a default file.");
 
@@ -74,7 +74,8 @@ namespace ClassicUO.Game.Managers
 
             try
             {
-                doc.Load(path);
+                using Stream stream = FileSystemHelper.OpenRead(path);
+                doc.Load(stream);
             }
             catch (Exception ex)
             {
@@ -105,13 +106,12 @@ namespace ClassicUO.Game.Managers
 
             string path = Path.Combine(ProfileManager.ProfilePath, "macros.xml");
 
-            using (XmlTextWriter xml = new XmlTextWriter(path, Encoding.UTF8)
+            using Stream stream = FileSystemHelper.OpenWrite(path);
+            using (XmlTextWriter xml = new XmlTextWriter(stream, Encoding.UTF8))
             {
-                Formatting = Formatting.Indented,
-                IndentChar = '\t',
-                Indentation = 1
-            })
-            {
+                xml.Formatting = Formatting.Indented;
+                xml.IndentChar = '\t';
+                xml.Indentation = 1;
                 xml.WriteStartDocument(true);
                 xml.WriteStartElement("macros");
 

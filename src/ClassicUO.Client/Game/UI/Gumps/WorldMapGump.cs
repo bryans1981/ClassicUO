@@ -1120,8 +1120,8 @@ namespace ClassicUO.Game.UI.Gumps
 
                 if (!_mapCache.TryGetValue(mapFile.FilePath, out var fileMapPath))
                 {
-                    using var mapReader = new BinaryReader(File.Open(mapFile.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-                    using var staticsReader = new BinaryReader(File.Open(staticFile.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+                    using var mapReader = new BinaryReader(FileSystemHelper.OpenRead(mapFile.FilePath));
+                    using var staticsReader = new BinaryReader(FileSystemHelper.OpenRead(staticFile.FilePath));
 
                     static string calculateMd5(BinaryReader file)
                     {
@@ -1155,7 +1155,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _mapCache[mapFile.FilePath] = fileMapPath;
                 }
 
-                if (!File.Exists(fileMapPath))
+                if (!FileSystemHelper.FileExists(fileMapPath))
                 {
                     try
                     {
@@ -1331,8 +1331,8 @@ namespace ClassicUO.Game.UI.Gumps
                             TransparentColorMode = PngTransparentColorMode.Clear,
                         };
 
-                        Directory.CreateDirectory(_mapsCachePath);
-                        using var stream2 = File.Create(fileMapPath);
+                        FileSystemHelper.CreateDirectory(_mapsCachePath);
+                        using var stream2 = FileSystemHelper.OpenWrite(fileMapPath);
                         img.Save(stream2, imageEncoder);
                     }
                     catch (Exception ex)
@@ -1347,9 +1347,9 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
 
-                if (File.Exists(fileMapPath))
+                if (FileSystemHelper.FileExists(fileMapPath))
                 {
-                    using var stream = File.OpenRead(fileMapPath);
+                    using var stream = FileSystemHelper.OpenRead(fileMapPath);
                     _mapTexture = Texture2D.FromStream(Client.Game.GraphicsDevice, stream);
                 }
 
@@ -1446,7 +1446,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 try
                 {
-                    var zf = System.Text.Json.JsonSerializer.Deserialize(File.ReadAllText(filename), ZonesJsonContext.Default.ZonesFile);
+                    var zf = System.Text.Json.JsonSerializer.Deserialize(FileSystemHelper.ReadAllText(filename), ZonesJsonContext.Default.ZonesFile);
                     ZoneSetDict[filename] = new ZoneSet(zf, filename, hidden);
                     GameActions.Print(world, string.Format(ResGumps.MapZoneFileLoaded, ZoneSetDict[filename].NiceFileName), 0x3A /* yellow green */);
                 }
@@ -1484,7 +1484,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             _zoneSets.Clear();
 
-            foreach (String filename in Directory.GetFiles(_mapFilesPath, "*.zones.json"))
+            foreach (String filename in FileSystemHelper.GetFiles(_mapFilesPath, "*.zones.json"))
             {
                 bool shouldHide = !string.IsNullOrEmpty
                 (
@@ -1518,21 +1518,21 @@ namespace ClassicUO.Game.UI.Gumps
                         }
                     }
 
-                    if (!File.Exists(UserMarkersFilePath))
+                    if (!FileSystemHelper.FileExists(UserMarkersFilePath))
                     {
-                        using (File.Create(UserMarkersFilePath)) { }
+                        using (FileSystemHelper.OpenWrite(UserMarkersFilePath)) { }
                     }
 
                     _markerIcons.Clear();
 
-                    if (!Directory.Exists(_mapIconsPath))
+                    if (!FileSystemHelper.DirectoryExists(_mapIconsPath))
                     {
-                        Directory.CreateDirectory(_mapIconsPath);
+                        FileSystemHelper.CreateDirectory(_mapIconsPath);
                     }
 
-                    foreach (string icon in Directory.GetFiles(_mapIconsPath, "*.cur").Union(Directory.GetFiles(_mapIconsPath, "*.ico")))
+                    foreach (string icon in FileSystemHelper.GetFiles(_mapIconsPath, "*.cur").Union(FileSystemHelper.GetFiles(_mapIconsPath, "*.ico")))
                     {
-                        FileStream fs = new FileStream(icon, FileMode.Open, FileAccess.Read);
+                        Stream fs = FileSystemHelper.OpenRead(icon);
                         MemoryStream ms = new MemoryStream();
                         fs.CopyTo(ms);
                         ms.Seek(0, SeekOrigin.Begin);
@@ -1554,9 +1554,9 @@ namespace ClassicUO.Game.UI.Gumps
                         }
                     }
 
-                    foreach (string icon in Directory.GetFiles(_mapIconsPath, "*.png").Union(Directory.GetFiles(_mapIconsPath, "*.jpg")))
+                    foreach (string icon in FileSystemHelper.GetFiles(_mapIconsPath, "*.png").Union(FileSystemHelper.GetFiles(_mapIconsPath, "*.jpg")))
                     {
-                        FileStream fs = new FileStream(icon, FileMode.Open, FileAccess.Read);
+                        Stream fs = FileSystemHelper.OpenRead(icon);
                         MemoryStream ms = new MemoryStream();
                         fs.CopyTo(ms);
                         ms.Seek(0, SeekOrigin.Begin);
@@ -1579,15 +1579,15 @@ namespace ClassicUO.Game.UI.Gumps
                     }
 
                     List<string> mapFiles = new List<string> { UserMarkersFilePath };
-                    mapFiles.AddRange(Directory.GetFiles(_mapFilesPath, "*.map")
-                                        .Union(Directory.GetFiles(_mapFilesPath, "*.csv"))
-                                        .Union(Directory.GetFiles(_mapFilesPath, "*.xml")));
+                    mapFiles.AddRange(FileSystemHelper.GetFiles(_mapFilesPath, "*.map")
+                                        .Union(FileSystemHelper.GetFiles(_mapFilesPath, "*.csv"))
+                                        .Union(FileSystemHelper.GetFiles(_mapFilesPath, "*.xml")));
 
                     _markerFiles.Clear();
 
                     foreach (string mapFile in mapFiles)
                     {
-                        if (File.Exists(mapFile))
+                        if (FileSystemHelper.FileExists(mapFile))
                         {
                             WMapMarkerFile markerFile = new WMapMarkerFile
                             {
@@ -1607,7 +1607,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (mapFile != null && Path.GetExtension(mapFile).ToLower().Equals(".xml")) // Ultima Mapper
                             {
-                                using (XmlTextReader reader = new XmlTextReader(File.Open(mapFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                                using (XmlTextReader reader = new XmlTextReader(FileSystemHelper.OpenRead(mapFile)))
                                 {
                                     while (reader.Read())
                                     {
@@ -1638,7 +1638,7 @@ namespace ClassicUO.Game.UI.Gumps
                             }
                             else if (mapFile != null && Path.GetExtension(mapFile).ToLower().Equals(".map")) //UOAM
                             {
-                                using (StreamReader reader = new StreamReader(File.Open(mapFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                                using (StreamReader reader = new StreamReader(FileSystemHelper.OpenRead(mapFile)))
                                 {
                                     while (!reader.EndOfStream)
                                     {
@@ -1695,7 +1695,7 @@ namespace ClassicUO.Game.UI.Gumps
                             }
                             else if (mapFile != null) //CSV x,y,mapindex,name of marker,iconname,color,zoom
                             {
-                                using (StreamReader reader = new StreamReader(File.Open(mapFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                                using (StreamReader reader = new StreamReader(FileSystemHelper.OpenRead(mapFile)))
                                 {
                                     while (!reader.EndOfStream)
                                     {
@@ -1793,10 +1793,9 @@ namespace ClassicUO.Game.UI.Gumps
 
             var markerCsv = $"{World.Player.X},{World.Player.Y},{_map.Index},{markerName},{markerIcon},{markerColor},{markerZoomLevel}";
 
-            using (var fileStream = File.Open(UserMarkersFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
+            using (var fileStream = FileSystemHelper.OpenAppend(UserMarkersFilePath))
             using (var streamWriter = new StreamWriter(fileStream))
             {
-                streamWriter.BaseStream.Seek(0, SeekOrigin.End);
                 streamWriter.WriteLine(markerCsv);
             }
 

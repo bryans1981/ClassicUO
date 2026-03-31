@@ -26,7 +26,7 @@ namespace ClassicUO.Assets
         {
             string path = FileManager.GetUOFilePath("gumpartLegacyMUL.uop");
 
-            if (FileManager.IsUOPInstallation && System.IO.File.Exists(path))
+            if (FileManager.IsUOPInstallation && FileSystemHelper.FileExists(path))
             {
                 _file = new UOFileUop(path, "build/gumpartlegacymul/{0:D8}.tga", true);
                 UseUOPGumps = true;
@@ -36,12 +36,12 @@ namespace ClassicUO.Assets
                 path = FileManager.GetUOFilePath("gumpart.mul");
                 string pathidx = FileManager.GetUOFilePath("gumpidx.mul");
 
-                if (!System.IO.File.Exists(path))
+                if (!FileSystemHelper.FileExists(path))
                 {
                     path = FileManager.GetUOFilePath("Gumpart.mul");
                 }
 
-                if (!System.IO.File.Exists(pathidx))
+                if (!FileSystemHelper.FileExists(pathidx))
                 {
                     pathidx = FileManager.GetUOFilePath("Gumpidx.mul");
                 }
@@ -55,7 +55,7 @@ namespace ClassicUO.Assets
 
             string pathdef = FileManager.GetUOFilePath("gump.def");
 
-            if (!System.IO.File.Exists(pathdef))
+            if (!FileSystemHelper.FileExists(pathdef))
             {
                 return;
             }

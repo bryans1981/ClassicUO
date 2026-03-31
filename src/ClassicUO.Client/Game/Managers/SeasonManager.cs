@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 using ClassicUO.Assets;
+using ClassicUO.Utility;
 using System;
 using System.IO;
 
@@ -42,12 +43,12 @@ namespace ClassicUO.Game.Managers
             _winterGraphic = new ushort[ArtLoader.MAX_STATIC_DATA_INDEX_COUNT];
             _desolationGraphic = new ushort[ArtLoader.MAX_STATIC_DATA_INDEX_COUNT];
 
-            if (!File.Exists(_seasonsFile))
+            if (!FileSystemHelper.FileExists(_seasonsFile))
             {
                 CreateDefaultSeasonsFile();
             }
 
-            using (StreamReader reader = new StreamReader(_seasonsFile))
+            using (StreamReader reader = new StreamReader(FileSystemHelper.OpenRead(_seasonsFile)))
             {
                 while (!reader.EndOfStream)
                 {
@@ -177,12 +178,14 @@ namespace ClassicUO.Game.Managers
 
         private static void CreateDefaultSeasonsFile()
         {
-            if (File.Exists(_seasonsFile))
+            if (FileSystemHelper.FileExists(_seasonsFile))
             {
                 return;
             }
 
-            using (StreamWriter writer = new StreamWriter(_seasonsFile))
+            FileSystemHelper.CreateDirectory(_seasonsFilePath);
+
+            using (StreamWriter writer = new StreamWriter(FileSystemHelper.OpenWrite(_seasonsFile)))
             {
                 writer.WriteLine("spring,static,0x0CA7,0x0C84");
                 writer.WriteLine("spring,static,0x0CAC,0x0C46");

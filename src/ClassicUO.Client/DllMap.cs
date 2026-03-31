@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using ClassicUO.Utility;
 
 namespace ClassicUO
 {
@@ -32,7 +33,7 @@ namespace ClassicUO
             // Locate the config file
             string xmlPath = Path.Combine(AppContext.BaseDirectory, "FNA.dll.config");
 
-            if (!File.Exists(xmlPath))
+            if (!FileSystemHelper.FileExists(xmlPath))
             {
                 // Let's hope for the best...
                 return;
@@ -40,7 +41,10 @@ namespace ClassicUO
 
             // Load the XML
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(xmlPath);
+            using (Stream stream = FileSystemHelper.OpenRead(xmlPath))
+            {
+                xmlDoc.Load(stream);
+            }
 
             // The NativeLibrary API cannot remap function names. :(
             if (xmlDoc.GetElementsByTagName("dllentry").Count > 0)

@@ -32,7 +32,7 @@ public sealed class StringDictionaryLoader : UOFileLoader
     public override void Load()
     {
         var path = FileManager.GetUOFilePath("string_dictionary.uop");
-        if (!File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             return;
 
         using var file = new UOFileUop(path, "build/stringdictionary/string_dictionary.bin");

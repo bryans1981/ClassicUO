@@ -84,13 +84,13 @@ namespace ClassicUO.Game.Managers
                     {
                         try
                         {
-                            string[] files = Directory.GetFiles(path, "*_journal.txt");
+                            string[] files = FileSystemHelper.GetFiles(path, "*_journal.txt");
                             Array.Sort(files);
                             Array.Reverse(files);
 
                             for (int i = files.Length - 1; i >= maxJournalFiles; --i)
                             {
-                                File.Delete(files[i]);
+                                FileSystemHelper.DeleteFile(files[i]);
                             }
                         }
                         catch (Exception ex)
@@ -99,7 +99,7 @@ namespace ClassicUO.Game.Managers
                         }
                     }
 
-                    _fileWriter = new StreamWriter(File.Open(Path.Combine(path, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}_journal.txt"), FileMode.Create, FileAccess.Write, FileShare.Read))
+                    _fileWriter = new StreamWriter(FileSystemHelper.OpenWrite(Path.Combine(path, $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}_journal.txt")))
                     {
                         AutoFlush = true
                     };

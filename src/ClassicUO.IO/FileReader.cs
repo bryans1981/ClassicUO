@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -8,14 +8,16 @@ namespace ClassicUO.IO
     public abstract class FileReader : IDisposable
     {
         private long _position;
-        private readonly FileStream _stream;
+        private readonly Stream _stream;
+        private readonly string _filePath;
 
-        protected FileReader(FileStream stream)
+        protected FileReader(Stream stream, string filePath = null)
         {
-            _stream = stream;
+            _stream = stream ?? throw new ArgumentNullException(nameof(stream));
+            _filePath = filePath ?? (stream as FileStream)?.Name ?? string.Empty;
         }
 
-        public string FilePath => _stream.Name;
+        public string FilePath => _filePath;
         public long Length => _stream.Length;
         public long Position => _position;
 

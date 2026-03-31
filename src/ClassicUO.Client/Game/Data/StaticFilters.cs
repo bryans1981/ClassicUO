@@ -32,9 +32,9 @@ namespace ClassicUO.Game.Data
         {
             string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
 
-            if (!Directory.Exists(path))
+            if (!FileSystemHelper.DirectoryExists(path))
             {
-                Directory.CreateDirectory(path);
+                FileSystemHelper.CreateDirectory(path);
             }
 
             string cave = Path.Combine(path, "cave.txt");
@@ -42,9 +42,10 @@ namespace ClassicUO.Game.Data
             string trees = Path.Combine(path, "tree.txt");
 
 
-            if (!File.Exists(cave))
+            if (!FileSystemHelper.FileExists(cave))
             {
-                using (StreamWriter writer = new StreamWriter(cave))
+                using (Stream stream = FileSystemHelper.OpenWrite(cave))
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
                     for (int i = 0x053B; i < 0x0553 + 1; i++)
                     {
@@ -56,9 +57,10 @@ namespace ClassicUO.Game.Data
                 }
             }
 
-            if (!File.Exists(vegetation))
+            if (!FileSystemHelper.FileExists(vegetation))
             {
-                using (StreamWriter writer = new StreamWriter(vegetation))
+                using (Stream stream = FileSystemHelper.OpenWrite(vegetation))
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
                     ushort[] vegetationTiles =
                     {
@@ -95,9 +97,10 @@ namespace ClassicUO.Game.Data
                 }
             }
 
-            if (!File.Exists(trees))
+            if (!FileSystemHelper.FileExists(trees))
             {
-                using (StreamWriter writer = new StreamWriter(trees))
+                using (Stream treeStream = FileSystemHelper.OpenWrite(trees))
+                using (StreamWriter writer = new StreamWriter(treeStream))
                 using (StreamWriter writerveg = new StreamWriter(vegetation, true))
                 {
                     ushort[] treeTiles =
@@ -150,7 +153,7 @@ namespace ClassicUO.Game.Data
             }
 
 
-            TextFileParser caveParser = new TextFileParser(File.ReadAllText(cave), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
+            TextFileParser caveParser = new TextFileParser(FileSystemHelper.ReadAllText(cave), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
 
             while (!caveParser.IsEOF())
             {
@@ -167,7 +170,7 @@ namespace ClassicUO.Game.Data
             }
 
 
-            TextFileParser stumpsParser = new TextFileParser(File.ReadAllText(trees), new[] { ' ', '\t', ',', '=' }, new[] { '#', ';' }, new[] { '"', '"' });
+            TextFileParser stumpsParser = new TextFileParser(FileSystemHelper.ReadAllText(trees), new[] { ' ', '\t', ',', '=' }, new[] { '#', ';' }, new[] { '"', '"' });
 
             while (!stumpsParser.IsEOF())
             {
@@ -191,7 +194,7 @@ namespace ClassicUO.Game.Data
             }
 
 
-            TextFileParser vegetationParser = new TextFileParser(File.ReadAllText(vegetation), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
+            TextFileParser vegetationParser = new TextFileParser(FileSystemHelper.ReadAllText(vegetation), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
 
             while (!vegetationParser.IsEOF())
             {

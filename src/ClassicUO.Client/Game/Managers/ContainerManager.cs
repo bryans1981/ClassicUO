@@ -220,20 +220,19 @@ namespace ClassicUO.Game.Managers
         {
             string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
 
-            if (!Directory.Exists(path))
+            if (!FileSystemHelper.DirectoryExists(path))
             {
-                Directory.CreateDirectory(path);
+                FileSystemHelper.CreateDirectory(path);
             }
 
             path = Path.Combine(path, "containers.txt");
 
-            if (!File.Exists(path) || force)
+            if (!FileSystemHelper.FileExists(path) || force)
             {
                 MakeDefault();
 
-                using var stream2 = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                using var stream2 = FileSystemHelper.OpenWrite(path);
                 using var writer = new StreamWriter(stream2);
-                writer.BaseStream.Seek(0, SeekOrigin.Begin);
 
                 writer.WriteLine("# FORMAT");
 
@@ -259,11 +258,8 @@ namespace ClassicUO.Game.Managers
 
             _data.Clear();
 
-            using var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using var reader = new StreamReader(stream);
-            reader.BaseStream.Seek(0, SeekOrigin.Begin);
             var containersParser = new TextFileParser(
-                reader.ReadToEnd(),
+                FileSystemHelper.ReadAllText(path),
                 new[] { ' ', '\t', ',' },
                 new[] { '#', ';' },
                 new[] { '"', '"' }

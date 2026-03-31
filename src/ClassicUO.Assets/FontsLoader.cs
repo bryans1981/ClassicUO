@@ -100,7 +100,7 @@ namespace ClassicUO.Assets
                     "unifont" + (i == 0 ? "" : i.ToString()) + ".mul"
                 );
 
-                if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                 {
                     _unicodeFontAddress[i] = new UOFileMul(path);
                 }

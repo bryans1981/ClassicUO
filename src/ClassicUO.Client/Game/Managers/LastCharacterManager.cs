@@ -10,6 +10,7 @@ using System.Xml;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Resources;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.Game.Managers
@@ -31,7 +32,7 @@ namespace ClassicUO.Game.Managers
         {
             LastCharacters = new List<LastCharacterInfo>();
 
-            if (!File.Exists(_lastCharacterFile))
+            if (!FileSystemHelper.FileExists(_lastCharacterFile))
             {
                 ConfigurationResolver.Save(LastCharacters, _lastCharacterFile, LastCharacterJsonContext.Default.ListLastCharacterInfo);
             }

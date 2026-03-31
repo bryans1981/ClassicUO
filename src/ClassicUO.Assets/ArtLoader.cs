@@ -26,7 +26,7 @@ namespace ClassicUO.Assets
         {
             string filePath = FileManager.GetUOFilePath("artLegacyMUL.uop");
 
-            if (FileManager.IsUOPInstallation && System.IO.File.Exists(filePath))
+            if (FileManager.IsUOPInstallation && FileSystemHelper.FileExists(filePath))
             {
                 _file = new UOFileUop(filePath, "build/artlegacymul/{0:D8}.tga");
             }
@@ -35,7 +35,7 @@ namespace ClassicUO.Assets
                 filePath = FileManager.GetUOFilePath("art.mul");
                 string idxPath = FileManager.GetUOFilePath("artidx.mul");
 
-                if (System.IO.File.Exists(filePath) && System.IO.File.Exists(idxPath))
+                if (FileSystemHelper.FileExists(filePath) && FileSystemHelper.FileExists(idxPath))
                 {
                     _file = new UOFileMul(filePath, idxPath);
                 }

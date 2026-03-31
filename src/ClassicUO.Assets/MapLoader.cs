@@ -144,7 +144,7 @@ namespace ClassicUO.Assets
             {
                 var path = FileManager.GetUOFilePath($"map{i}LegacyMUL.uop");
 
-                if (FileManager.IsUOPInstallation && File.Exists(path))
+            if (FileManager.IsUOPInstallation && FileSystemHelper.FileExists(path))
                 {
                     var uopFile = new UOFileUop(path, $"build/map{i}legacymul/{{0:D8}}.dat");
                     uopFile.FillEntries();
@@ -152,7 +152,7 @@ namespace ClassicUO.Assets
                     _filesMap[i] = uopFile;
 
                     path = FileManager.GetUOFilePath($"map{i}xLegacyMUL.uop");
-                    if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                     {
                         var uopFileX = new UOFileUop(path, $"build/map{i}legacymul/{{0:D8}}.dat");
                         uopFileX.FillEntries();
@@ -166,12 +166,12 @@ namespace ClassicUO.Assets
                 {
                     path = FileManager.GetUOFilePath($"map{i}.mul");
 
-                    if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                     {
                         _filesMap[i] = new UOFileMul(path);
 
                         path = FileManager.GetUOFilePath($"map{i}x.mul");
-                        if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                         {
                             _filesMapX[i] = new UOFileMul(path);
                         }
@@ -181,7 +181,7 @@ namespace ClassicUO.Assets
 
                     path = FileManager.GetUOFilePath($"mapdifl{i}.mul");
 
-                    if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                     {
                         _mapDifl[i] = new UOFileMul(path);
                         _mapDif[i] = new UOFileMul(FileManager.GetUOFilePath($"mapdif{i}.mul"));
@@ -192,26 +192,26 @@ namespace ClassicUO.Assets
                 }
 
                 path = FileManager.GetUOFilePath($"statics{i}.mul");
-                if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                 {
                     _filesStatics[i] = new UOFileMul(path);
                 }
 
                 path = FileManager.GetUOFilePath($"staidx{i}.mul");
-                if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                 {
                     _filesIdxStatics[i] = new UOFileMul(path);
                 }
 
 
                 path = FileManager.GetUOFilePath($"statics{i}x.mul");
-                if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                 {
                     _filesStaticsX[i] = new UOFileMul(path);
                 }
 
                 path = FileManager.GetUOFilePath($"staidx{i}x.mul");
-                if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
                 {
                     _filesIdxStaticsX[i] = new UOFileMul(path);
                 }

@@ -30,7 +30,7 @@ namespace ClassicUO.Assets
         {
             string path = FileManager.GetUOFilePath("soundLegacyMUL.uop");
 
-            if (FileManager.IsUOPInstallation && File.Exists(path))
+            if (FileManager.IsUOPInstallation && FileSystemHelper.FileExists(path))
             {
                 _file = new UOFileUop(path, "build/soundlegacymul/{0:D8}.dat");
             }
@@ -39,7 +39,7 @@ namespace ClassicUO.Assets
                 path = FileManager.GetUOFilePath("sound.mul");
                 string idxpath = FileManager.GetUOFilePath("soundidx.mul");
 
-                if (File.Exists(path) && File.Exists(idxpath))
+            if (FileSystemHelper.FileExists(path) && FileSystemHelper.FileExists(idxpath))
                 {
                     _file = new UOFileMul(path, idxpath);
                 }
@@ -53,7 +53,7 @@ namespace ClassicUO.Assets
 
             string def = FileManager.GetUOFilePath("Sound.def");
 
-            if (File.Exists(def))
+            if (FileSystemHelper.FileExists(def))
             {
                 using (DefReader reader = new DefReader(def))
                 {
@@ -106,7 +106,7 @@ namespace ClassicUO.Assets
 
             path = FileManager.GetUOFilePath(FileManager.Version >= ClientVersion.CV_4011C ?  @"Music/Digital/Config.txt" : @"Music/Config.txt");
 
-            if (File.Exists(path))
+            if (FileSystemHelper.FileExists(path))
             {
                 using (var reader = new StreamReader(path))
                 {

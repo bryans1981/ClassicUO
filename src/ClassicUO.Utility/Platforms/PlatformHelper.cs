@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: BSD-2-Clause
+// SPDX-License-Identifier: BSD-2-Clause
 
 using System;
 using System.Diagnostics;
@@ -14,12 +14,17 @@ namespace ClassicUO.Utility.Platforms
         public static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         public static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         public static readonly bool IsOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        public static readonly bool IsBrowser = OperatingSystem.IsBrowser();
 
         public static void LaunchBrowser(string url)
         {
             try
             {
-                if (IsWindows)
+                if (IsBrowser)
+                {
+                    Log.Trace("LaunchBrowser skipped in browser runtime.");
+                }
+                else if (IsWindows)
                 {
                     ProcessStartInfo psi = new ProcessStartInfo
                     {

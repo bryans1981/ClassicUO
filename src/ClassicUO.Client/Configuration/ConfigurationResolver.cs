@@ -1,10 +1,11 @@
-﻿// SPDX-License-Identifier: BSD-2-Clause
+// SPDX-License-Identifier: BSD-2-Clause
 
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.Configuration
@@ -13,14 +14,14 @@ namespace ClassicUO.Configuration
     {
         public static T Load<T>(string file, JsonTypeInfo<T> ctx) where T : class
         {
-            if (!File.Exists(file))
+            if (!FileSystemHelper.FileExists(file))
             {
                 Log.Warn(file + " not found.");
 
                 return null;
             }
 
-            var text = File.ReadAllText(file);
+            var text = FileSystemHelper.ReadAllText(file);
 
             text = Regex.Replace
             (
@@ -44,11 +45,11 @@ namespace ClassicUO.Configuration
 
                 if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
                 {
-                    fileInfo.Directory.Create();
+                    FileSystemHelper.CreateDirectory(fileInfo.Directory.FullName);
                 }
 
                 var json = JsonSerializer.Serialize(obj, ctx);
-                File.WriteAllText(file, json);
+                FileSystemHelper.WriteAllText(file, json);
             }
             catch (IOException e)
             {

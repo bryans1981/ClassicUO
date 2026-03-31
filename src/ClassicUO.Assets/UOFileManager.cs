@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: BSD-2-Clause
+// SPDX-License-Identifier: BSD-2-Clause
 
 using ClassicUO.IO;
 using ClassicUO.Utility;
@@ -26,7 +26,7 @@ namespace ClassicUO.Assets
             BasePath = uoPath;
 
             _overrideMap = overrideMap;
-            IsUOPInstallation = Version >= ClientVersion.CV_7000 && File.Exists(GetUOFilePath("MainMisc.uop"));
+            IsUOPInstallation = Version >= ClientVersion.CV_7000 && FileSystemHelper.FileExists(GetUOFilePath("MainMisc.uop"));
 
             Animations = new AnimationsLoader(this);
             AnimData = new AnimDataLoader(this);
@@ -109,14 +109,14 @@ namespace ClassicUO.Assets
             }
 
             //If the file with the given name doesn't exist, check for it with alternative casing if not on windows
-            if (!PlatformHelper.IsWindows && !File.Exists(uoFilePath))
+            if (!PlatformHelper.IsWindows && !FileSystemHelper.FileExists(uoFilePath))
             {
                 FileInfo finfo = new FileInfo(uoFilePath);
                 var dir = Path.GetFullPath(finfo.DirectoryName ?? BasePath);
 
-                if (Directory.Exists(dir))
+                if (FileSystemHelper.DirectoryExists(dir))
                 {
-                    var files = Directory.GetFiles(dir);
+                    var files = FileSystemHelper.GetFiles(dir);
                     var matches = 0;
 
                     foreach (var f in files)
@@ -364,7 +364,7 @@ namespace ClassicUO.Assets
         {
             string pathdef = GetUOFilePath("art.def");
 
-            if (!File.Exists(pathdef))
+            if (!FileSystemHelper.FileExists(pathdef))
             {
                 return;
             }
@@ -433,3 +433,4 @@ namespace ClassicUO.Assets
         }
     }
 }
+

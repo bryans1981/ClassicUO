@@ -7,6 +7,7 @@ using ClassicUO.Configuration;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.Resources;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.Game.Managers
@@ -77,7 +78,7 @@ namespace ClassicUO.Game.Managers
 
             string ignoreXmlPath = Path.Combine(ProfileManager.ProfilePath, "ignore_list.xml");
 
-            if (!File.Exists(ignoreXmlPath))
+            if (!FileSystemHelper.FileExists(ignoreXmlPath))
             {
                 return;
             }
@@ -86,7 +87,8 @@ namespace ClassicUO.Game.Managers
 
             try
             {
-                doc.Load(ignoreXmlPath);
+                using Stream stream = FileSystemHelper.OpenRead(ignoreXmlPath);
+                doc.Load(stream);
             }
             catch (Exception ex)
             {
@@ -119,13 +121,12 @@ namespace ClassicUO.Game.Managers
         {
             string ignoreXmlPath = Path.Combine(ProfileManager.ProfilePath, "ignore_list.xml");
 
-            using (XmlTextWriter xml = new XmlTextWriter(ignoreXmlPath, Encoding.UTF8)
+            using Stream stream = FileSystemHelper.OpenWrite(ignoreXmlPath);
+            using (XmlTextWriter xml = new XmlTextWriter(stream, Encoding.UTF8))
             {
-                Formatting = Formatting.Indented,
-                IndentChar = '\t',
-                Indentation = 1
-            })
-            {
+                xml.Formatting = Formatting.Indented;
+                xml.IndentChar = '\t';
+                xml.Indentation = 1;
                 xml.WriteStartDocument(true);
                 xml.WriteStartElement("ignore");
 

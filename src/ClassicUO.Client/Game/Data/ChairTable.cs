@@ -13,16 +13,17 @@ namespace ClassicUO.Game.Data
         {
             string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
 
-            if (!Directory.Exists(path))
+            if (!FileSystemHelper.DirectoryExists(path))
             {
-                Directory.CreateDirectory(path);
+                FileSystemHelper.CreateDirectory(path);
             }
 
             string chair = Path.Combine(path, "chair.txt");
 
-            if (!File.Exists(chair))
+            if (!FileSystemHelper.FileExists(chair))
             {
-                using (StreamWriter writer = new StreamWriter(chair))
+                using (Stream stream = FileSystemHelper.OpenWrite(chair))
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
                     foreach (var item in _defaultTable)
                     {
@@ -31,7 +32,7 @@ namespace ClassicUO.Game.Data
                 }
             }
 
-            TextFileParser chairParse = new TextFileParser(File.ReadAllText(chair), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
+            TextFileParser chairParse = new TextFileParser(FileSystemHelper.ReadAllText(chair), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
 
             while (!chairParse.IsEOF())
             {

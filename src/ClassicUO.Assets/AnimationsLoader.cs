@@ -58,7 +58,7 @@ namespace ClassicUO.Assets
                 var pathmul = FileManager.GetUOFilePath("anim" + (i == 0 ? string.Empty : (i + 1).ToString()) + ".mul");
                 var pathidx = FileManager.GetUOFilePath("anim" + (i == 0 ? string.Empty : (i + 1).ToString()) + ".idx");
 
-                if (File.Exists(pathmul) && File.Exists(pathidx))
+                if (FileSystemHelper.FileExists(pathmul) && FileSystemHelper.FileExists(pathidx))
                 {
                     _files[i] = new UOFileMul(pathmul, pathidx);
                 }
@@ -72,7 +72,7 @@ namespace ClassicUO.Assets
                 {
                     var pathuop = FileManager.GetUOFilePath($"AnimationFrame{i + 1}.uop");
 
-                    if (File.Exists(pathuop))
+                    if (FileSystemHelper.FileExists(pathuop))
                     {
                         _filesUop[i] = new UOFileUop(pathuop, "build/animationlegacyframe/{0:D6}/{0:D2}.bin");
                         _filesUop[i].FillEntries();
@@ -90,7 +90,7 @@ namespace ClassicUO.Assets
             {
                 string path = FileManager.GetUOFilePath("mobtypes.txt");
 
-                if (File.Exists(path))
+                if (FileSystemHelper.FileExists(path))
                 {
                     var typeNames = new string[5]
                     {
@@ -101,7 +101,7 @@ namespace ClassicUO.Assets
                         "equipment"
                     };
 
-                    using (var reader = new StreamReader(File.OpenRead(path)))
+                    using (var reader = new StreamReader(FileSystemHelper.OpenRead(path)))
                     {
                         string line;
 
@@ -164,7 +164,7 @@ namespace ClassicUO.Assets
 
             string file = FileManager.GetUOFilePath("Anim1.def");
 
-            if (File.Exists(file))
+            if (FileSystemHelper.FileExists(file))
             {
                 using (DefReader defReader = new DefReader(file))
                 {
@@ -186,7 +186,7 @@ namespace ClassicUO.Assets
 
             file = FileManager.GetUOFilePath("Anim2.def");
 
-            if (File.Exists(file))
+            if (FileSystemHelper.FileExists(file))
             {
                 using (DefReader defReader = new DefReader(file))
                 {
@@ -471,7 +471,7 @@ namespace ClassicUO.Assets
 
             var file = FileManager.GetUOFilePath("Equipconv.def");
 
-            if (File.Exists(file))
+            if (FileSystemHelper.FileExists(file))
             {
                 using (DefReader defReader = new DefReader(file, 5))
                 {
@@ -518,7 +518,7 @@ namespace ClassicUO.Assets
 
             var file = FileManager.GetUOFilePath("Bodyconv.def");
 
-            if (!File.Exists(file))
+            if (!FileSystemHelper.FileExists(file))
                 return;
 
             using (var defReader = new DefReader(file))
@@ -624,7 +624,7 @@ namespace ClassicUO.Assets
 
             var file = FileManager.GetUOFilePath("Body.def");
 
-            if (!File.Exists(file))
+            if (!FileSystemHelper.FileExists(file))
                 return;
 
             using (var defReader = new DefReader(file, 1))
@@ -668,7 +668,7 @@ namespace ClassicUO.Assets
 
             var file = FileManager.GetUOFilePath("Corpse.def");
 
-            if (!File.Exists(file))
+            if (!FileSystemHelper.FileExists(file))
                 return;
 
             using (var defReader = new DefReader(file, 1))
@@ -710,7 +710,7 @@ namespace ClassicUO.Assets
 
             var animationSequencePath = FileManager.GetUOFilePath("AnimationSequence.uop");
 
-            if (!File.Exists(animationSequencePath))
+            if (!FileSystemHelper.FileExists(animationSequencePath))
             {
                 Log.Warn("AnimationSequence.uop not found");
 

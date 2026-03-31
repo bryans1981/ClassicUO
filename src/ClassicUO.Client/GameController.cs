@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: BSD-2-Clause
+// SPDX-License-Identifier: BSD-2-Clause
 
 using ClassicUO.Configuration;
 using ClassicUO.Game;
@@ -14,6 +14,7 @@ using ClassicUO.Renderer;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
+using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -133,16 +134,23 @@ namespace ClassicUO
             // TODO: temporary fix to avoid crash when laoding plugins
             Settings.GlobalSettings.Encryption = (byte) NetClient.Socket.Load(UO.FileManager.Version, (EncryptionType) Settings.GlobalSettings.Encryption);
 
-            Log.Trace("Loading plugins...");
-            PluginHost?.Initialize();
-
-            foreach (string p in Settings.GlobalSettings.Plugins)
+            if (PlatformHelper.IsBrowser)
             {
-                Plugin.Create(p);
+                Log.Trace("Skipping plugin loading in browser mode.");
             }
-            _pluginsInitialized = true;
+            else
+            {
+                Log.Trace("Loading plugins...");
+                PluginHost?.Initialize();
 
-            Log.Trace("Done!");
+                foreach (string p in Settings.GlobalSettings.Plugins)
+                {
+                    Plugin.Create(p);
+                }
+                _pluginsInitialized = true;
+
+                Log.Trace("Done!");
+            }
 
             SetScene(new LoginScene(UO.World));
 #endif
@@ -962,7 +970,7 @@ namespace ClassicUO
                     SurfaceFormat.Color
                 )
             )
-            using (FileStream fileStream = File.Create(path))
+            using (Stream fileStream = FileSystemHelper.OpenWrite(path))
             {
                 texture.SetData(colors);
                 texture.SaveAsPng(fileStream, texture.Width, texture.Height);
@@ -983,3 +991,7 @@ namespace ClassicUO
         }
     }
 }
+
+
+
+

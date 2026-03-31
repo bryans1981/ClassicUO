@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: BSD-2-Clause
 
 using ClassicUO.IO;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using System;
 using System.Runtime.InteropServices;
@@ -16,7 +17,7 @@ namespace ClassicUO.Assets
         {
             string path = FileManager.GetUOFilePath("verdata.mul");
 
-            if (!System.IO.File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             {
                 File = null;
             }

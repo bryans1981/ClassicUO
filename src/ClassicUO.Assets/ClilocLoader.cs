@@ -30,7 +30,7 @@ namespace ClassicUO.Assets
             _cliloc = $"Cliloc.{lang}";
             Log.Trace($"searching for: '{_cliloc}'");
 
-            if (!File.Exists(FileManager.GetUOFilePath(_cliloc)))
+            if (!FileSystemHelper.FileExists(FileManager.GetUOFilePath(_cliloc)))
             {
                 Log.Warn($"'{_cliloc}' not found. Rolled back to Cliloc.enu");
 
@@ -49,7 +49,7 @@ namespace ClassicUO.Assets
 
             string path = FileManager.GetUOFilePath(_cliloc);
 
-            if (!File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             {
                 Log.Error($"cliloc not found: '{path}'");
                 return;
@@ -66,7 +66,7 @@ namespace ClassicUO.Assets
 
         void ReadCliloc(string path)
         {
-            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            using Stream fileStream = FileSystemHelper.OpenRead(path);
 
             int bytesRead;
             var totalRead = 0;

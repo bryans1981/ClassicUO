@@ -7,6 +7,7 @@ using ClassicUO.Game.UI.Gumps;
 using ClassicUO.IO;
 using ClassicUO.Assets;
 using ClassicUO.Network;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using System;
 using System.Collections.Concurrent;
@@ -327,11 +328,11 @@ namespace ClassicUO.Game
                         return;
                     }
 
-                    if (!Directory.Exists(_UL.ShardName))
+                    if (!FileSystemHelper.DirectoryExists(_UL.ShardName))
                     {
-                        Directory.CreateDirectory(_UL.ShardName);
+                        FileSystemHelper.CreateDirectory(_UL.ShardName);
 
-                        if (!Directory.Exists(_UL.ShardName))
+                        if (!FileSystemHelper.DirectoryExists(_UL.ShardName))
                         {
                             _UL = null;
 
@@ -636,7 +637,7 @@ namespace ClassicUO.Game
             private readonly BinaryReader _reader;
             private readonly BinaryWriter _writer;
 
-            public ULFileMul(FileStream stream) : base(stream)
+            public ULFileMul(Stream stream, string filePath = null) : base(stream, filePath)
             {
                 _reader = new BinaryReader(stream);
                 _writer = new BinaryWriter(stream);
@@ -687,7 +688,7 @@ namespace ClassicUO.Game
         public class ULMapLoader : MapLoader
         {
             private readonly CancellationTokenSource _feedCancel;
-            private FileStream[] _filesStaticsStream;
+            private Stream[] _filesStaticsStream;
             private readonly Task _writerTask;
 
             public ULMapLoader(UOFileManager fileManager, uint maps) : base(fileManager)
@@ -761,7 +762,7 @@ namespace ClassicUO.Game
                 Client.Game.UO.FileManager.Maps = this;
 
                 _UL._EOF = new uint[NumMaps];
-                _filesStaticsStream = new FileStream[NumMaps];
+                _filesStaticsStream = new Stream[NumMaps];
                 bool foundOneMap = false;
 
                 for (int x = 0; x < _UL._ValidMaps.Count; x++)
@@ -769,37 +770,37 @@ namespace ClassicUO.Game
                     int i = _UL._ValidMaps[x];
                     string path = Path.Combine(_UL.ShardName, $"map{i}.mul");
 
-                    if (File.Exists(path))
+                    if (FileSystemHelper.FileExists(path))
                     {
-                        _filesMap[i] = new ULFileMul(File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite));
+                        _filesMap[i] = new ULFileMul(FileSystemHelper.OpenReadWrite(path), path);
                         foundOneMap = true;
                     }
 
                     path = Path.Combine(_UL.ShardName, $"statics{i}.mul");
 
-                    if (!File.Exists(path))
+                    if (!FileSystemHelper.FileExists(path))
                     {
                         foundOneMap = false;
 
                         break;
                     }
 
-                    _filesStatics[i] = new ULFileMul(File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite));
+                    _filesStatics[i] = new ULFileMul(FileSystemHelper.OpenReadWrite(path), path);
 
-                    _filesStaticsStream[i] = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    _filesStaticsStream[i] = FileSystemHelper.OpenReadWrite(path);
 
-                    _UL._EOF[i] = (uint)new FileInfo(path).Length;
+                    _UL._EOF[i] = (uint) FileSystemHelper.GetFileLength(path);
 
                     path = Path.Combine(_UL.ShardName, $"staidx{i}.mul");
 
-                    if (!File.Exists(path))
+                    if (!FileSystemHelper.FileExists(path))
                     {
                         foundOneMap = false;
 
                         break;
                     }
 
-                    _filesIdxStatics[i] = new ULFileMul(File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite));
+                    _filesIdxStatics[i] = new ULFileMul(FileSystemHelper.OpenReadWrite(path), path);
                 }
 
                 if (!foundOneMap)
@@ -832,7 +833,7 @@ namespace ClassicUO.Game
                 string staIdxPath = Path.Combine(_UL.ShardName, $"staidx{mapId}.mul");
                 string staticsPath = Path.Combine(_UL.ShardName, $"statics{mapId}.mul");
 
-                if (!File.Exists(mapPath))
+                if (!FileSystemHelper.FileExists(mapPath))
                 {
                     var mapFile = GetMapFile(mapId);
 
@@ -879,12 +880,12 @@ namespace ClassicUO.Game
                     }
                 }
 
-                if (!File.Exists(staticsPath))
+                if (!FileSystemHelper.FileExists(staticsPath))
                 {
                     CopyFile(oldStatics, staticsPath);
                 }
 
-                if (!File.Exists(staIdxPath))
+                if (!FileSystemHelper.FileExists(staIdxPath))
                 {
                     CopyFile(oldStaIdx, staIdxPath);
                 }
@@ -928,7 +929,7 @@ namespace ClassicUO.Game
                 }
 
                 //create map new file
-                using (FileStream stream = File.Create(mapPath))
+                using (Stream stream = FileSystemHelper.OpenWrite(mapPath))
                 {
                     Log.Trace($"UltimaLive -> creating new blank map:\t{mapPath}");
                     Log.Trace($"Writing {mapWidthInBlocks} blocks by {mapHeightInBlocks} blocks");
@@ -954,7 +955,7 @@ namespace ClassicUO.Game
                 }
 
                 //create map new file
-                using (FileStream stream = File.Create(staIdxPath))
+                using (Stream stream = FileSystemHelper.OpenWrite(staIdxPath))
                 {
                     Log.Trace("UltimaLive -> creating new index file");
 
@@ -966,7 +967,7 @@ namespace ClassicUO.Game
                     stream.Flush();
                 }
 
-                using (FileStream stream = File.Create(staticsPath))
+                using (Stream stream = FileSystemHelper.OpenWrite(staticsPath))
                 {
                     Log.Trace("UltimaLive -> creating empty static file");
                 }
@@ -975,10 +976,10 @@ namespace ClassicUO.Game
             //TODO: pull out into a FileHelper
             private static void CopyFile(string fromFilePath, string toFilePath)
             {
-                if (!File.Exists(toFilePath) || new FileInfo(toFilePath).Length == 0)
+                if (!FileSystemHelper.FileExists(toFilePath) || FileSystemHelper.GetFileLength(toFilePath) == 0)
                 {
                     Log.Trace($"UltimaLive -> copying file:\t{toFilePath} from {fromFilePath}");
-                    File.Copy(fromFilePath, toFilePath, true);
+                    FileSystemHelper.CopyFile(fromFilePath, toFilePath, true);
                 }
             }
 

@@ -328,16 +328,17 @@ namespace ClassicUO.Game.Data
         {
             string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
 
-            if (!Directory.Exists(path))
+            if (!FileSystemHelper.DirectoryExists(path))
             {
-                Directory.CreateDirectory(path);
+                FileSystemHelper.CreateDirectory(path);
             }
 
             path = Path.Combine(path, "lightshaders.txt");
 
-            if (!File.Exists(path) || force)
+            if (!FileSystemHelper.FileExists(path) || force)
             {
-                using (StreamWriter writer = new StreamWriter(File.Create(path)))
+                using (Stream stream = FileSystemHelper.OpenWrite(path))
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
                     writer.WriteLine("# FORMAT");
 
@@ -353,7 +354,7 @@ namespace ClassicUO.Game.Data
                 }
             }
 
-            TextFileParser lightshadersParser = new TextFileParser(File.ReadAllText(path), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
+            TextFileParser lightshadersParser = new TextFileParser(FileSystemHelper.ReadAllText(path), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
 
             while (!lightshadersParser.IsEOF())
             {
@@ -392,16 +393,17 @@ namespace ClassicUO.Game.Data
         {
             string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
 
-            if (!Directory.Exists(path))
+            if (!FileSystemHelper.DirectoryExists(path))
             {
-                Directory.CreateDirectory(path);
+                FileSystemHelper.CreateDirectory(path);
             }
 
             string lights = Path.Combine(path, "lights.txt");
 
-            if (!File.Exists(lights))
+            if (!FileSystemHelper.FileExists(lights))
             {
-                using (StreamWriter writer = new StreamWriter(lights))
+                using (Stream stream = FileSystemHelper.OpenWrite(lights))
+                using (StreamWriter writer = new StreamWriter(stream))
                 {
                     writer.WriteLine("# FORMAT");
                     writer.WriteLine("# ITEM_ID LIGHT_SHADER_OR_HUE");
@@ -415,7 +417,7 @@ namespace ClassicUO.Game.Data
                 }
             }
 
-            TextFileParser itemlightsparser = new TextFileParser(File.ReadAllText(lights), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
+            TextFileParser itemlightsparser = new TextFileParser(FileSystemHelper.ReadAllText(lights), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
 
             while (!itemlightsparser.IsEOF())
             {

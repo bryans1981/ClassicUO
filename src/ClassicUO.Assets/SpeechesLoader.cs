@@ -24,7 +24,7 @@ namespace ClassicUO.Assets
         {
             string path = FileManager.GetUOFilePath("speech.mul");
 
-            if (!File.Exists(path))
+            if (!FileSystemHelper.FileExists(path))
             {
                 _speech = Array.Empty<SpeechEntry>();
 

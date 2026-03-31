@@ -207,18 +207,18 @@ namespace ClassicUO.Game.Data
         {
             string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
 
-            if (!Directory.Exists(path))
+            if (!FileSystemHelper.DirectoryExists(path))
             {
-                Directory.CreateDirectory(path);
+                FileSystemHelper.CreateDirectory(path);
             }
 
             string buff = Path.Combine(path, "buff.txt");
 
-            if (File.Exists(buff))
+            if (FileSystemHelper.FileExists(buff))
             {
                 var tempList = new List<ushort>();
 
-                TextFileParser buffParser = new TextFileParser(File.ReadAllText(buff), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
+                TextFileParser buffParser = new TextFileParser(FileSystemHelper.ReadAllText(buff), new[] { ' ', '\t', ',' }, new[] { '#', ';' }, new[] { '"', '"' });
 
                 while (!buffParser.IsEOF())
                 {

@@ -119,7 +119,7 @@ namespace ClassicUO
             string clientVersionText = Settings.GlobalSettings.ClientVersion;
 
             // check if directory is good
-            if (!Directory.Exists(clientPath))
+            if (!FileSystemHelper.DirectoryExists(clientPath))
             {
                 Log.Error("Invalid client directory: " + clientPath);
                 Client.ShowErrorMessage(string.Format(ResErrorMessages.ClientPathIsNotAValidUODirectory, clientPath));

@@ -1,5 +1,6 @@
-﻿// SPDX-License-Identifier: BSD-2-Clause
+// SPDX-License-Identifier: BSD-2-Clause
 
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using System;
 using System.IO;
@@ -8,7 +9,7 @@ namespace ClassicUO.IO
 {
     public class UOFile : MMFileReader
     {
-        public UOFile(string filepath) : base(File.Open(filepath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        public UOFile(string filepath) : base(FileSystemHelper.OpenRead(filepath), filepath)
         {
             Entries = Array.Empty<UOFileIndex>();
 
@@ -47,3 +48,4 @@ namespace ClassicUO.IO
         }
     }
 }
+

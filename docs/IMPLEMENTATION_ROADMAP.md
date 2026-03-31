@@ -99,7 +99,9 @@ Current status:
 - `tiledata.mul`, `cliloc.enu`, and `hues.mul` are now being read through the browser asset harness.
 - The browser spike now has a layered browser asset subsystem with client-facing and runtime-facing service boundaries.
 - The shared utility layer now includes a read-only binary asset provider shape for `/uo` browser asset reads.
-- The remaining work is now wiring the browser-host asset subsystem into the shared seam plus a smaller cleanup list in a few client/UI subsystems.
+- The experimental browser host now targets `net10.0` and can reference the shared utility/browser filesystem seam directly.
+- A first shared `BrowserFileSystem` bridge now preloads the bootstrap subset into a real read-only seam provider for browser-host validation.
+- The remaining work is now extending that bridge from bootstrap preloading to on-demand shared-seam reads plus a smaller cleanup list in a few client/UI subsystems.
 
 ### Milestone 3: Linux Container Packaging
 
@@ -240,8 +242,8 @@ Use these unless discovery proves they are wrong:
 
 The next concrete actions should be:
 
-1. Adapt the browser-host asset subsystem to a provider that `BrowserFileSystem` can consume.
-2. Feed `tiledata.mul` through the shared filesystem seam using that provider path.
+1. Extend the new browser-host to shared `BrowserFileSystem` bridge from bootstrap subset preload to on-demand provider-backed reads.
+2. Feed `tiledata.mul` through the shared filesystem seam using the new bridge path.
 3. Expand from tiledata to the next core asset files once the seam is proven.
 4. Only then move on to container packaging and backend scaffolding.
 

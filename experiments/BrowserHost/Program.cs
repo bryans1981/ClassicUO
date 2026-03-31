@@ -21,6 +21,7 @@ builder.Services.AddScoped<BrowserBootstrapAssetService>();
 builder.Services.AddScoped<BrowserRuntimeBootstrapAssetService>();
 builder.Services.AddScoped<IBrowserRuntimeBootstrapAssets>(sp => sp.GetRequiredService<BrowserRuntimeBootstrapAssetService>());
 builder.Services.AddScoped<IBrowserClientAssetService, BrowserClientAssetService>();
+builder.Services.AddScoped<BrowserFileSystemBridgeService>();
 builder.Services.AddScoped<BrowserVirtualFileBridgeService>();
 
 await builder.Build().RunAsync();

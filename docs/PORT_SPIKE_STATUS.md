@@ -30,6 +30,8 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - client-facing browser asset service that now drives the current test panels instead of direct probe services
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and `Diagnostics`
+- browser host now targets `net10.0` and references `ClassicUO.Utility`
+- shared `BrowserFileSystem` bridge now exists for read-only bootstrap asset loading through the real seam
 
 ### Main-code integration progress
 
@@ -71,6 +73,8 @@ We have a working experimental browser host at `experiments/BrowserHost`.
   - runtime-facing bootstrap and cache control boundary
 - `BrowserClientAssetService`
   - client-facing browser asset API used by the spike UI
+- `BrowserFileSystemBridgeService`
+  - activates a shared read-only `BrowserFileSystem` provider from bootstrap assets and probes seam-level reads
 
 ### Operator commands
 
@@ -94,4 +98,4 @@ Test:
 
 ### Next code objective
 
-Bridge the browser-host asset subsystem into the shared `BrowserFileSystem` path so the real client/browser seam can consume browser-backed `/uo` assets instead of spike-only services.
+Extend the new shared `BrowserFileSystem` bridge from bootstrap subset preloading to on-demand provider-backed reads that the main browser seam can use directly.

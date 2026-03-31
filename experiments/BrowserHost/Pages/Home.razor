@@ -2,6 +2,7 @@
 @inject BrowserHost.Services.EnvironmentProbeService ProbeService
 @inject BrowserHost.Services.BrowserStorageService StorageService
 @inject BrowserHost.Services.IBrowserClientAssetService BrowserClientAssetService
+@inject BrowserHost.Services.BrowserFileSystemBridgeService BrowserFileSystemBridgeService
 @inject BrowserHost.Services.BrowserVirtualFileBridgeService BridgeService
 
 <PageTitle>ClassicUO Browser Spike</PageTitle>
@@ -98,6 +99,51 @@
         }
     </div>
 }
+
+<div class="next-steps">
+    <h2>Shared filesystem bridge</h2>
+    <p>This loads the current bootstrap asset set into a read-only shared `BrowserFileSystem` provider so the browser-host path can be validated through the real seam instead of spike-only readers.</p>
+
+    <div class="mb-2">
+        <label><strong>Bridge probe path:</strong></label>
+        <input class="form-control" @bind="_fileSystemBridgePath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="ActivateFileSystemBridge" disabled="@_fileSystemBridgeBusy">@(_fileSystemBridgeBusy ? "Activating..." : "Activate bridge from bootstrap assets")</button>
+        <button class="btn btn-outline-secondary ms-2" @onclick="ProbeFileSystemBridge" disabled="@_fileSystemBridgeProbeBusy">@(_fileSystemBridgeProbeBusy ? "Probing..." : "Probe shared filesystem path")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_fileSystemBridgeMessage))
+    {
+        <p class="message">@_fileSystemBridgeMessage</p>
+    }
+
+    @if (_fileSystemBridgeState is not null)
+    {
+        <p><strong>Activated:</strong> @FormatBool(_fileSystemBridgeState.Activated)</p>
+        <p><strong>Loaded paths:</strong> @_fileSystemBridgeState.LoadedCount</p>
+
+        @if (_fileSystemBridgeState.LoadedPaths.Length > 0)
+        {
+            <p><strong>Bridge assets:</strong> @string.Join(", ", _fileSystemBridgeState.LoadedPaths)</p>
+        }
+    }
+
+    @if (_fileSystemBridgeProbe is not null)
+    {
+        <p><strong>Probe path:</strong> @_fileSystemBridgeProbe.Path</p>
+        <p><strong>Exists:</strong> @FormatBool(_fileSystemBridgeProbe.Exists)</p>
+        <p><strong>Read succeeded:</strong> @FormatBool(_fileSystemBridgeProbe.ReadSucceeded)</p>
+        <p><strong>Bytes:</strong> @_fileSystemBridgeProbe.Length</p>
+        <p><strong>Total ms:</strong> @_fileSystemBridgeProbe.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_fileSystemBridgeProbe.Error))
+        {
+            <p><strong>Error:</strong> @_fileSystemBridgeProbe.Error</p>
+        }
+    }
+</div>
 
 <div class="next-steps">
     <h2>Bootstrap loader snapshot</h2>
@@ -581,6 +627,8 @@
     private BrowserHost.Services.BrowserRuntimeBootstrapState? _loaderSnapshot;
     private BrowserHost.Services.BrowserAssetWarmResult? _assetWarmResult;
     private BrowserHost.Services.BrowserRuntimeCacheState? _runtimeCacheState;
+    private BrowserHost.Services.BrowserFileSystemBridgeState? _fileSystemBridgeState;
+    private BrowserHost.Services.BrowserFileSystemBridgeProbeResult? _fileSystemBridgeProbe;
     private BrowserHost.Services.BrowserVirtualRootSummary[]? _rootSummaries;
     private bool _isBusy;
     private bool _storageBusy;
@@ -595,6 +643,8 @@
     private bool _clilocBusy;
     private bool _huesBusy;
     private bool _loaderSnapshotBusy;
+    private bool _fileSystemBridgeBusy;
+    private bool _fileSystemBridgeProbeBusy;
     private bool _assetWarmBusy;
     private bool _assetCacheClearBusy;
     private bool _preloadBusy;
@@ -617,6 +667,8 @@
     private string _huesPath = "/uo/hues.mul";
     private string _huesMessage = "Probe hues.mul to validate the next loader-style asset family.";
     private string _loaderSnapshotMessage = "Load the bootstrap snapshot to run the current browser-side asset set together.";
+    private string _fileSystemBridgePath = "/uo/tiledata.mul";
+    private string _fileSystemBridgeMessage = "Activate the bridge to preload bootstrap assets into the shared BrowserFileSystem provider.";
     private string _assetWarmPath = "/uo/cliloc.enu";
     private string _assetWarmMessage = "Warm a file into the C# asset stream cache to avoid repeated browser interop for loader-style reads.";
     private string _preloadPath = "/uo/TestDoc.txt";
@@ -707,6 +759,7 @@
             _assetManifest = await StorageService.GetAssetManifestAsync();
             _hostedSeedManifest = await StorageService.GetHostedSeedManifestAsync();
             _runtimeCacheState = await BrowserClientAssetService.GetCacheStateAsync();
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
         }
         finally
         {
@@ -968,6 +1021,56 @@
         finally
         {
             _loaderSnapshotBusy = false;
+        }
+    }
+
+    private async Task ActivateFileSystemBridge()
+    {
+        _fileSystemBridgeBusy = true;
+        _fileSystemBridgeMessage = "Activating shared BrowserFileSystem bridge from bootstrap assets...";
+
+        try
+        {
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.ActivateBootstrapAssetsAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _tileDataPath,
+                    ClilocPath = _clilocPath,
+                    HuesPath = _huesPath
+                }
+            );
+
+            _fileSystemBridgeMessage = $"Bridge activated with {_fileSystemBridgeState.LoadedCount} bootstrap asset(s).";
+        }
+        catch (Exception ex)
+        {
+            _fileSystemBridgeMessage = $"Bridge activation failed: {ex.Message}";
+        }
+        finally
+        {
+            _fileSystemBridgeBusy = false;
+        }
+    }
+
+    private async Task ProbeFileSystemBridge()
+    {
+        _fileSystemBridgeProbeBusy = true;
+        _fileSystemBridgeMessage = $"Probing shared BrowserFileSystem path {_fileSystemBridgePath}...";
+
+        try
+        {
+            _fileSystemBridgeProbe = await BrowserFileSystemBridgeService.ProbePathAsync(_fileSystemBridgePath);
+            _fileSystemBridgeMessage = string.IsNullOrWhiteSpace(_fileSystemBridgeProbe.Error)
+                ? $"Shared filesystem probe completed for {_fileSystemBridgeProbe.Path}."
+                : $"Shared filesystem probe finished with error: {_fileSystemBridgeProbe.Error}";
+        }
+        catch (Exception ex)
+        {
+            _fileSystemBridgeMessage = $"Shared filesystem probe failed: {ex.Message}";
+        }
+        finally
+        {
+            _fileSystemBridgeProbeBusy = false;
         }
     }
 

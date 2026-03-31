@@ -24,6 +24,12 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - focused recommended-seed import path for bootstrap-critical files and retail UOP alternatives
 - structured `tiledata.mul` probe that now parses the first land tile correctly from the imported browser asset set
 - C# browser asset byte-source service used by the spike instead of relying only on JS-side binary parsing
+- root-aware browser asset caching with separate raw asset cache and processed asset cache
+- reusable browser asset loader harness for read, preprocess, parse, and cache flow
+- browser asset readers for `tiledata.mul`, `cliloc.enu`, and `hues.mul`
+- client-facing browser asset service that now drives the current test panels instead of direct probe services
+- bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
+- browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and `Diagnostics`
 
 ### Main-code integration progress
 
@@ -45,6 +51,26 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - `dotnet build .\experiments\BrowserHost\BrowserHost.csproj -c Debug`
 - `dotnet build .\src\ClassicUO.Client\ClassicUO.Client.csproj -c Debug`
 - `dotnet test .\tests\ClassicUO.UnitTests\ClassicUO.UnitTests.csproj -c Debug --filter BrowserFileSystemTests` (18 passing tests)
+
+### Current browser asset subsystem layout
+
+- `BrowserAssetSourceService`
+  - browser-backed raw byte and stream access
+  - case-insensitive path resolution
+  - raw asset cache
+- `BrowserProcessedAssetCacheService`
+  - processed and parsed asset cache
+- `BrowserAssetLoaderHarnessService`
+  - shared read/preprocess/parse/cache flow
+- `BrowserTileDataReaderService`
+- `BrowserClilocReaderService`
+- `BrowserHuesReaderService`
+- `BrowserBootstrapAssetService`
+  - aggregates bootstrap asset reads
+- `BrowserRuntimeBootstrapAssetService`
+  - runtime-facing bootstrap and cache control boundary
+- `BrowserClientAssetService`
+  - client-facing browser asset API used by the spike UI
 
 ### Operator commands
 
@@ -68,6 +94,4 @@ Test:
 
 ### Next code objective
 
-Use the new browser asset byte-source path to satisfy real loader-style reads from `/uo`, starting with the tiledata loader expectations and then expanding to additional asset files.
-
-
+Bridge the browser-host asset subsystem into the shared `BrowserFileSystem` path so the real client/browser seam can consume browser-backed `/uo` assets instead of spike-only services.

@@ -1,11 +1,21 @@
-using System.Buffers.Binary;
-using System.Text;
-
 namespace BrowserHost.Services;
 
-public sealed class BrowserAssetSourceService
+public interface IBrowserAssetStreamSource
+{
+    ValueTask<bool> FileExistsAsync(string path);
+    ValueTask<BrowserStoredFilesResult> ListFilesUnderPathAsync(string path);
+    ValueTask<int> GetFileLengthAsync(string path);
+    ValueTask<byte[]> ReadAllBytesAsync(string path);
+    ValueTask<Stream> OpenReadAsync(string path);
+    ValueTask<BrowserAssetSourceCacheSummary> GetCacheSummaryAsync();
+    ValueTask<BrowserAssetWarmResult> WarmPathAsync(string path);
+    ValueTask ClearCacheAsync();
+}
+
+public sealed class BrowserAssetSourceService : IBrowserAssetStreamSource
 {
     private readonly BrowserStorageService _storageService;
+    private readonly Dictionary<string, byte[]> _cachedFiles = new(StringComparer.OrdinalIgnoreCase);
 
     public BrowserAssetSourceService(BrowserStorageService storageService)
     {
@@ -14,40 +24,72 @@ public sealed class BrowserAssetSourceService
 
     public ValueTask<bool> FileExistsAsync(string path)
     {
-        return _storageService.FileExistsAsync(path);
+        return FileExistsCoreAsync(path);
+    }
+
+    public async ValueTask<BrowserStoredFilesResult> ListFilesUnderPathAsync(string path)
+    {
+        BrowserStoredFilesResult result = await _storageService.ListFilesUnderPathAsync(path);
+        result.FileNames = result.FileNames
+            .Select(EnsureLeadingSlash)
+            .ToArray();
+
+        return result;
     }
 
     public async ValueTask<int> GetFileLengthAsync(string path)
     {
-        BrowserFileBytesResult result = await _storageService.ReadBytesBase64Async(path);
+        BrowserFileBytesResult result = await ReadBytesResultAsync(path);
         return result.Exists ? result.Length : 0;
     }
 
     public async ValueTask<byte[]> ReadAllBytesAsync(string path)
     {
-        BrowserFileBytesResult result = await _storageService.ReadBytesBase64Async(path);
+        string resolvedPath = await ResolvePathAsync(path);
+
+        if (string.IsNullOrEmpty(resolvedPath))
+        {
+            throw new FileNotFoundException(path);
+        }
+
+        if (_cachedFiles.TryGetValue(resolvedPath, out byte[]? cachedBytes))
+        {
+            return cachedBytes;
+        }
+
+        BrowserFileBytesResult result = await ReadBytesResultAsync(resolvedPath);
 
         if (!result.Exists)
         {
             throw new FileNotFoundException(path);
         }
 
-        return string.IsNullOrEmpty(result.Base64) ? Array.Empty<byte>() : Convert.FromBase64String(result.Base64);
-    }
-}
-
-public sealed class TileDataProbeService
-{
-    private readonly BrowserAssetSourceService _assetSourceService;
-
-    public TileDataProbeService(BrowserAssetSourceService assetSourceService)
-    {
-        _assetSourceService = assetSourceService;
+        byte[] bytes = string.IsNullOrEmpty(result.Base64) ? Array.Empty<byte>() : Convert.FromBase64String(result.Base64);
+        _cachedFiles[resolvedPath] = bytes;
+        return bytes;
     }
 
-    public async ValueTask<BrowserTileDataProbeResult> ProbeAsync(string path)
+    public async ValueTask<Stream> OpenReadAsync(string path)
     {
-        BrowserTileDataProbeResult result = new()
+        byte[] bytes = await ReadAllBytesAsync(path);
+        return new MemoryStream(bytes, writable: false);
+    }
+
+    public ValueTask<BrowserAssetSourceCacheSummary> GetCacheSummaryAsync()
+    {
+        BrowserAssetSourceCacheSummary summary = new()
+        {
+            EntryCount = _cachedFiles.Count,
+            TotalBytes = _cachedFiles.Values.Sum(static x => (long) x.Length),
+            Paths = _cachedFiles.Keys.OrderBy(static x => x, StringComparer.OrdinalIgnoreCase).ToArray()
+        };
+
+        return ValueTask.FromResult(summary);
+    }
+
+    public async ValueTask<BrowserAssetWarmResult> WarmPathAsync(string path)
+    {
+        BrowserAssetWarmResult result = new()
         {
             Path = path
         };
@@ -56,27 +98,20 @@ public sealed class TileDataProbeService
 
         try
         {
-            result.Exists = await _assetSourceService.FileExistsAsync(path);
+            string resolvedPath = await ResolvePathAsync(path);
 
-            if (!result.Exists)
+            if (string.IsNullOrEmpty(resolvedPath))
             {
+                result.Error = "File does not exist.";
                 return result;
             }
 
-            byte[] bytes = await _assetSourceService.ReadAllBytesAsync(path);
+            result.Path = resolvedPath;
+            result.WasCached = _cachedFiles.ContainsKey(resolvedPath);
+            byte[] bytes = await ReadAllBytesAsync(resolvedPath);
+            result.Succeeded = true;
             result.Length = bytes.Length;
-
-            TileDataFirstLandParse oldFormat = ParseFirstLand(bytes, isOldFormat: true);
-            TileDataFirstLandParse newFormat = ParseFirstLand(bytes, isOldFormat: false);
-            TileDataFirstLandParse selected = SelectBest(oldFormat, newFormat);
-
-            result.IsOldFormat = selected.IsOldFormat;
-            result.Header = selected.Header;
-            result.FirstLandFlags = selected.Flags;
-            result.FirstLandTextureId = selected.TextureId;
-            result.FirstLandName = selected.Name;
             result.TotalMs = (DateTime.UtcNow - started).TotalMilliseconds;
-
             return result;
         }
         catch (Exception ex)
@@ -87,93 +122,81 @@ public sealed class TileDataProbeService
         }
     }
 
-    private static TileDataFirstLandParse SelectBest(TileDataFirstLandParse oldFormat, TileDataFirstLandParse newFormat)
+    public ValueTask ClearCacheAsync()
     {
-        bool oldLooksValid = LooksLikeTileName(oldFormat.Name);
-        bool newLooksValid = LooksLikeTileName(newFormat.Name);
-
-        if (oldLooksValid && !newLooksValid)
-        {
-            return oldFormat;
-        }
-
-        if (!oldLooksValid && newLooksValid)
-        {
-            return newFormat;
-        }
-
-        return oldFormat;
+        _cachedFiles.Clear();
+        return ValueTask.CompletedTask;
     }
 
-    private static TileDataFirstLandParse ParseFirstLand(byte[] bytes, bool isOldFormat)
+    private async ValueTask<bool> FileExistsCoreAsync(string path)
     {
-        ReadOnlySpan<byte> span = bytes;
-        const int headerLength = 4;
-        int flagsLength = isOldFormat ? 4 : 8;
-        const int textureIdLength = 2;
-        const int nameLength = 20;
-        int minimumLength = headerLength + flagsLength + textureIdLength + nameLength;
-
-        if (span.Length < minimumLength)
-        {
-            throw new InvalidDataException("tiledata.mul is smaller than the first land-tile record.");
-        }
-
-        uint header = BinaryPrimitives.ReadUInt32LittleEndian(span[..4]);
-        int offset = 4;
-        string flags;
-
-        if (isOldFormat)
-        {
-            flags = BinaryPrimitives.ReadUInt32LittleEndian(span.Slice(offset, 4)).ToString();
-            offset += 4;
-        }
-        else
-        {
-            flags = BinaryPrimitives.ReadUInt64LittleEndian(span.Slice(offset, 8)).ToString();
-            offset += 8;
-        }
-
-        ushort textureId = BinaryPrimitives.ReadUInt16LittleEndian(span.Slice(offset, 2));
-        offset += 2;
-        string name = Encoding.UTF8.GetString(span.Slice(offset, 20)).TrimEnd('\0');
-
-        return new TileDataFirstLandParse(isOldFormat, header, flags, textureId, name);
+        string resolvedPath = await ResolvePathAsync(path);
+        return !string.IsNullOrEmpty(resolvedPath);
     }
 
-    private static bool LooksLikeTileName(string value)
+    private async ValueTask<BrowserFileBytesResult> ReadBytesResultAsync(string path)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        string resolvedPath = await ResolvePathAsync(path);
+
+        if (string.IsNullOrEmpty(resolvedPath))
         {
-            return false;
+            return new BrowserFileBytesResult
+            {
+                Path = path,
+                Exists = false
+            };
         }
 
-        foreach (char c in value.Trim())
-        {
-            if (char.IsLetterOrDigit(c))
-            {
-                continue;
-            }
+        BrowserFileBytesResult result = await _storageService.ReadBytesBase64Async(resolvedPath);
+        result.Path = EnsureLeadingSlash(result.Path);
 
-            switch (c)
+        return result;
+    }
+
+    private async ValueTask<string> ResolvePathAsync(string path)
+    {
+        string normalizedPath = EnsureLeadingSlash(path);
+
+        if (await _storageService.FileExistsAsync(normalizedPath))
+        {
+            return normalizedPath;
+        }
+
+        string parentPath = GetParentPath(normalizedPath);
+        BrowserStoredFilesResult listing = await _storageService.ListFilesUnderPathAsync(parentPath);
+
+        foreach (string fileName in listing.FileNames)
+        {
+            string candidate = EnsureLeadingSlash(fileName);
+
+            if (string.Equals(candidate, normalizedPath, StringComparison.OrdinalIgnoreCase))
             {
-                case ' ':
-                case '!':
-                case '\'':
-                case '(':
-                case ')':
-                case '.':
-                case ',':
-                case '_':
-                case '-':
-                    continue;
-                default:
-                    return false;
+                return candidate;
             }
         }
 
-        return true;
+        return string.Empty;
     }
 
-    private readonly record struct TileDataFirstLandParse(bool IsOldFormat, uint Header, string Flags, ushort TextureId, string Name);
+    private static string GetParentPath(string path)
+    {
+        int lastSeparator = path.LastIndexOf('/');
+
+        if (lastSeparator <= 0)
+        {
+            return "/";
+        }
+
+        return path[..lastSeparator];
+    }
+
+    private static string EnsureLeadingSlash(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return "/";
+        }
+
+        return path[0] == '/' ? path : "/" + path;
+    }
 }

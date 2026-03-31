@@ -96,9 +96,10 @@ Current status:
 - Main client now has a test-validated browser filesystem/provider seam.
 - The shallow asset-layer file checks have largely been moved to the shared seam.
 - Most major direct `System.IO` clusters have been moved onto the shared filesystem seam, including `UltimaLive`.
-- `tiledata.mul` is now being read and parsed as a structured browser-backed asset through the spike.
+- `tiledata.mul`, `cliloc.enu`, and `hues.mul` are now being read through the browser asset harness.
+- The browser spike now has a layered browser asset subsystem with client-facing and runtime-facing service boundaries.
 - The shared utility layer now includes a read-only binary asset provider shape for `/uo` browser asset reads.
-- The remaining work is now wiring a JS-backed browser asset provider into the shared seam plus a smaller cleanup list in a few client/UI subsystems.
+- The remaining work is now wiring the browser-host asset subsystem into the shared seam plus a smaller cleanup list in a few client/UI subsystems.
 
 ### Milestone 3: Linux Container Packaging
 
@@ -218,9 +219,9 @@ Gateway implementation can likely be sourced from public references, but the bro
 
 These are the first tasks we should execute in order:
 
-1. Bridge the browser-host byte source into the main `BrowserFileSystem` provider path.
+1. Bridge the browser-host asset subsystem into the main `BrowserFileSystem` provider path.
 2. Run the first real asset-backed shared-seam read using the tiledata loader expectations.
-3. Extend the browser-backed read path to additional core asset files beyond `tiledata.mul`.
+3. Extend the shared-seam browser-backed read path to additional core asset files beyond `tiledata.mul`.
 4. Finish the smaller remaining direct-file cleanup areas in client/UI code.
 5. Design the minimum container layout needed for static hosting plus persistent storage.
 6. Choose the first backend stack for auth and settings.
@@ -239,8 +240,8 @@ Use these unless discovery proves they are wrong:
 
 The next concrete actions should be:
 
-1. Implement the JS-backed provider bridge for imported OPFS files.
-2. Feed `tiledata.mul` through the shared filesystem seam using the new browser asset byte-source path.
+1. Adapt the browser-host asset subsystem to a provider that `BrowserFileSystem` can consume.
+2. Feed `tiledata.mul` through the shared filesystem seam using that provider path.
 3. Expand from tiledata to the next core asset files once the seam is proven.
 4. Only then move on to container packaging and backend scaffolding.
 
@@ -260,8 +261,6 @@ Refined next steps after current discovery:
 3. Identify what will be required for a production-safe WebSocket gateway.
 4. Defer container work until browser packaging is reproducible or externally sourced.
 
-
-
 ## Custom Port Direction
 
 Current project direction:
@@ -277,7 +276,3 @@ Immediate implementation branch of work:
 3. Introduce a browser-compatible asset access layer.
 4. Replace high-value deep System.IO usage with the shared filesystem seam.
 5. Reach a minimal boot target before solving full deployment.
-
-
-
-

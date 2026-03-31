@@ -1,7 +1,7 @@
 @page "/"
 @inject BrowserHost.Services.EnvironmentProbeService ProbeService
 @inject BrowserHost.Services.BrowserStorageService StorageService
-@inject BrowserHost.Services.TileDataProbeService TileDataProbeService
+@inject BrowserHost.Services.IBrowserClientAssetService BrowserClientAssetService
 @inject BrowserHost.Services.BrowserVirtualFileBridgeService BridgeService
 
 <PageTitle>ClassicUO Browser Spike</PageTitle>
@@ -61,6 +61,232 @@
     <p class="message">@_importMessage</p>
 }
 
+<div class="tab-bar">
+    <button class="@GetTabClass("current")" @onclick='() => SetActiveTab("current")'>Current Tests</button>
+    <button class="@GetTabClass("imports")" @onclick='() => SetActiveTab("imports")'>Imports & Assets</button>
+    <button class="@GetTabClass("diagnostics")" @onclick='() => SetActiveTab("diagnostics")'>Diagnostics</button>
+</div>
+
+@if (_activeTab == "current")
+{
+@if (_assetManifest?.Bootstrap is not null)
+{
+    <div class="next-steps">
+        <h2>Bootstrap readiness</h2>
+        <p>This is a stricter browser-port check than the current desktop startup guard, intended to tell us whether `/uo` looks usable for a first real asset-read path.</p>
+        <p><strong>Ready:</strong> @FormatBool(_assetManifest.Bootstrap.IsReady)</p>
+        <p><strong>Checks passed:</strong> @_assetManifest.Bootstrap.PassedChecks / @_assetManifest.Bootstrap.TotalChecks</p>
+        <p><strong>Primary read target:</strong> @(string.IsNullOrWhiteSpace(_assetManifest.Bootstrap.PrimaryReadTargetPath) ? "not ready" : _assetManifest.Bootstrap.PrimaryReadTargetPath)</p>
+        <p><strong>Reason:</strong> @_assetManifest.Bootstrap.PrimaryReadTargetReason</p>
+        <p><strong>Recommended minimal import set:</strong> @string.Join(", ", _assetManifest.Bootstrap.RecommendedImportSet)</p>
+
+        @if (_assetManifest.Bootstrap.MissingRecommendedFiles.Length > 0)
+        {
+            <p><strong>Missing recommended files:</strong> @string.Join(", ", _assetManifest.Bootstrap.MissingRecommendedFiles)</p>
+        }
+        else
+        {
+            <p><strong>Missing recommended files:</strong> none</p>
+        }
+
+        @foreach (var check in _assetManifest.Bootstrap.Checks)
+        {
+            <p><strong>@check.Name:</strong> @FormatBool(check.IsSatisfied)</p>
+            <p>@check.Description</p>
+            <p><strong>Accepted:</strong> @string.Join(", ", check.AcceptedPatterns)</p>
+            <p><strong>Matches:</strong> @(check.Matches.Length == 0 ? "none" : string.Join(", ", check.Matches))</p>
+        }
+    </div>
+}
+
+<div class="next-steps">
+    <h2>Bootstrap loader snapshot</h2>
+    <p>This runs the current browser-side bootstrap asset set together through the loader service and reports one combined result.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBootstrapSnapshot" disabled="@_loaderSnapshotBusy">@(_loaderSnapshotBusy ? "Loading..." : "Load bootstrap snapshot")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_loaderSnapshotMessage))
+    {
+        <p class="message">@_loaderSnapshotMessage</p>
+    }
+
+    @if (_loaderSnapshot is not null)
+    {
+        <p><strong>Loaded assets:</strong> @_loaderSnapshot.LoadedCount / 3</p>
+        <p><strong>Cache hits:</strong> @_loaderSnapshot.CacheHits</p>
+        <p><strong>Total ms:</strong> @_loaderSnapshot.TotalMs.ToString("0.00")</p>
+        <p><strong>Ready:</strong> @FormatBool(_loaderSnapshot.IsReady)</p>
+        <p><strong>Tiledata:</strong> @FormatBool(_loaderSnapshot.TileData.Exists)</p>
+        <p><strong>Cliloc:</strong> @FormatBool(_loaderSnapshot.Cliloc.Exists)</p>
+        <p><strong>Hues:</strong> @FormatBool(_loaderSnapshot.Hues.Exists)</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Asset stream cache</h2>
+    <p>This is the reusable C# binary cache that sits behind the browser asset stream source and avoids repeated JS/base64 reads for warmed files.</p>
+
+    <div class="mb-2">
+        <label><strong>Warm path:</strong></label>
+        <input class="form-control" @bind="_assetWarmPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-secondary" @onclick="WarmAssetPath" disabled="@_assetWarmBusy">@(_assetWarmBusy ? "Warming..." : "Warm asset path")</button>
+        <button class="btn btn-outline-danger ms-2" @onclick="ClearAssetSourceCache" disabled="@_assetCacheClearBusy">@(_assetCacheClearBusy ? "Clearing..." : "Clear asset stream cache")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_assetWarmMessage))
+    {
+        <p class="message">@_assetWarmMessage</p>
+    }
+
+    @if (_assetWarmResult is not null)
+    {
+        <p><strong>Path:</strong> @_assetWarmResult.Path</p>
+        <p><strong>Succeeded:</strong> @FormatBool(_assetWarmResult.Succeeded)</p>
+        <p><strong>Was cached:</strong> @FormatBool(_assetWarmResult.WasCached)</p>
+        <p><strong>Bytes:</strong> @_assetWarmResult.Length</p>
+        <p><strong>Total ms:</strong> @_assetWarmResult.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_assetWarmResult.Error))
+        {
+            <p><strong>Error:</strong> @_assetWarmResult.Error</p>
+        }
+    }
+
+    @if (_runtimeCacheState is not null)
+    {
+        <p><strong>Raw cached entries:</strong> @_runtimeCacheState.RawAssetCache.EntryCount</p>
+        <p><strong>Raw cached bytes:</strong> @_runtimeCacheState.RawAssetCache.TotalBytes</p>
+        <p><strong>Processed cache entries:</strong> @_runtimeCacheState.ProcessedAssetCache.EntryCount</p>
+
+        @if (_runtimeCacheState.RawAssetCache.Paths.Length > 0)
+        {
+            <p><strong>Raw cached paths:</strong> @string.Join(", ", _runtimeCacheState.RawAssetCache.Paths)</p>
+        }
+
+        @if (_runtimeCacheState.ProcessedAssetCache.Keys.Length > 0)
+        {
+            <p><strong>Processed cache keys:</strong> @string.Join(", ", _runtimeCacheState.ProcessedAssetCache.Keys)</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Hues probe</h2>
+    <p>This validates `hues.mul` through the same loader harness and cached parse path as the other asset families.</p>
+
+    <div class="mb-2">
+        <label><strong>Hues path:</strong></label>
+        <input class="form-control" @bind="_huesPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="ProbeHues" disabled="@_huesBusy">@(_huesBusy ? "Reading..." : "Probe hues file")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_huesMessage))
+    {
+        <p class="message">@_huesMessage</p>
+    }
+
+    @if (_huesProbe is not null)
+    {
+        <p><strong>Exists:</strong> @FormatBool(_huesProbe.Exists)</p>
+        <p><strong>Bytes:</strong> @_huesProbe.Length</p>
+        <p><strong>Used parsed cache:</strong> @FormatBool(_huesProbe.UsedParsedCache)</p>
+        <p><strong>First group header:</strong> @_huesProbe.FirstGroupHeader</p>
+        <p><strong>First palette color16:</strong> @_huesProbe.FirstPaletteColor16</p>
+        <p><strong>First hue name:</strong> @(string.IsNullOrWhiteSpace(_huesProbe.FirstHueName) ? "(empty)" : _huesProbe.FirstHueName)</p>
+        <p><strong>Total ms:</strong> @_huesProbe.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_huesProbe.Error))
+        {
+            <p><strong>Error:</strong> @_huesProbe.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Cliloc probe</h2>
+    <p>This validates a second real asset family through the same browser-backed stream seam used by the tiledata probe.</p>
+
+    <div class="mb-2">
+        <label><strong>Cliloc path:</strong></label>
+        <input class="form-control" @bind="_clilocPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="ProbeCliloc" disabled="@_clilocBusy">@(_clilocBusy ? "Reading..." : "Probe cliloc file")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_clilocMessage))
+    {
+        <p class="message">@_clilocMessage</p>
+    }
+
+    @if (_clilocProbe is not null)
+    {
+        <p><strong>Exists:</strong> @FormatBool(_clilocProbe.Exists)</p>
+        <p><strong>Bytes:</strong> @_clilocProbe.Length</p>
+        <p><strong>Used processed cache:</strong> @FormatBool(_clilocProbe.UsedProcessedCache)</p>
+        <p><strong>Header 1:</strong> @_clilocProbe.Header1</p>
+        <p><strong>Header 2:</strong> @_clilocProbe.Header2</p>
+        <p><strong>First entry number:</strong> @_clilocProbe.FirstEntryNumber</p>
+        <p><strong>First entry flag:</strong> @_clilocProbe.FirstEntryFlag</p>
+        <p><strong>First entry text length:</strong> @_clilocProbe.FirstEntryTextLength</p>
+        <p><strong>First entry text:</strong> @(string.IsNullOrWhiteSpace(_clilocProbe.FirstEntryText) ? "(empty)" : _clilocProbe.FirstEntryText)</p>
+        <p><strong>Total ms:</strong> @_clilocProbe.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_clilocProbe.Error))
+        {
+            <p><strong>Error:</strong> @_clilocProbe.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Tiledata probe</h2>
+    <p>This is the first structured binary asset read, using the same file the desktop client currently validates at startup.</p>
+
+    <div class="mb-2">
+        <label><strong>Tiledata path:</strong></label>
+        <input class="form-control" @bind="_tileDataPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="ProbeTileData" disabled="@_tileDataBusy">@(_tileDataBusy ? "Reading..." : "Probe tiledata.mul")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_tileDataMessage))
+    {
+        <p class="message">@_tileDataMessage</p>
+    }
+
+    @if (_tileDataProbe is not null)
+    {
+        <p><strong>Exists:</strong> @FormatBool(_tileDataProbe.Exists)</p>
+        <p><strong>Bytes:</strong> @_tileDataProbe.Length</p>
+        <p><strong>Old format:</strong> @FormatBool(_tileDataProbe.IsOldFormat)</p>
+        <p><strong>First group header:</strong> @_tileDataProbe.Header</p>
+        <p><strong>First land flags:</strong> @_tileDataProbe.FirstLandFlags</p>
+        <p><strong>First land texture id:</strong> @_tileDataProbe.FirstLandTextureId</p>
+        <p><strong>First land name:</strong> @(string.IsNullOrWhiteSpace(_tileDataProbe.FirstLandName) ? "(empty)" : _tileDataProbe.FirstLandName)</p>
+        <p><strong>Total ms:</strong> @_tileDataProbe.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_tileDataProbe.Error))
+        {
+            <p><strong>Error:</strong> @_tileDataProbe.Error</p>
+        }
+    }
+</div>
+}
+
+@if (_activeTab == "imports")
+{
 @if (_storage is not null)
 {
     <div class="next-steps">
@@ -194,73 +420,10 @@
         }
     </div>
 }
-
-@if (_assetManifest?.Bootstrap is not null)
-{
-    <div class="next-steps">
-        <h2>Bootstrap readiness</h2>
-        <p>This is a stricter browser-port check than the current desktop startup guard, intended to tell us whether `/uo` looks usable for a first real asset-read path.</p>
-        <p><strong>Ready:</strong> @FormatBool(_assetManifest.Bootstrap.IsReady)</p>
-        <p><strong>Checks passed:</strong> @_assetManifest.Bootstrap.PassedChecks / @_assetManifest.Bootstrap.TotalChecks</p>
-        <p><strong>Primary read target:</strong> @(string.IsNullOrWhiteSpace(_assetManifest.Bootstrap.PrimaryReadTargetPath) ? "not ready" : _assetManifest.Bootstrap.PrimaryReadTargetPath)</p>
-        <p><strong>Reason:</strong> @_assetManifest.Bootstrap.PrimaryReadTargetReason</p>
-        <p><strong>Recommended minimal import set:</strong> @string.Join(", ", _assetManifest.Bootstrap.RecommendedImportSet)</p>
-
-        @if (_assetManifest.Bootstrap.MissingRecommendedFiles.Length > 0)
-        {
-            <p><strong>Missing recommended files:</strong> @string.Join(", ", _assetManifest.Bootstrap.MissingRecommendedFiles)</p>
-        }
-        else
-        {
-            <p><strong>Missing recommended files:</strong> none</p>
-        }
-
-        @foreach (var check in _assetManifest.Bootstrap.Checks)
-        {
-            <p><strong>@check.Name:</strong> @FormatBool(check.IsSatisfied)</p>
-            <p>@check.Description</p>
-            <p><strong>Accepted:</strong> @string.Join(", ", check.AcceptedPatterns)</p>
-            <p><strong>Matches:</strong> @(check.Matches.Length == 0 ? "none" : string.Join(", ", check.Matches))</p>
-        }
-    </div>
 }
 
-<div class="next-steps">
-    <h2>Tiledata probe</h2>
-    <p>This is the first structured binary asset read, using the same file the desktop client currently validates at startup.</p>
-
-    <div class="mb-2">
-        <label><strong>Tiledata path:</strong></label>
-        <input class="form-control" @bind="_tileDataPath" />
-    </div>
-
-    <div class="actions">
-        <button class="btn btn-dark" @onclick="ProbeTileData" disabled="@_tileDataBusy">@(_tileDataBusy ? "Reading..." : "Probe tiledata.mul")</button>
-    </div>
-
-    @if (!string.IsNullOrWhiteSpace(_tileDataMessage))
-    {
-        <p class="message">@_tileDataMessage</p>
-    }
-
-    @if (_tileDataProbe is not null)
-    {
-        <p><strong>Exists:</strong> @FormatBool(_tileDataProbe.Exists)</p>
-        <p><strong>Bytes:</strong> @_tileDataProbe.Length</p>
-        <p><strong>Old format:</strong> @FormatBool(_tileDataProbe.IsOldFormat)</p>
-        <p><strong>First group header:</strong> @_tileDataProbe.Header</p>
-        <p><strong>First land flags:</strong> @_tileDataProbe.FirstLandFlags</p>
-        <p><strong>First land texture id:</strong> @_tileDataProbe.FirstLandTextureId</p>
-        <p><strong>First land name:</strong> @(string.IsNullOrWhiteSpace(_tileDataProbe.FirstLandName) ? "(empty)" : _tileDataProbe.FirstLandName)</p>
-        <p><strong>Total ms:</strong> @_tileDataProbe.TotalMs.ToString("0.00")</p>
-
-        @if (!string.IsNullOrWhiteSpace(_tileDataProbe.Error))
-        {
-            <p><strong>Error:</strong> @_tileDataProbe.Error</p>
-        }
-    }
-</div>
-
+@if (_activeTab == "diagnostics")
+{
 <div class="next-steps">
     <h2>Virtual path bridge probe</h2>
     <p>This exercises the same kind of virtual-path reads and writes the future browser filesystem provider will need.</p>
@@ -398,18 +561,7 @@
         }
     }
 </div>
-
-<div class="next-steps">
-    <h2>What success looks like</h2>
-    <ul>
-        <li>The page opens in your browser.</li>
-        <li>The probe reports `.NET browser runtime: yes`.</li>
-        <li>The storage section reports whether OPFS is available.</li>
-        <li>The OPFS smoke test can create and read a small file.</li>
-        <li>The import flow stores selected files in browser OPFS and lists them on the page.</li>
-        <li>The virtual path probe can read or write a file by path from C# through the browser storage bridge.</li>
-    </ul>
-</div>
+}
 
 @code {
     private BrowserHost.Services.BrowserProbeResult? _probe;
@@ -423,7 +575,12 @@
     private BrowserHost.Services.BrowserPreloadCacheSummary? _preloadSummary;
     private BrowserHost.Services.BrowserAssetManifestResult? _assetManifest;
     private BrowserHost.Services.BrowserHostedSeedManifestResult? _hostedSeedManifest;
-    private BrowserHost.Services.BrowserTileDataProbeResult? _tileDataProbe;
+    private BrowserHost.Services.BrowserClientTileDataDetails? _tileDataProbe;
+    private BrowserHost.Services.BrowserClientClilocDetails? _clilocProbe;
+    private BrowserHost.Services.BrowserClientHuesDetails? _huesProbe;
+    private BrowserHost.Services.BrowserRuntimeBootstrapState? _loaderSnapshot;
+    private BrowserHost.Services.BrowserAssetWarmResult? _assetWarmResult;
+    private BrowserHost.Services.BrowserRuntimeCacheState? _runtimeCacheState;
     private BrowserHost.Services.BrowserVirtualRootSummary[]? _rootSummaries;
     private bool _isBusy;
     private bool _storageBusy;
@@ -435,6 +592,11 @@
     private bool _bridgeWriteBusy;
     private bool _benchmarkBusy;
     private bool _tileDataBusy;
+    private bool _clilocBusy;
+    private bool _huesBusy;
+    private bool _loaderSnapshotBusy;
+    private bool _assetWarmBusy;
+    private bool _assetCacheClearBusy;
     private bool _preloadBusy;
     private bool _preloadClearBusy;
     private bool _hostedSeedImportBusy;
@@ -450,8 +612,16 @@
     private string _benchmarkMessage = "Import a `/uo` file and run the benchmark to measure repeated read cost.";
     private string _tileDataPath = "/uo/tiledata.mul";
     private string _tileDataMessage = "Probe tiledata.mul to validate the first structured browser-side asset read.";
+    private string _clilocPath = "/uo/cliloc.enu";
+    private string _clilocMessage = "Probe cliloc.enu to validate a second structured browser-side asset read.";
+    private string _huesPath = "/uo/hues.mul";
+    private string _huesMessage = "Probe hues.mul to validate the next loader-style asset family.";
+    private string _loaderSnapshotMessage = "Load the bootstrap snapshot to run the current browser-side asset set together.";
+    private string _assetWarmPath = "/uo/cliloc.enu";
+    private string _assetWarmMessage = "Warm a file into the C# asset stream cache to avoid repeated browser interop for loader-style reads.";
     private string _preloadPath = "/uo/TestDoc.txt";
     private string _preloadMessage = "Preload a `/uo` file into browser memory to simulate a hot asset cache.";
+    private string _activeTab = "current";
 
     protected override async Task OnInitializedAsync()
     {
@@ -536,6 +706,7 @@
             _preloadSummary = await StorageService.GetPreloadCacheSummaryAsync();
             _assetManifest = await StorageService.GetAssetManifestAsync();
             _hostedSeedManifest = await StorageService.GetHostedSeedManifestAsync();
+            _runtimeCacheState = await BrowserClientAssetService.GetCacheStateAsync();
         }
         finally
         {
@@ -713,9 +884,9 @@
 
         try
         {
-            _tileDataProbe = await TileDataProbeService.ProbeAsync(_tileDataPath);
+            _tileDataProbe = await BrowserClientAssetService.GetFirstTileDataEntryAsync(_tileDataPath);
             _tileDataMessage = string.IsNullOrWhiteSpace(_tileDataProbe.Error)
-                ? $"Tiledata probe completed for {_tileDataProbe.Path}."
+                ? $"Tiledata read completed for {_tileDataPath}."
                 : $"Tiledata probe finished with error: {_tileDataProbe.Error}";
         }
         catch (Exception ex)
@@ -725,6 +896,123 @@
         finally
         {
             _tileDataBusy = false;
+        }
+    }
+
+    private async Task ProbeCliloc()
+    {
+        _clilocBusy = true;
+        _clilocMessage = $"Reading structured cliloc data from {_clilocPath}...";
+
+        try
+        {
+            _clilocProbe = await BrowserClientAssetService.GetFirstClilocEntryAsync(_clilocPath);
+            _clilocMessage = string.IsNullOrWhiteSpace(_clilocProbe.Error)
+                ? $"Cliloc read completed for {_clilocPath}."
+                : $"Cliloc probe finished with error: {_clilocProbe.Error}";
+        }
+        catch (Exception ex)
+        {
+            _clilocMessage = $"Cliloc probe failed: {ex.Message}";
+        }
+        finally
+        {
+            _clilocBusy = false;
+        }
+    }
+
+    private async Task ProbeHues()
+    {
+        _huesBusy = true;
+        _huesMessage = $"Reading structured hues data from {_huesPath}...";
+
+        try
+        {
+            _huesProbe = await BrowserClientAssetService.GetFirstHueGroupAsync(_huesPath);
+            _huesMessage = string.IsNullOrWhiteSpace(_huesProbe.Error)
+                ? $"Hues read completed for {_huesPath}."
+                : $"Hues probe finished with error: {_huesProbe.Error}";
+        }
+        catch (Exception ex)
+        {
+            _huesMessage = $"Hues probe failed: {ex.Message}";
+        }
+        finally
+        {
+            _huesBusy = false;
+        }
+    }
+
+    private async Task LoadBootstrapSnapshot()
+    {
+        _loaderSnapshotBusy = true;
+        _loaderSnapshotMessage = "Loading bootstrap asset snapshot...";
+
+        try
+        {
+            _loaderSnapshot = await BrowserClientAssetService.GetBootstrapStateAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _tileDataPath,
+                    ClilocPath = _clilocPath,
+                    HuesPath = _huesPath
+                }
+            );
+
+            _loaderSnapshotMessage = $"Bootstrap snapshot completed in {_loaderSnapshot.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _loaderSnapshotMessage = $"Bootstrap snapshot failed: {ex.Message}";
+        }
+        finally
+        {
+            _loaderSnapshotBusy = false;
+        }
+    }
+
+    private async Task WarmAssetPath()
+    {
+        _assetWarmBusy = true;
+        _assetWarmMessage = $"Warming {_assetWarmPath} into the C# asset stream cache...";
+
+        try
+        {
+            _assetWarmResult = await BrowserClientAssetService.WarmAssetAsync(_assetWarmPath);
+            _runtimeCacheState = await BrowserClientAssetService.GetCacheStateAsync();
+            _assetWarmMessage = string.IsNullOrWhiteSpace(_assetWarmResult.Error)
+                ? $"Asset warm completed for {_assetWarmResult.Path}."
+                : $"Asset warm finished with error: {_assetWarmResult.Error}";
+        }
+        catch (Exception ex)
+        {
+            _assetWarmMessage = $"Asset warm failed: {ex.Message}";
+        }
+        finally
+        {
+            _assetWarmBusy = false;
+        }
+    }
+
+    private async Task ClearAssetSourceCache()
+    {
+        _assetCacheClearBusy = true;
+        _assetWarmMessage = "Clearing the C# asset stream cache...";
+
+        try
+        {
+            await BrowserClientAssetService.ClearCachesAsync();
+            _assetWarmResult = null;
+            _runtimeCacheState = await BrowserClientAssetService.GetCacheStateAsync();
+            _assetWarmMessage = "Asset stream cache cleared.";
+        }
+        catch (Exception ex)
+        {
+            _assetWarmMessage = $"Clear asset stream cache failed: {ex.Message}";
+        }
+        finally
+        {
+            _assetCacheClearBusy = false;
         }
     }
 
@@ -780,5 +1068,15 @@
             false => "no",
             _ => "not checked"
         };
+    }
+
+    private void SetActiveTab(string tab)
+    {
+        _activeTab = tab;
+    }
+
+    private string GetTabClass(string tab)
+    {
+        return _activeTab == tab ? "tab-button tab-button-active" : "tab-button";
     }
 }

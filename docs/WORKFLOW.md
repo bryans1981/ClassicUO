@@ -185,6 +185,8 @@ These facts are now confirmed and should guide future decisions:
 - The bootstrap-readiness check now accepts retail UOP alternatives for map, art, and gump data instead of only legacy MUL/IDX pairs.
 - `tiledata.mul` is now proven readable from browser-backed `/uo` storage with a structured binary probe that matches the old-format retail file layout.
 - The spike now has a C# browser asset byte-source service instead of relying only on JS-side asset parsing.
+- The browser-host spike now has a layered asset subsystem: raw asset source, processed cache, loader harness, family readers, bootstrap aggregation, runtime bootstrap service, and client-facing asset service.
+- The browser-host spike UI is now organized so the active validation work stays in a `Current Tests` tab and older diagnostics stay out of the critical path.
 - The shared utility layer now supports a read-only binary asset provider shape for `/uo` paths, separate from writable profile/config storage.
 - The browser-port effort has now covered the major direct filesystem clusters including asset loaders, profile/state managers, data tables, world-map support, container persistence, and UltimaLive.
 - The remaining direct System.IO usage in the client is now a smaller cleanup set rather than a major architectural blocker.

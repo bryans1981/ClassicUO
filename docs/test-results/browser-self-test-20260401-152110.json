@@ -1,0 +1,367 @@
+{
+  "GeneratedAtUtc": "2026-04-01T15:21:10.184+00:00",
+  "Request": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul"
+  },
+  "DirectBootstrap": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul",
+    "IsReady": false,
+    "LoadedCount": 0,
+    "CacheHits": 0,
+    "TotalMs": 31,
+    "TileData": {
+      "Exists": false,
+      "Length": 0,
+      "FirstLandName": "",
+      "FirstLandTextureId": 0
+    },
+    "Cliloc": {
+      "Exists": false,
+      "Length": 0,
+      "FirstEntryNumber": 0,
+      "FirstEntryText": "",
+      "UsedProcessedCache": false
+    },
+    "Hues": {
+      "Exists": false,
+      "Length": 0,
+      "FirstGroupHeader": 0,
+      "FirstHueName": "",
+      "UsedParsedCache": false
+    }
+  },
+  "SeamBootstrap": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul",
+    "IsReady": false,
+    "LoadedCount": 0,
+    "CacheHits": 0,
+    "TotalMs": 19,
+    "TileData": {
+      "Exists": false,
+      "ReadSucceeded": false,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 0,
+      "FirstLandName": "",
+      "FirstLandTextureId": 0
+    },
+    "Cliloc": {
+      "Exists": false,
+      "ReadSucceeded": false,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 0,
+      "FirstEntryNumber": 0,
+      "FirstEntryText": ""
+    },
+    "Hues": {
+      "Exists": false,
+      "ReadSucceeded": false,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 0,
+      "FirstGroupHeader": 0,
+      "FirstHueName": ""
+    }
+  },
+  "Handoff": {
+    "IsReady": false,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "ReadyAssetCount": 0,
+    "CacheHits": 0,
+    "TotalMs": 8,
+    "Assets": [
+      {
+        "Id": "tiledata",
+        "Path": "/uo/tiledata.mul",
+        "Exists": false,
+        "ReadSucceeded": false,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": false,
+        "Length": 0,
+        "Summary": "texture 0"
+      },
+      {
+        "Id": "cliloc",
+        "Path": "/uo/cliloc.enu",
+        "Exists": false,
+        "ReadSucceeded": false,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": false,
+        "Length": 0,
+        "Summary": ""
+      },
+      {
+        "Id": "hues",
+        "Path": "/uo/hues.mul",
+        "Exists": false,
+        "ReadSucceeded": false,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": false,
+        "Length": 0,
+        "Summary": "header 0"
+      }
+    ],
+    "Summary": "Bootstrap handoff incomplete with 0 ready asset(s)."
+  },
+  "CacheState": {
+    "RawAssetCache": {
+      "EntryCount": 0,
+      "TotalBytes": 0,
+      "Paths": []
+    },
+    "ProcessedAssetCache": {
+      "EntryCount": 0,
+      "Keys": []
+    }
+  },
+  "BridgeState": {
+    "Activated": true,
+    "LoadedCount": 0,
+    "LoadedPaths": []
+  },
+  "StartupArtifact": {
+    "IsReady": false,
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "ProfileId": "default",
+    "WriteSucceeded": true,
+    "Length": 2439,
+    "StartupRun": {
+      "IsReady": false,
+      "ProfileId": "default",
+      "LaunchPlan": {
+        "IsReady": false,
+        "ProfileId": "default",
+        "AssetRootPath": "/uo",
+        "ProfilesRootPath": "/profiles",
+        "CacheRootPath": "/cache",
+        "ConfigRootPath": "/config",
+        "SettingsFilePath": "/config/client.settings.json",
+        "StartupProfilePath": "/profiles/default/profile.json",
+        "SettingsPrepared": true,
+        "StartupProfilePrepared": true,
+        "ReadyAssetCount": 0,
+        "CacheHits": 0,
+        "TotalMs": 41,
+        "Assets": [
+          {
+            "Id": "tiledata",
+            "Path": "/uo/tiledata.mul",
+            "Exists": false,
+            "ReadSucceeded": false,
+            "IsRequired": true,
+            "Length": 0,
+            "Summary": "texture 0"
+          },
+          {
+            "Id": "cliloc",
+            "Path": "/uo/cliloc.enu",
+            "Exists": false,
+            "ReadSucceeded": false,
+            "IsRequired": true,
+            "Length": 0,
+            "Summary": ""
+          },
+          {
+            "Id": "hues",
+            "Path": "/uo/hues.mul",
+            "Exists": false,
+            "ReadSucceeded": false,
+            "IsRequired": true,
+            "Length": 0,
+            "Summary": "header 0"
+          }
+        ],
+        "Issues": [
+          {
+            "Code": "missing-tiledata",
+            "Message": "Required startup asset is not ready: /uo/tiledata.mul"
+          },
+          {
+            "Code": "missing-cliloc",
+            "Message": "Required startup asset is not ready: /uo/cliloc.enu"
+          },
+          {
+            "Code": "missing-hues",
+            "Message": "Required startup asset is not ready: /uo/hues.mul"
+          }
+        ],
+        "Summary": "Launch plan blocked for profile \u0027default\u0027 with 3 issue(s)."
+      },
+      "CompletedSteps": 2,
+      "TotalSteps": 4,
+      "Steps": [
+        {
+          "Id": "bootstrap-assets",
+          "Title": "Validate bootstrap assets",
+          "Succeeded": false,
+          "Detail": "0 / 3 required assets ready."
+        },
+        {
+          "Id": "config",
+          "Title": "Prepare config files",
+          "Succeeded": true,
+          "Detail": "Ready at /config/client.settings.json"
+        },
+        {
+          "Id": "profile",
+          "Title": "Prepare startup profile",
+          "Succeeded": true,
+          "Detail": "Ready at /profiles/default/profile.json"
+        },
+        {
+          "Id": "launch",
+          "Title": "Create startup launch contract",
+          "Succeeded": false,
+          "Detail": "Launch plan blocked for profile \u0027default\u0027 with 3 issue(s)."
+        }
+      ],
+      "TotalMs": 44,
+      "Summary": "Startup run blocked with 2 / 4 steps complete."
+    },
+    "TotalMs": 93,
+    "Summary": "Startup artifact written to /cache/startup/default/launch-plan.json.",
+    "Error": ""
+  },
+  "StartupArtifactRead": {
+    "ProfileId": "default",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "IsReady": false,
+    "Length": 2439,
+    "CompletedSteps": 2,
+    "TotalSteps": 4,
+    "StartupRun": {
+      "IsReady": false,
+      "ProfileId": "default",
+      "LaunchPlan": {
+        "IsReady": false,
+        "ProfileId": "default",
+        "AssetRootPath": "/uo",
+        "ProfilesRootPath": "/profiles",
+        "CacheRootPath": "/cache",
+        "ConfigRootPath": "/config",
+        "SettingsFilePath": "/config/client.settings.json",
+        "StartupProfilePath": "/profiles/default/profile.json",
+        "SettingsPrepared": true,
+        "StartupProfilePrepared": true,
+        "ReadyAssetCount": 0,
+        "CacheHits": 0,
+        "TotalMs": 41,
+        "Assets": [
+          {
+            "Id": "tiledata",
+            "Path": "/uo/tiledata.mul",
+            "Exists": false,
+            "ReadSucceeded": false,
+            "IsRequired": true,
+            "Length": 0,
+            "Summary": "texture 0"
+          },
+          {
+            "Id": "cliloc",
+            "Path": "/uo/cliloc.enu",
+            "Exists": false,
+            "ReadSucceeded": false,
+            "IsRequired": true,
+            "Length": 0,
+            "Summary": ""
+          },
+          {
+            "Id": "hues",
+            "Path": "/uo/hues.mul",
+            "Exists": false,
+            "ReadSucceeded": false,
+            "IsRequired": true,
+            "Length": 0,
+            "Summary": "header 0"
+          }
+        ],
+        "Issues": [
+          {
+            "Code": "missing-tiledata",
+            "Message": "Required startup asset is not ready: /uo/tiledata.mul"
+          },
+          {
+            "Code": "missing-cliloc",
+            "Message": "Required startup asset is not ready: /uo/cliloc.enu"
+          },
+          {
+            "Code": "missing-hues",
+            "Message": "Required startup asset is not ready: /uo/hues.mul"
+          }
+        ],
+        "Summary": "Launch plan blocked for profile \u0027default\u0027 with 3 issue(s)."
+      },
+      "CompletedSteps": 2,
+      "TotalSteps": 4,
+      "Steps": [
+        {
+          "Id": "bootstrap-assets",
+          "Title": "Validate bootstrap assets",
+          "Succeeded": false,
+          "Detail": "0 / 3 required assets ready."
+        },
+        {
+          "Id": "config",
+          "Title": "Prepare config files",
+          "Succeeded": true,
+          "Detail": "Ready at /config/client.settings.json"
+        },
+        {
+          "Id": "profile",
+          "Title": "Prepare startup profile",
+          "Succeeded": true,
+          "Detail": "Ready at /profiles/default/profile.json"
+        },
+        {
+          "Id": "launch",
+          "Title": "Create startup launch contract",
+          "Succeeded": false,
+          "Detail": "Launch plan blocked for profile \u0027default\u0027 with 3 issue(s)."
+        }
+      ],
+      "TotalMs": 44,
+      "Summary": "Startup run blocked with 2 / 4 steps complete."
+    },
+    "TotalMs": 33,
+    "Summary": "Startup artifact loaded but not ready for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "LaunchSession": {
+    "IsReady": false,
+    "ProfileId": "default",
+    "SessionId": "",
+    "SessionPath": "",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "ArtifactWriteSucceeded": true,
+    "ArtifactReadSucceeded": true,
+    "UsedExistingArtifact": false,
+    "WriteSucceeded": false,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "",
+    "StartupProfilePath": "",
+    "ReadyAssetCount": 0,
+    "CompletedSteps": 0,
+    "TotalSteps": 0,
+    "RequiredAssets": [],
+    "TotalMs": 31,
+    "Summary": "Launch session blocked for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "Summary": "handoff=not-ready | direct=0/3 | seam=0/3 | handoffCacheHits=0 | rawCache=0 | processedCache=0 | bridgeLoaded=0 | artifactWrite=ok | artifactRead=ok | launchSession=fail",
+  "Json": ""
+}

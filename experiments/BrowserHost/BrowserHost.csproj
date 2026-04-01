@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\\..\\src\\ClassicUO.Utility\\ClassicUO.Utility.csproj" />
+    <Compile Include="..\\..\\src\\ClassicUO.Utility\\BrowserVirtualPaths.cs" Link="Shared\\BrowserVirtualPaths.cs" />
+    <Compile Include="..\\..\\src\\ClassicUO.Utility\\Platforms\\BrowserFileSystem.cs" Link="Shared\\BrowserFileSystem.cs" />
+    <Compile Include="..\\..\\src\\ClassicUO.Utility\\Platforms\\IClassicUOFileSystem.cs" Link="Shared\\IClassicUOFileSystem.cs" />
   </ItemGroup>
 
 </Project>

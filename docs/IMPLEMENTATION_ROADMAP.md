@@ -99,7 +99,7 @@ Current status:
 - `tiledata.mul`, `cliloc.enu`, and `hues.mul` are now being read through the browser asset harness.
 - The browser spike now has a layered browser asset subsystem with client-facing and runtime-facing service boundaries.
 - The shared utility layer now includes a read-only binary asset provider shape for `/uo` browser asset reads.
-- The experimental browser host now targets `net10.0` and can reference the shared utility/browser filesystem seam directly.
+- The experimental browser host now stays on a lighter `net8.0` host path and links only the needed shared browser-seam source files directly.
 - A first shared `BrowserFileSystem` bridge now preloads the bootstrap subset into a real read-only seam provider for browser-host validation.
 - The remaining work is now extending that bridge from bootstrap preloading to on-demand shared-seam reads plus a smaller cleanup list in a few client/UI subsystems.
 
@@ -245,7 +245,8 @@ The next concrete actions should be:
 1. Extend the new browser-host to shared `BrowserFileSystem` bridge from bootstrap subset preload to on-demand provider-backed reads.
 2. Feed `tiledata.mul` through the shared filesystem seam using the new bridge path.
 3. Expand from tiledata to the next core asset files once the seam is proven.
-4. Only then move on to container packaging and backend scaffolding.
+4. Extend the runtime invocation output into a persistent runtime startup cycle/state object for the future browser entrypoint.
+5. Only then move on to container packaging and backend scaffolding.
 
 ## Completion Markers
 
@@ -278,3 +279,73 @@ Immediate implementation branch of work:
 3. Introduce a browser-compatible asset access layer.
 4. Replace high-value deep System.IO usage with the shared filesystem seam.
 5. Reach a minimal boot target before solving full deployment.
+
+- The browser-host spike now has a launch-oriented browser entrypoint output that prepares minimal browser-side settings/profile files and reports startup readiness.
+
+- The browser-host spike now has a startup-sequence browser entrypoint shell that groups launch preparation into explicit startup steps.
+
+- The browser-host spike now writes a launch-state artifact into browser storage as the first persisted startup output for a future browser entrypoint.
+
+- The browser-host spike now reads the persisted launch-state artifact back from browser storage as the first consumer-side startup behavior.
+- The browser-host startup path now writes a launch artifact, reads it back, and creates a simulated launch session object; the self-test suite also saves a machine-readable local report so browser verification does not require manual copy/paste.
+- The browser-host startup path now includes launch-session readback, so the one-click self-test covers a full producer/consumer cycle for startup artifacts and simulated launch state.
+- Launch-session persistence now writes final session state before readback validation so the resumable launch-state consumer sees correct write flags and summary fields.
+- A runtime launch contract is now derived from the saved launch session, so the browser startup path has a stable consumer object above raw startup/session persistence.
+- A startup packet is now derived from the runtime launch contract, giving the eventual browser entrypoint a single bootstrap input above artifacts, sessions, and runtime contract layers.
+- An in-memory startup consumer now sits above the startup packet, giving the future browser entrypoint a first browser-bootstrap handshake object rather than only persisted startup metadata.
+- A startup-session executor now sits above the in-memory startup consumer, giving the browser path a first runtime-oriented startup consumption layer beyond handshake and packet generation.
+- A startup-session runner now sits above the executor, giving the browser path a first simulated runtime startup pass rather than only prepared startup state.
+- A minimal runtime bootstrap loop now sits above the startup-session runner, giving the browser path its first phase-based startup loop model instead of only stacked startup state objects.
+- A minimal runtime invocation layer now sits above the bootstrap loop, giving the browser path a first concrete browser-runtime call boundary instead of only startup-loop state.
+- A minimal runtime startup cycle now sits above the runtime invocation, giving the browser path a first persistent runtime startup-state object above the invocation boundary.
+- A minimal runtime startup state now sits above the runtime startup cycle, giving the browser path its first concrete runtime startup-state holder above the cycle layer.
+- A minimal runtime startup state machine now sits above the runtime startup state, giving the browser path its first browser bootstrap state-progression object above the startup-state holder.
+- A minimal runtime startup transition driver now sits above the runtime startup state machine, giving the browser path its first executable browser bootstrap progression layer above the state machine.
+- A minimal runtime startup dispatcher now sits above the runtime startup transition driver, giving the browser path its first bootstrap-session control layer above the executable transition model.
+- A minimal runtime startup session controller now sits above the runtime startup dispatcher, giving the browser path its first executable bootstrap-session control object above the dispatch layer.
+- A minimal runtime startup coordinator now sits above the runtime startup session controller, giving the browser path its first browser bootstrap orchestration layer above the session-control object.
+- A minimal runtime startup orchestrator now sits above the runtime startup coordinator, giving the browser path its first runtime-wide startup orchestration layer above bootstrap coordination.
+- A first browser boot-flow controller now sits above the runtime startup orchestrator, giving the browser path its first browser-facing boot flow model above runtime startup orchestration.
+- A first browser boot session now sits above the boot-flow controller, giving the browser path its first browser-session startup object above the boot flow model.
+- A first runtime launch handoff now sits above the browser boot session, giving the browser path its first browser-to-runtime handoff object above the boot session layer.
+- A first runtime bootstrap consumer now sits above the runtime launch handoff, giving the browser path its first runtime-side consumer of the browser handoff above the handoff layer.
+- A first runtime bootstrap session now sits above the runtime bootstrap consumer, giving the browser path its first runtime-session startup object above the consumer layer.
+- Browser runtime startup chain now extends past the readiness gate into `RuntimeReadySignal` and `RuntimeLaunchController`.
+- Next validation point remains the one-click self-test suite after restarting the browser host and report receiver.
+- Browser runtime startup chain now extends through `RuntimeClientReadyState` and `RuntimeClientLaunchSession` after `RuntimeLaunchController`.
+- Browser runtime startup chain now extends through `RuntimeClientActivation` and `RuntimeClientRunState` after `RuntimeClientLaunchSession`.
+- Browser runtime startup chain now extends through `RuntimeClientLoopState` and `RuntimeHostSession` after `RuntimeClientRunState`.
+- Browser runtime startup chain now extends through `RuntimeHostLoop` and `RuntimeHostReadyState` after `RuntimeHostSession`.
+- Browser runtime startup chain now extends through `RuntimePlatformSession` and `RuntimePlatformReadyState` after `RuntimeHostReadyState`.
+- Browser runtime startup chain now extends through `RuntimePlatformLoop` and `RuntimePlatformLaunchGate` after `RuntimePlatformReadyState`.
+
+- Browser runtime startup chain now extends through RuntimeBrowserShellSession and RuntimeBrowserShellReadyState after RuntimePlatformLaunchGate.
+- Browser runtime startup chain now extends through RuntimeBrowserSurfaceSession and RuntimeBrowserSurfaceReadyState after RuntimeBrowserShellReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserWindowSession and RuntimeBrowserWindowReadyState after RuntimeBrowserSurfaceReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserFrameSession and RuntimeBrowserFrameReadyState after RuntimeBrowserWindowReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserCanvasSession and RuntimeBrowserCanvasReadyState after RuntimeBrowserFrameReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserRenderSession and RuntimeBrowserRenderReadyState after RuntimeBrowserCanvasReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserPresentSession and RuntimeBrowserPresentReadyState after RuntimeBrowserRenderReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserDisplaySession and RuntimeBrowserDisplayReadyState after RuntimeBrowserPresentReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserViewportSession and RuntimeBrowserViewportReadyState after RuntimeBrowserDisplayReadyState.
+
+- Browser runtime startup chain now extends through RuntimeBrowserSceneSession and RuntimeBrowserSceneReadyState after RuntimeBrowserViewportReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserInputSession and RuntimeBrowserInputReadyState after RuntimeBrowserSceneReadyState.
+
+- Browser runtime startup chain now extends through RuntimeBrowserEventSession and RuntimeBrowserEventReadyState after RuntimeBrowserInputReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserInteractionSession and RuntimeBrowserInteractionReadyState after RuntimeBrowserEventReadyState.
+
+- Browser runtime startup chain now extends through RuntimeBrowserFocusSession and RuntimeBrowserFocusReadyState after RuntimeBrowserInteractionReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserShortcutSession and RuntimeBrowserShortcutReadyState after RuntimeBrowserFocusReadyState.
+
+- Browser runtime startup chain now extends through RuntimeBrowserPointerSession and RuntimeBrowserPointerReadyState after RuntimeBrowserShortcutReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserCommandSession and RuntimeBrowserCommandReadyState after RuntimeBrowserPointerReadyState.
+
+- Browser runtime startup chain now extends through RuntimeBrowserGestureSession and RuntimeBrowserGestureReadyState after RuntimeBrowserCommandReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserLifecycleSession and RuntimeBrowserLifecycleReadyState after RuntimeBrowserGestureReadyState.
+
+- Browser runtime startup chain now extends through RuntimeBrowserRouteSession and RuntimeBrowserRouteReadyState after RuntimeBrowserLifecycleReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserStateSyncSession and RuntimeBrowserStateSyncReadyState after RuntimeBrowserRouteReadyState.
+
+- Browser runtime startup chain now extends through RuntimeBrowserRestoreSession and RuntimeBrowserRestoreReadyState after RuntimeBrowserStateSyncReadyState.
+- Browser runtime startup chain now extends through RuntimeBrowserResumeSession and RuntimeBrowserResumeReadyState after RuntimeBrowserRestoreReadyState.

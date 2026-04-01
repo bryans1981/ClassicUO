@@ -1006,5 +1006,17 @@ window.classicuoFs = {
       result.error = error instanceof Error ? error.message : String(error);
       return result;
     }
+  },
+
+  downloadTextFile: async function (fileName, contents) {
+    const blob = new Blob([contents ?? ''], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = fileName || 'classicuo-browser-report.json';
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 };

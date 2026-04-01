@@ -2,7 +2,16 @@
 @inject BrowserHost.Services.EnvironmentProbeService ProbeService
 @inject BrowserHost.Services.BrowserStorageService StorageService
 @inject BrowserHost.Services.IBrowserClientAssetService BrowserClientAssetService
+@inject BrowserHost.Services.IBrowserClientBootstrapAdapter BrowserClientBootstrapAdapter
+@inject BrowserHost.Services.IBrowserClientEntrypoint BrowserClientEntrypoint
+@inject BrowserHost.Services.IBrowserClientStartupIntegration BrowserClientStartupIntegration
+@inject BrowserHost.Services.IBrowserClientStartupArtifacts BrowserClientStartupArtifacts
+@inject BrowserHost.Services.IBrowserClientStartupArtifactReader BrowserClientStartupArtifactReader
+@inject BrowserHost.Services.IBrowserClientLaunchSession BrowserClientLaunchSession
+@inject BrowserHost.Services.IBrowserClientLaunchSessionReader BrowserClientLaunchSessionReader
 @inject BrowserHost.Services.BrowserFileSystemBridgeService BrowserFileSystemBridgeService
+@inject BrowserHost.Services.BrowserSelfTestReportService BrowserSelfTestReportService
+@inject BrowserHost.Services.BrowserLocalReportSinkService BrowserLocalReportSinkService
 @inject BrowserHost.Services.BrowserVirtualFileBridgeService BridgeService
 
 <PageTitle>ClassicUO Browser Spike</PageTitle>
@@ -65,11 +74,130 @@
 <div class="tab-bar">
     <button class="@GetTabClass("current")" @onclick='() => SetActiveTab("current")'>Current Tests</button>
     <button class="@GetTabClass("imports")" @onclick='() => SetActiveTab("imports")'>Imports & Assets</button>
-    <button class="@GetTabClass("diagnostics")" @onclick='() => SetActiveTab("diagnostics")'>Diagnostics</button>
+    <button class="@GetTabClass("diagnostics")" @onclick='() => SetActiveTab("diagnostics")'>Archived Tests</button>
 </div>
 
 @if (_activeTab == "current")
 {
+<div class="next-steps">
+    <h2>Current Self-Test Suite</h2>
+    <p>This runs the current browser bootstrap checks in one batch and can export a JSON report.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="RunSelfTestSuite" disabled="@_selfTestBusy">@(_selfTestBusy ? "Running..." : "Run current self-test suite")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_selfTestMessage))
+    {
+        <p class="message">@_selfTestMessage</p>
+    }
+
+    @if (_selfTestReport is not null)
+    {
+        <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
+        <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
+        @if (_selfTestReportSave is not null)
+        {
+            <p><strong>Saved locally:</strong> @FormatBool(_selfTestReportSave.Saved)</p>
+            <p><strong>Latest report path:</strong> @(_selfTestReportSave.LatestPath ?? "(not saved)")</p>
+        }
+        <p><strong>Seed import attempted:</strong> @FormatBool(_selfTestReport.SeedImportAttempted)</p>
+        <p><strong>Seed import count:</strong> @_selfTestReport.SeedImportCount</p>
+        <p><strong>Direct bootstrap:</strong> @_selfTestReport.DirectBootstrap.LoadedCount / 3</p>
+        <p><strong>Shared seam:</strong> @_selfTestReport.SeamBootstrap.LoadedCount / 3</p>
+        <p><strong>Handoff ready:</strong> @FormatBool(_selfTestReport.Handoff.IsReady)</p>
+        <p><strong>Raw cache entries:</strong> @_selfTestReport.CacheState.RawAssetCache.EntryCount</p>
+        <p><strong>Processed cache entries:</strong> @_selfTestReport.CacheState.ProcessedAssetCache.EntryCount</p>
+        <p><strong>Bridge loaded paths:</strong> @_selfTestReport.BridgeState.LoadedCount</p>
+        <p><strong>Startup artifact write:</strong> @FormatBool(_selfTestReport.StartupArtifact.WriteSucceeded)</p>
+        <p><strong>Startup artifact read:</strong> @FormatBool(_selfTestReport.StartupArtifactRead.ReadSucceeded)</p>
+        <p><strong>Launch session write:</strong> @FormatBool(_selfTestReport.LaunchSession.WriteSucceeded)</p>
+        <p><strong>Launch session read:</strong> @FormatBool(_selfTestReport.LaunchSessionRead.ReadSucceeded)</p>
+        <p><strong>Runtime contract ready:</strong> @FormatBool(_selfTestReport.RuntimeLaunchContract.IsReady)</p>
+        <p><strong>Startup packet ready:</strong> @FormatBool(_selfTestReport.StartupPacket.IsReady)</p>
+        <p><strong>Startup consumer ready:</strong> @FormatBool(_selfTestReport.StartupConsumer.IsReady)</p>
+        <p><strong>Startup executor ready:</strong> @FormatBool(_selfTestReport.StartupSessionExecutor.IsReady)</p>
+        <p><strong>Startup runner ready:</strong> @FormatBool(_selfTestReport.StartupSessionRunner.IsReady)</p>
+        <p><strong>Runtime loop ready:</strong> @FormatBool(_selfTestReport.RuntimeBootstrapLoop.IsReady)</p>
+        <p><strong>Runtime invocation ready:</strong> @FormatBool(_selfTestReport.RuntimeInvocation.IsReady)</p>
+        <p><strong>Runtime cycle ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupCycle.IsReady)</p>
+        <p><strong>Runtime state ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupState.IsReady)</p>
+        <p><strong>Runtime state machine ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupStateMachine.IsReady)</p>
+        <p><strong>Runtime transition driver ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupTransitionDriver.IsReady)</p>
+        <p><strong>Runtime dispatcher ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupDispatcher.IsReady)</p>
+        <p><strong>Runtime session controller ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupSessionController.IsReady)</p>
+        <p><strong>Runtime coordinator ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupCoordinator.IsReady)</p>
+        <p><strong>Runtime orchestrator ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupOrchestrator.IsReady)</p>
+        <p><strong>Browser boot flow ready:</strong> @FormatBool(_selfTestReport.BrowserBootFlowController.IsReady)</p>
+        <p><strong>Browser boot session ready:</strong> @FormatBool(_selfTestReport.BrowserBootSession.IsReady)</p>
+        <p><strong>Runtime launch handoff ready:</strong> @FormatBool(_selfTestReport.RuntimeLaunchHandoff.IsReady)</p>
+        <p><strong>Runtime bootstrap consumer ready:</strong> @FormatBool(_selfTestReport.RuntimeBootstrapConsumer.IsReady)</p>
+        <p><strong>Runtime bootstrap session ready:</strong> @FormatBool(_selfTestReport.RuntimeBootstrapSession.IsReady)</p>
+        <p><strong>Runtime client bootstrap ready:</strong> @FormatBool(_selfTestReport.RuntimeClientBootstrapController.IsReady)</p>
+        <p><strong>Runtime readiness gate ready:</strong> @FormatBool(_selfTestReport.RuntimeStartupReadinessGate.IsReady)</p>
+        <p><strong>Runtime ready signal ready:</strong> @FormatBool(_selfTestReport.RuntimeReadySignal.IsReady)</p>
+        <p><strong>Runtime launch controller ready:</strong> @FormatBool(_selfTestReport.RuntimeLaunchController.IsReady)</p>
+        <p><strong>Runtime client ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeClientReadyState.IsReady)</p>
+        <p><strong>Runtime client launch session ready:</strong> @FormatBool(_selfTestReport.RuntimeClientLaunchSession.IsReady)</p>
+        <p><strong>Runtime client activation ready:</strong> @FormatBool(_selfTestReport.RuntimeClientActivation.IsReady)</p>
+        <p><strong>Runtime client run state ready:</strong> @FormatBool(_selfTestReport.RuntimeClientRunState.IsReady)</p>
+        <p><strong>Runtime client loop state ready:</strong> @FormatBool(_selfTestReport.RuntimeClientLoopState.IsReady)</p>
+        <p><strong>Runtime host session ready:</strong> @FormatBool(_selfTestReport.RuntimeHostSession.IsReady)</p>
+        <p><strong>Runtime host loop ready:</strong> @FormatBool(_selfTestReport.RuntimeHostLoop.IsReady)</p>
+        <p><strong>Runtime host ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeHostReadyState.IsReady)</p>
+        <p><strong>Runtime platform session ready:</strong> @FormatBool(_selfTestReport.RuntimePlatformSession.IsReady)</p>
+        <p><strong>Runtime platform ready state ready:</strong> @FormatBool(_selfTestReport.RuntimePlatformReadyState.IsReady)</p>
+        <p><strong>Runtime platform loop ready:</strong> @FormatBool(_selfTestReport.RuntimePlatformLoop.IsReady)</p>
+        <p><strong>Runtime platform launch gate ready:</strong> @FormatBool(_selfTestReport.RuntimePlatformLaunchGate.IsReady)</p>
+        <p><strong>Runtime browser shell session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserShellSession.IsReady)</p>
+        <p><strong>Runtime browser shell ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserShellReadyState.IsReady)</p>
+        <p><strong>Runtime browser surface session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserSurfaceSession.IsReady)</p>
+        <p><strong>Runtime browser surface ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserSurfaceReadyState.IsReady)</p>
+        <p><strong>Runtime browser window session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserWindowSession.IsReady)</p>
+        <p><strong>Runtime browser window ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserWindowReadyState.IsReady)</p>
+        <p><strong>Runtime browser frame session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserFrameSession.IsReady)</p>
+        <p><strong>Runtime browser frame ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserFrameReadyState.IsReady)</p>
+        <p><strong>Runtime browser canvas session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserCanvasSession.IsReady)</p>
+        <p><strong>Runtime browser canvas ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserCanvasReadyState.IsReady)</p>
+        <p><strong>Runtime browser render session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRenderSession.IsReady)</p>
+        <p><strong>Runtime browser render ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRenderReadyState.IsReady)</p>
+        <p><strong>Runtime browser present session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserPresentSession.IsReady)</p>
+        <p><strong>Runtime browser present ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserPresentReadyState.IsReady)</p>
+        <p><strong>Runtime browser display session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserDisplaySession.IsReady)</p>
+        <p><strong>Runtime browser display ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserDisplayReadyState.IsReady)</p>
+        <p><strong>Runtime browser viewport session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserViewportSession.IsReady)</p>
+        <p><strong>Runtime browser viewport ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserViewportReadyState.IsReady)</p>
+        <p><strong>Runtime browser scene session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserSceneSession.IsReady)</p>
+        <p><strong>Runtime browser scene ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserSceneReadyState.IsReady)</p>
+        <p><strong>Runtime browser input session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserInputSession.IsReady)</p>
+        <p><strong>Runtime browser input ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserInputReadyState.IsReady)</p>
+        <p><strong>Runtime browser event session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserEventSession.IsReady)</p>
+        <p><strong>Runtime browser event ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserEventReadyState.IsReady)</p>
+        <p><strong>Runtime browser interaction session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserInteractionSession.IsReady)</p>
+        <p><strong>Runtime browser interaction ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserInteractionReadyState.IsReady)</p>
+        <p><strong>Runtime browser focus session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserFocusSession.IsReady)</p>
+        <p><strong>Runtime browser focus ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserFocusReadyState.IsReady)</p>
+        <p><strong>Runtime browser shortcut session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserShortcutSession.IsReady)</p>
+        <p><strong>Runtime browser shortcut ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserShortcutReadyState.IsReady)</p>
+        <p><strong>Runtime browser pointer session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserPointerSession.IsReady)</p>
+        <p><strong>Runtime browser pointer ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserPointerReadyState.IsReady)</p>
+        <p><strong>Runtime browser command session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserCommandSession.IsReady)</p>
+        <p><strong>Runtime browser command ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserCommandReadyState.IsReady)</p>
+        <p><strong>Runtime browser gesture session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserGestureSession.IsReady)</p>
+        <p><strong>Runtime browser gesture ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserGestureReadyState.IsReady)</p>
+        <p><strong>Runtime browser lifecycle session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserLifecycleSession.IsReady)</p>
+        <p><strong>Runtime browser lifecycle ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserLifecycleReadyState.IsReady)</p>
+        <p><strong>Runtime browser route session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRouteSession.IsReady)</p>
+        <p><strong>Runtime browser route ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRouteReadyState.IsReady)</p>
+        <p><strong>Runtime browser state-sync session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserStateSyncSession.IsReady)</p>
+        <p><strong>Runtime browser state-sync ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserStateSyncReadyState.IsReady)</p>
+        <p><strong>Runtime browser restore session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRestoreSession.IsReady)</p>
+        <p><strong>Runtime browser restore ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRestoreReadyState.IsReady)</p>
+        <p><strong>Runtime browser resume session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserResumeSession.IsReady)</p>
+        <p><strong>Runtime browser resume ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserResumeReadyState.IsReady)</p>
+    }
+</div>
+
 @if (_assetManifest?.Bootstrap is not null)
 {
     <div class="next-steps">
@@ -134,6 +262,7 @@
     {
         <p><strong>Probe path:</strong> @_fileSystemBridgeProbe.Path</p>
         <p><strong>Exists:</strong> @FormatBool(_fileSystemBridgeProbe.Exists)</p>
+        <p><strong>Loaded on demand:</strong> @FormatBool(_fileSystemBridgeProbe.LoadedOnDemand)</p>
         <p><strong>Read succeeded:</strong> @FormatBool(_fileSystemBridgeProbe.ReadSucceeded)</p>
         <p><strong>Bytes:</strong> @_fileSystemBridgeProbe.Length</p>
         <p><strong>Total ms:</strong> @_fileSystemBridgeProbe.TotalMs.ToString("0.00")</p>
@@ -146,8 +275,532 @@
 </div>
 
 <div class="next-steps">
+    <h2>Browser bootstrap handoff</h2>
+    <p>This is the first entrypoint-oriented payload built from the seam runtime state instead of test-specific result models.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserBootstrapHandoff" disabled="@_browserBootstrapHandoffBusy">@(_browserBootstrapHandoffBusy ? "Loading..." : "Load browser bootstrap handoff")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserBootstrapHandoffMessage))
+    {
+        <p class="message">@_browserBootstrapHandoffMessage</p>
+    }
+
+    @if (_browserBootstrapHandoff is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserBootstrapHandoff.IsReady)</p>
+        <p><strong>Ready assets:</strong> @_browserBootstrapHandoff.ReadyAssetCount / 3</p>
+        <p><strong>Cache hits:</strong> @_browserBootstrapHandoff.CacheHits</p>
+        <p><strong>Total ms:</strong> @_browserBootstrapHandoff.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserBootstrapHandoff.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup context</h2>
+    <p>This is the first startup-oriented adapter output built from the seam-backed handoff for a future ClassicUO browser entrypoint.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserStartupContext" disabled="@_browserStartupContextBusy">@(_browserStartupContextBusy ? "Loading..." : "Load browser startup context")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupContextMessage))
+    {
+        <p class="message">@_browserStartupContextMessage</p>
+    }
+
+    @if (_browserStartupContext is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupContext.IsReady)</p>
+        <p><strong>Ready assets:</strong> @_browserStartupContext.ReadyAssetCount / 3</p>
+        <p><strong>Total ms:</strong> @_browserStartupContext.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserStartupContext.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser launch plan</h2>
+    <p>This prepares minimal browser-side config/profile files and reports whether startup can proceed.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserLaunchPlan" disabled="@_browserLaunchPlanBusy">@(_browserLaunchPlanBusy ? "Loading..." : "Load browser launch plan")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserLaunchPlanMessage))
+    {
+        <p class="message">@_browserLaunchPlanMessage</p>
+    }
+
+    @if (_browserLaunchPlan is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserLaunchPlan.IsReady)</p>
+        <p><strong>Settings prepared:</strong> @FormatBool(_browserLaunchPlan.SettingsPrepared)</p>
+        <p><strong>Profile prepared:</strong> @FormatBool(_browserLaunchPlan.StartupProfilePrepared)</p>
+        <p><strong>Total ms:</strong> @_browserLaunchPlan.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserLaunchPlan.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup run</h2>
+    <p>This groups the launch plan into explicit startup steps for a future browser entrypoint.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserStartupRun" disabled="@_browserStartupRunBusy">@(_browserStartupRunBusy ? "Loading..." : "Load browser startup run")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupRunMessage))
+    {
+        <p class="message">@_browserStartupRunMessage</p>
+    }
+
+    @if (_browserStartupRun is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupRun.IsReady)</p>
+        <p><strong>Completed steps:</strong> @_browserStartupRun.CompletedSteps / @_browserStartupRun.TotalSteps</p>
+        <p><strong>Total ms:</strong> @_browserStartupRun.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserStartupRun.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup artifact</h2>
+    <p>This writes the startup run into browser storage as a real launch-state artifact.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="CreateBrowserStartupArtifact" disabled="@_browserStartupArtifactBusy">@(_browserStartupArtifactBusy ? "Writing..." : "Create browser startup artifact")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupArtifactMessage))
+    {
+        <p class="message">@_browserStartupArtifactMessage</p>
+    }
+
+    @if (_browserStartupArtifact is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupArtifact.IsReady)</p>
+        <p><strong>Write succeeded:</strong> @FormatBool(_browserStartupArtifact.WriteSucceeded)</p>
+        <p><strong>Artifact path:</strong> @_browserStartupArtifact.ArtifactPath</p>
+        <p><strong>Total ms:</strong> @_browserStartupArtifact.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserStartupArtifact.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup artifact read</h2>
+    <p>This reads the persisted startup artifact back from browser storage as if a future browser entrypoint were consuming it.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="ReadBrowserStartupArtifact" disabled="@_browserStartupArtifactReadBusy">@(_browserStartupArtifactReadBusy ? "Reading..." : "Read browser startup artifact")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupArtifactReadMessage))
+    {
+        <p class="message">@_browserStartupArtifactReadMessage</p>
+    }
+
+    @if (_browserStartupArtifactRead is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupArtifactRead.IsReady)</p>
+        <p><strong>Exists:</strong> @FormatBool(_browserStartupArtifactRead.Exists)</p>
+        <p><strong>Read succeeded:</strong> @FormatBool(_browserStartupArtifactRead.ReadSucceeded)</p>
+        <p><strong>Total ms:</strong> @_browserStartupArtifactRead.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserStartupArtifactRead.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser launch session</h2>
+    <p>This consumes the saved startup artifact and writes the first simulated browser launch session object for a future entrypoint.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="CreateBrowserLaunchSession" disabled="@_browserLaunchSessionBusy">@(_browserLaunchSessionBusy ? "Creating..." : "Create browser launch session")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserLaunchSessionMessage))
+    {
+        <p class="message">@_browserLaunchSessionMessage</p>
+    }
+
+    @if (_browserLaunchSession is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserLaunchSession.IsReady)</p>
+        <p><strong>Write succeeded:</strong> @FormatBool(_browserLaunchSession.WriteSucceeded)</p>
+        <p><strong>Session path:</strong> @_browserLaunchSession.SessionPath</p>
+        <p><strong>Session id:</strong> @_browserLaunchSession.SessionId</p>
+        <p><strong>Total ms:</strong> @_browserLaunchSession.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserLaunchSession.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser launch session read</h2>
+    <p>This reads the saved launch session back as the first resumable browser launch-state consumer.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="ReadBrowserLaunchSession" disabled="@_browserLaunchSessionReadBusy">@(_browserLaunchSessionReadBusy ? "Reading..." : "Read browser launch session")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserLaunchSessionReadMessage))
+    {
+        <p class="message">@_browserLaunchSessionReadMessage</p>
+    }
+
+    @if (_browserLaunchSessionRead is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserLaunchSessionRead.IsReady)</p>
+        <p><strong>Read succeeded:</strong> @FormatBool(_browserLaunchSessionRead.ReadSucceeded)</p>
+        <p><strong>Session path:</strong> @_browserLaunchSessionRead.SessionPath</p>
+        <p><strong>Required assets:</strong> @_browserLaunchSessionRead.RequiredAssetCount</p>
+        <p><strong>Total ms:</strong> @_browserLaunchSessionRead.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserLaunchSessionRead.Summary</p>
+    }
+</div>
+
+}
+
+@if (_activeTab == "diagnostics")
+{
+<div class="next-steps">
+    <h2>Shared seam tiledata</h2>
+    <p>This is an archived detailed seam probe kept for troubleshooting after `tiledata.mul` was validated in the current workflow.</p>
+
+    <div class="mb-2">
+        <label><strong>Shared seam tiledata path:</strong></label>
+        <input class="form-control" @bind="_sharedSeamTileDataPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="ProbeSharedSeamTileData" disabled="@_sharedSeamTileDataBusy">@(_sharedSeamTileDataBusy ? "Reading..." : "Probe shared seam tiledata")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_sharedSeamTileDataMessage))
+    {
+        <p class="message">@_sharedSeamTileDataMessage</p>
+    }
+
+    @if (_sharedSeamTileData is not null)
+    {
+        <p><strong>Path:</strong> @_sharedSeamTileData.Path</p>
+        <p><strong>Exists:</strong> @FormatBool(_sharedSeamTileData.Exists)</p>
+        <p><strong>Loaded on demand:</strong> @FormatBool(_sharedSeamTileData.LoadedOnDemand)</p>
+        <p><strong>Read succeeded:</strong> @FormatBool(_sharedSeamTileData.ReadSucceeded)</p>
+        <p><strong>Used parsed cache:</strong> @FormatBool(_sharedSeamTileData.UsedParsedCache)</p>
+        <p><strong>Bytes:</strong> @_sharedSeamTileData.Length</p>
+        <p><strong>Old format:</strong> @FormatBool(_sharedSeamTileData.IsOldFormat)</p>
+        <p><strong>First group header:</strong> @_sharedSeamTileData.Header</p>
+        <p><strong>First land flags:</strong> @_sharedSeamTileData.FirstLandFlags</p>
+        <p><strong>First land texture id:</strong> @_sharedSeamTileData.FirstLandTextureId</p>
+        <p><strong>First land name:</strong> @(string.IsNullOrWhiteSpace(_sharedSeamTileData.FirstLandName) ? "(empty)" : _sharedSeamTileData.FirstLandName)</p>
+        <p><strong>Total ms:</strong> @_sharedSeamTileData.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_sharedSeamTileData.Error))
+        {
+            <p><strong>Error:</strong> @_sharedSeamTileData.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Shared seam cliloc</h2>
+    <p>This is an archived detailed seam probe kept for troubleshooting after `cliloc.enu` was validated in the current workflow.</p>
+
+    <div class="mb-2">
+        <label><strong>Shared seam cliloc path:</strong></label>
+        <input class="form-control" @bind="_sharedSeamClilocPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="ProbeSharedSeamCliloc" disabled="@_sharedSeamClilocBusy">@(_sharedSeamClilocBusy ? "Reading..." : "Probe shared seam cliloc")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_sharedSeamClilocMessage))
+    {
+        <p class="message">@_sharedSeamClilocMessage</p>
+    }
+
+    @if (_sharedSeamCliloc is not null)
+    {
+        <p><strong>Path:</strong> @_sharedSeamCliloc.Path</p>
+        <p><strong>Exists:</strong> @FormatBool(_sharedSeamCliloc.Exists)</p>
+        <p><strong>Loaded on demand:</strong> @FormatBool(_sharedSeamCliloc.LoadedOnDemand)</p>
+        <p><strong>Read succeeded:</strong> @FormatBool(_sharedSeamCliloc.ReadSucceeded)</p>
+        <p><strong>Used parsed cache:</strong> @FormatBool(_sharedSeamCliloc.UsedParsedCache)</p>
+        <p><strong>Bytes:</strong> @_sharedSeamCliloc.Length</p>
+        <p><strong>Header 1:</strong> @_sharedSeamCliloc.Header1</p>
+        <p><strong>Header 2:</strong> @_sharedSeamCliloc.Header2</p>
+        <p><strong>First entry number:</strong> @_sharedSeamCliloc.FirstEntryNumber</p>
+        <p><strong>First entry flag:</strong> @_sharedSeamCliloc.FirstEntryFlag</p>
+        <p><strong>First entry text length:</strong> @_sharedSeamCliloc.FirstEntryTextLength</p>
+        <p><strong>First entry text:</strong> @(string.IsNullOrWhiteSpace(_sharedSeamCliloc.FirstEntryText) ? "(empty)" : _sharedSeamCliloc.FirstEntryText)</p>
+        <p><strong>Total ms:</strong> @_sharedSeamCliloc.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_sharedSeamCliloc.Error))
+        {
+            <p><strong>Error:</strong> @_sharedSeamCliloc.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Shared seam hues</h2>
+    <p>This is an archived detailed seam probe kept for troubleshooting after `hues.mul` was validated in the current workflow.</p>
+
+    <div class="mb-2">
+        <label><strong>Shared seam hues path:</strong></label>
+        <input class="form-control" @bind="_sharedSeamHuesPath" />
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-dark" @onclick="ProbeSharedSeamHues" disabled="@_sharedSeamHuesBusy">@(_sharedSeamHuesBusy ? "Reading..." : "Probe shared seam hues")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_sharedSeamHuesMessage))
+    {
+        <p class="message">@_sharedSeamHuesMessage</p>
+    }
+
+    @if (_sharedSeamHues is not null)
+    {
+        <p><strong>Path:</strong> @_sharedSeamHues.Path</p>
+        <p><strong>Exists:</strong> @FormatBool(_sharedSeamHues.Exists)</p>
+        <p><strong>Loaded on demand:</strong> @FormatBool(_sharedSeamHues.LoadedOnDemand)</p>
+        <p><strong>Read succeeded:</strong> @FormatBool(_sharedSeamHues.ReadSucceeded)</p>
+        <p><strong>Used parsed cache:</strong> @FormatBool(_sharedSeamHues.UsedParsedCache)</p>
+        <p><strong>Bytes:</strong> @_sharedSeamHues.Length</p>
+        <p><strong>First group header:</strong> @_sharedSeamHues.FirstGroupHeader</p>
+        <p><strong>First palette color16:</strong> @_sharedSeamHues.FirstPaletteColor16</p>
+        <p><strong>First hue name:</strong> @(string.IsNullOrWhiteSpace(_sharedSeamHues.FirstHueName) ? "(empty)" : _sharedSeamHues.FirstHueName)</p>
+        <p><strong>Total ms:</strong> @_sharedSeamHues.TotalMs.ToString("0.00")</p>
+
+        @if (!string.IsNullOrWhiteSpace(_sharedSeamHues.Error))
+        {
+            <p><strong>Error:</strong> @_sharedSeamHues.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Shared seam bootstrap snapshot</h2>
+    <p>This is an archived seam-level comparison panel kept for troubleshooting after the browser bootstrap handoff was validated.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadSharedSeamBootstrapSnapshot" disabled="@_sharedSeamBootstrapBusy">@(_sharedSeamBootstrapBusy ? "Loading..." : "Load shared seam bootstrap snapshot")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_sharedSeamBootstrapMessage))
+    {
+        <p class="message">@_sharedSeamBootstrapMessage</p>
+    }
+
+    @if (_sharedSeamBootstrapSnapshot is not null)
+    {
+        <p><strong>Loaded assets:</strong> @_sharedSeamBootstrapSnapshot.LoadedCount / 3</p>
+        <p><strong>Cache hits:</strong> @_sharedSeamBootstrapSnapshot.CacheHits</p>
+        <p><strong>Total ms:</strong> @_sharedSeamBootstrapSnapshot.TotalMs.ToString("0.00")</p>
+        <p><strong>Ready:</strong> @FormatBool(_sharedSeamBootstrapSnapshot.IsReady)</p>
+        <p><strong>Tiledata:</strong> @FormatBool(_sharedSeamBootstrapSnapshot.TileData.Exists && _sharedSeamBootstrapSnapshot.TileData.ReadSucceeded)</p>
+        <p><strong>Cliloc:</strong> @FormatBool(_sharedSeamBootstrapSnapshot.Cliloc.Exists && _sharedSeamBootstrapSnapshot.Cliloc.ReadSucceeded)</p>
+        <p><strong>Hues:</strong> @FormatBool(_sharedSeamBootstrapSnapshot.Hues.Exists && _sharedSeamBootstrapSnapshot.Hues.ReadSucceeded)</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser bootstrap handoff</h2>
+    <p>This is the first entrypoint-oriented payload built from the seam runtime state instead of test-specific result models.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserBootstrapHandoff" disabled="@_browserBootstrapHandoffBusy">@(_browserBootstrapHandoffBusy ? "Loading..." : "Load browser bootstrap handoff")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserBootstrapHandoffMessage))
+    {
+        <p class="message">@_browserBootstrapHandoffMessage</p>
+    }
+
+    @if (_browserBootstrapHandoff is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserBootstrapHandoff.IsReady)</p>
+        <p><strong>Ready assets:</strong> @_browserBootstrapHandoff.ReadyAssetCount / 3</p>
+        <p><strong>Cache hits:</strong> @_browserBootstrapHandoff.CacheHits</p>
+        <p><strong>Total ms:</strong> @_browserBootstrapHandoff.TotalMs.ToString("0.00")</p>
+        <p><strong>Asset root:</strong> @_browserBootstrapHandoff.AssetRootPath</p>
+        <p><strong>Profiles root:</strong> @_browserBootstrapHandoff.ProfilesRootPath</p>
+        <p><strong>Cache root:</strong> @_browserBootstrapHandoff.CacheRootPath</p>
+        <p><strong>Config root:</strong> @_browserBootstrapHandoff.ConfigRootPath</p>
+        <p><strong>Summary:</strong> @_browserBootstrapHandoff.Summary</p>
+
+        @foreach (var asset in _browserBootstrapHandoff.Assets)
+        {
+            <p><strong>@asset.Id:</strong> @FormatBool(asset.Exists && asset.ReadSucceeded)</p>
+            <p><strong>Path:</strong> @asset.Path</p>
+            <p><strong>Loaded on demand:</strong> @FormatBool(asset.LoadedOnDemand)</p>
+            <p><strong>Used parsed cache:</strong> @FormatBool(asset.UsedParsedCache)</p>
+            <p><strong>Bytes:</strong> @asset.Length</p>
+            <p><strong>Summary:</strong> @(string.IsNullOrWhiteSpace(asset.Summary) ? "(empty)" : asset.Summary)</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup context</h2>
+    <p>This is the first startup-oriented adapter output built from the seam-backed handoff for a future ClassicUO browser entrypoint.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserStartupContext" disabled="@_browserStartupContextBusy">@(_browserStartupContextBusy ? "Loading..." : "Load browser startup context")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupContextMessage))
+    {
+        <p class="message">@_browserStartupContextMessage</p>
+    }
+
+    @if (_browserStartupContext is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupContext.IsReady)</p>
+        <p><strong>Ready assets:</strong> @_browserStartupContext.ReadyAssetCount / 3</p>
+        <p><strong>Cache hits:</strong> @_browserStartupContext.CacheHits</p>
+        <p><strong>Total ms:</strong> @_browserStartupContext.TotalMs.ToString("0.00")</p>
+        <p><strong>Asset root:</strong> @_browserStartupContext.AssetRootPath</p>
+        <p><strong>Profiles root:</strong> @_browserStartupContext.ProfilesRootPath</p>
+        <p><strong>Cache root:</strong> @_browserStartupContext.CacheRootPath</p>
+        <p><strong>Config root:</strong> @_browserStartupContext.ConfigRootPath</p>
+        <p><strong>Settings file:</strong> @_browserStartupContext.SettingsFilePath</p>
+        <p><strong>Startup profile:</strong> @_browserStartupContext.StartupProfilePath</p>
+        <p><strong>Summary:</strong> @_browserStartupContext.Summary</p>
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser launch plan</h2>
+    <p>This is the first launch-oriented output. It prepares minimal browser-side config/profile files and reports whether startup can proceed.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserLaunchPlan" disabled="@_browserLaunchPlanBusy">@(_browserLaunchPlanBusy ? "Loading..." : "Load browser launch plan")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserLaunchPlanMessage))
+    {
+        <p class="message">@_browserLaunchPlanMessage</p>
+    }
+
+    @if (_browserLaunchPlan is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserLaunchPlan.IsReady)</p>
+        <p><strong>Profile:</strong> @_browserLaunchPlan.ProfileId</p>
+        <p><strong>Ready assets:</strong> @_browserLaunchPlan.ReadyAssetCount / 3</p>
+        <p><strong>Cache hits:</strong> @_browserLaunchPlan.CacheHits</p>
+        <p><strong>Total ms:</strong> @_browserLaunchPlan.TotalMs.ToString("0.00")</p>
+        <p><strong>Settings prepared:</strong> @FormatBool(_browserLaunchPlan.SettingsPrepared)</p>
+        <p><strong>Profile prepared:</strong> @FormatBool(_browserLaunchPlan.StartupProfilePrepared)</p>
+        <p><strong>Settings file:</strong> @_browserLaunchPlan.SettingsFilePath</p>
+        <p><strong>Startup profile:</strong> @_browserLaunchPlan.StartupProfilePath</p>
+        <p><strong>Summary:</strong> @_browserLaunchPlan.Summary</p>
+
+        @if (_browserLaunchPlan.Issues.Length > 0)
+        {
+            @foreach (var issue in _browserLaunchPlan.Issues)
+            {
+                <p><strong>@issue.Code:</strong> @issue.Message</p>
+            }
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup run</h2>
+    <p>This is the first startup-sequence shell. It groups the launch plan into explicit startup steps for a future browser entrypoint.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="LoadBrowserStartupRun" disabled="@_browserStartupRunBusy">@(_browserStartupRunBusy ? "Loading..." : "Load browser startup run")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupRunMessage))
+    {
+        <p class="message">@_browserStartupRunMessage</p>
+    }
+
+    @if (_browserStartupRun is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupRun.IsReady)</p>
+        <p><strong>Profile:</strong> @_browserStartupRun.ProfileId</p>
+        <p><strong>Completed steps:</strong> @_browserStartupRun.CompletedSteps / @_browserStartupRun.TotalSteps</p>
+        <p><strong>Total ms:</strong> @_browserStartupRun.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserStartupRun.Summary</p>
+
+        @foreach (var step in _browserStartupRun.Steps)
+        {
+            <p><strong>@step.Title:</strong> @FormatBool(step.Succeeded)</p>
+            <p>@step.Detail</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup artifact</h2>
+    <p>This writes the startup run into browser storage as a real launch-state artifact for a future browser entrypoint to consume.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="CreateBrowserStartupArtifact" disabled="@_browserStartupArtifactBusy">@(_browserStartupArtifactBusy ? "Writing..." : "Create browser startup artifact")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupArtifactMessage))
+    {
+        <p class="message">@_browserStartupArtifactMessage</p>
+    }
+
+    @if (_browserStartupArtifact is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupArtifact.IsReady)</p>
+        <p><strong>Profile:</strong> @_browserStartupArtifact.ProfileId</p>
+        <p><strong>Write succeeded:</strong> @FormatBool(_browserStartupArtifact.WriteSucceeded)</p>
+        <p><strong>Artifact path:</strong> @_browserStartupArtifact.ArtifactPath</p>
+        <p><strong>Bytes:</strong> @_browserStartupArtifact.Length</p>
+        <p><strong>Total ms:</strong> @_browserStartupArtifact.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserStartupArtifact.Summary</p>
+
+        @if (!string.IsNullOrWhiteSpace(_browserStartupArtifact.Error))
+        {
+            <p><strong>Error:</strong> @_browserStartupArtifact.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
+    <h2>Browser startup artifact read</h2>
+    <p>This reads the persisted startup artifact back from browser storage as if a future browser entrypoint were consuming launch state.</p>
+
+    <div class="actions">
+        <button class="btn btn-primary" @onclick="ReadBrowserStartupArtifact" disabled="@_browserStartupArtifactReadBusy">@(_browserStartupArtifactReadBusy ? "Reading..." : "Read browser startup artifact")</button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(_browserStartupArtifactReadMessage))
+    {
+        <p class="message">@_browserStartupArtifactReadMessage</p>
+    }
+
+    @if (_browserStartupArtifactRead is not null)
+    {
+        <p><strong>Ready:</strong> @FormatBool(_browserStartupArtifactRead.IsReady)</p>
+        <p><strong>Exists:</strong> @FormatBool(_browserStartupArtifactRead.Exists)</p>
+        <p><strong>Read succeeded:</strong> @FormatBool(_browserStartupArtifactRead.ReadSucceeded)</p>
+        <p><strong>Artifact path:</strong> @_browserStartupArtifactRead.ArtifactPath</p>
+        <p><strong>Completed steps:</strong> @_browserStartupArtifactRead.CompletedSteps / @_browserStartupArtifactRead.TotalSteps</p>
+        <p><strong>Bytes:</strong> @_browserStartupArtifactRead.Length</p>
+        <p><strong>Total ms:</strong> @_browserStartupArtifactRead.TotalMs.ToString("0.00")</p>
+        <p><strong>Summary:</strong> @_browserStartupArtifactRead.Summary</p>
+
+        @if (!string.IsNullOrWhiteSpace(_browserStartupArtifactRead.Error))
+        {
+            <p><strong>Error:</strong> @_browserStartupArtifactRead.Error</p>
+        }
+    }
+</div>
+
+<div class="next-steps">
     <h2>Bootstrap loader snapshot</h2>
-    <p>This runs the current browser-side bootstrap asset set together through the loader service and reports one combined result.</p>
+    <p>This is an archived direct-loader comparison panel kept for troubleshooting after the seam-backed handoff became the primary path.</p>
 
     <div class="actions">
         <button class="btn btn-primary" @onclick="LoadBootstrapSnapshot" disabled="@_loaderSnapshotBusy">@(_loaderSnapshotBusy ? "Loading..." : "Load bootstrap snapshot")</button>
@@ -172,7 +825,7 @@
 
 <div class="next-steps">
     <h2>Asset stream cache</h2>
-    <p>This is the reusable C# binary cache that sits behind the browser asset stream source and avoids repeated JS/base64 reads for warmed files.</p>
+    <p>This is an archived cache inspection panel kept for troubleshooting.</p>
 
     <div class="mb-2">
         <label><strong>Warm path:</strong></label>
@@ -223,7 +876,7 @@
 
 <div class="next-steps">
     <h2>Hues probe</h2>
-    <p>This validates `hues.mul` through the same loader harness and cached parse path as the other asset families.</p>
+    <p>This is an archived detailed probe kept for troubleshooting.</p>
 
     <div class="mb-2">
         <label><strong>Hues path:</strong></label>
@@ -258,7 +911,7 @@
 
 <div class="next-steps">
     <h2>Cliloc probe</h2>
-    <p>This validates a second real asset family through the same browser-backed stream seam used by the tiledata probe.</p>
+    <p>This is an archived detailed probe kept for troubleshooting.</p>
 
     <div class="mb-2">
         <label><strong>Cliloc path:</strong></label>
@@ -296,7 +949,7 @@
 
 <div class="next-steps">
     <h2>Tiledata probe</h2>
-    <p>This is the first structured binary asset read, using the same file the desktop client currently validates at startup.</p>
+    <p>This is an archived detailed probe kept for troubleshooting.</p>
 
     <div class="mb-2">
         <label><strong>Tiledata path:</strong></label>
@@ -471,6 +1124,13 @@
 @if (_activeTab == "diagnostics")
 {
 <div class="next-steps">
+    <h2>Archived Diagnostics</h2>
+    <p>The remaining sections on this tab are older spike tools and low-level diagnostics that are no longer part of the active validation path.</p>
+    <p><strong>Asset root:</strong> `/uo`</p>
+    <p><strong>Use:</strong> troubleshooting only</p>
+  </div>
+
+<div class="next-steps">
     <h2>Virtual path bridge probe</h2>
     <p>This exercises the same kind of virtual-path reads and writes the future browser filesystem provider will need.</p>
     <p><strong>Asset root:</strong> `/uo`</p>
@@ -629,6 +1289,20 @@
     private BrowserHost.Services.BrowserRuntimeCacheState? _runtimeCacheState;
     private BrowserHost.Services.BrowserFileSystemBridgeState? _fileSystemBridgeState;
     private BrowserHost.Services.BrowserFileSystemBridgeProbeResult? _fileSystemBridgeProbe;
+    private BrowserHost.Services.BrowserClientSharedSeamTileDataDetails? _sharedSeamTileData;
+    private BrowserHost.Services.BrowserClientSharedSeamClilocDetails? _sharedSeamCliloc;
+    private BrowserHost.Services.BrowserClientSharedSeamHuesDetails? _sharedSeamHues;
+    private BrowserHost.Services.BrowserSharedSeamRuntimeBootstrapState? _sharedSeamBootstrapSnapshot;
+    private BrowserHost.Services.BrowserClientBootstrapHandoff? _browserBootstrapHandoff;
+    private BrowserHost.Services.BrowserClientStartupContext? _browserStartupContext;
+    private BrowserHost.Services.BrowserClientLaunchPlan? _browserLaunchPlan;
+    private BrowserHost.Services.BrowserClientStartupRun? _browserStartupRun;
+    private BrowserHost.Services.BrowserClientStartupArtifact? _browserStartupArtifact;
+    private BrowserHost.Services.BrowserClientStartupArtifactRead? _browserStartupArtifactRead;
+    private BrowserHost.Services.BrowserSelfTestReport? _selfTestReport;
+    private BrowserHost.Services.BrowserLocalReportSaveResult? _selfTestReportSave;
+    private BrowserHost.Services.BrowserClientLaunchSession? _browserLaunchSession;
+    private BrowserHost.Services.BrowserClientLaunchSessionRead? _browserLaunchSessionRead;
     private BrowserHost.Services.BrowserVirtualRootSummary[]? _rootSummaries;
     private bool _isBusy;
     private bool _storageBusy;
@@ -645,6 +1319,19 @@
     private bool _loaderSnapshotBusy;
     private bool _fileSystemBridgeBusy;
     private bool _fileSystemBridgeProbeBusy;
+    private bool _sharedSeamTileDataBusy;
+    private bool _sharedSeamClilocBusy;
+    private bool _sharedSeamHuesBusy;
+    private bool _sharedSeamBootstrapBusy;
+    private bool _browserBootstrapHandoffBusy;
+    private bool _browserStartupContextBusy;
+    private bool _browserLaunchPlanBusy;
+    private bool _browserStartupRunBusy;
+    private bool _browserStartupArtifactBusy;
+    private bool _browserStartupArtifactReadBusy;
+    private bool _selfTestBusy;
+    private bool _browserLaunchSessionBusy;
+    private bool _browserLaunchSessionReadBusy;
     private bool _assetWarmBusy;
     private bool _assetCacheClearBusy;
     private bool _preloadBusy;
@@ -669,6 +1356,22 @@
     private string _loaderSnapshotMessage = "Load the bootstrap snapshot to run the current browser-side asset set together.";
     private string _fileSystemBridgePath = "/uo/tiledata.mul";
     private string _fileSystemBridgeMessage = "Activate the bridge to preload bootstrap assets into the shared BrowserFileSystem provider.";
+    private string _sharedSeamTileDataPath = "/uo/tiledata.mul";
+    private string _sharedSeamTileDataMessage = "Probe tiledata through the shared BrowserFileSystem seam.";
+    private string _sharedSeamClilocPath = "/uo/cliloc.enu";
+    private string _sharedSeamClilocMessage = "Probe cliloc through the shared BrowserFileSystem seam.";
+    private string _sharedSeamHuesPath = "/uo/hues.mul";
+    private string _sharedSeamHuesMessage = "Probe hues through the shared BrowserFileSystem seam.";
+    private string _sharedSeamBootstrapMessage = "Load the bootstrap trio through the shared BrowserFileSystem seam.";
+    private string _browserBootstrapHandoffMessage = "Load the first client-facing browser bootstrap handoff.";
+    private string _browserStartupContextMessage = "Load the first startup-oriented browser adapter output.";
+    private string _browserLaunchPlanMessage = "Load the first launch-oriented browser entrypoint output.";
+    private string _browserStartupRunMessage = "Load the first startup-sequence browser entrypoint shell.";
+    private string _browserStartupArtifactMessage = "Write the startup run into browser storage as a launch-state artifact.";
+    private string _browserStartupArtifactReadMessage = "Read the persisted startup artifact back from browser storage.";
+    private string _selfTestMessage = "Run the current self-test suite to batch the main browser bootstrap checks.";
+    private string _browserLaunchSessionMessage = "Create the first simulated browser launch session from the saved startup artifact.";
+    private string _browserLaunchSessionReadMessage = "Read the saved browser launch session as the first resumable launch-state consumer.";
     private string _assetWarmPath = "/uo/cliloc.enu";
     private string _assetWarmMessage = "Warm a file into the C# asset stream cache to avoid repeated browser interop for loader-style reads.";
     private string _preloadPath = "/uo/TestDoc.txt";
@@ -1071,6 +1774,359 @@
         finally
         {
             _fileSystemBridgeProbeBusy = false;
+        }
+    }
+
+    private async Task ProbeSharedSeamTileData()
+    {
+        _sharedSeamTileDataBusy = true;
+        _sharedSeamTileDataMessage = $"Reading tiledata through shared seam path {_sharedSeamTileDataPath}...";
+
+        try
+        {
+            _sharedSeamTileData = await BrowserClientAssetService.GetSharedSeamFirstTileDataEntryAsync(_sharedSeamTileDataPath);
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _sharedSeamTileDataMessage = string.IsNullOrWhiteSpace(_sharedSeamTileData.Error)
+                ? $"Shared seam tiledata read completed for {_sharedSeamTileData.Path}."
+                : $"Shared seam tiledata read finished with error: {_sharedSeamTileData.Error}";
+        }
+        catch (Exception ex)
+        {
+            _sharedSeamTileDataMessage = $"Shared seam tiledata read failed: {ex.Message}";
+        }
+        finally
+        {
+            _sharedSeamTileDataBusy = false;
+        }
+    }
+
+    private async Task ProbeSharedSeamCliloc()
+    {
+        _sharedSeamClilocBusy = true;
+        _sharedSeamClilocMessage = $"Reading cliloc through shared seam path {_sharedSeamClilocPath}...";
+
+        try
+        {
+            _sharedSeamCliloc = await BrowserClientAssetService.GetSharedSeamFirstClilocEntryAsync(_sharedSeamClilocPath);
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _sharedSeamClilocMessage = string.IsNullOrWhiteSpace(_sharedSeamCliloc.Error)
+                ? $"Shared seam cliloc read completed for {_sharedSeamCliloc.Path}."
+                : $"Shared seam cliloc read finished with error: {_sharedSeamCliloc.Error}";
+        }
+        catch (Exception ex)
+        {
+            _sharedSeamClilocMessage = $"Shared seam cliloc read failed: {ex.Message}";
+        }
+        finally
+        {
+            _sharedSeamClilocBusy = false;
+        }
+    }
+
+    private async Task ProbeSharedSeamHues()
+    {
+        _sharedSeamHuesBusy = true;
+        _sharedSeamHuesMessage = $"Reading hues through shared seam path {_sharedSeamHuesPath}...";
+
+        try
+        {
+            _sharedSeamHues = await BrowserClientAssetService.GetSharedSeamFirstHueGroupAsync(_sharedSeamHuesPath);
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _sharedSeamHuesMessage = string.IsNullOrWhiteSpace(_sharedSeamHues.Error)
+                ? $"Shared seam hues read completed for {_sharedSeamHues.Path}."
+                : $"Shared seam hues read finished with error: {_sharedSeamHues.Error}";
+        }
+        catch (Exception ex)
+        {
+            _sharedSeamHuesMessage = $"Shared seam hues read failed: {ex.Message}";
+        }
+        finally
+        {
+            _sharedSeamHuesBusy = false;
+        }
+    }
+
+    private async Task LoadSharedSeamBootstrapSnapshot()
+    {
+        _sharedSeamBootstrapBusy = true;
+        _sharedSeamBootstrapMessage = "Loading shared seam bootstrap snapshot...";
+
+        try
+        {
+            _sharedSeamBootstrapSnapshot = await BrowserClientAssetService.GetSharedSeamBootstrapStateAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _sharedSeamBootstrapMessage = $"Shared seam bootstrap snapshot completed in {_sharedSeamBootstrapSnapshot.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _sharedSeamBootstrapMessage = $"Shared seam bootstrap snapshot failed: {ex.Message}";
+        }
+        finally
+        {
+            _sharedSeamBootstrapBusy = false;
+        }
+    }
+
+    private async Task LoadBrowserBootstrapHandoff()
+    {
+        _browserBootstrapHandoffBusy = true;
+        _browserBootstrapHandoffMessage = "Loading browser bootstrap handoff...";
+
+        try
+        {
+            _browserBootstrapHandoff = await BrowserClientAssetService.GetBrowserBootstrapHandoffAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserBootstrapHandoffMessage = $"Browser bootstrap handoff completed in {_browserBootstrapHandoff.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserBootstrapHandoffMessage = $"Browser bootstrap handoff failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserBootstrapHandoffBusy = false;
+        }
+    }
+
+    private async Task LoadBrowserStartupContext()
+    {
+        _browserStartupContextBusy = true;
+        _browserStartupContextMessage = "Loading browser startup context...";
+
+        try
+        {
+            _browserStartupContext = await BrowserClientBootstrapAdapter.PrepareStartupContextAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserStartupContextMessage = $"Browser startup context completed in {_browserStartupContext.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserStartupContextMessage = $"Browser startup context failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserStartupContextBusy = false;
+        }
+    }
+
+    private async Task LoadBrowserLaunchPlan()
+    {
+        _browserLaunchPlanBusy = true;
+        _browserLaunchPlanMessage = "Loading browser launch plan...";
+
+        try
+        {
+            _browserLaunchPlan = await BrowserClientEntrypoint.PrepareLaunchAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserLaunchPlanMessage = $"Browser launch plan completed in {_browserLaunchPlan.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserLaunchPlanMessage = $"Browser launch plan failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserLaunchPlanBusy = false;
+        }
+    }
+
+    private async Task LoadBrowserStartupRun()
+    {
+        _browserStartupRunBusy = true;
+        _browserStartupRunMessage = "Loading browser startup run...";
+
+        try
+        {
+            _browserStartupRun = await BrowserClientStartupIntegration.PrepareStartupRunAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserStartupRunMessage = $"Browser startup run completed in {_browserStartupRun.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserStartupRunMessage = $"Browser startup run failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserStartupRunBusy = false;
+        }
+    }
+
+    private async Task CreateBrowserStartupArtifact()
+    {
+        _browserStartupArtifactBusy = true;
+        _browserStartupArtifactMessage = "Writing browser startup artifact...";
+
+        try
+        {
+            _browserStartupArtifact = await BrowserClientStartupArtifacts.CreateStartupArtifactAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserStartupArtifactMessage = $"Browser startup artifact completed in {_browserStartupArtifact.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserStartupArtifactMessage = $"Browser startup artifact failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserStartupArtifactBusy = false;
+        }
+    }
+
+    private async Task ReadBrowserStartupArtifact()
+    {
+        _browserStartupArtifactReadBusy = true;
+        _browserStartupArtifactReadMessage = "Reading browser startup artifact...";
+
+        try
+        {
+            _browserStartupArtifactRead = await BrowserClientStartupArtifactReader.ReadStartupArtifactAsync();
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserStartupArtifactReadMessage = $"Browser startup artifact read completed in {_browserStartupArtifactRead.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserStartupArtifactReadMessage = $"Browser startup artifact read failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserStartupArtifactReadBusy = false;
+        }
+    }
+
+    private async Task RunSelfTestSuite()
+    {
+        _selfTestBusy = true;
+        _selfTestReportSave = null;
+        _selfTestMessage = "Running current self-test suite and saving the report locally...";
+
+        try
+        {
+            _selfTestReport = await BrowserSelfTestReportService.RunAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _selfTestReportSave = await BrowserLocalReportSinkService.SaveSelfTestReportAsync(_selfTestReport.Json);
+
+            if (_selfTestReportSave.Saved)
+            {
+                _selfTestMessage = $"Self-test suite completed and saved locally. {_selfTestReport.Summary}";
+            }
+            else
+            {
+                _selfTestMessage = $"Self-test suite completed, but local save failed. {_selfTestReport.Summary} | saveError={_selfTestReportSave.Error}";
+            }
+        }
+        catch (Exception ex)
+        {
+            _selfTestMessage = $"Self-test suite failed: {ex.Message}";
+        }
+        finally
+        {
+            _selfTestBusy = false;
+        }
+    }
+
+    private async Task CreateBrowserLaunchSession()
+    {
+        _browserLaunchSessionBusy = true;
+        _browserLaunchSessionMessage = "Creating browser launch session...";
+
+        try
+        {
+            _browserLaunchSession = await BrowserClientLaunchSession.CreateLaunchSessionAsync(
+                new BrowserHost.Services.BrowserRuntimeBootstrapRequest
+                {
+                    TileDataPath = _sharedSeamTileDataPath,
+                    ClilocPath = _sharedSeamClilocPath,
+                    HuesPath = _sharedSeamHuesPath
+                }
+            );
+
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserLaunchSessionMessage = $"Browser launch session completed in {_browserLaunchSession.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserLaunchSessionMessage = $"Browser launch session failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserLaunchSessionBusy = false;
+        }
+    }
+
+    private async Task ReadBrowserLaunchSession()
+    {
+        _browserLaunchSessionReadBusy = true;
+        _browserLaunchSessionReadMessage = "Reading browser launch session...";
+
+        try
+        {
+            _browserLaunchSessionRead = await BrowserClientLaunchSessionReader.ReadLaunchSessionAsync();
+            _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
+            _browserLaunchSessionReadMessage = $"Browser launch session read completed in {_browserLaunchSessionRead.TotalMs:0.00} ms.";
+        }
+        catch (Exception ex)
+        {
+            _browserLaunchSessionReadMessage = $"Browser launch session read failed: {ex.Message}";
+        }
+        finally
+        {
+            _browserLaunchSessionReadBusy = false;
         }
     }
 

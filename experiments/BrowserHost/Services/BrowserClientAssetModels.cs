@@ -39,3 +39,53 @@ public sealed class BrowserClientHuesDetails
     public double TotalMs { get; set; }
     public string Error { get; set; } = string.Empty;
 }
+
+public sealed class BrowserClientSharedSeamTileDataDetails
+{
+    public string Path { get; set; } = string.Empty;
+    public bool Exists { get; set; }
+    public bool LoadedOnDemand { get; set; }
+    public bool ReadSucceeded { get; set; }
+    public bool UsedParsedCache { get; set; }
+    public long Length { get; set; }
+    public bool IsOldFormat { get; set; }
+    public uint Header { get; set; }
+    public string FirstLandFlags { get; set; } = string.Empty;
+    public int FirstLandTextureId { get; set; }
+    public string FirstLandName { get; set; } = string.Empty;
+    public double TotalMs { get; set; }
+    public string Error { get; set; } = string.Empty;
+}
+
+public sealed class BrowserClientSharedSeamClilocDetails
+{
+    public string Path { get; set; } = string.Empty;
+    public bool Exists { get; set; }
+    public bool LoadedOnDemand { get; set; }
+    public bool ReadSucceeded { get; set; }
+    public bool UsedParsedCache { get; set; }
+    public long Length { get; set; }
+    public int Header1 { get; set; }
+    public short Header2 { get; set; }
+    public int FirstEntryNumber { get; set; }
+    public byte FirstEntryFlag { get; set; }
+    public short FirstEntryTextLength { get; set; }
+    public string FirstEntryText { get; set; } = string.Empty;
+    public double TotalMs { get; set; }
+    public string Error { get; set; } = string.Empty;
+}
+
+public sealed class BrowserClientSharedSeamHuesDetails
+{
+    public string Path { get; set; } = string.Empty;
+    public bool Exists { get; set; }
+    public bool LoadedOnDemand { get; set; }
+    public bool ReadSucceeded { get; set; }
+    public bool UsedParsedCache { get; set; }
+    public long Length { get; set; }
+    public uint FirstGroupHeader { get; set; }
+    public int FirstPaletteColor16 { get; set; }
+    public string FirstHueName { get; set; } = string.Empty;
+    public double TotalMs { get; set; }
+    public string Error { get; set; } = string.Empty;
+}

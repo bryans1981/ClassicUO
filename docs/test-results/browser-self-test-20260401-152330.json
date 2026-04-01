@@ -1,0 +1,365 @@
+{
+  "GeneratedAtUtc": "2026-04-01T15:22:53.259+00:00",
+  "Request": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul"
+  },
+  "DirectBootstrap": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul",
+    "IsReady": true,
+    "LoadedCount": 3,
+    "CacheHits": 0,
+    "TotalMs": 8681,
+    "TileData": {
+      "Exists": true,
+      "Length": 3188736,
+      "FirstLandName": "UNUSED",
+      "FirstLandTextureId": 0
+    },
+    "Cliloc": {
+      "Exists": true,
+      "Length": 4960424,
+      "FirstEntryNumber": 500000,
+      "FirstEntryText": "Reputation aversion triggered.",
+      "UsedProcessedCache": false
+    },
+    "Hues": {
+      "Exists": true,
+      "Length": 265500,
+      "FirstGroupHeader": 0,
+      "FirstHueName": "",
+      "UsedParsedCache": false
+    }
+  },
+  "SeamBootstrap": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul",
+    "IsReady": true,
+    "LoadedCount": 3,
+    "CacheHits": 0,
+    "TotalMs": 8647,
+    "TileData": {
+      "Exists": true,
+      "ReadSucceeded": true,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 3188736,
+      "FirstLandName": "UNUSED",
+      "FirstLandTextureId": 0
+    },
+    "Cliloc": {
+      "Exists": true,
+      "ReadSucceeded": true,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 4960424,
+      "FirstEntryNumber": 500000,
+      "FirstEntryText": "Reputation aversion triggered."
+    },
+    "Hues": {
+      "Exists": true,
+      "ReadSucceeded": true,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 265500,
+      "FirstGroupHeader": 0,
+      "FirstHueName": ""
+    }
+  },
+  "Handoff": {
+    "IsReady": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "ReadyAssetCount": 3,
+    "CacheHits": 3,
+    "TotalMs": 11,
+    "Assets": [
+      {
+        "Id": "tiledata",
+        "Path": "/uo/tiledata.mul",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": true,
+        "Length": 3188736,
+        "Summary": "UNUSED"
+      },
+      {
+        "Id": "cliloc",
+        "Path": "/uo/cliloc.enu",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": true,
+        "Length": 4960424,
+        "Summary": "500000: Reputation aversion triggered."
+      },
+      {
+        "Id": "hues",
+        "Path": "/uo/hues.mul",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": true,
+        "Length": 265500,
+        "Summary": "header 0"
+      }
+    ],
+    "Summary": "Bootstrap handoff ready with 3 seam-backed asset(s)."
+  },
+  "CacheState": {
+    "RawAssetCache": {
+      "EntryCount": 3,
+      "TotalBytes": 8414660,
+      "Paths": [
+        "/uo/Cliloc.enu",
+        "/uo/hues.mul",
+        "/uo/tiledata.mul"
+      ]
+    },
+    "ProcessedAssetCache": {
+      "EntryCount": 9,
+      "Keys": [
+        "cliloc-decompressed:/uo/cliloc.enu",
+        "cliloc-first-entry:/uo/cliloc.enu",
+        "hues-first-entry:/uo/hues.mul",
+        "hues-raw:/uo/hues.mul",
+        "shared-seam:cliloc:/uo/cliloc.enu",
+        "shared-seam:hues:/uo/hues.mul",
+        "shared-seam:tiledata:/uo/tiledata.mul",
+        "tiledata-first-land:/uo/tiledata.mul",
+        "tiledata-raw:/uo/tiledata.mul"
+      ]
+    }
+  },
+  "BridgeState": {
+    "Activated": true,
+    "LoadedCount": 3,
+    "LoadedPaths": [
+      "/uo/cliloc.enu",
+      "/uo/hues.mul",
+      "/uo/tiledata.mul"
+    ]
+  },
+  "SeedImportAttempted": true,
+  "SeedImportCount": 6,
+  "StartupArtifact": {
+    "IsReady": true,
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "ProfileId": "default",
+    "WriteSucceeded": true,
+    "Length": 2070,
+    "StartupRun": {
+      "IsReady": true,
+      "ProfileId": "default",
+      "LaunchPlan": {
+        "IsReady": true,
+        "ProfileId": "default",
+        "AssetRootPath": "/uo",
+        "ProfilesRootPath": "/profiles",
+        "CacheRootPath": "/cache",
+        "ConfigRootPath": "/config",
+        "SettingsFilePath": "/config/client.settings.json",
+        "StartupProfilePath": "/profiles/default/profile.json",
+        "SettingsPrepared": true,
+        "StartupProfilePrepared": true,
+        "ReadyAssetCount": 3,
+        "CacheHits": 3,
+        "TotalMs": 23,
+        "Assets": [
+          {
+            "Id": "tiledata",
+            "Path": "/uo/tiledata.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 3188736,
+            "Summary": "UNUSED"
+          },
+          {
+            "Id": "cliloc",
+            "Path": "/uo/cliloc.enu",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 4960424,
+            "Summary": "500000: Reputation aversion triggered."
+          },
+          {
+            "Id": "hues",
+            "Path": "/uo/hues.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 265500,
+            "Summary": "header 0"
+          }
+        ],
+        "Issues": [],
+        "Summary": "Launch plan ready for profile \u0027default\u0027."
+      },
+      "CompletedSteps": 4,
+      "TotalSteps": 4,
+      "Steps": [
+        {
+          "Id": "bootstrap-assets",
+          "Title": "Validate bootstrap assets",
+          "Succeeded": true,
+          "Detail": "3 / 3 required assets ready."
+        },
+        {
+          "Id": "config",
+          "Title": "Prepare config files",
+          "Succeeded": true,
+          "Detail": "Ready at /config/client.settings.json"
+        },
+        {
+          "Id": "profile",
+          "Title": "Prepare startup profile",
+          "Succeeded": true,
+          "Detail": "Ready at /profiles/default/profile.json"
+        },
+        {
+          "Id": "launch",
+          "Title": "Create startup launch contract",
+          "Succeeded": true,
+          "Detail": "Launch plan ready for profile \u0027default\u0027."
+        }
+      ],
+      "TotalMs": 26,
+      "Summary": "Startup run prepared with 4 / 4 steps complete."
+    },
+    "TotalMs": 74,
+    "Summary": "Startup artifact written to /cache/startup/default/launch-plan.json.",
+    "Error": ""
+  },
+  "StartupArtifactRead": {
+    "ProfileId": "default",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "IsReady": true,
+    "Length": 2070,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "StartupRun": {
+      "IsReady": true,
+      "ProfileId": "default",
+      "LaunchPlan": {
+        "IsReady": true,
+        "ProfileId": "default",
+        "AssetRootPath": "/uo",
+        "ProfilesRootPath": "/profiles",
+        "CacheRootPath": "/cache",
+        "ConfigRootPath": "/config",
+        "SettingsFilePath": "/config/client.settings.json",
+        "StartupProfilePath": "/profiles/default/profile.json",
+        "SettingsPrepared": true,
+        "StartupProfilePrepared": true,
+        "ReadyAssetCount": 3,
+        "CacheHits": 3,
+        "TotalMs": 23,
+        "Assets": [
+          {
+            "Id": "tiledata",
+            "Path": "/uo/tiledata.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 3188736,
+            "Summary": "UNUSED"
+          },
+          {
+            "Id": "cliloc",
+            "Path": "/uo/cliloc.enu",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 4960424,
+            "Summary": "500000: Reputation aversion triggered."
+          },
+          {
+            "Id": "hues",
+            "Path": "/uo/hues.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 265500,
+            "Summary": "header 0"
+          }
+        ],
+        "Issues": [],
+        "Summary": "Launch plan ready for profile \u0027default\u0027."
+      },
+      "CompletedSteps": 4,
+      "TotalSteps": 4,
+      "Steps": [
+        {
+          "Id": "bootstrap-assets",
+          "Title": "Validate bootstrap assets",
+          "Succeeded": true,
+          "Detail": "3 / 3 required assets ready."
+        },
+        {
+          "Id": "config",
+          "Title": "Prepare config files",
+          "Succeeded": true,
+          "Detail": "Ready at /config/client.settings.json"
+        },
+        {
+          "Id": "profile",
+          "Title": "Prepare startup profile",
+          "Succeeded": true,
+          "Detail": "Ready at /profiles/default/profile.json"
+        },
+        {
+          "Id": "launch",
+          "Title": "Create startup launch contract",
+          "Succeeded": true,
+          "Detail": "Launch plan ready for profile \u0027default\u0027."
+        }
+      ],
+      "TotalMs": 26,
+      "Summary": "Startup run prepared with 4 / 4 steps complete."
+    },
+    "TotalMs": 33,
+    "Summary": "Startup artifact loaded for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "LaunchSession": {
+    "IsReady": true,
+    "ProfileId": "default",
+    "SessionId": "session-20260401152330452",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "ArtifactWriteSucceeded": true,
+    "ArtifactReadSucceeded": true,
+    "UsedExistingArtifact": false,
+    "WriteSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "TotalMs": 63,
+    "Summary": "Launch session \u0027session-20260401152330452\u0027 created for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "Summary": "handoff=ready | direct=3/3 | seam=3/3 | handoffCacheHits=3 | rawCache=3 | processedCache=9 | bridgeLoaded=3 | seedImport=6 | artifactWrite=ok | artifactRead=ok | launchSession=ok",
+  "Json": ""
+}

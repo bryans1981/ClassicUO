@@ -1,5 +1,6 @@
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $pidFile = Join-Path $projectRoot 'experiments\BrowserHost\.browserhost.pid'
+$reportPidFile = Join-Path $projectRoot 'experiments\BrowserHost.ReportHost\.reporthost.pid'
 
 if (-not (Test-Path $pidFile)) {
     Write-Host 'Browser spike is not running.'
@@ -15,3 +16,15 @@ if ($processId -and (Get-Process -Id $processId -ErrorAction SilentlyContinue)) 
 }
 
 Remove-Item $pidFile -Force -ErrorAction SilentlyContinue
+
+if (Test-Path $reportPidFile) {
+    $reportProcessId = Get-Content $reportPidFile -ErrorAction SilentlyContinue
+    if ($reportProcessId -and (Get-Process -Id $reportProcessId -ErrorAction SilentlyContinue)) {
+        Stop-Process -Id $reportProcessId -Force
+        Write-Host "Stopped report receiver process $reportProcessId."
+    } else {
+        Write-Host 'No running report receiver process was found.'
+    }
+
+    Remove-Item $reportPidFile -Force -ErrorAction SilentlyContinue
+}

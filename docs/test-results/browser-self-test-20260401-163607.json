@@ -1,0 +1,1550 @@
+{
+  "GeneratedAtUtc": "2026-04-01T16:35:42.247+00:00",
+  "Request": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul"
+  },
+  "DirectBootstrap": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul",
+    "IsReady": true,
+    "LoadedCount": 3,
+    "CacheHits": 0,
+    "TotalMs": 8671,
+    "TileData": {
+      "Exists": true,
+      "Length": 3188736,
+      "FirstLandName": "UNUSED",
+      "FirstLandTextureId": 0
+    },
+    "Cliloc": {
+      "Exists": true,
+      "Length": 4960424,
+      "FirstEntryNumber": 500000,
+      "FirstEntryText": "Reputation aversion triggered.",
+      "UsedProcessedCache": false
+    },
+    "Hues": {
+      "Exists": true,
+      "Length": 265500,
+      "FirstGroupHeader": 0,
+      "FirstHueName": "",
+      "UsedParsedCache": false
+    }
+  },
+  "SeamBootstrap": {
+    "TileDataPath": "/uo/tiledata.mul",
+    "ClilocPath": "/uo/cliloc.enu",
+    "HuesPath": "/uo/hues.mul",
+    "IsReady": true,
+    "LoadedCount": 3,
+    "CacheHits": 0,
+    "TotalMs": 8666,
+    "TileData": {
+      "Exists": true,
+      "ReadSucceeded": true,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 3188736,
+      "FirstLandName": "UNUSED",
+      "FirstLandTextureId": 0
+    },
+    "Cliloc": {
+      "Exists": true,
+      "ReadSucceeded": true,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 4960424,
+      "FirstEntryNumber": 500000,
+      "FirstEntryText": "Reputation aversion triggered."
+    },
+    "Hues": {
+      "Exists": true,
+      "ReadSucceeded": true,
+      "LoadedOnDemand": false,
+      "UsedParsedCache": false,
+      "Length": 265500,
+      "FirstGroupHeader": 0,
+      "FirstHueName": ""
+    }
+  },
+  "Handoff": {
+    "IsReady": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "ReadyAssetCount": 3,
+    "CacheHits": 3,
+    "TotalMs": 11,
+    "Assets": [
+      {
+        "Id": "tiledata",
+        "Path": "/uo/tiledata.mul",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": true,
+        "Length": 3188736,
+        "Summary": "UNUSED"
+      },
+      {
+        "Id": "cliloc",
+        "Path": "/uo/cliloc.enu",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": true,
+        "Length": 4960424,
+        "Summary": "500000: Reputation aversion triggered."
+      },
+      {
+        "Id": "hues",
+        "Path": "/uo/hues.mul",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": true,
+        "Length": 265500,
+        "Summary": "header 0"
+      }
+    ],
+    "Summary": "Bootstrap handoff ready with 3 seam-backed asset(s)."
+  },
+  "CacheState": {
+    "RawAssetCache": {
+      "EntryCount": 3,
+      "TotalBytes": 8414660,
+      "Paths": [
+        "/uo/Cliloc.enu",
+        "/uo/hues.mul",
+        "/uo/tiledata.mul"
+      ]
+    },
+    "ProcessedAssetCache": {
+      "EntryCount": 9,
+      "Keys": [
+        "cliloc-decompressed:/uo/cliloc.enu",
+        "cliloc-first-entry:/uo/cliloc.enu",
+        "hues-first-entry:/uo/hues.mul",
+        "hues-raw:/uo/hues.mul",
+        "shared-seam:cliloc:/uo/cliloc.enu",
+        "shared-seam:hues:/uo/hues.mul",
+        "shared-seam:tiledata:/uo/tiledata.mul",
+        "tiledata-first-land:/uo/tiledata.mul",
+        "tiledata-raw:/uo/tiledata.mul"
+      ]
+    }
+  },
+  "BridgeState": {
+    "Activated": true,
+    "LoadedCount": 3,
+    "LoadedPaths": [
+      "/uo/cliloc.enu",
+      "/uo/hues.mul",
+      "/uo/tiledata.mul"
+    ]
+  },
+  "SeedImportAttempted": false,
+  "SeedImportCount": 0,
+  "StartupArtifact": {
+    "IsReady": true,
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "ProfileId": "default",
+    "WriteSucceeded": true,
+    "Length": 2070,
+    "StartupRun": {
+      "IsReady": true,
+      "ProfileId": "default",
+      "LaunchPlan": {
+        "IsReady": true,
+        "ProfileId": "default",
+        "AssetRootPath": "/uo",
+        "ProfilesRootPath": "/profiles",
+        "CacheRootPath": "/cache",
+        "ConfigRootPath": "/config",
+        "SettingsFilePath": "/config/client.settings.json",
+        "StartupProfilePath": "/profiles/default/profile.json",
+        "SettingsPrepared": true,
+        "StartupProfilePrepared": true,
+        "ReadyAssetCount": 3,
+        "CacheHits": 3,
+        "TotalMs": 24,
+        "Assets": [
+          {
+            "Id": "tiledata",
+            "Path": "/uo/tiledata.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 3188736,
+            "Summary": "UNUSED"
+          },
+          {
+            "Id": "cliloc",
+            "Path": "/uo/cliloc.enu",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 4960424,
+            "Summary": "500000: Reputation aversion triggered."
+          },
+          {
+            "Id": "hues",
+            "Path": "/uo/hues.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 265500,
+            "Summary": "header 0"
+          }
+        ],
+        "Issues": [],
+        "Summary": "Launch plan ready for profile \u0027default\u0027."
+      },
+      "CompletedSteps": 4,
+      "TotalSteps": 4,
+      "Steps": [
+        {
+          "Id": "bootstrap-assets",
+          "Title": "Validate bootstrap assets",
+          "Succeeded": true,
+          "Detail": "3 / 3 required assets ready."
+        },
+        {
+          "Id": "config",
+          "Title": "Prepare config files",
+          "Succeeded": true,
+          "Detail": "Ready at /config/client.settings.json"
+        },
+        {
+          "Id": "profile",
+          "Title": "Prepare startup profile",
+          "Succeeded": true,
+          "Detail": "Ready at /profiles/default/profile.json"
+        },
+        {
+          "Id": "launch",
+          "Title": "Create startup launch contract",
+          "Succeeded": true,
+          "Detail": "Launch plan ready for profile \u0027default\u0027."
+        }
+      ],
+      "TotalMs": 26,
+      "Summary": "Startup run prepared with 4 / 4 steps complete."
+    },
+    "TotalMs": 78,
+    "Summary": "Startup artifact written to /cache/startup/default/launch-plan.json.",
+    "Error": ""
+  },
+  "StartupArtifactRead": {
+    "ProfileId": "default",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "IsReady": true,
+    "Length": 2070,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "StartupRun": {
+      "IsReady": true,
+      "ProfileId": "default",
+      "LaunchPlan": {
+        "IsReady": true,
+        "ProfileId": "default",
+        "AssetRootPath": "/uo",
+        "ProfilesRootPath": "/profiles",
+        "CacheRootPath": "/cache",
+        "ConfigRootPath": "/config",
+        "SettingsFilePath": "/config/client.settings.json",
+        "StartupProfilePath": "/profiles/default/profile.json",
+        "SettingsPrepared": true,
+        "StartupProfilePrepared": true,
+        "ReadyAssetCount": 3,
+        "CacheHits": 3,
+        "TotalMs": 24,
+        "Assets": [
+          {
+            "Id": "tiledata",
+            "Path": "/uo/tiledata.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 3188736,
+            "Summary": "UNUSED"
+          },
+          {
+            "Id": "cliloc",
+            "Path": "/uo/cliloc.enu",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 4960424,
+            "Summary": "500000: Reputation aversion triggered."
+          },
+          {
+            "Id": "hues",
+            "Path": "/uo/hues.mul",
+            "Exists": true,
+            "ReadSucceeded": true,
+            "IsRequired": true,
+            "Length": 265500,
+            "Summary": "header 0"
+          }
+        ],
+        "Issues": [],
+        "Summary": "Launch plan ready for profile \u0027default\u0027."
+      },
+      "CompletedSteps": 4,
+      "TotalSteps": 4,
+      "Steps": [
+        {
+          "Id": "bootstrap-assets",
+          "Title": "Validate bootstrap assets",
+          "Succeeded": true,
+          "Detail": "3 / 3 required assets ready."
+        },
+        {
+          "Id": "config",
+          "Title": "Prepare config files",
+          "Succeeded": true,
+          "Detail": "Ready at /config/client.settings.json"
+        },
+        {
+          "Id": "profile",
+          "Title": "Prepare startup profile",
+          "Succeeded": true,
+          "Detail": "Ready at /profiles/default/profile.json"
+        },
+        {
+          "Id": "launch",
+          "Title": "Create startup launch contract",
+          "Succeeded": true,
+          "Detail": "Launch plan ready for profile \u0027default\u0027."
+        }
+      ],
+      "TotalMs": 26,
+      "Summary": "Startup run prepared with 4 / 4 steps complete."
+    },
+    "TotalMs": 29,
+    "Summary": "Startup artifact loaded for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "LaunchSession": {
+    "IsReady": true,
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "ArtifactWriteSucceeded": true,
+    "ArtifactReadSucceeded": true,
+    "UsedExistingArtifact": false,
+    "WriteSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "TotalMs": 55,
+    "Summary": "Launch session \u0027session-20260401163606550\u0027 created for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "LaunchSessionRead": {
+    "ProfileId": "default",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "IsReady": true,
+    "Length": 874,
+    "RequiredAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Session": {
+      "IsReady": true,
+      "ProfileId": "default",
+      "SessionId": "session-20260401163606550",
+      "SessionPath": "/cache/startup/default/launch-session.json",
+      "ArtifactPath": "/cache/startup/default/launch-plan.json",
+      "ArtifactWriteSucceeded": true,
+      "ArtifactReadSucceeded": true,
+      "UsedExistingArtifact": false,
+      "WriteSucceeded": true,
+      "AssetRootPath": "/uo",
+      "ProfilesRootPath": "/profiles",
+      "CacheRootPath": "/cache",
+      "ConfigRootPath": "/config",
+      "SettingsFilePath": "/config/client.settings.json",
+      "StartupProfilePath": "/profiles/default/profile.json",
+      "ReadyAssetCount": 3,
+      "CompletedSteps": 4,
+      "TotalSteps": 4,
+      "RequiredAssets": [
+        "/uo/tiledata.mul",
+        "/uo/cliloc.enu",
+        "/uo/hues.mul"
+      ],
+      "TotalMs": 55,
+      "Summary": "Launch session \u0027session-20260401163606550\u0027 created for profile \u0027default\u0027.",
+      "Error": ""
+    },
+    "TotalMs": 12,
+    "Summary": "Launch session loaded for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "RuntimeLaunchContract": {
+    "IsReady": true,
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "TotalMs": 6,
+    "Summary": "Runtime launch contract ready for profile \u0027default\u0027 with 3 required asset(s).",
+    "Error": ""
+  },
+  "StartupPacket": {
+    "IsReady": true,
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "TotalMs": 6,
+    "Summary": "Startup packet ready for profile \u0027default\u0027 with 3 asset path(s).",
+    "Error": ""
+  },
+  "StartupConsumer": {
+    "IsReady": true,
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "HandshakeSummary": "Bootstrap handshake prepared for profile \u0027default\u0027.",
+    "TotalMs": 6,
+    "Summary": "Startup consumer ready for profile \u0027default\u0027 with 3 required asset(s).",
+    "Error": ""
+  },
+  "StartupSessionExecutor": {
+    "IsReady": true,
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "ExecutionSummary": "Startup session executor prepared runtime state for profile \u0027default\u0027.",
+    "TotalMs": 6,
+    "Summary": "Startup session executor ready for profile \u0027default\u0027 with 3 required asset(s).",
+    "Error": ""
+  },
+  "StartupSessionRunner": {
+    "IsReady": true,
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "RunSummary": "Startup session runner simulated a runtime pass for profile \u0027default\u0027.",
+    "TotalMs": 6,
+    "Summary": "Startup session runner ready for profile \u0027default\u0027 with 3 required asset(s).",
+    "Error": ""
+  },
+  "RuntimeBootstrapLoop": {
+    "IsReady": true,
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "TotalMs": 7,
+    "Summary": "Runtime bootstrap loop ready for profile \u0027default\u0027 with 3 phase(s).",
+    "Error": ""
+  },
+  "RuntimeInvocation": {
+    "IsReady": true,
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "InvocationSummary": "Runtime invocation prepared for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime invocation ready for profile \u0027default\u0027 with 3 bootstrap phase(s).",
+    "Error": ""
+  },
+  "RuntimeStartupCycle": {
+    "IsReady": true,
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "State": "ready",
+    "CycleSummary": "Runtime startup cycle is ready for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime startup cycle ready for profile \u0027default\u0027 with 3 phase(s).",
+    "Error": ""
+  },
+  "RuntimeStartupState": {
+    "IsReady": true,
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "State": "ready",
+    "StateSummary": "Runtime startup state prepared for profile \u0027default\u0027 in state \u0027ready\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime startup state ready for profile \u0027default\u0027 with 3 phase(s).",
+    "Error": ""
+  },
+  "RuntimeStartupStateMachine": {
+    "IsReady": true,
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "StateMachineSummary": "Runtime startup state machine prepared for profile \u0027default\u0027 in state \u0027ready\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime startup state machine ready for profile \u0027default\u0027 with 3 state(s).",
+    "Error": ""
+  },
+  "RuntimeStartupTransitionDriver": {
+    "IsReady": true,
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DriverSummary": "Runtime startup transition driver advanced profile \u0027default\u0027 through 2 transition(s).",
+    "TotalMs": 8,
+    "Summary": "Runtime startup transition driver ready for profile \u0027default\u0027 with 2 transition(s).",
+    "Error": ""
+  },
+  "RuntimeStartupDispatcher": {
+    "IsReady": true,
+    "DispatcherVersion": "runtime-startup-dispatcher-v1",
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DispatchTargets": [
+      "asset-bootstrap",
+      "profile-bootstrap",
+      "runtime-bootstrap"
+    ],
+    "DispatchSummary": "Runtime startup dispatcher prepared 3 dispatch target(s) for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime startup dispatcher ready for profile \u0027default\u0027 with 3 dispatch target(s).",
+    "Error": ""
+  },
+  "RuntimeStartupSessionController": {
+    "IsReady": true,
+    "ControllerVersion": "runtime-startup-session-controller-v1",
+    "DispatcherVersion": "runtime-startup-dispatcher-v1",
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DispatchTargets": [
+      "asset-bootstrap",
+      "profile-bootstrap",
+      "runtime-bootstrap"
+    ],
+    "ControlActions": [
+      "validate-session",
+      "bind-dispatch-targets",
+      "commit-runtime-ready"
+    ],
+    "ControllerSummary": "Runtime startup session controller prepared 3 control action(s) for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime startup session controller ready for profile \u0027default\u0027 with 3 control action(s).",
+    "Error": ""
+  },
+  "RuntimeStartupCoordinator": {
+    "IsReady": true,
+    "CoordinatorVersion": "runtime-startup-coordinator-v1",
+    "ControllerVersion": "runtime-startup-session-controller-v1",
+    "DispatcherVersion": "runtime-startup-dispatcher-v1",
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DispatchTargets": [
+      "asset-bootstrap",
+      "profile-bootstrap",
+      "runtime-bootstrap"
+    ],
+    "ControlActions": [
+      "validate-session",
+      "bind-dispatch-targets",
+      "commit-runtime-ready"
+    ],
+    "CoordinatorSteps": [
+      "prepare-bootstrap-context",
+      "coordinate-session-control",
+      "confirm-runtime-handoff"
+    ],
+    "CoordinatorSummary": "Runtime startup coordinator prepared 3 coordination step(s) for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime startup coordinator ready for profile \u0027default\u0027 with 3 coordination step(s).",
+    "Error": ""
+  },
+  "RuntimeStartupOrchestrator": {
+    "IsReady": true,
+    "OrchestratorVersion": "runtime-startup-orchestrator-v1",
+    "CoordinatorVersion": "runtime-startup-coordinator-v1",
+    "ControllerVersion": "runtime-startup-session-controller-v1",
+    "DispatcherVersion": "runtime-startup-dispatcher-v1",
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DispatchTargets": [
+      "asset-bootstrap",
+      "profile-bootstrap",
+      "runtime-bootstrap"
+    ],
+    "ControlActions": [
+      "validate-session",
+      "bind-dispatch-targets",
+      "commit-runtime-ready"
+    ],
+    "CoordinatorSteps": [
+      "prepare-bootstrap-context",
+      "coordinate-session-control",
+      "confirm-runtime-handoff"
+    ],
+    "OrchestrationStages": [
+      "bootstrap-assets-ready",
+      "startup-session-bound",
+      "runtime-handoff-complete"
+    ],
+    "OrchestratorSummary": "Runtime startup orchestrator prepared 3 orchestration stage(s) for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime startup orchestrator ready for profile \u0027default\u0027 with 3 orchestration stage(s).",
+    "Error": ""
+  },
+  "BrowserBootFlowController": {
+    "IsReady": true,
+    "BootFlowVersion": "browser-boot-flow-controller-v1",
+    "OrchestratorVersion": "runtime-startup-orchestrator-v1",
+    "CoordinatorVersion": "runtime-startup-coordinator-v1",
+    "ControllerVersion": "runtime-startup-session-controller-v1",
+    "DispatcherVersion": "runtime-startup-dispatcher-v1",
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DispatchTargets": [
+      "asset-bootstrap",
+      "profile-bootstrap",
+      "runtime-bootstrap"
+    ],
+    "ControlActions": [
+      "validate-session",
+      "bind-dispatch-targets",
+      "commit-runtime-ready"
+    ],
+    "CoordinatorSteps": [
+      "prepare-bootstrap-context",
+      "coordinate-session-control",
+      "confirm-runtime-handoff"
+    ],
+    "OrchestrationStages": [
+      "bootstrap-assets-ready",
+      "startup-session-bound",
+      "runtime-handoff-complete"
+    ],
+    "BootFlowStages": [
+      "browser-bootstrap",
+      "runtime-bootstrap",
+      "client-ready"
+    ],
+    "BootFlowSummary": "Browser boot flow controller prepared 3 boot-flow stage(s) for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Browser boot flow controller ready for profile \u0027default\u0027 with 3 boot-flow stage(s).",
+    "Error": ""
+  },
+  "BrowserBootSession": {
+    "IsReady": true,
+    "BootSessionVersion": "browser-boot-session-v1",
+    "BootFlowVersion": "browser-boot-flow-controller-v1",
+    "OrchestratorVersion": "runtime-startup-orchestrator-v1",
+    "CoordinatorVersion": "runtime-startup-coordinator-v1",
+    "ControllerVersion": "runtime-startup-session-controller-v1",
+    "DispatcherVersion": "runtime-startup-dispatcher-v1",
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DispatchTargets": [
+      "asset-bootstrap",
+      "profile-bootstrap",
+      "runtime-bootstrap"
+    ],
+    "ControlActions": [
+      "validate-session",
+      "bind-dispatch-targets",
+      "commit-runtime-ready"
+    ],
+    "CoordinatorSteps": [
+      "prepare-bootstrap-context",
+      "coordinate-session-control",
+      "confirm-runtime-handoff"
+    ],
+    "OrchestrationStages": [
+      "bootstrap-assets-ready",
+      "startup-session-bound",
+      "runtime-handoff-complete"
+    ],
+    "BootFlowStages": [
+      "browser-bootstrap",
+      "runtime-bootstrap",
+      "client-ready"
+    ],
+    "BootSessionStages": [
+      "initialize-browser-client",
+      "bind-runtime-handoff",
+      "open-boot-session"
+    ],
+    "BootSessionSummary": "Browser boot session prepared 3 session stage(s) for profile \u0027default\u0027.",
+    "TotalMs": 8,
+    "Summary": "Browser boot session ready for profile \u0027default\u0027 with 3 session stage(s).",
+    "Error": ""
+  },
+  "RuntimeLaunchHandoff": {
+    "IsReady": true,
+    "HandoffVersion": "runtime-launch-handoff-v1",
+    "BootSessionVersion": "browser-boot-session-v1",
+    "BootFlowVersion": "browser-boot-flow-controller-v1",
+    "OrchestratorVersion": "runtime-startup-orchestrator-v1",
+    "CoordinatorVersion": "runtime-startup-coordinator-v1",
+    "ControllerVersion": "runtime-startup-session-controller-v1",
+    "DispatcherVersion": "runtime-startup-dispatcher-v1",
+    "DriverVersion": "runtime-startup-transition-driver-v1",
+    "StateMachineVersion": "runtime-startup-state-machine-v1",
+    "StateVersion": "runtime-startup-state-v1",
+    "CycleVersion": "runtime-startup-cycle-v1",
+    "InvocationVersion": "runtime-invocation-v1",
+    "LoopVersion": "runtime-bootstrap-loop-v1",
+    "RunnerVersion": "startup-runner-v1",
+    "ExecutionVersion": "startup-executor-v1",
+    "HandshakeVersion": "browser-bootstrap-v1",
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260401163606550",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "Phases": [
+      {
+        "Id": "bootstrap",
+        "Title": "Bootstrap assets",
+        "Succeeded": true,
+        "Detail": "3 / 3 required assets ready."
+      },
+      {
+        "Id": "profile",
+        "Title": "Profile and config",
+        "Succeeded": true,
+        "Detail": "Using /config/client.settings.json and /profiles/default/profile.json."
+      },
+      {
+        "Id": "runtime",
+        "Title": "Runtime pass",
+        "Succeeded": true,
+        "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
+      }
+    ],
+    "CurrentState": "ready",
+    "States": [
+      "bootstrap",
+      "profile",
+      "runtime-ready"
+    ],
+    "Transitions": [
+      "bootstrap-\u003Eprofile",
+      "profile-\u003Eruntime-ready"
+    ],
+    "DispatchTargets": [
+      "asset-bootstrap",
+      "profile-bootstrap",
+      "runtime-bootstrap"
+    ],
+    "ControlActions": [
+      "validate-session",
+      "bind-dispatch-targets",
+      "commit-runtime-ready"
+    ],
+    "CoordinatorSteps": [
+      "prepare-bootstrap-context",
+      "coordinate-session-control",
+      "confirm-runtime-handoff"
+    ],
+    "OrchestrationStages": [
+      "bootstrap-assets-ready",
+      "startup-session-bound",
+      "runtime-handoff-complete"
+    ],
+    "BootFlowStages": [
+      "browser-bootstrap",
+      "runtime-bootstrap",
+      "client-ready"
+    ],
+    "BootSessionStages": [
+      "initialize-browser-client",
+      "bind-runtime-handoff",
+      "open-boot-session"
+    ],
+    "HandoffArtifacts": [
+      "/cache/startup/default/launch-plan.json",
+      "/cache/startup/default/launch-session.json"
+    ],
+    "HandoffSummary": "Runtime launch handoff prepared 2 handoff artifact(s) for profile \u0027default\u0027.",
+    "TotalMs": 7,
+    "Summary": "Runtime launch handoff ready for profile \u0027default\u0027 with 2 artifact(s).",
+    "Error": ""
+  },
+  "Summary": "handoff=ready | direct=3/3 | seam=3/3 | handoffCacheHits=3 | rawCache=3 | processedCache=9 | bridgeLoaded=3 | seedImport=skip | artifactWrite=ok | artifactRead=ok | launchSession=ok | launchSessionRead=ok | runtimeContract=ok | startupPacket=ok | startupConsumer=ok | startupExecutor=ok | startupRunner=ok | runtimeLoop=ok | runtimeInvoke=ok | runtimeCycle=ok | runtimeState=ok | runtimeStateMachine=ok | runtimeTransitionDriver=ok | runtimeDispatcher=ok | runtimeSessionController=ok | runtimeCoordinator=ok | runtimeOrchestrator=ok | bootFlow=ok | bootSession=ok | launchHandoff=ok",
+  "Json": ""
+}

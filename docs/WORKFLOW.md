@@ -99,6 +99,10 @@ Exit criteria:
 - Keep notes on hidden assumptions and blockers.
 - Separate confirmed facts from guesses.
 - If a task uncovers browser/runtime uncertainty, stop and convert it into an explicit investigation task.
+- Prefer batched implementation work over tiny verify-after-every-change loops when the risk is manageable.
+- Keep the active browser operator surface minimal: only the current required checks should remain in `Current Tests`; completed or diagnostic checks should move to archived sections.
+- Prefer one-click browser actions that save machine-readable results locally over manual copy/paste from the UI.
+- Treat automatic local report saving as the default validation path whenever a browser-side result needs to be handed back into the repo for review.
 
 ### After Implementation
 
@@ -106,6 +110,7 @@ Exit criteria:
 - Record how it was validated.
 - Record open risks or unresolved follow-up items.
 - Update the roadmap if the critical path changed.
+- Update this workflow doc locally after meaningful milestones so the current operating method stays explicit.
 
 ## Status Review Cadence
 
@@ -116,6 +121,18 @@ At the end of each meaningful work session, update:
 - What remains blocked
 - Next 1 to 3 tasks
 - Any new risk that could change scope or design
+
+## Preferred Operator Interaction
+
+The default operator interaction for this project is:
+
+- Do not ask the operator to reply with "next" or any equivalent continue signal; continue implementation automatically after routine milestones and only request input for an actual test, external decision, or blocker.
+- Do not pause for user confirmation between routine implementation milestones; continue automatically and only stop when a browser-side test, external decision, or blocker truly requires operator input.
+- Keep manual operator steps short and infrequent.
+- When browser validation is required, prefer a single current action over multiple scattered panel checks.
+- Save browser validation output automatically into the local repo when possible, so results can be reviewed directly without copy/paste.
+- Ask the operator for manual transcription only when the browser cannot yet write a usable report locally or when a true visual judgment is required.
+- Continue to use `Current Tests` only for the active path; move older checks into archived sections once they are no longer part of the main workflow.
 
 ## Issue Triage
 
@@ -187,7 +204,77 @@ These facts are now confirmed and should guide future decisions:
 - The spike now has a C# browser asset byte-source service instead of relying only on JS-side asset parsing.
 - The browser-host spike now has a layered asset subsystem: raw asset source, processed cache, loader harness, family readers, bootstrap aggregation, runtime bootstrap service, client-facing asset service, and a shared `BrowserFileSystem` bridge.
 - The browser-host spike UI is now organized so the active validation work stays in a `Current Tests` tab and older diagnostics stay out of the critical path.
-- The experimental browser host now targets `net10.0` so it can reference the shared ClassicUO utility/browser filesystem seam directly.
+- The preferred operator flow is now one-click browser validation with automatic local report saving, rather than manual result copying.
+- The browser-host startup path now progresses through startup artifact write/read and into a simulated launch session object for future browser entrypoint consumption.
+- The startup path now also reads the saved launch session back as a resumable launch-state consumer, and the one-click self-test records that readback state automatically.
+- The launch-session persistence path now serializes final session state before readback validation, so the saved session can be consumed without stale write-state fields.
+- The startup path now shapes a reusable runtime launch contract from the saved launch session, so future browser startup code can consume one stable object instead of raw session internals.
+- The startup path now also builds a single startup packet from the runtime launch contract, so the future browser entrypoint can consume one bootstrap input instead of multiple persistence layers.
+- The startup path now also has an in-memory startup consumer above the startup packet, representing the first real browser bootstrap handshake object instead of only persisted contract data.
+- The startup path now also has a startup-session executor above the in-memory consumer, representing the first runtime-oriented startup consumption layer rather than only handshake assembly.
+- The startup path now also has a startup-session runner above the executor, representing the first simulated runtime startup pass instead of only prepared startup state.
+- The startup path now also has a minimal runtime bootstrap loop above the runner, representing the first phase-based startup loop model rather than only stacked startup state objects.
+- The startup path now also has a minimal runtime invocation layer above the loop, representing the first concrete browser-runtime call boundary rather than only startup-loop state.
+- The startup path now also has a minimal runtime startup cycle layer above the runtime invocation, representing the first persistent runtime startup-state object rather than only an invocation boundary.
+- The startup path now also has a minimal runtime startup state layer above the runtime startup cycle, representing the first concrete runtime startup-state holder rather than only a cycle object.
+- The startup path now also has a minimal runtime startup state machine layer above the runtime startup state, representing the first browser bootstrap state-progression object rather than only a single startup-state holder.
+- The startup path now also has a minimal runtime startup transition driver above the runtime startup state machine, representing the first executable browser bootstrap progression layer rather than only a static state machine object.
+- The startup path now also has a minimal runtime startup dispatcher above the runtime startup transition driver, representing the first bootstrap-session control layer that can route startup work rather than only describe transitions.
+- The startup path now also has a minimal runtime startup session controller above the runtime startup dispatcher, representing the first executable bootstrap-session control object rather than only a dispatch plan.
+- The startup path now also has a minimal runtime startup coordinator above the runtime startup session controller, representing the first browser bootstrap orchestration layer rather than only a session-control object.
+- The startup path now also has a minimal runtime startup orchestrator above the runtime startup coordinator, representing the first runtime-wide startup orchestration layer rather than only bootstrap coordination.
+- The startup path now also has a first browser boot-flow controller above the runtime startup orchestrator, representing the first browser-facing boot flow model rather than only runtime startup orchestration.
+- The startup path now also has a first browser boot session above the boot-flow controller, representing the first browser-session startup object rather than only a boot flow model.
+- The startup path now also has a first runtime launch handoff above the browser boot session, representing the first browser-to-runtime handoff object rather than only a boot session.
+- The startup path now also has a first runtime bootstrap consumer above the runtime launch handoff, representing the first runtime-side consumer of the browser handoff rather than only the handoff object itself.
+- The startup path now also has a first runtime bootstrap session above the runtime bootstrap consumer, representing the first runtime-session startup object beyond the consumer layer.
+- The experimental browser host now stays on the lighter `net8.0` path and links only the needed browser-seam source files, avoiding the heavier desktop dependency chain.
 - The shared utility layer now supports a read-only binary asset provider shape for `/uo` paths, separate from writable profile/config storage.
 - The browser-port effort has now covered the major direct filesystem clusters including asset loaders, profile/state managers, data tables, world-map support, container persistence, and UltimaLive.
 - The remaining direct System.IO usage in the client is now a smaller cleanup set rather than a major architectural blocker.
+
+
+
+
+
+
+- Runtime batch progression now includes `RuntimeReadySignal` and `RuntimeLaunchController` after the startup readiness gate.
+- Continue automatically across routine milestones; only interrupt for a real browser test, an external decision, or a blocker.
+- Runtime progression now continues through `RuntimeClientReadyState` and `RuntimeClientLaunchSession` after the launch controller.
+- Runtime progression now continues through `RuntimeClientActivation` and `RuntimeClientRunState` after the client launch session.
+- Runtime progression now continues through `RuntimeClientLoopState` and `RuntimeHostSession` after the client run state.
+- Runtime progression now continues through `RuntimeHostLoop` and `RuntimeHostReadyState` after the host session.
+- Treat a user reply of `done` after a requested browser test as both test completion and authorization to continue automatically to the next milestone.
+- Runtime progression now continues through `RuntimePlatformSession` and `RuntimePlatformReadyState` after the host-ready state.
+- Runtime progression now continues through `RuntimePlatformLoop` and `RuntimePlatformLaunchGate` after the platform-ready state.
+- Runtime progression now continues through `RuntimeBrowserShellSession` and `RuntimeBrowserShellReadyState` after the platform launch gate.
+- Runtime progression now continues through `RuntimeBrowserSurfaceSession` and `RuntimeBrowserSurfaceReadyState` after the browser-shell ready state.
+- Runtime progression now continues through `RuntimeBrowserWindowSession` and `RuntimeBrowserWindowReadyState` after the browser-surface ready state.
+- Runtime progression now continues through `RuntimeBrowserFrameSession` and `RuntimeBrowserFrameReadyState` after the browser-window ready state.
+- Runtime progression now continues through `RuntimeBrowserCanvasSession` and `RuntimeBrowserCanvasReadyState` after the browser-frame ready state.
+- Runtime progression now continues through `RuntimeBrowserRenderSession` and `RuntimeBrowserRenderReadyState` after the browser-canvas ready state.
+- Runtime progression now continues through `RuntimeBrowserPresentSession` and `RuntimeBrowserPresentReadyState` after the browser-render ready state.
+
+- Runtime progression now continues through RuntimeBrowserDisplaySession and RuntimeBrowserDisplayReadyState after the browser-present ready state.
+- Runtime progression now continues through RuntimeBrowserViewportSession and RuntimeBrowserViewportReadyState after the browser-display ready state.
+
+- Runtime progression now continues through RuntimeBrowserSceneSession and RuntimeBrowserSceneReadyState after the browser-viewport ready state.
+- Runtime progression now continues through RuntimeBrowserInputSession and RuntimeBrowserInputReadyState after the browser-scene ready state.
+
+- Runtime progression now continues through RuntimeBrowserEventSession and RuntimeBrowserEventReadyState after the browser-input ready state.
+- Runtime progression now continues through RuntimeBrowserInteractionSession and RuntimeBrowserInteractionReadyState after the browser-event ready state.
+
+- Runtime progression now continues through RuntimeBrowserFocusSession and RuntimeBrowserFocusReadyState after the browser-interaction ready state.
+- Runtime progression now continues through RuntimeBrowserShortcutSession and RuntimeBrowserShortcutReadyState after the browser-focus ready state.
+
+- Runtime progression now continues through RuntimeBrowserPointerSession and RuntimeBrowserPointerReadyState after the browser-shortcut ready state.
+- Runtime progression now continues through RuntimeBrowserCommandSession and RuntimeBrowserCommandReadyState after the browser-pointer ready state.
+
+- Runtime progression now continues through RuntimeBrowserGestureSession and RuntimeBrowserGestureReadyState after the browser-command ready state.
+- Runtime progression now continues through RuntimeBrowserLifecycleSession and RuntimeBrowserLifecycleReadyState after the browser-gesture ready state.
+
+- Runtime progression now continues through RuntimeBrowserRouteSession and RuntimeBrowserRouteReadyState after the browser-lifecycle ready state.
+- Runtime progression now continues through RuntimeBrowserStateSyncSession and RuntimeBrowserStateSyncReadyState after the browser-route ready state.
+
+- Runtime progression now continues through RuntimeBrowserRestoreSession and RuntimeBrowserRestoreReadyState after the browser-state-sync ready state.
+- Runtime progression now continues through RuntimeBrowserResumeSession and RuntimeBrowserResumeReadyState after the browser-restore ready state.

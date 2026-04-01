@@ -110,6 +110,11 @@ public sealed class BrowserStorageService
     {
         return _js.InvokeAsync<BrowserTileDataProbeResult>("classicuoFs.probeTileData", path);
     }
+
+    public ValueTask DownloadTextFileAsync(string fileName, string contents)
+    {
+        return _js.InvokeVoidAsync("classicuoFs.downloadTextFile", fileName, contents);
+    }
 }
 
 public sealed class BrowserStorageSmokeTestResult

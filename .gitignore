@@ -266,3 +266,10 @@ __pycache__/
 /.svn
 Data
 experiments/BrowserHost/wwwroot/local-uo/
+
+# Browser spike local run artifacts
+docs/test-results/browser-self-test-20*.json
+!docs/test-results/browser-self-test-latest.json
+experiments/BrowserHost/.browserhost.pid
+experiments/BrowserHost.ReportHost/.reporthost.pid
+

@@ -1,0 +1,97 @@
+namespace BrowserHost.Services;
+
+public interface IBrowserClientRuntimeBrowserNavigationalConfidenceReadyState
+{
+    ValueTask<BrowserClientRuntimeBrowserNavigationalConfidenceReadyStateResult> BuildAsync(string profileId = "default");
+}
+
+public sealed class BrowserClientRuntimeBrowserNavigationalConfidenceReadyStateService : IBrowserClientRuntimeBrowserNavigationalConfidenceReadyState
+{
+    private readonly IBrowserClientRuntimeBrowserNavigationalConfidenceSession _runtimeBrowserNavigationalConfidenceSession;
+
+    public BrowserClientRuntimeBrowserNavigationalConfidenceReadyStateService(IBrowserClientRuntimeBrowserNavigationalConfidenceSession runtimeBrowserNavigationalConfidenceSession)
+    {
+        _runtimeBrowserNavigationalConfidenceSession = runtimeBrowserNavigationalConfidenceSession;
+    }
+
+    public async ValueTask<BrowserClientRuntimeBrowserNavigationalConfidenceReadyStateResult> BuildAsync(string profileId = "default")
+    {
+        DateTimeOffset started = DateTimeOffset.UtcNow;
+        BrowserClientRuntimeBrowserNavigationalConfidenceSessionResult navigationalconfidenceSession = await _runtimeBrowserNavigationalConfidenceSession.CreateAsync(profileId);
+
+        BrowserClientRuntimeBrowserNavigationalConfidenceReadyStateResult result = new()
+        {
+            ProfileId = navigationalconfidenceSession.ProfileId,
+            SessionId = navigationalconfidenceSession.SessionId,
+            SessionPath = navigationalconfidenceSession.SessionPath,
+            BrowserNavigationalConfidenceSessionVersion = navigationalconfidenceSession.BrowserNavigationalConfidenceSessionVersion,
+            BrowserPerceivabilityReadyStateVersion = navigationalconfidenceSession.BrowserPerceivabilityReadyStateVersion,
+            BrowserPerceivabilitySessionVersion = navigationalconfidenceSession.BrowserPerceivabilitySessionVersion,
+            LaunchMode = navigationalconfidenceSession.LaunchMode,
+            AssetRootPath = navigationalconfidenceSession.AssetRootPath,
+            ProfilesRootPath = navigationalconfidenceSession.ProfilesRootPath,
+            CacheRootPath = navigationalconfidenceSession.CacheRootPath,
+            ConfigRootPath = navigationalconfidenceSession.ConfigRootPath,
+            SettingsFilePath = navigationalconfidenceSession.SettingsFilePath,
+            StartupProfilePath = navigationalconfidenceSession.StartupProfilePath,
+            RequiredAssets = navigationalconfidenceSession.RequiredAssets,
+            ReadyAssetCount = navigationalconfidenceSession.ReadyAssetCount,
+            CompletedSteps = navigationalconfidenceSession.CompletedSteps,
+            TotalSteps = navigationalconfidenceSession.TotalSteps,
+            Exists = navigationalconfidenceSession.Exists,
+            ReadSucceeded = navigationalconfidenceSession.ReadSucceeded
+        };
+
+        if (!navigationalconfidenceSession.IsReady)
+        {
+            result.TotalMs = (DateTimeOffset.UtcNow - started).TotalMilliseconds;
+            result.Summary = $"Runtime browser navigationalconfidence ready state blocked for profile '{navigationalconfidenceSession.ProfileId}'.";
+            result.Error = navigationalconfidenceSession.Error;
+            return result;
+        }
+
+        result.IsReady = true;
+        result.BrowserNavigationalConfidenceReadyStateVersion = "runtime-browser-navigationalconfidence-ready-state-v1";
+        result.BrowserNavigationalConfidenceReadyChecks =
+        [
+            "browser-perceivability-ready-state-ready",
+            "browser-navigationalconfidence-session-ready",
+            "browser-navigationalconfidence-ready"
+        ];
+        result.BrowserNavigationalConfidenceReadySummary = $"Runtime browser navigationalconfidence ready state passed {result.BrowserNavigationalConfidenceReadyChecks.Length} navigationalconfidence readiness check(s) for profile '{navigationalconfidenceSession.ProfileId}'.";
+        result.TotalMs = (DateTimeOffset.UtcNow - started).TotalMilliseconds;
+        result.Summary = $"Runtime browser navigationalconfidence ready state ready for profile '{navigationalconfidenceSession.ProfileId}' with {result.BrowserNavigationalConfidenceReadyChecks.Length} check(s).";
+
+        return result;
+    }
+}
+
+public sealed class BrowserClientRuntimeBrowserNavigationalConfidenceReadyStateResult
+{
+    public bool IsReady { get; set; }
+    public string BrowserNavigationalConfidenceReadyStateVersion { get; set; } = string.Empty;
+    public string BrowserNavigationalConfidenceSessionVersion { get; set; } = string.Empty;
+    public string BrowserPerceivabilityReadyStateVersion { get; set; } = string.Empty;
+    public string BrowserPerceivabilitySessionVersion { get; set; } = string.Empty;
+    public string LaunchMode { get; set; } = string.Empty;
+    public string ProfileId { get; set; } = "default";
+    public string SessionId { get; set; } = string.Empty;
+    public string SessionPath { get; set; } = string.Empty;
+    public bool Exists { get; set; }
+    public bool ReadSucceeded { get; set; }
+    public string AssetRootPath { get; set; } = string.Empty;
+    public string ProfilesRootPath { get; set; } = string.Empty;
+    public string CacheRootPath { get; set; } = string.Empty;
+    public string ConfigRootPath { get; set; } = string.Empty;
+    public string SettingsFilePath { get; set; } = string.Empty;
+    public string StartupProfilePath { get; set; } = string.Empty;
+    public string[] RequiredAssets { get; set; } = Array.Empty<string>();
+    public int ReadyAssetCount { get; set; }
+    public int CompletedSteps { get; set; }
+    public int TotalSteps { get; set; }
+    public string[] BrowserNavigationalConfidenceReadyChecks { get; set; } = Array.Empty<string>();
+    public string BrowserNavigationalConfidenceReadySummary { get; set; } = string.Empty;
+    public double TotalMs { get; set; }
+    public string Summary { get; set; } = string.Empty;
+    public string Error { get; set; } = string.Empty;
+}

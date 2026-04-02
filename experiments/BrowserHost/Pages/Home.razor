@@ -1,4 +1,4 @@
-@page "/"
+﻿@page "/"
 @inject BrowserHost.Services.EnvironmentProbeService ProbeService
 @inject BrowserHost.Services.BrowserStorageService StorageService
 @inject BrowserHost.Services.IBrowserClientAssetService BrowserClientAssetService
@@ -10,9 +10,8 @@
 @inject BrowserHost.Services.IBrowserClientLaunchSession BrowserClientLaunchSession
 @inject BrowserHost.Services.IBrowserClientLaunchSessionReader BrowserClientLaunchSessionReader
 @inject BrowserHost.Services.BrowserFileSystemBridgeService BrowserFileSystemBridgeService
-@inject BrowserHost.Services.BrowserSelfTestReportService BrowserSelfTestReportService
-@inject BrowserHost.Services.BrowserLocalReportSinkService BrowserLocalReportSinkService
 @inject BrowserHost.Services.BrowserVirtualFileBridgeService BridgeService
+@inject IServiceProvider Services
 
 <PageTitle>ClassicUO Browser Spike</PageTitle>
 
@@ -95,11 +94,15 @@
     @if (_selfTestReport is not null)
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
+        <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
+        <p><strong>Newest layers:</strong> confirmation, completion readiness</p>
+        <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
         {
             <p><strong>Saved locally:</strong> @FormatBool(_selfTestReportSave.Saved)</p>
             <p><strong>Latest report path:</strong> @(_selfTestReportSave.LatestPath ?? "(not saved)")</p>
+            <p><strong>Saved at:</strong> @(_selfTestReportSave.SavedAtUtc == default ? "(unknown)" : _selfTestReportSave.SavedAtUtc.ToString("u"))</p>
         }
         <p><strong>Seed import attempted:</strong> @FormatBool(_selfTestReport.SeedImportAttempted)</p>
         <p><strong>Seed import count:</strong> @_selfTestReport.SeedImportCount</p>
@@ -1464,6 +1467,10 @@
             _runtimeCacheState = await BrowserClientAssetService.GetCacheStateAsync();
             _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
         }
+        catch (Exception ex)
+        {
+            _importMessage = $"Refresh stored files failed: {ex.Message}";
+        }
         finally
         {
             _refreshBusy = false;
@@ -2049,7 +2056,10 @@
 
         try
         {
-            _selfTestReport = await BrowserSelfTestReportService.RunAsync(
+            var selfTestReportService = Services.GetRequiredService<BrowserHost.Services.BrowserSelfTestReportService>();
+            var localReportSinkService = Services.GetRequiredService<BrowserHost.Services.BrowserLocalReportSinkService>();
+
+            _selfTestReport = await selfTestReportService.RunAsync(
                 new BrowserHost.Services.BrowserRuntimeBootstrapRequest
                 {
                     TileDataPath = _sharedSeamTileDataPath,
@@ -2059,7 +2069,7 @@
             );
 
             _fileSystemBridgeState = await BrowserFileSystemBridgeService.GetStateAsync();
-            _selfTestReportSave = await BrowserLocalReportSinkService.SaveSelfTestReportAsync(_selfTestReport.Json);
+            _selfTestReportSave = await localReportSinkService.SaveSelfTestReportAsync(_selfTestReport.Json);
 
             if (_selfTestReportSave.Saved)
             {

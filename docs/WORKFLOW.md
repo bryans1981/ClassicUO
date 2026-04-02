@@ -278,3 +278,114 @@ These facts are now confirmed and should guide future decisions:
 
 - Runtime progression now continues through RuntimeBrowserRestoreSession and RuntimeBrowserRestoreReadyState after the browser-state-sync ready state.
 - Runtime progression now continues through RuntimeBrowserResumeSession and RuntimeBrowserResumeReadyState after the browser-restore ready state.
+
+- Runtime progression now continues through RuntimeBrowserCheckpointSession and RuntimeBrowserCheckpointReadyState after the browser-resume ready state.
+- Runtime progression now continues through RuntimeBrowserPersistenceSession and RuntimeBrowserPersistenceReadyState after the browser-checkpoint ready state.
+
+- Runtime progression now continues through RuntimeBrowserHistorySession and RuntimeBrowserHistoryReadyState after the browser-persistence ready state.
+- Runtime progression now continues through RuntimeBrowserRecoverySession and RuntimeBrowserRecoveryReadyState after the browser-history ready state.
+
+- Runtime progression now continues through RuntimeBrowserSnapshotSession and RuntimeBrowserSnapshotReadyState after the browser-recovery ready state.
+- Runtime progression now continues through RuntimeBrowserArchiveSession and RuntimeBrowserArchiveReadyState after the browser-snapshot ready state.
+
+- Runtime progression now continues through RuntimeBrowserTelemetrySession and RuntimeBrowserTelemetryReadyState after the browser-archive ready state.
+- Runtime progression now continues through RuntimeBrowserDiagnosticsSession and RuntimeBrowserDiagnosticsReadyState after the browser-telemetry ready state.
+
+- Runtime progression now continues through RuntimeBrowserMonitoringSession and RuntimeBrowserMonitoringReadyState after the browser-diagnostics ready state.
+- Runtime progression now continues through RuntimeBrowserWatchdogSession and RuntimeBrowserWatchdogReadyState after the browser-monitoring ready state.
+
+- Runtime progression now continues through RuntimeBrowserHealthSession and RuntimeBrowserHealthReadyState after the browser-watchdog ready state.
+- Runtime progression now continues through RuntimeBrowserAlertingSession and RuntimeBrowserAlertingReadyState after the browser-health ready state.
+
+- Runtime progression now continues through RuntimeBrowserPolicySession and RuntimeBrowserPolicyReadyState after the browser-alerting ready state.
+- Runtime progression now continues through RuntimeBrowserAuditSession and RuntimeBrowserAuditReadyState after the browser-policy ready state.
+
+- 2026-04-02: Added browser security/compliance session and ready-state layers to the self-test runtime chain after audit. Also hardened self-test JSON serialization with cycle handling, higher depth, and a visible runtime chain marker.
+
+- 2026-04-02: Added browser privacy/governance session and ready-state layers above security/compliance. Self-test summary and UI now expose privacy/governance readiness flags.
+
+- 2026-04-02: Added browser trust/assurance session and ready-state layers above privacy/governance. Self-test summary and Current Tests now include trust/assurance readiness flags.
+
+- 2026-04-02: Added browser risk/integrity session and ready-state layers above trust/assurance. Self-test summary and Current Tests now include risk/integrity readiness flags.
+
+- 2026-04-02: Added browser resilience session and ready-state layers above risk/integrity. Self-test summary and Current Tests now expose resilience readiness flags.
+
+- 2026-04-02: Added browser availability session and ready-state layers above resilience. Current Tests and self-test summary now surface availability readiness.
+
+- 2026-04-02: Switched the saved self-test report toward compact browser-runtime JSON by excluding the large browser runtime object graph from serialization while keeping the detailed status view in-memory on the page.
+
+- 2026-04-02: Added browser continuity session and ready-state layers above availability. Also moved new operator-facing context to the top of Current Tests with the compact report mode and newest-layer indicator.
+
+- 2026-04-02: Added browser durability session and ready-state layers above continuity. Current Tests now shows continuity and durability as the newest layers at the top while preserving the compact self-test report flow.
+
+
+- 2026-04-02: Added browser sustainability session and ready-state layers above durability. Current Tests now shows durability and sustainability as the newest layers at the top while preserving the compact self-test report flow.
+
+
+- 2026-04-02: Added browser longevity session and ready-state layers above sustainability. Current Tests now shows sustainability and longevity as the newest layers at the top while preserving the compact self-test report flow.
+
+
+- 2026-04-02: Added browser stewardship session and ready-state layers above longevity. Current Tests now shows longevity and stewardship as the newest layers at the top while preserving the compact self-test report flow.
+
+
+- 2026-04-02: Added browser operability session and ready-state layers above stewardship. Current Tests now shows stewardship and operability as the newest layers at the top while preserving the compact self-test report flow.
+
+
+- 2026-04-02: Added browser serviceability session and ready-state layers above operability. Current Tests now shows operability and serviceability as the newest layers at the top while preserving the compact self-test report flow.
+
+
+- 2026-04-02: Added browser maintainability session and ready-state layers above serviceability. Current Tests now shows serviceability and maintainability as the newest layers at the top while preserving the compact self-test report flow.
+
+
+- 2026-04-02: Added browser supportability session and ready-state layers above maintainability. The compact self-test report stays in place with operator-facing additions kept at the top of Current Tests.
+
+
+- 2026-04-02: Added browser usability session and ready-state layers above supportability. Current Tests now shows supportability and usability as the newest layers at the top.
+
+
+- 2026-04-02: Added browser accessibility session and ready-state layers above usability. The compact self-test report remains in place with new operator-facing items kept at the top of Current Tests.
+
+
+- 2026-04-02: Added browser inclusivity session and ready-state layers above accessibility. Current Tests now shows accessibility and inclusivity as the newest layers at the top.
+
+
+- 2026-04-02: Added browser adaptability session and ready-state layers above inclusivity. The compact self-test report remains in place with new operator-facing items kept at the top of Current Tests.
+
+
+- 2026-04-02: Added browser discoverability session and ready-state layers above adaptability. Current Tests now shows adaptability and discoverability as the newest layers at the top.
+
+
+- 2026-04-02: Added browser learnability session and ready-state layers above discoverability. The compact self-test report remains in place with new operator-facing items kept at the top of Current Tests.
+
+
+- 2026-04-02: Added browser approachability session and ready-state layers above learnability. Current Tests now shows learnability and approachability as the newest layers at the top.
+
+- Added browser runtime layers for navigability and guidability, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Added browser runtime layers for clarity and intuitiveness, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Added browser runtime layers for consistency and cohesiveness, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Added browser runtime layers for predictability and familiarity, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Added browser runtime layers for fluency and harmony, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Added browser runtime layers for readability and legibility, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Added browser runtime layers for simplicity and understandability, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Added browser runtime layers for scannability and comprehensibility, extended the compact self-test report, and moved the active UI label to show the newest pair at the top.
+
+- Default browser validation batch limit: 20 new runtime layers per browser self-test unless there is a real blocker or a user-only decision.
+
+- Added the next 20 browser runtime layers from credibility/completion confidence, under the 20-layer validation batch rule with a single self-test at the end.
+
+Validated second 20-layer browser runtime batch through progress-awareness/completion-confidence.
+Validated third 20-layer browser runtime batch through milestone-awareness/closure-confidence.
+Validated fourth 20-layer browser runtime batch through reassurance/completion-assurance.
+Generated the fifth 20-layer browser runtime batch through confirmation/completion-readiness and prepared it for the next one-click self-test.
+
+
+
+- 2026-04-02: Began the fifth 20-layer browser runtime batch from confirmation/completion-readiness. Fixed a generated duplicate-property regression in BrowserSelfTestReportService, moved self-test/report resolution to lazy runtime lookup so Current Tests can load even when the newest batch is broken, and repaired the persistence anchor after the generator introduced a DI cycle through perseverance. Stopping point: browser page loads again, but the fifth batch still needs a fresh one-click self-test after the persistence anchor fix.
+

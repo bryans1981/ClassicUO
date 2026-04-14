@@ -116,6 +116,8 @@
         <p><strong>Startup artifact read:</strong> @FormatBool(_selfTestReport.StartupArtifactRead.ReadSucceeded)</p>
         <p><strong>Launch session write:</strong> @FormatBool(_selfTestReport.LaunchSession.WriteSucceeded)</p>
         <p><strong>Launch session read:</strong> @FormatBool(_selfTestReport.LaunchSessionRead.ReadSucceeded)</p>
+        <p><strong>Browser bootstrap package ready:</strong> @FormatBool(_selfTestReport.BootstrapPackage.IsReady)</p>
+        <p><strong>Browser bootstrap package artifact:</strong> @_selfTestReport.BootstrapPackage.ArtifactPath</p>
         <p><strong>Runtime contract ready:</strong> @FormatBool(_selfTestReport.RuntimeLaunchContract.IsReady)</p>
         <p><strong>Startup packet ready:</strong> @FormatBool(_selfTestReport.StartupPacket.IsReady)</p>
         <p><strong>Startup consumer ready:</strong> @FormatBool(_selfTestReport.StartupConsumer.IsReady)</p>
@@ -198,6 +200,10 @@
         <p><strong>Runtime browser restore ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRestoreReadyState.IsReady)</p>
         <p><strong>Runtime browser resume session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserResumeSession.IsReady)</p>
         <p><strong>Runtime browser resume ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserResumeReadyState.IsReady)</p>
+        <p><strong>Runtime browser live persistence session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserLivePersistenceSession.IsReady)</p>
+        <p><strong>Runtime browser live persistence ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserLivePersistenceReadyState.IsReady)</p>
+        <p><strong>Runtime browser steady persistence readiness session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserSteadyPersistenceReadinessSession.IsReady)</p>
+        <p><strong>Runtime browser steady persistence readiness ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserSteadyPersistenceReadinessReadyState.IsReady)</p>
         <p><strong>Runtime tail extension ready:</strong> @FormatBool(_selfTestReport.RuntimeTailExtension.IsReady)</p>
         <p><strong>Runtime tail extension version:</strong> @_selfTestReport.RuntimeTailExtension.ExtensionVersion</p>
         <p><strong>Runtime tail extension phases:</strong> @string.Join(", ", _selfTestReport.RuntimeTailExtension.Phases)</p>

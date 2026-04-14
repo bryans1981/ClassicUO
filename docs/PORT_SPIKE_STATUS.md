@@ -64,6 +64,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the startup path now includes a first runtime bootstrap consumer above the runtime launch handoff, and the one-click self-test records whether that runtime-side handoff consumer is ready
 - the startup path now includes a first runtime bootstrap session above the runtime bootstrap consumer, and the one-click self-test records whether that runtime-session startup layer is ready
 - the current stable tail baseline is `runtimeTailExtension=ok`, which extends the steady-operation readiness layer with a compact 20-phase stabilization tail
+- the current active browser handoff is now the concrete `Browser bootstrap package` artifact written to `/cache/startup/default/browser-bootstrap-package.json`; the synthetic tail remains validated, but it is no longer the active implementation path
 
 ### Main-code integration progress
 

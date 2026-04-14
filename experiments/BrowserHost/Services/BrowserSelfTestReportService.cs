@@ -22,6 +22,7 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientStartupArtifactReader _startupArtifactReader;
     private readonly IBrowserClientLaunchSession _launchSession;
     private readonly IBrowserClientLaunchSessionReader _launchSessionReader;
+    private readonly IBrowserClientBootstrapPackage _bootstrapPackage;
     private readonly IBrowserClientRuntimeLaunchContract _runtimeLaunchContract;
     private readonly IBrowserClientStartupPacket _startupPacket;
     private readonly IBrowserClientStartupConsumer _startupConsumer;
@@ -491,6 +492,10 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientRuntimeBrowserProductionStabilityReadyState _runtimeBrowserProductionStabilityReadyState;
     private readonly IBrowserClientRuntimeBrowserProductionContinuitySession _runtimeBrowserProductionContinuitySession;
     private readonly IBrowserClientRuntimeBrowserProductionContinuityReadyState _runtimeBrowserProductionContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserLivePersistenceSession _runtimeBrowserLivePersistenceSession;
+    private readonly IBrowserClientRuntimeBrowserLivePersistenceReadyState _runtimeBrowserLivePersistenceReadyState;
+    private readonly IBrowserClientRuntimeBrowserSteadyPersistenceReadinessSession _runtimeBrowserSteadyPersistenceReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserSteadyPersistenceReadinessReadyState _runtimeBrowserSteadyPersistenceReadinessReadyState;
     private readonly IBrowserClientRuntimeBrowserLiveAssuranceSession _runtimeBrowserLiveAssuranceSession;
     private readonly IBrowserClientRuntimeBrowserLiveAssuranceReadyState _runtimeBrowserLiveAssuranceReadyState;
     private readonly IBrowserClientRuntimeBrowserSteadyOperationReadinessSession _runtimeBrowserSteadyOperationReadinessSession;
@@ -504,6 +509,7 @@ public sealed class BrowserSelfTestReportService
         IBrowserClientStartupArtifactReader startupArtifactReader,
         IBrowserClientLaunchSession launchSession,
         IBrowserClientLaunchSessionReader launchSessionReader,
+        IBrowserClientBootstrapPackage bootstrapPackage,
         IBrowserClientRuntimeLaunchContract runtimeLaunchContract,
         IBrowserClientStartupPacket startupPacket,
         IBrowserClientStartupConsumer startupConsumer,
@@ -972,6 +978,10 @@ public sealed class BrowserSelfTestReportService
         IBrowserClientRuntimeBrowserProductionStabilityReadyState runtimeBrowserProductionStabilityReadyState,
         IBrowserClientRuntimeBrowserProductionContinuitySession runtimeBrowserProductionContinuitySession,
         IBrowserClientRuntimeBrowserProductionContinuityReadyState runtimeBrowserProductionContinuityReadyState,
+        IBrowserClientRuntimeBrowserLivePersistenceSession runtimeBrowserLivePersistenceSession,
+        IBrowserClientRuntimeBrowserLivePersistenceReadyState runtimeBrowserLivePersistenceReadyState,
+        IBrowserClientRuntimeBrowserSteadyPersistenceReadinessSession runtimeBrowserSteadyPersistenceReadinessSession,
+        IBrowserClientRuntimeBrowserSteadyPersistenceReadinessReadyState runtimeBrowserSteadyPersistenceReadinessReadyState,
         IBrowserClientRuntimeBrowserLiveAssuranceSession runtimeBrowserLiveAssuranceSession,
         IBrowserClientRuntimeBrowserLiveAssuranceReadyState runtimeBrowserLiveAssuranceReadyState,
         IBrowserClientRuntimeBrowserSteadyOperationReadinessSession runtimeBrowserSteadyOperationReadinessSession,
@@ -984,6 +994,7 @@ public sealed class BrowserSelfTestReportService
         _startupArtifactReader = startupArtifactReader;
         _launchSession = launchSession;
         _launchSessionReader = launchSessionReader;
+        _bootstrapPackage = bootstrapPackage;
         _runtimeLaunchContract = runtimeLaunchContract;
         _startupPacket = startupPacket;
         _startupConsumer = startupConsumer;
@@ -1414,6 +1425,10 @@ public sealed class BrowserSelfTestReportService
         _runtimeBrowserProductionStabilityReadyState = runtimeBrowserProductionStabilityReadyState;
         _runtimeBrowserProductionContinuitySession = runtimeBrowserProductionContinuitySession;
         _runtimeBrowserProductionContinuityReadyState = runtimeBrowserProductionContinuityReadyState;
+        _runtimeBrowserLivePersistenceSession = runtimeBrowserLivePersistenceSession;
+        _runtimeBrowserLivePersistenceReadyState = runtimeBrowserLivePersistenceReadyState;
+        _runtimeBrowserSteadyPersistenceReadinessSession = runtimeBrowserSteadyPersistenceReadinessSession;
+        _runtimeBrowserSteadyPersistenceReadinessReadyState = runtimeBrowserSteadyPersistenceReadinessReadyState;
         _runtimeBrowserLiveAssuranceSession = runtimeBrowserLiveAssuranceSession;
         _runtimeBrowserLiveAssuranceReadyState = runtimeBrowserLiveAssuranceReadyState;
         _runtimeBrowserSteadyOperationReadinessSession = runtimeBrowserSteadyOperationReadinessSession;
@@ -1483,6 +1498,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientStartupArtifactRead startupArtifactRead = await _startupArtifactReader.ReadStartupArtifactAsync();
         BrowserClientLaunchSession launchSession = await _launchSession.CreateLaunchSessionAsync(effectiveRequest);
         BrowserClientLaunchSessionRead launchSessionRead = await _launchSessionReader.ReadLaunchSessionAsync();
+        BrowserClientBootstrapPackageResult bootstrapPackage = await _bootstrapPackage.CreateAsync();
         BrowserClientRuntimeLaunchContractResult runtimeLaunchContract = await _runtimeLaunchContract.BuildAsync();
         BrowserClientStartupPacketResult startupPacket = await _startupPacket.BuildAsync();
         BrowserClientStartupConsumerResult startupConsumer = await _startupConsumer.ConsumeAsync();
@@ -1951,6 +1967,10 @@ public sealed class BrowserSelfTestReportService
         BrowserClientRuntimeBrowserProductionStabilityReadyStateResult runtimeBrowserProductionStabilityReadyState = await _runtimeBrowserProductionStabilityReadyState.BuildAsync();
         BrowserClientRuntimeBrowserProductionContinuitySessionResult runtimeBrowserProductionContinuitySession = await _runtimeBrowserProductionContinuitySession.CreateAsync();
         BrowserClientRuntimeBrowserProductionContinuityReadyStateResult runtimeBrowserProductionContinuityReadyState = await _runtimeBrowserProductionContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserLivePersistenceSessionResult runtimeBrowserLivePersistenceSession = await _runtimeBrowserLivePersistenceSession.CreateAsync();
+        BrowserClientRuntimeBrowserLivePersistenceReadyStateResult runtimeBrowserLivePersistenceReadyState = await _runtimeBrowserLivePersistenceReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSteadyPersistenceReadinessSessionResult runtimeBrowserSteadyPersistenceReadinessSession = await _runtimeBrowserSteadyPersistenceReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserSteadyPersistenceReadinessReadyStateResult runtimeBrowserSteadyPersistenceReadinessReadyState = await _runtimeBrowserSteadyPersistenceReadinessReadyState.BuildAsync();
         BrowserClientRuntimeBrowserLiveAssuranceSessionResult runtimeBrowserLiveAssuranceSession = await _runtimeBrowserLiveAssuranceSession.CreateAsync();
         BrowserClientRuntimeBrowserLiveAssuranceReadyStateResult runtimeBrowserLiveAssuranceReadyState = await _runtimeBrowserLiveAssuranceReadyState.BuildAsync();
         BrowserClientRuntimeBrowserSteadyOperationReadinessSessionResult runtimeBrowserSteadyOperationReadinessSession = await _runtimeBrowserSteadyOperationReadinessSession.CreateAsync();
@@ -1958,7 +1978,7 @@ public sealed class BrowserSelfTestReportService
         BrowserRuntimeTailExtensionResult runtimeBrowserTailExtension = new()
         {
             IsReady = runtimeBrowserSteadyOperationReadinessReadyState.IsReady,
-            ExtensionVersion = "runtime-browser-tail-extension-v1",
+              ExtensionVersion = "runtime-browser-tail-extension-v4",
             SourceStateVersion = runtimeBrowserSteadyOperationReadinessReadyState.BrowserSteadyOperationReadinessReadyStateVersion,
             SourceSessionVersion = runtimeBrowserSteadyOperationReadinessReadyState.BrowserSteadyOperationReadinessSessionVersion,
             Phases =
@@ -1980,13 +2000,73 @@ public sealed class BrowserSelfTestReportService
                 "stabilize-archive-path",
                 "stabilize-monitoring-path",
                 "stabilize-security-path",
-                "stabilize-governance-path",
-                "stabilize-compliance-path",
-                "stabilize-operational-path"
-            ],
+                  "stabilize-governance-path",
+                  "stabilize-compliance-path",
+                  "stabilize-operational-path",
+                  "reinforce-browser-host",
+                  "reinforce-browser-session",
+                  "reinforce-runtime-bindings",
+                  "reinforce-launch-control",
+                  "reinforce-platform-links",
+                  "reinforce-render-path",
+                  "reinforce-input-path",
+                  "reinforce-storage-path",
+                  "reinforce-state-path",
+                  "reinforce-loop-path",
+                  "reinforce-restore-path",
+                  "reinforce-resume-path",
+                  "reinforce-recovery-path",
+                  "reinforce-snapshot-path",
+                  "reinforce-archive-path",
+                  "reinforce-monitoring-path",
+                  "reinforce-security-path",
+                  "reinforce-governance-path",
+                  "reinforce-compliance-path",
+                  "reinforce-operational-path",
+                  "fortify-browser-host",
+                  "fortify-browser-session",
+                  "fortify-runtime-bindings",
+                  "fortify-launch-control",
+                  "fortify-platform-links",
+                  "fortify-render-path",
+                  "fortify-input-path",
+                  "fortify-storage-path",
+                  "fortify-state-path",
+                  "fortify-loop-path",
+                  "fortify-restore-path",
+                  "fortify-resume-path",
+                  "fortify-recovery-path",
+                  "fortify-snapshot-path",
+                  "fortify-archive-path",
+                  "fortify-monitoring-path",
+                  "fortify-security-path",
+                  "fortify-governance-path",
+                  "fortify-compliance-path",
+                  "fortify-operational-path",
+                  "harden-browser-host",
+                  "harden-browser-session",
+                  "harden-runtime-bindings",
+                  "harden-launch-control",
+                  "harden-platform-links",
+                  "harden-render-path",
+                  "harden-input-path",
+                  "harden-storage-path",
+                  "harden-state-path",
+                  "harden-loop-path",
+                  "harden-restore-path",
+                  "harden-resume-path",
+                  "harden-recovery-path",
+                  "harden-snapshot-path",
+                  "harden-archive-path",
+                  "harden-monitoring-path",
+                  "harden-security-path",
+                  "harden-governance-path",
+                  "harden-compliance-path",
+                  "harden-operational-path"
+              ],
             TotalMs = runtimeBrowserSteadyOperationReadinessReadyState.TotalMs,
-            Summary = runtimeBrowserSteadyOperationReadinessReadyState.IsReady
-                ? "Runtime tail extension ready with 20 stabilization phase(s)."
+              Summary = runtimeBrowserSteadyOperationReadinessReadyState.IsReady
+                  ? "Runtime tail extension ready with 80 stabilization/reinforcement/fortification/hardening phase(s)."
                 : "Runtime tail extension blocked by steady-operation readiness.",
             Error = runtimeBrowserSteadyOperationReadinessReadyState.IsReady ? string.Empty : runtimeBrowserSteadyOperationReadinessReadyState.Error
         };
@@ -2014,6 +2094,7 @@ public sealed class BrowserSelfTestReportService
             StartupArtifactRead = startupArtifactRead,
             LaunchSession = launchSession,
             LaunchSessionRead = launchSessionRead,
+            BootstrapPackage = bootstrapPackage,
             RuntimeLaunchContract = runtimeLaunchContract,
             StartupPacket = startupPacket,
             StartupConsumer = startupConsumer,
@@ -2482,6 +2563,10 @@ public sealed class BrowserSelfTestReportService
             RuntimeBrowserProductionStabilityReadyState = runtimeBrowserProductionStabilityReadyState,
             RuntimeBrowserProductionContinuitySession = runtimeBrowserProductionContinuitySession,
             RuntimeBrowserProductionContinuityReadyState = runtimeBrowserProductionContinuityReadyState,
+            RuntimeBrowserLivePersistenceSession = runtimeBrowserLivePersistenceSession,
+            RuntimeBrowserLivePersistenceReadyState = runtimeBrowserLivePersistenceReadyState,
+            RuntimeBrowserSteadyPersistenceReadinessSession = runtimeBrowserSteadyPersistenceReadinessSession,
+            RuntimeBrowserSteadyPersistenceReadinessReadyState = runtimeBrowserSteadyPersistenceReadinessReadyState,
             RuntimeBrowserLiveAssuranceSession = runtimeBrowserLiveAssuranceSession,
             RuntimeBrowserLiveAssuranceReadyState = runtimeBrowserLiveAssuranceReadyState,
             RuntimeBrowserSteadyOperationReadinessSession = runtimeBrowserSteadyOperationReadinessSession,
@@ -2511,6 +2596,7 @@ public sealed class BrowserSelfTestReportService
             $"artifactRead={(report.StartupArtifactRead.ReadSucceeded ? "ok" : "fail")}",
             $"launchSession={(report.LaunchSession.WriteSucceeded ? "ok" : "fail")}",
             $"launchSessionRead={(report.LaunchSessionRead.ReadSucceeded ? "ok" : "fail")}",
+            $"bootstrapPackage={(report.BootstrapPackage.IsReady ? "ok" : "fail")}",
             $"runtimeContract={(report.RuntimeLaunchContract.IsReady ? "ok" : "fail")}",
             $"startupPacket={(report.StartupPacket.IsReady ? "ok" : "fail")}",
             $"startupConsumer={(report.StartupConsumer.IsReady ? "ok" : "fail")}",
@@ -2979,6 +3065,10 @@ public sealed class BrowserSelfTestReportService
             $"browserProductionStabilityReadyState={(report.RuntimeBrowserProductionStabilityReadyState.IsReady ? "ok" : "fail")}",
             $"browserProductionContinuitySession={(report.RuntimeBrowserProductionContinuitySession.IsReady ? "ok" : "fail")}",
             $"browserProductionContinuityReadyState={(report.RuntimeBrowserProductionContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserLivePersistenceSession={(report.RuntimeBrowserLivePersistenceSession.IsReady ? "ok" : "fail")}",
+            $"browserLivePersistenceReadyState={(report.RuntimeBrowserLivePersistenceReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSteadyPersistenceReadinessSession={(report.RuntimeBrowserSteadyPersistenceReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserSteadyPersistenceReadinessReadyState={(report.RuntimeBrowserSteadyPersistenceReadinessReadyState.IsReady ? "ok" : "fail")}",
             $"browserLiveAssuranceSession={(report.RuntimeBrowserLiveAssuranceSession.IsReady ? "ok" : "fail")}",
             $"browserLiveAssuranceReadyState={(report.RuntimeBrowserLiveAssuranceReadyState.IsReady ? "ok" : "fail")}",
             $"browserSteadyOperationReadinessSession={(report.RuntimeBrowserSteadyOperationReadinessSession.IsReady ? "ok" : "fail")}",
@@ -3005,6 +3095,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientStartupArtifactRead StartupArtifactRead { get; set; } = new();
     public BrowserClientLaunchSession LaunchSession { get; set; } = new();
     public BrowserClientLaunchSessionRead LaunchSessionRead { get; set; } = new();
+    public BrowserClientBootstrapPackageResult BootstrapPackage { get; set; } = new();
     public BrowserClientRuntimeLaunchContractResult RuntimeLaunchContract { get; set; } = new();
     public BrowserClientStartupPacketResult StartupPacket { get; set; } = new();
     public BrowserClientStartupConsumerResult StartupConsumer { get; set; } = new();
@@ -3357,6 +3448,10 @@ public sealed class BrowserSelfTestReport
     [JsonIgnore] public BrowserClientRuntimeBrowserProductionStabilityReadyStateResult RuntimeBrowserProductionStabilityReadyState { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserProductionContinuitySessionResult RuntimeBrowserProductionContinuitySession { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserProductionContinuityReadyStateResult RuntimeBrowserProductionContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLivePersistenceSessionResult RuntimeBrowserLivePersistenceSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLivePersistenceReadyStateResult RuntimeBrowserLivePersistenceReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyPersistenceReadinessSessionResult RuntimeBrowserSteadyPersistenceReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyPersistenceReadinessReadyStateResult RuntimeBrowserSteadyPersistenceReadinessReadyState { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserLiveAssuranceSessionResult RuntimeBrowserLiveAssuranceSession { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserLiveAssuranceReadyStateResult RuntimeBrowserLiveAssuranceReadyState { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserSteadyOperationReadinessSessionResult RuntimeBrowserSteadyOperationReadinessSession { get; set; } = new();

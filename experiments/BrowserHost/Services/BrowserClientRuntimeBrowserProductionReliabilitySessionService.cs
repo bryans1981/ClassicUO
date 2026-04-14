@@ -7,25 +7,25 @@ public interface IBrowserClientRuntimeBrowserProductionReliabilitySession
 
 public sealed class BrowserClientRuntimeBrowserProductionReliabilitySessionService : IBrowserClientRuntimeBrowserProductionReliabilitySession
 {
-    private readonly IBrowserClientRuntimeBrowserServiceContinuityReadyState _runtimeBrowserServiceContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserProductionReadinessReadyState _runtimeBrowserProductionReadinessReadyState;
 
-    public BrowserClientRuntimeBrowserProductionReliabilitySessionService(IBrowserClientRuntimeBrowserServiceContinuityReadyState runtimeBrowserServiceContinuityReadyState)
+    public BrowserClientRuntimeBrowserProductionReliabilitySessionService(IBrowserClientRuntimeBrowserProductionReadinessReadyState runtimeBrowserProductionReadinessReadyState)
     {
-        _runtimeBrowserServiceContinuityReadyState = runtimeBrowserServiceContinuityReadyState;
+        _runtimeBrowserProductionReadinessReadyState = runtimeBrowserProductionReadinessReadyState;
     }
 
     public async ValueTask<BrowserClientRuntimeBrowserProductionReliabilitySessionResult> CreateAsync(string profileId = "default")
     {
         DateTimeOffset started = DateTimeOffset.UtcNow;
-        BrowserClientRuntimeBrowserServiceContinuityReadyStateResult prevReadyState = await _runtimeBrowserServiceContinuityReadyState.BuildAsync(profileId);
+        BrowserClientRuntimeBrowserProductionReadinessReadyStateResult prevReadyState = await _runtimeBrowserProductionReadinessReadyState.BuildAsync(profileId);
 
         BrowserClientRuntimeBrowserProductionReliabilitySessionResult result = new()
         {
             ProfileId = prevReadyState.ProfileId,
             SessionId = prevReadyState.SessionId,
             SessionPath = prevReadyState.SessionPath,
-            BrowserServiceContinuityReadyStateVersion = prevReadyState.BrowserServiceContinuityReadyStateVersion,
-            BrowserServiceContinuitySessionVersion = prevReadyState.BrowserServiceContinuitySessionVersion,
+            BrowserServiceContinuityReadyStateVersion = prevReadyState.BrowserProductionReadinessReadyStateVersion,
+            BrowserServiceContinuitySessionVersion = prevReadyState.BrowserProductionReadinessSessionVersion,
             LaunchMode = prevReadyState.LaunchMode,
             AssetRootPath = prevReadyState.AssetRootPath,
             ProfilesRootPath = prevReadyState.ProfilesRootPath,
@@ -54,7 +54,7 @@ public sealed class BrowserClientRuntimeBrowserProductionReliabilitySessionServi
         result.BrowserProductionReliabilityStages =
         [
             "open-browser-productionreliability-session",
-            "bind-browser-servicecontinuity-ready-state",
+            "bind-browser-productionreadiness-ready-state",
             "publish-browser-productionreliability-ready"
         ];
         result.BrowserProductionReliabilitySummary = $"Runtime browser productionreliability session prepared {result.BrowserProductionReliabilityStages.Length} productionreliability stage(s) for profile '{prevReadyState.ProfileId}'.";

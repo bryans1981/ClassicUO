@@ -138,6 +138,7 @@ The default operator interaction for this project is:
 - Default validation batch size is 20 runtime layers per browser self-test.
 - When a batch exposes a DI cycle in the browser runtime chain, break the newest edge first and re-run the compact self-test before adding more layers.
 - The current stable tail baseline is `runtimeTailExtension=ok`; future routine work should extend from that point unless a blocker is found.
+- The current active browser handoff is now the concrete `Browser bootstrap package` artifact, not further synthetic readiness layers. Future routine work should consume that package and move the active UI toward real client-bootstrap integration instead of extending the synthetic tail.
 
 ## Issue Triage
 

@@ -1,0 +1,95 @@
+namespace BrowserHost.Services;
+
+public interface IBrowserClientRuntimeBrowserServiceReliabilitySession
+{
+    ValueTask<BrowserClientRuntimeBrowserServiceReliabilitySessionResult> CreateAsync(string profileId = "default");
+}
+
+public sealed class BrowserClientRuntimeBrowserServiceReliabilitySessionService : IBrowserClientRuntimeBrowserServiceReliabilitySession
+{
+    private readonly IBrowserClientRuntimeBrowserGoLiveReliabilityReadyState _runtimeBrowserGoLiveReliabilityReadyState;
+
+    public BrowserClientRuntimeBrowserServiceReliabilitySessionService(IBrowserClientRuntimeBrowserGoLiveReliabilityReadyState runtimeBrowserGoLiveReliabilityReadyState)
+    {
+        _runtimeBrowserGoLiveReliabilityReadyState = runtimeBrowserGoLiveReliabilityReadyState;
+    }
+
+    public async ValueTask<BrowserClientRuntimeBrowserServiceReliabilitySessionResult> CreateAsync(string profileId = "default")
+    {
+        DateTimeOffset started = DateTimeOffset.UtcNow;
+        BrowserClientRuntimeBrowserGoLiveReliabilityReadyStateResult prevReadyState = await _runtimeBrowserGoLiveReliabilityReadyState.BuildAsync(profileId);
+
+        BrowserClientRuntimeBrowserServiceReliabilitySessionResult result = new()
+        {
+            ProfileId = prevReadyState.ProfileId,
+            SessionId = prevReadyState.SessionId,
+            SessionPath = prevReadyState.SessionPath,
+            BrowserGoLiveReliabilityReadyStateVersion = prevReadyState.BrowserGoLiveReliabilityReadyStateVersion,
+            BrowserGoLiveReliabilitySessionVersion = prevReadyState.BrowserGoLiveReliabilitySessionVersion,
+            LaunchMode = prevReadyState.LaunchMode,
+            AssetRootPath = prevReadyState.AssetRootPath,
+            ProfilesRootPath = prevReadyState.ProfilesRootPath,
+            CacheRootPath = prevReadyState.CacheRootPath,
+            ConfigRootPath = prevReadyState.ConfigRootPath,
+            SettingsFilePath = prevReadyState.SettingsFilePath,
+            StartupProfilePath = prevReadyState.StartupProfilePath,
+            RequiredAssets = prevReadyState.RequiredAssets,
+            ReadyAssetCount = prevReadyState.ReadyAssetCount,
+            CompletedSteps = prevReadyState.CompletedSteps,
+            TotalSteps = prevReadyState.TotalSteps,
+            Exists = prevReadyState.Exists,
+            ReadSucceeded = prevReadyState.ReadSucceeded
+        };
+
+        if (!prevReadyState.IsReady)
+        {
+            result.TotalMs = (DateTimeOffset.UtcNow - started).TotalMilliseconds;
+            result.Summary = $"Runtime browser servicereliability session blocked for profile '{prevReadyState.ProfileId}'.";
+            result.Error = prevReadyState.Error;
+            return result;
+        }
+
+        result.IsReady = true;
+        result.BrowserServiceReliabilitySessionVersion = "runtime-browser-servicereliability-session-v1";
+        result.BrowserServiceReliabilityStages =
+        [
+            "open-browser-servicereliability-session",
+            "bind-browser-golivereliability-ready-state",
+            "publish-browser-servicereliability-ready"
+        ];
+        result.BrowserServiceReliabilitySummary = $"Runtime browser servicereliability session prepared {result.BrowserServiceReliabilityStages.Length} servicereliability stage(s) for profile '{prevReadyState.ProfileId}'.";
+        result.TotalMs = (DateTimeOffset.UtcNow - started).TotalMilliseconds;
+        result.Summary = $"Runtime browser servicereliability session ready for profile '{prevReadyState.ProfileId}' with {result.BrowserServiceReliabilityStages.Length} stage(s).";
+
+        return result;
+    }
+}
+
+public sealed class BrowserClientRuntimeBrowserServiceReliabilitySessionResult
+{
+    public bool IsReady { get; set; }
+    public string BrowserServiceReliabilitySessionVersion { get; set; } = string.Empty;
+    public string BrowserGoLiveReliabilityReadyStateVersion { get; set; } = string.Empty;
+    public string BrowserGoLiveReliabilitySessionVersion { get; set; } = string.Empty;
+    public string LaunchMode { get; set; } = string.Empty;
+    public string ProfileId { get; set; } = "default";
+    public string SessionId { get; set; } = string.Empty;
+    public string SessionPath { get; set; } = string.Empty;
+    public bool Exists { get; set; }
+    public bool ReadSucceeded { get; set; }
+    public string AssetRootPath { get; set; } = string.Empty;
+    public string ProfilesRootPath { get; set; } = string.Empty;
+    public string CacheRootPath { get; set; } = string.Empty;
+    public string ConfigRootPath { get; set; } = string.Empty;
+    public string SettingsFilePath { get; set; } = string.Empty;
+    public string StartupProfilePath { get; set; } = string.Empty;
+    public string[] RequiredAssets { get; set; } = Array.Empty<string>();
+    public int ReadyAssetCount { get; set; }
+    public int CompletedSteps { get; set; }
+    public int TotalSteps { get; set; }
+    public string[] BrowserServiceReliabilityStages { get; set; } = Array.Empty<string>();
+    public string BrowserServiceReliabilitySummary { get; set; } = string.Empty;
+    public double TotalMs { get; set; }
+    public string Summary { get; set; } = string.Empty;
+    public string Error { get; set; } = string.Empty;
+}

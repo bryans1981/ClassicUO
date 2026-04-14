@@ -1,4 +1,4 @@
-# Project Workflow
+﻿# Project Workflow
 
 ## Purpose
 
@@ -102,6 +102,8 @@ Exit criteria:
 - Prefer batched implementation work over tiny verify-after-every-change loops when the risk is manageable.
 - Keep the active browser operator surface minimal: only the current required checks should remain in `Current Tests`; completed or diagnostic checks should move to archived sections.
 - Prefer one-click browser actions that save machine-readable results locally over manual copy/paste from the UI.
+- If the browser self-test throws before the report is built, save a compact failure envelope locally through the report sink so the error is still captured without user copy/paste.
+- If a new runtime batch introduces a DI cycle, detach the newest ready-state services from their paired session services before adding more layers.
 - Treat automatic local report saving as the default validation path whenever a browser-side result needs to be handed back into the repo for review.
 
 ### After Implementation
@@ -133,6 +135,9 @@ The default operator interaction for this project is:
 - Save browser validation output automatically into the local repo when possible, so results can be reviewed directly without copy/paste.
 - Ask the operator for manual transcription only when the browser cannot yet write a usable report locally or when a true visual judgment is required.
 - Continue to use `Current Tests` only for the active path; move older checks into archived sections once they are no longer part of the main workflow.
+- Default validation batch size is 20 runtime layers per browser self-test.
+- When a batch exposes a DI cycle in the browser runtime chain, break the newest edge first and re-run the compact self-test before adding more layers.
+- The current stable tail baseline is `runtimeTailExtension=ok`; future routine work should extend from that point unless a blocker is found.
 
 ## Issue Triage
 
@@ -388,4 +393,8 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 
 
 - 2026-04-02: Began the fifth 20-layer browser runtime batch from confirmation/completion-readiness. Fixed a generated duplicate-property regression in BrowserSelfTestReportService, moved self-test/report resolution to lazy runtime lookup so Current Tests can load even when the newest batch is broken, and repaired the persistence anchor after the generator introduced a DI cycle through perseverance. Stopping point: browser page loads again, but the fifth batch still needs a fresh one-click self-test after the persistence anchor fix.
+- 2026-04-14: Generated the sixth 20-layer browser runtime batch from operational readiness/deployment readiness through live stability/steady state readiness above the validated completion readiness baseline. Next step: one compact self-test for this block.
 
+- 2026-04-14: Generated the seventh 20-layer browser runtime batch from operational stability/deployment stability through live assurance/steady operation readiness above the validated steady-state readiness baseline. Next step: one compact self-test for this block.
+- 2026-04-14: Generated the eighth 20-layer browser runtime batch from operational resilience/deployment resilience through live continuity/steady continuity readiness above the validated steady operation readiness baseline. Next step: one compact self-test for this block.
+- 2026-04-14: Generated the ninth 20-layer browser runtime batch from operational reliability/deployment reliability through live persistence/steady persistence readiness above the validated steady continuity readiness baseline. Next step: one compact self-test for this block.

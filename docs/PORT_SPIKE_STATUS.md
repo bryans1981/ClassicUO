@@ -1,4 +1,4 @@
-# Port Spike Status
+﻿# Port Spike Status
 
 ## Current Spike
 
@@ -31,7 +31,15 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting
-- shared `BrowserFileSystem` bridge now exists for read-only bootstrap asset loading through the real seam`r`n- seam-backed browser bootstrap handoff now validates successfully with `3 / 3` ready assets and warm-cache reruns in single-digit milliseconds`r`n- startup-oriented browser adapter output now exists on top of the seam-backed handoff for a future ClassicUO browser entrypoint`r`n- launch-oriented browser entrypoint output now prepares minimal browser-side config/profile files and reports startup readiness`r`n- startup-sequence browser entrypoint shell now groups launch preparation into explicit startup steps for a future browser entrypoint`r`n- launch-state artifact step now writes startup data into browser storage for a future browser entrypoint to consume`r`n- startup artifact reader now reads the launch-state artifact back from browser storage as if a browser entrypoint were consuming it
+- self-test failures now write a compact local failure envelope when the runtime chain throws before the full report is built
+- the ninth 20-layer runtime batch needed a DI cycle break; its newest ready-state services were detached from paired session services to restore the compact self-test path
+- shared `BrowserFileSystem` bridge now exists for read-only bootstrap asset loading through the real seam
+- seam-backed browser bootstrap handoff now validates successfully with `3 / 3` ready assets and warm-cache reruns in single-digit milliseconds
+- startup-oriented browser adapter output now exists on top of the seam-backed handoff for a future ClassicUO browser entrypoint
+- launch-oriented browser entrypoint output now prepares minimal browser-side config/profile files and reports startup readiness
+- startup-sequence browser entrypoint shell now groups launch preparation into explicit startup steps for a future browser entrypoint
+- launch-state artifact step now writes startup data into browser storage for a future browser entrypoint to consume
+- startup artifact reader now reads the launch-state artifact back from browser storage as if a browser entrypoint were consuming it
 - the startup path now creates a simulated browser launch session from the saved startup artifact, and the self-test suite records artifact write/read plus launch-session write state in a locally saved JSON report
 - the startup path now also reads the saved launch session back as a resumable launch-state consumer, and the self-test suite records launch-session read state in the local JSON report
 - the launch-session serialization order has been corrected so saved session JSON reflects final write-state and summary values during readback validation
@@ -55,6 +63,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the startup path now includes a first runtime launch handoff above the browser boot session, and the one-click self-test records whether that browser-to-runtime handoff layer is ready
 - the startup path now includes a first runtime bootstrap consumer above the runtime launch handoff, and the one-click self-test records whether that runtime-side handoff consumer is ready
 - the startup path now includes a first runtime bootstrap session above the runtime bootstrap consumer, and the one-click self-test records whether that runtime-session startup layer is ready
+- the current stable tail baseline is `runtimeTailExtension=ok`, which extends the steady-operation readiness layer with a compact 20-phase stabilization tail
 
 ### Main-code integration progress
 
@@ -318,4 +327,8 @@ Fifth 20-layer runtime batch extends from browserConfirmation/browserVerificatio
 
 
 Fifth 20-layer runtime batch remains the active work item. Today's close-out fixed the duplicate self-test report property block, restored page-load stability by lazily resolving the self-test/report services, and repaired the generated DI loop by re-anchoring browser persistence back to checkpoint instead of perseverance. Next pickup: run the one-click self-test for the confirmation/completion-readiness block and continue the chain if it validates.
+- 2026-04-14: Sixth 20-layer runtime batch extends from browserOperationalReadiness/browserDeploymentReadiness through browserLiveStability/browserSteadyStateReadiness and remains on the compact self-test report path, pending the next one-click self-test.
 
+- 2026-04-14: Seventh 20-layer runtime batch extends from browserOperationalStability/browserDeploymentStability through browserLiveAssurance/browserSteadyOperationReadiness and remains on the compact self-test report path, pending the next one-click self-test.
+- 2026-04-14: Generated the eighth 20-layer browser runtime batch from operational resilience/deployment resilience through live continuity/steady continuity readiness above the validated steady operation readiness baseline. Next step: one compact self-test for this block.
+- 2026-04-14: Generated the ninth 20-layer browser runtime batch from operational reliability/deployment reliability through live persistence/steady persistence readiness above the validated steady continuity readiness baseline. Next step: one compact self-test for this block.

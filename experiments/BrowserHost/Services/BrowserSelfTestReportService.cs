@@ -5,7 +5,7 @@ namespace BrowserHost.Services;
 
 public sealed class BrowserSelfTestReportService
 {
-    public const string RuntimeChainMarker = "runtime-chain-v20260402-policy-audit";
+    public const string RuntimeChainMarker = "runtime-chain-v20260414-operational-reliability";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -415,6 +415,87 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientRuntimeBrowserAccomplishmentReadyState _runtimeBrowserAccomplishmentReadyState;
     private readonly IBrowserClientRuntimeBrowserCompletionReadinessSession _runtimeBrowserCompletionReadinessSession;
     private readonly IBrowserClientRuntimeBrowserCompletionReadinessReadyState _runtimeBrowserCompletionReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserOperationalReadinessSession _runtimeBrowserOperationalReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserOperationalReadinessReadyState _runtimeBrowserOperationalReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserDeploymentReadinessSession _runtimeBrowserDeploymentReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserDeploymentReadinessReadyState _runtimeBrowserDeploymentReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserReleaseReadinessSession _runtimeBrowserReleaseReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserReleaseReadinessReadyState _runtimeBrowserReleaseReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserLaunchAssuranceSession _runtimeBrowserLaunchAssuranceSession;
+    private readonly IBrowserClientRuntimeBrowserLaunchAssuranceReadyState _runtimeBrowserLaunchAssuranceReadyState;
+    private readonly IBrowserClientRuntimeBrowserGoLiveReadinessSession _runtimeBrowserGoLiveReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserGoLiveReadinessReadyState _runtimeBrowserGoLiveReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserServiceActivationSession _runtimeBrowserServiceActivationSession;
+    private readonly IBrowserClientRuntimeBrowserServiceActivationReadyState _runtimeBrowserServiceActivationReadyState;
+    private readonly IBrowserClientRuntimeBrowserSteadyOperationSession _runtimeBrowserSteadyOperationSession;
+    private readonly IBrowserClientRuntimeBrowserSteadyOperationReadyState _runtimeBrowserSteadyOperationReadyState;
+    private readonly IBrowserClientRuntimeBrowserRuntimeStabilitySession _runtimeBrowserRuntimeStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserRuntimeStabilityReadyState _runtimeBrowserRuntimeStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserSessionStabilitySession _runtimeBrowserSessionStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserSessionStabilityReadyState _runtimeBrowserSessionStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserStateStabilitySession _runtimeBrowserStateStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserStateStabilityReadyState _runtimeBrowserStateStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserInteractionStabilitySession _runtimeBrowserInteractionStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserInteractionStabilityReadyState _runtimeBrowserInteractionStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserContinuationAssuranceSession _runtimeBrowserContinuationAssuranceSession;
+    private readonly IBrowserClientRuntimeBrowserContinuationAssuranceReadyState _runtimeBrowserContinuationAssuranceReadyState;
+    private readonly IBrowserClientRuntimeBrowserSustainmentReadinessSession _runtimeBrowserSustainmentReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserSustainmentReadinessReadyState _runtimeBrowserSustainmentReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserLiveOperabilitySession _runtimeBrowserLiveOperabilitySession;
+    private readonly IBrowserClientRuntimeBrowserLiveOperabilityReadyState _runtimeBrowserLiveOperabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserRuntimeOperabilitySession _runtimeBrowserRuntimeOperabilitySession;
+    private readonly IBrowserClientRuntimeBrowserRuntimeOperabilityReadyState _runtimeBrowserRuntimeOperabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserServiceAssuranceSession _runtimeBrowserServiceAssuranceSession;
+    private readonly IBrowserClientRuntimeBrowserServiceAssuranceReadyState _runtimeBrowserServiceAssuranceReadyState;
+    private readonly IBrowserClientRuntimeBrowserProductionReadinessSession _runtimeBrowserProductionReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserProductionReadinessReadyState _runtimeBrowserProductionReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserProductionAssuranceSession _runtimeBrowserProductionAssuranceSession;
+    private readonly IBrowserClientRuntimeBrowserProductionAssuranceReadyState _runtimeBrowserProductionAssuranceReadyState;
+    private readonly IBrowserClientRuntimeBrowserLiveStabilitySession _runtimeBrowserLiveStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserLiveStabilityReadyState _runtimeBrowserLiveStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserSteadyStateReadinessSession _runtimeBrowserSteadyStateReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserSteadyStateReadinessReadyState _runtimeBrowserSteadyStateReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserOperationalStabilitySession _runtimeBrowserOperationalStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserOperationalStabilityReadyState _runtimeBrowserOperationalStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserDeploymentStabilitySession _runtimeBrowserDeploymentStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserDeploymentStabilityReadyState _runtimeBrowserDeploymentStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserReleaseStabilitySession _runtimeBrowserReleaseStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserReleaseStabilityReadyState _runtimeBrowserReleaseStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserLaunchStabilitySession _runtimeBrowserLaunchStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserLaunchStabilityReadyState _runtimeBrowserLaunchStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserGoLiveStabilitySession _runtimeBrowserGoLiveStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserGoLiveStabilityReadyState _runtimeBrowserGoLiveStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserServiceContinuitySession _runtimeBrowserServiceContinuitySession;
+    private readonly IBrowserClientRuntimeBrowserServiceContinuityReadyState _runtimeBrowserServiceContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserRuntimeContinuitySession _runtimeBrowserRuntimeContinuitySession;
+    private readonly IBrowserClientRuntimeBrowserRuntimeContinuityReadyState _runtimeBrowserRuntimeContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserSessionContinuitySession _runtimeBrowserSessionContinuitySession;
+    private readonly IBrowserClientRuntimeBrowserSessionContinuityReadyState _runtimeBrowserSessionContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserStateContinuitySession _runtimeBrowserStateContinuitySession;
+    private readonly IBrowserClientRuntimeBrowserStateContinuityReadyState _runtimeBrowserStateContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserInteractionContinuitySession _runtimeBrowserInteractionContinuitySession;
+    private readonly IBrowserClientRuntimeBrowserInteractionContinuityReadyState _runtimeBrowserInteractionContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserFlowContinuitySession _runtimeBrowserFlowContinuitySession;
+    private readonly IBrowserClientRuntimeBrowserFlowContinuityReadyState _runtimeBrowserFlowContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserContinuationReadinessSession _runtimeBrowserContinuationReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserContinuationReadinessReadyState _runtimeBrowserContinuationReadinessReadyState;
+    private readonly IBrowserClientRuntimeBrowserSustainmentAssuranceSession _runtimeBrowserSustainmentAssuranceSession;
+    private readonly IBrowserClientRuntimeBrowserSustainmentAssuranceReadyState _runtimeBrowserSustainmentAssuranceReadyState;
+    private readonly IBrowserClientRuntimeBrowserLiveSustainabilitySession _runtimeBrowserLiveSustainabilitySession;
+    private readonly IBrowserClientRuntimeBrowserLiveSustainabilityReadyState _runtimeBrowserLiveSustainabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserRuntimeSustainabilitySession _runtimeBrowserRuntimeSustainabilitySession;
+    private readonly IBrowserClientRuntimeBrowserRuntimeSustainabilityReadyState _runtimeBrowserRuntimeSustainabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserServiceSustainabilitySession _runtimeBrowserServiceSustainabilitySession;
+    private readonly IBrowserClientRuntimeBrowserServiceSustainabilityReadyState _runtimeBrowserServiceSustainabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserProductionStabilitySession _runtimeBrowserProductionStabilitySession;
+    private readonly IBrowserClientRuntimeBrowserProductionStabilityReadyState _runtimeBrowserProductionStabilityReadyState;
+    private readonly IBrowserClientRuntimeBrowserProductionContinuitySession _runtimeBrowserProductionContinuitySession;
+    private readonly IBrowserClientRuntimeBrowserProductionContinuityReadyState _runtimeBrowserProductionContinuityReadyState;
+    private readonly IBrowserClientRuntimeBrowserLiveAssuranceSession _runtimeBrowserLiveAssuranceSession;
+    private readonly IBrowserClientRuntimeBrowserLiveAssuranceReadyState _runtimeBrowserLiveAssuranceReadyState;
+    private readonly IBrowserClientRuntimeBrowserSteadyOperationReadinessSession _runtimeBrowserSteadyOperationReadinessSession;
+    private readonly IBrowserClientRuntimeBrowserSteadyOperationReadinessReadyState _runtimeBrowserSteadyOperationReadinessReadyState;
+
     public BrowserSelfTestReportService(
         IBrowserClientAssetService browserClientAssetService,
         BrowserFileSystemBridgeService bridgeService,
@@ -814,7 +895,87 @@ public sealed class BrowserSelfTestReportService
         IBrowserClientRuntimeBrowserAccomplishmentSession runtimeBrowserAccomplishmentSession,
         IBrowserClientRuntimeBrowserAccomplishmentReadyState runtimeBrowserAccomplishmentReadyState,
         IBrowserClientRuntimeBrowserCompletionReadinessSession runtimeBrowserCompletionReadinessSession,
-        IBrowserClientRuntimeBrowserCompletionReadinessReadyState runtimeBrowserCompletionReadinessReadyState)
+        IBrowserClientRuntimeBrowserCompletionReadinessReadyState runtimeBrowserCompletionReadinessReadyState,
+        IBrowserClientRuntimeBrowserOperationalReadinessSession runtimeBrowserOperationalReadinessSession,
+        IBrowserClientRuntimeBrowserOperationalReadinessReadyState runtimeBrowserOperationalReadinessReadyState,
+        IBrowserClientRuntimeBrowserDeploymentReadinessSession runtimeBrowserDeploymentReadinessSession,
+        IBrowserClientRuntimeBrowserDeploymentReadinessReadyState runtimeBrowserDeploymentReadinessReadyState,
+        IBrowserClientRuntimeBrowserReleaseReadinessSession runtimeBrowserReleaseReadinessSession,
+        IBrowserClientRuntimeBrowserReleaseReadinessReadyState runtimeBrowserReleaseReadinessReadyState,
+        IBrowserClientRuntimeBrowserLaunchAssuranceSession runtimeBrowserLaunchAssuranceSession,
+        IBrowserClientRuntimeBrowserLaunchAssuranceReadyState runtimeBrowserLaunchAssuranceReadyState,
+        IBrowserClientRuntimeBrowserGoLiveReadinessSession runtimeBrowserGoLiveReadinessSession,
+        IBrowserClientRuntimeBrowserGoLiveReadinessReadyState runtimeBrowserGoLiveReadinessReadyState,
+        IBrowserClientRuntimeBrowserServiceActivationSession runtimeBrowserServiceActivationSession,
+        IBrowserClientRuntimeBrowserServiceActivationReadyState runtimeBrowserServiceActivationReadyState,
+        IBrowserClientRuntimeBrowserSteadyOperationSession runtimeBrowserSteadyOperationSession,
+        IBrowserClientRuntimeBrowserSteadyOperationReadyState runtimeBrowserSteadyOperationReadyState,
+        IBrowserClientRuntimeBrowserRuntimeStabilitySession runtimeBrowserRuntimeStabilitySession,
+        IBrowserClientRuntimeBrowserRuntimeStabilityReadyState runtimeBrowserRuntimeStabilityReadyState,
+        IBrowserClientRuntimeBrowserSessionStabilitySession runtimeBrowserSessionStabilitySession,
+        IBrowserClientRuntimeBrowserSessionStabilityReadyState runtimeBrowserSessionStabilityReadyState,
+        IBrowserClientRuntimeBrowserStateStabilitySession runtimeBrowserStateStabilitySession,
+        IBrowserClientRuntimeBrowserStateStabilityReadyState runtimeBrowserStateStabilityReadyState,
+        IBrowserClientRuntimeBrowserInteractionStabilitySession runtimeBrowserInteractionStabilitySession,
+        IBrowserClientRuntimeBrowserInteractionStabilityReadyState runtimeBrowserInteractionStabilityReadyState,
+        IBrowserClientRuntimeBrowserContinuationAssuranceSession runtimeBrowserContinuationAssuranceSession,
+        IBrowserClientRuntimeBrowserContinuationAssuranceReadyState runtimeBrowserContinuationAssuranceReadyState,
+        IBrowserClientRuntimeBrowserSustainmentReadinessSession runtimeBrowserSustainmentReadinessSession,
+        IBrowserClientRuntimeBrowserSustainmentReadinessReadyState runtimeBrowserSustainmentReadinessReadyState,
+        IBrowserClientRuntimeBrowserLiveOperabilitySession runtimeBrowserLiveOperabilitySession,
+        IBrowserClientRuntimeBrowserLiveOperabilityReadyState runtimeBrowserLiveOperabilityReadyState,
+        IBrowserClientRuntimeBrowserRuntimeOperabilitySession runtimeBrowserRuntimeOperabilitySession,
+        IBrowserClientRuntimeBrowserRuntimeOperabilityReadyState runtimeBrowserRuntimeOperabilityReadyState,
+        IBrowserClientRuntimeBrowserServiceAssuranceSession runtimeBrowserServiceAssuranceSession,
+        IBrowserClientRuntimeBrowserServiceAssuranceReadyState runtimeBrowserServiceAssuranceReadyState,
+        IBrowserClientRuntimeBrowserProductionReadinessSession runtimeBrowserProductionReadinessSession,
+        IBrowserClientRuntimeBrowserProductionReadinessReadyState runtimeBrowserProductionReadinessReadyState,
+        IBrowserClientRuntimeBrowserProductionAssuranceSession runtimeBrowserProductionAssuranceSession,
+        IBrowserClientRuntimeBrowserProductionAssuranceReadyState runtimeBrowserProductionAssuranceReadyState,
+        IBrowserClientRuntimeBrowserLiveStabilitySession runtimeBrowserLiveStabilitySession,
+        IBrowserClientRuntimeBrowserLiveStabilityReadyState runtimeBrowserLiveStabilityReadyState,
+        IBrowserClientRuntimeBrowserSteadyStateReadinessSession runtimeBrowserSteadyStateReadinessSession,
+        IBrowserClientRuntimeBrowserSteadyStateReadinessReadyState runtimeBrowserSteadyStateReadinessReadyState,
+        IBrowserClientRuntimeBrowserOperationalStabilitySession runtimeBrowserOperationalStabilitySession,
+        IBrowserClientRuntimeBrowserOperationalStabilityReadyState runtimeBrowserOperationalStabilityReadyState,
+        IBrowserClientRuntimeBrowserDeploymentStabilitySession runtimeBrowserDeploymentStabilitySession,
+        IBrowserClientRuntimeBrowserDeploymentStabilityReadyState runtimeBrowserDeploymentStabilityReadyState,
+        IBrowserClientRuntimeBrowserReleaseStabilitySession runtimeBrowserReleaseStabilitySession,
+        IBrowserClientRuntimeBrowserReleaseStabilityReadyState runtimeBrowserReleaseStabilityReadyState,
+        IBrowserClientRuntimeBrowserLaunchStabilitySession runtimeBrowserLaunchStabilitySession,
+        IBrowserClientRuntimeBrowserLaunchStabilityReadyState runtimeBrowserLaunchStabilityReadyState,
+        IBrowserClientRuntimeBrowserGoLiveStabilitySession runtimeBrowserGoLiveStabilitySession,
+        IBrowserClientRuntimeBrowserGoLiveStabilityReadyState runtimeBrowserGoLiveStabilityReadyState,
+        IBrowserClientRuntimeBrowserServiceContinuitySession runtimeBrowserServiceContinuitySession,
+        IBrowserClientRuntimeBrowserServiceContinuityReadyState runtimeBrowserServiceContinuityReadyState,
+        IBrowserClientRuntimeBrowserRuntimeContinuitySession runtimeBrowserRuntimeContinuitySession,
+        IBrowserClientRuntimeBrowserRuntimeContinuityReadyState runtimeBrowserRuntimeContinuityReadyState,
+        IBrowserClientRuntimeBrowserSessionContinuitySession runtimeBrowserSessionContinuitySession,
+        IBrowserClientRuntimeBrowserSessionContinuityReadyState runtimeBrowserSessionContinuityReadyState,
+        IBrowserClientRuntimeBrowserStateContinuitySession runtimeBrowserStateContinuitySession,
+        IBrowserClientRuntimeBrowserStateContinuityReadyState runtimeBrowserStateContinuityReadyState,
+        IBrowserClientRuntimeBrowserInteractionContinuitySession runtimeBrowserInteractionContinuitySession,
+        IBrowserClientRuntimeBrowserInteractionContinuityReadyState runtimeBrowserInteractionContinuityReadyState,
+        IBrowserClientRuntimeBrowserFlowContinuitySession runtimeBrowserFlowContinuitySession,
+        IBrowserClientRuntimeBrowserFlowContinuityReadyState runtimeBrowserFlowContinuityReadyState,
+        IBrowserClientRuntimeBrowserContinuationReadinessSession runtimeBrowserContinuationReadinessSession,
+        IBrowserClientRuntimeBrowserContinuationReadinessReadyState runtimeBrowserContinuationReadinessReadyState,
+        IBrowserClientRuntimeBrowserSustainmentAssuranceSession runtimeBrowserSustainmentAssuranceSession,
+        IBrowserClientRuntimeBrowserSustainmentAssuranceReadyState runtimeBrowserSustainmentAssuranceReadyState,
+        IBrowserClientRuntimeBrowserLiveSustainabilitySession runtimeBrowserLiveSustainabilitySession,
+        IBrowserClientRuntimeBrowserLiveSustainabilityReadyState runtimeBrowserLiveSustainabilityReadyState,
+        IBrowserClientRuntimeBrowserRuntimeSustainabilitySession runtimeBrowserRuntimeSustainabilitySession,
+        IBrowserClientRuntimeBrowserRuntimeSustainabilityReadyState runtimeBrowserRuntimeSustainabilityReadyState,
+        IBrowserClientRuntimeBrowserServiceSustainabilitySession runtimeBrowserServiceSustainabilitySession,
+        IBrowserClientRuntimeBrowserServiceSustainabilityReadyState runtimeBrowserServiceSustainabilityReadyState,
+        IBrowserClientRuntimeBrowserProductionStabilitySession runtimeBrowserProductionStabilitySession,
+        IBrowserClientRuntimeBrowserProductionStabilityReadyState runtimeBrowserProductionStabilityReadyState,
+        IBrowserClientRuntimeBrowserProductionContinuitySession runtimeBrowserProductionContinuitySession,
+        IBrowserClientRuntimeBrowserProductionContinuityReadyState runtimeBrowserProductionContinuityReadyState,
+        IBrowserClientRuntimeBrowserLiveAssuranceSession runtimeBrowserLiveAssuranceSession,
+        IBrowserClientRuntimeBrowserLiveAssuranceReadyState runtimeBrowserLiveAssuranceReadyState,
+        IBrowserClientRuntimeBrowserSteadyOperationReadinessSession runtimeBrowserSteadyOperationReadinessSession,
+        IBrowserClientRuntimeBrowserSteadyOperationReadinessReadyState runtimeBrowserSteadyOperationReadinessReadyState)
     {
         _browserClientAssetService = browserClientAssetService;
         _bridgeService = bridgeService;
@@ -1177,6 +1338,87 @@ public sealed class BrowserSelfTestReportService
         _runtimeBrowserAccomplishmentReadyState = runtimeBrowserAccomplishmentReadyState;
         _runtimeBrowserCompletionReadinessSession = runtimeBrowserCompletionReadinessSession;
         _runtimeBrowserCompletionReadinessReadyState = runtimeBrowserCompletionReadinessReadyState;
+        _runtimeBrowserOperationalReadinessSession = runtimeBrowserOperationalReadinessSession;
+        _runtimeBrowserOperationalReadinessReadyState = runtimeBrowserOperationalReadinessReadyState;
+        _runtimeBrowserDeploymentReadinessSession = runtimeBrowserDeploymentReadinessSession;
+        _runtimeBrowserDeploymentReadinessReadyState = runtimeBrowserDeploymentReadinessReadyState;
+        _runtimeBrowserReleaseReadinessSession = runtimeBrowserReleaseReadinessSession;
+        _runtimeBrowserReleaseReadinessReadyState = runtimeBrowserReleaseReadinessReadyState;
+        _runtimeBrowserLaunchAssuranceSession = runtimeBrowserLaunchAssuranceSession;
+        _runtimeBrowserLaunchAssuranceReadyState = runtimeBrowserLaunchAssuranceReadyState;
+        _runtimeBrowserGoLiveReadinessSession = runtimeBrowserGoLiveReadinessSession;
+        _runtimeBrowserGoLiveReadinessReadyState = runtimeBrowserGoLiveReadinessReadyState;
+        _runtimeBrowserServiceActivationSession = runtimeBrowserServiceActivationSession;
+        _runtimeBrowserServiceActivationReadyState = runtimeBrowserServiceActivationReadyState;
+        _runtimeBrowserSteadyOperationSession = runtimeBrowserSteadyOperationSession;
+        _runtimeBrowserSteadyOperationReadyState = runtimeBrowserSteadyOperationReadyState;
+        _runtimeBrowserRuntimeStabilitySession = runtimeBrowserRuntimeStabilitySession;
+        _runtimeBrowserRuntimeStabilityReadyState = runtimeBrowserRuntimeStabilityReadyState;
+        _runtimeBrowserSessionStabilitySession = runtimeBrowserSessionStabilitySession;
+        _runtimeBrowserSessionStabilityReadyState = runtimeBrowserSessionStabilityReadyState;
+        _runtimeBrowserStateStabilitySession = runtimeBrowserStateStabilitySession;
+        _runtimeBrowserStateStabilityReadyState = runtimeBrowserStateStabilityReadyState;
+        _runtimeBrowserInteractionStabilitySession = runtimeBrowserInteractionStabilitySession;
+        _runtimeBrowserInteractionStabilityReadyState = runtimeBrowserInteractionStabilityReadyState;
+        _runtimeBrowserContinuationAssuranceSession = runtimeBrowserContinuationAssuranceSession;
+        _runtimeBrowserContinuationAssuranceReadyState = runtimeBrowserContinuationAssuranceReadyState;
+        _runtimeBrowserSustainmentReadinessSession = runtimeBrowserSustainmentReadinessSession;
+        _runtimeBrowserSustainmentReadinessReadyState = runtimeBrowserSustainmentReadinessReadyState;
+        _runtimeBrowserLiveOperabilitySession = runtimeBrowserLiveOperabilitySession;
+        _runtimeBrowserLiveOperabilityReadyState = runtimeBrowserLiveOperabilityReadyState;
+        _runtimeBrowserRuntimeOperabilitySession = runtimeBrowserRuntimeOperabilitySession;
+        _runtimeBrowserRuntimeOperabilityReadyState = runtimeBrowserRuntimeOperabilityReadyState;
+        _runtimeBrowserServiceAssuranceSession = runtimeBrowserServiceAssuranceSession;
+        _runtimeBrowserServiceAssuranceReadyState = runtimeBrowserServiceAssuranceReadyState;
+        _runtimeBrowserProductionReadinessSession = runtimeBrowserProductionReadinessSession;
+        _runtimeBrowserProductionReadinessReadyState = runtimeBrowserProductionReadinessReadyState;
+        _runtimeBrowserProductionAssuranceSession = runtimeBrowserProductionAssuranceSession;
+        _runtimeBrowserProductionAssuranceReadyState = runtimeBrowserProductionAssuranceReadyState;
+        _runtimeBrowserLiveStabilitySession = runtimeBrowserLiveStabilitySession;
+        _runtimeBrowserLiveStabilityReadyState = runtimeBrowserLiveStabilityReadyState;
+        _runtimeBrowserSteadyStateReadinessSession = runtimeBrowserSteadyStateReadinessSession;
+        _runtimeBrowserSteadyStateReadinessReadyState = runtimeBrowserSteadyStateReadinessReadyState;
+        _runtimeBrowserOperationalStabilitySession = runtimeBrowserOperationalStabilitySession;
+        _runtimeBrowserOperationalStabilityReadyState = runtimeBrowserOperationalStabilityReadyState;
+        _runtimeBrowserDeploymentStabilitySession = runtimeBrowserDeploymentStabilitySession;
+        _runtimeBrowserDeploymentStabilityReadyState = runtimeBrowserDeploymentStabilityReadyState;
+        _runtimeBrowserReleaseStabilitySession = runtimeBrowserReleaseStabilitySession;
+        _runtimeBrowserReleaseStabilityReadyState = runtimeBrowserReleaseStabilityReadyState;
+        _runtimeBrowserLaunchStabilitySession = runtimeBrowserLaunchStabilitySession;
+        _runtimeBrowserLaunchStabilityReadyState = runtimeBrowserLaunchStabilityReadyState;
+        _runtimeBrowserGoLiveStabilitySession = runtimeBrowserGoLiveStabilitySession;
+        _runtimeBrowserGoLiveStabilityReadyState = runtimeBrowserGoLiveStabilityReadyState;
+        _runtimeBrowserServiceContinuitySession = runtimeBrowserServiceContinuitySession;
+        _runtimeBrowserServiceContinuityReadyState = runtimeBrowserServiceContinuityReadyState;
+        _runtimeBrowserRuntimeContinuitySession = runtimeBrowserRuntimeContinuitySession;
+        _runtimeBrowserRuntimeContinuityReadyState = runtimeBrowserRuntimeContinuityReadyState;
+        _runtimeBrowserSessionContinuitySession = runtimeBrowserSessionContinuitySession;
+        _runtimeBrowserSessionContinuityReadyState = runtimeBrowserSessionContinuityReadyState;
+        _runtimeBrowserStateContinuitySession = runtimeBrowserStateContinuitySession;
+        _runtimeBrowserStateContinuityReadyState = runtimeBrowserStateContinuityReadyState;
+        _runtimeBrowserInteractionContinuitySession = runtimeBrowserInteractionContinuitySession;
+        _runtimeBrowserInteractionContinuityReadyState = runtimeBrowserInteractionContinuityReadyState;
+        _runtimeBrowserFlowContinuitySession = runtimeBrowserFlowContinuitySession;
+        _runtimeBrowserFlowContinuityReadyState = runtimeBrowserFlowContinuityReadyState;
+        _runtimeBrowserContinuationReadinessSession = runtimeBrowserContinuationReadinessSession;
+        _runtimeBrowserContinuationReadinessReadyState = runtimeBrowserContinuationReadinessReadyState;
+        _runtimeBrowserSustainmentAssuranceSession = runtimeBrowserSustainmentAssuranceSession;
+        _runtimeBrowserSustainmentAssuranceReadyState = runtimeBrowserSustainmentAssuranceReadyState;
+        _runtimeBrowserLiveSustainabilitySession = runtimeBrowserLiveSustainabilitySession;
+        _runtimeBrowserLiveSustainabilityReadyState = runtimeBrowserLiveSustainabilityReadyState;
+        _runtimeBrowserRuntimeSustainabilitySession = runtimeBrowserRuntimeSustainabilitySession;
+        _runtimeBrowserRuntimeSustainabilityReadyState = runtimeBrowserRuntimeSustainabilityReadyState;
+        _runtimeBrowserServiceSustainabilitySession = runtimeBrowserServiceSustainabilitySession;
+        _runtimeBrowserServiceSustainabilityReadyState = runtimeBrowserServiceSustainabilityReadyState;
+        _runtimeBrowserProductionStabilitySession = runtimeBrowserProductionStabilitySession;
+        _runtimeBrowserProductionStabilityReadyState = runtimeBrowserProductionStabilityReadyState;
+        _runtimeBrowserProductionContinuitySession = runtimeBrowserProductionContinuitySession;
+        _runtimeBrowserProductionContinuityReadyState = runtimeBrowserProductionContinuityReadyState;
+        _runtimeBrowserLiveAssuranceSession = runtimeBrowserLiveAssuranceSession;
+        _runtimeBrowserLiveAssuranceReadyState = runtimeBrowserLiveAssuranceReadyState;
+        _runtimeBrowserSteadyOperationReadinessSession = runtimeBrowserSteadyOperationReadinessSession;
+        _runtimeBrowserSteadyOperationReadinessReadyState = runtimeBrowserSteadyOperationReadinessReadyState;
+
         _runtimeBrowserResolutionSession = runtimeBrowserResolutionSession;
         _runtimeBrowserResolutionReadyState = runtimeBrowserResolutionReadyState;
         _runtimeBrowserCertaintySession = runtimeBrowserCertaintySession;
@@ -1633,6 +1875,122 @@ public sealed class BrowserSelfTestReportService
         BrowserClientRuntimeBrowserAccomplishmentReadyStateResult runtimeBrowserAccomplishmentReadyState = await _runtimeBrowserAccomplishmentReadyState.BuildAsync();
         BrowserClientRuntimeBrowserCompletionReadinessSessionResult runtimeBrowserCompletionReadinessSession = await _runtimeBrowserCompletionReadinessSession.CreateAsync();
         BrowserClientRuntimeBrowserCompletionReadinessReadyStateResult runtimeBrowserCompletionReadinessReadyState = await _runtimeBrowserCompletionReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserOperationalReadinessSessionResult runtimeBrowserOperationalReadinessSession = await _runtimeBrowserOperationalReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserOperationalReadinessReadyStateResult runtimeBrowserOperationalReadinessReadyState = await _runtimeBrowserOperationalReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserDeploymentReadinessSessionResult runtimeBrowserDeploymentReadinessSession = await _runtimeBrowserDeploymentReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserDeploymentReadinessReadyStateResult runtimeBrowserDeploymentReadinessReadyState = await _runtimeBrowserDeploymentReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserReleaseReadinessSessionResult runtimeBrowserReleaseReadinessSession = await _runtimeBrowserReleaseReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserReleaseReadinessReadyStateResult runtimeBrowserReleaseReadinessReadyState = await _runtimeBrowserReleaseReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserLaunchAssuranceSessionResult runtimeBrowserLaunchAssuranceSession = await _runtimeBrowserLaunchAssuranceSession.CreateAsync();
+        BrowserClientRuntimeBrowserLaunchAssuranceReadyStateResult runtimeBrowserLaunchAssuranceReadyState = await _runtimeBrowserLaunchAssuranceReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserGoLiveReadinessSessionResult runtimeBrowserGoLiveReadinessSession = await _runtimeBrowserGoLiveReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserGoLiveReadinessReadyStateResult runtimeBrowserGoLiveReadinessReadyState = await _runtimeBrowserGoLiveReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserServiceActivationSessionResult runtimeBrowserServiceActivationSession = await _runtimeBrowserServiceActivationSession.CreateAsync();
+        BrowserClientRuntimeBrowserServiceActivationReadyStateResult runtimeBrowserServiceActivationReadyState = await _runtimeBrowserServiceActivationReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSteadyOperationSessionResult runtimeBrowserSteadyOperationSession = await _runtimeBrowserSteadyOperationSession.CreateAsync();
+        BrowserClientRuntimeBrowserSteadyOperationReadyStateResult runtimeBrowserSteadyOperationReadyState = await _runtimeBrowserSteadyOperationReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserRuntimeStabilitySessionResult runtimeBrowserRuntimeStabilitySession = await _runtimeBrowserRuntimeStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserRuntimeStabilityReadyStateResult runtimeBrowserRuntimeStabilityReadyState = await _runtimeBrowserRuntimeStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSessionStabilitySessionResult runtimeBrowserSessionStabilitySession = await _runtimeBrowserSessionStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserSessionStabilityReadyStateResult runtimeBrowserSessionStabilityReadyState = await _runtimeBrowserSessionStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserStateStabilitySessionResult runtimeBrowserStateStabilitySession = await _runtimeBrowserStateStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserStateStabilityReadyStateResult runtimeBrowserStateStabilityReadyState = await _runtimeBrowserStateStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserInteractionStabilitySessionResult runtimeBrowserInteractionStabilitySession = await _runtimeBrowserInteractionStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserInteractionStabilityReadyStateResult runtimeBrowserInteractionStabilityReadyState = await _runtimeBrowserInteractionStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserContinuationAssuranceSessionResult runtimeBrowserContinuationAssuranceSession = await _runtimeBrowserContinuationAssuranceSession.CreateAsync();
+        BrowserClientRuntimeBrowserContinuationAssuranceReadyStateResult runtimeBrowserContinuationAssuranceReadyState = await _runtimeBrowserContinuationAssuranceReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSustainmentReadinessSessionResult runtimeBrowserSustainmentReadinessSession = await _runtimeBrowserSustainmentReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserSustainmentReadinessReadyStateResult runtimeBrowserSustainmentReadinessReadyState = await _runtimeBrowserSustainmentReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserLiveOperabilitySessionResult runtimeBrowserLiveOperabilitySession = await _runtimeBrowserLiveOperabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserLiveOperabilityReadyStateResult runtimeBrowserLiveOperabilityReadyState = await _runtimeBrowserLiveOperabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserRuntimeOperabilitySessionResult runtimeBrowserRuntimeOperabilitySession = await _runtimeBrowserRuntimeOperabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserRuntimeOperabilityReadyStateResult runtimeBrowserRuntimeOperabilityReadyState = await _runtimeBrowserRuntimeOperabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserServiceAssuranceSessionResult runtimeBrowserServiceAssuranceSession = await _runtimeBrowserServiceAssuranceSession.CreateAsync();
+        BrowserClientRuntimeBrowserServiceAssuranceReadyStateResult runtimeBrowserServiceAssuranceReadyState = await _runtimeBrowserServiceAssuranceReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserProductionReadinessSessionResult runtimeBrowserProductionReadinessSession = await _runtimeBrowserProductionReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserProductionReadinessReadyStateResult runtimeBrowserProductionReadinessReadyState = await _runtimeBrowserProductionReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserProductionAssuranceSessionResult runtimeBrowserProductionAssuranceSession = await _runtimeBrowserProductionAssuranceSession.CreateAsync();
+        BrowserClientRuntimeBrowserProductionAssuranceReadyStateResult runtimeBrowserProductionAssuranceReadyState = await _runtimeBrowserProductionAssuranceReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserLiveStabilitySessionResult runtimeBrowserLiveStabilitySession = await _runtimeBrowserLiveStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserLiveStabilityReadyStateResult runtimeBrowserLiveStabilityReadyState = await _runtimeBrowserLiveStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSteadyStateReadinessSessionResult runtimeBrowserSteadyStateReadinessSession = await _runtimeBrowserSteadyStateReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserSteadyStateReadinessReadyStateResult runtimeBrowserSteadyStateReadinessReadyState = await _runtimeBrowserSteadyStateReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserOperationalStabilitySessionResult runtimeBrowserOperationalStabilitySession = await _runtimeBrowserOperationalStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserOperationalStabilityReadyStateResult runtimeBrowserOperationalStabilityReadyState = await _runtimeBrowserOperationalStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserDeploymentStabilitySessionResult runtimeBrowserDeploymentStabilitySession = await _runtimeBrowserDeploymentStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserDeploymentStabilityReadyStateResult runtimeBrowserDeploymentStabilityReadyState = await _runtimeBrowserDeploymentStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserReleaseStabilitySessionResult runtimeBrowserReleaseStabilitySession = await _runtimeBrowserReleaseStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserReleaseStabilityReadyStateResult runtimeBrowserReleaseStabilityReadyState = await _runtimeBrowserReleaseStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserLaunchStabilitySessionResult runtimeBrowserLaunchStabilitySession = await _runtimeBrowserLaunchStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserLaunchStabilityReadyStateResult runtimeBrowserLaunchStabilityReadyState = await _runtimeBrowserLaunchStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserGoLiveStabilitySessionResult runtimeBrowserGoLiveStabilitySession = await _runtimeBrowserGoLiveStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserGoLiveStabilityReadyStateResult runtimeBrowserGoLiveStabilityReadyState = await _runtimeBrowserGoLiveStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserServiceContinuitySessionResult runtimeBrowserServiceContinuitySession = await _runtimeBrowserServiceContinuitySession.CreateAsync();
+        BrowserClientRuntimeBrowserServiceContinuityReadyStateResult runtimeBrowserServiceContinuityReadyState = await _runtimeBrowserServiceContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserRuntimeContinuitySessionResult runtimeBrowserRuntimeContinuitySession = await _runtimeBrowserRuntimeContinuitySession.CreateAsync();
+        BrowserClientRuntimeBrowserRuntimeContinuityReadyStateResult runtimeBrowserRuntimeContinuityReadyState = await _runtimeBrowserRuntimeContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSessionContinuitySessionResult runtimeBrowserSessionContinuitySession = await _runtimeBrowserSessionContinuitySession.CreateAsync();
+        BrowserClientRuntimeBrowserSessionContinuityReadyStateResult runtimeBrowserSessionContinuityReadyState = await _runtimeBrowserSessionContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserStateContinuitySessionResult runtimeBrowserStateContinuitySession = await _runtimeBrowserStateContinuitySession.CreateAsync();
+        BrowserClientRuntimeBrowserStateContinuityReadyStateResult runtimeBrowserStateContinuityReadyState = await _runtimeBrowserStateContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserInteractionContinuitySessionResult runtimeBrowserInteractionContinuitySession = await _runtimeBrowserInteractionContinuitySession.CreateAsync();
+        BrowserClientRuntimeBrowserInteractionContinuityReadyStateResult runtimeBrowserInteractionContinuityReadyState = await _runtimeBrowserInteractionContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserFlowContinuitySessionResult runtimeBrowserFlowContinuitySession = await _runtimeBrowserFlowContinuitySession.CreateAsync();
+        BrowserClientRuntimeBrowserFlowContinuityReadyStateResult runtimeBrowserFlowContinuityReadyState = await _runtimeBrowserFlowContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserContinuationReadinessSessionResult runtimeBrowserContinuationReadinessSession = await _runtimeBrowserContinuationReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserContinuationReadinessReadyStateResult runtimeBrowserContinuationReadinessReadyState = await _runtimeBrowserContinuationReadinessReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSustainmentAssuranceSessionResult runtimeBrowserSustainmentAssuranceSession = await _runtimeBrowserSustainmentAssuranceSession.CreateAsync();
+        BrowserClientRuntimeBrowserSustainmentAssuranceReadyStateResult runtimeBrowserSustainmentAssuranceReadyState = await _runtimeBrowserSustainmentAssuranceReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserLiveSustainabilitySessionResult runtimeBrowserLiveSustainabilitySession = await _runtimeBrowserLiveSustainabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserLiveSustainabilityReadyStateResult runtimeBrowserLiveSustainabilityReadyState = await _runtimeBrowserLiveSustainabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserRuntimeSustainabilitySessionResult runtimeBrowserRuntimeSustainabilitySession = await _runtimeBrowserRuntimeSustainabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserRuntimeSustainabilityReadyStateResult runtimeBrowserRuntimeSustainabilityReadyState = await _runtimeBrowserRuntimeSustainabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserServiceSustainabilitySessionResult runtimeBrowserServiceSustainabilitySession = await _runtimeBrowserServiceSustainabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserServiceSustainabilityReadyStateResult runtimeBrowserServiceSustainabilityReadyState = await _runtimeBrowserServiceSustainabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserProductionStabilitySessionResult runtimeBrowserProductionStabilitySession = await _runtimeBrowserProductionStabilitySession.CreateAsync();
+        BrowserClientRuntimeBrowserProductionStabilityReadyStateResult runtimeBrowserProductionStabilityReadyState = await _runtimeBrowserProductionStabilityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserProductionContinuitySessionResult runtimeBrowserProductionContinuitySession = await _runtimeBrowserProductionContinuitySession.CreateAsync();
+        BrowserClientRuntimeBrowserProductionContinuityReadyStateResult runtimeBrowserProductionContinuityReadyState = await _runtimeBrowserProductionContinuityReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserLiveAssuranceSessionResult runtimeBrowserLiveAssuranceSession = await _runtimeBrowserLiveAssuranceSession.CreateAsync();
+        BrowserClientRuntimeBrowserLiveAssuranceReadyStateResult runtimeBrowserLiveAssuranceReadyState = await _runtimeBrowserLiveAssuranceReadyState.BuildAsync();
+        BrowserClientRuntimeBrowserSteadyOperationReadinessSessionResult runtimeBrowserSteadyOperationReadinessSession = await _runtimeBrowserSteadyOperationReadinessSession.CreateAsync();
+        BrowserClientRuntimeBrowserSteadyOperationReadinessReadyStateResult runtimeBrowserSteadyOperationReadinessReadyState = await _runtimeBrowserSteadyOperationReadinessReadyState.BuildAsync();
+        BrowserRuntimeTailExtensionResult runtimeBrowserTailExtension = new()
+        {
+            IsReady = runtimeBrowserSteadyOperationReadinessReadyState.IsReady,
+            ExtensionVersion = "runtime-browser-tail-extension-v1",
+            SourceStateVersion = runtimeBrowserSteadyOperationReadinessReadyState.BrowserSteadyOperationReadinessReadyStateVersion,
+            SourceSessionVersion = runtimeBrowserSteadyOperationReadinessReadyState.BrowserSteadyOperationReadinessSessionVersion,
+            Phases =
+            [
+                "stabilize-browser-host",
+                "stabilize-browser-session",
+                "stabilize-runtime-bindings",
+                "stabilize-launch-control",
+                "stabilize-platform-links",
+                "stabilize-render-path",
+                "stabilize-input-path",
+                "stabilize-storage-path",
+                "stabilize-state-path",
+                "stabilize-loop-path",
+                "stabilize-restore-path",
+                "stabilize-resume-path",
+                "stabilize-recovery-path",
+                "stabilize-snapshot-path",
+                "stabilize-archive-path",
+                "stabilize-monitoring-path",
+                "stabilize-security-path",
+                "stabilize-governance-path",
+                "stabilize-compliance-path",
+                "stabilize-operational-path"
+            ],
+            TotalMs = runtimeBrowserSteadyOperationReadinessReadyState.TotalMs,
+            Summary = runtimeBrowserSteadyOperationReadinessReadyState.IsReady
+                ? "Runtime tail extension ready with 20 stabilization phase(s)."
+                : "Runtime tail extension blocked by steady-operation readiness.",
+            Error = runtimeBrowserSteadyOperationReadinessReadyState.IsReady ? string.Empty : runtimeBrowserSteadyOperationReadinessReadyState.Error
+        };
+
 
         BrowserSelfTestReport report = new()
         {
@@ -2047,7 +2405,88 @@ public sealed class BrowserSelfTestReportService
             RuntimeBrowserAccomplishmentSession = runtimeBrowserAccomplishmentSession,
             RuntimeBrowserAccomplishmentReadyState = runtimeBrowserAccomplishmentReadyState,
             RuntimeBrowserCompletionReadinessSession = runtimeBrowserCompletionReadinessSession,
-            RuntimeBrowserCompletionReadinessReadyState = runtimeBrowserCompletionReadinessReadyState
+            RuntimeBrowserCompletionReadinessReadyState = runtimeBrowserCompletionReadinessReadyState,
+            RuntimeBrowserOperationalReadinessSession = runtimeBrowserOperationalReadinessSession,
+            RuntimeBrowserOperationalReadinessReadyState = runtimeBrowserOperationalReadinessReadyState,
+            RuntimeBrowserDeploymentReadinessSession = runtimeBrowserDeploymentReadinessSession,
+            RuntimeBrowserDeploymentReadinessReadyState = runtimeBrowserDeploymentReadinessReadyState,
+            RuntimeBrowserReleaseReadinessSession = runtimeBrowserReleaseReadinessSession,
+            RuntimeBrowserReleaseReadinessReadyState = runtimeBrowserReleaseReadinessReadyState,
+            RuntimeBrowserLaunchAssuranceSession = runtimeBrowserLaunchAssuranceSession,
+            RuntimeBrowserLaunchAssuranceReadyState = runtimeBrowserLaunchAssuranceReadyState,
+            RuntimeBrowserGoLiveReadinessSession = runtimeBrowserGoLiveReadinessSession,
+            RuntimeBrowserGoLiveReadinessReadyState = runtimeBrowserGoLiveReadinessReadyState,
+            RuntimeBrowserServiceActivationSession = runtimeBrowserServiceActivationSession,
+            RuntimeBrowserServiceActivationReadyState = runtimeBrowserServiceActivationReadyState,
+            RuntimeBrowserSteadyOperationSession = runtimeBrowserSteadyOperationSession,
+            RuntimeBrowserSteadyOperationReadyState = runtimeBrowserSteadyOperationReadyState,
+            RuntimeBrowserRuntimeStabilitySession = runtimeBrowserRuntimeStabilitySession,
+            RuntimeBrowserRuntimeStabilityReadyState = runtimeBrowserRuntimeStabilityReadyState,
+            RuntimeBrowserSessionStabilitySession = runtimeBrowserSessionStabilitySession,
+            RuntimeBrowserSessionStabilityReadyState = runtimeBrowserSessionStabilityReadyState,
+            RuntimeBrowserStateStabilitySession = runtimeBrowserStateStabilitySession,
+            RuntimeBrowserStateStabilityReadyState = runtimeBrowserStateStabilityReadyState,
+            RuntimeBrowserInteractionStabilitySession = runtimeBrowserInteractionStabilitySession,
+            RuntimeBrowserInteractionStabilityReadyState = runtimeBrowserInteractionStabilityReadyState,
+            RuntimeBrowserContinuationAssuranceSession = runtimeBrowserContinuationAssuranceSession,
+            RuntimeBrowserContinuationAssuranceReadyState = runtimeBrowserContinuationAssuranceReadyState,
+            RuntimeBrowserSustainmentReadinessSession = runtimeBrowserSustainmentReadinessSession,
+            RuntimeBrowserSustainmentReadinessReadyState = runtimeBrowserSustainmentReadinessReadyState,
+            RuntimeBrowserLiveOperabilitySession = runtimeBrowserLiveOperabilitySession,
+            RuntimeBrowserLiveOperabilityReadyState = runtimeBrowserLiveOperabilityReadyState,
+            RuntimeBrowserRuntimeOperabilitySession = runtimeBrowserRuntimeOperabilitySession,
+            RuntimeBrowserRuntimeOperabilityReadyState = runtimeBrowserRuntimeOperabilityReadyState,
+            RuntimeBrowserServiceAssuranceSession = runtimeBrowserServiceAssuranceSession,
+            RuntimeBrowserServiceAssuranceReadyState = runtimeBrowserServiceAssuranceReadyState,
+            RuntimeBrowserProductionReadinessSession = runtimeBrowserProductionReadinessSession,
+            RuntimeBrowserProductionReadinessReadyState = runtimeBrowserProductionReadinessReadyState,
+            RuntimeBrowserProductionAssuranceSession = runtimeBrowserProductionAssuranceSession,
+            RuntimeBrowserProductionAssuranceReadyState = runtimeBrowserProductionAssuranceReadyState,
+            RuntimeBrowserLiveStabilitySession = runtimeBrowserLiveStabilitySession,
+            RuntimeBrowserLiveStabilityReadyState = runtimeBrowserLiveStabilityReadyState,
+            RuntimeBrowserSteadyStateReadinessSession = runtimeBrowserSteadyStateReadinessSession,
+            RuntimeBrowserSteadyStateReadinessReadyState = runtimeBrowserSteadyStateReadinessReadyState,
+            RuntimeBrowserOperationalStabilitySession = runtimeBrowserOperationalStabilitySession,
+            RuntimeBrowserOperationalStabilityReadyState = runtimeBrowserOperationalStabilityReadyState,
+            RuntimeBrowserDeploymentStabilitySession = runtimeBrowserDeploymentStabilitySession,
+            RuntimeBrowserDeploymentStabilityReadyState = runtimeBrowserDeploymentStabilityReadyState,
+            RuntimeBrowserReleaseStabilitySession = runtimeBrowserReleaseStabilitySession,
+            RuntimeBrowserReleaseStabilityReadyState = runtimeBrowserReleaseStabilityReadyState,
+            RuntimeBrowserLaunchStabilitySession = runtimeBrowserLaunchStabilitySession,
+            RuntimeBrowserLaunchStabilityReadyState = runtimeBrowserLaunchStabilityReadyState,
+            RuntimeBrowserGoLiveStabilitySession = runtimeBrowserGoLiveStabilitySession,
+            RuntimeBrowserGoLiveStabilityReadyState = runtimeBrowserGoLiveStabilityReadyState,
+            RuntimeBrowserServiceContinuitySession = runtimeBrowserServiceContinuitySession,
+            RuntimeBrowserServiceContinuityReadyState = runtimeBrowserServiceContinuityReadyState,
+            RuntimeBrowserRuntimeContinuitySession = runtimeBrowserRuntimeContinuitySession,
+            RuntimeBrowserRuntimeContinuityReadyState = runtimeBrowserRuntimeContinuityReadyState,
+            RuntimeBrowserSessionContinuitySession = runtimeBrowserSessionContinuitySession,
+            RuntimeBrowserSessionContinuityReadyState = runtimeBrowserSessionContinuityReadyState,
+            RuntimeBrowserStateContinuitySession = runtimeBrowserStateContinuitySession,
+            RuntimeBrowserStateContinuityReadyState = runtimeBrowserStateContinuityReadyState,
+            RuntimeBrowserInteractionContinuitySession = runtimeBrowserInteractionContinuitySession,
+            RuntimeBrowserInteractionContinuityReadyState = runtimeBrowserInteractionContinuityReadyState,
+            RuntimeBrowserFlowContinuitySession = runtimeBrowserFlowContinuitySession,
+            RuntimeBrowserFlowContinuityReadyState = runtimeBrowserFlowContinuityReadyState,
+            RuntimeBrowserContinuationReadinessSession = runtimeBrowserContinuationReadinessSession,
+            RuntimeBrowserContinuationReadinessReadyState = runtimeBrowserContinuationReadinessReadyState,
+            RuntimeBrowserSustainmentAssuranceSession = runtimeBrowserSustainmentAssuranceSession,
+            RuntimeBrowserSustainmentAssuranceReadyState = runtimeBrowserSustainmentAssuranceReadyState,
+            RuntimeBrowserLiveSustainabilitySession = runtimeBrowserLiveSustainabilitySession,
+            RuntimeBrowserLiveSustainabilityReadyState = runtimeBrowserLiveSustainabilityReadyState,
+            RuntimeBrowserRuntimeSustainabilitySession = runtimeBrowserRuntimeSustainabilitySession,
+            RuntimeBrowserRuntimeSustainabilityReadyState = runtimeBrowserRuntimeSustainabilityReadyState,
+            RuntimeBrowserServiceSustainabilitySession = runtimeBrowserServiceSustainabilitySession,
+            RuntimeBrowserServiceSustainabilityReadyState = runtimeBrowserServiceSustainabilityReadyState,
+            RuntimeBrowserProductionStabilitySession = runtimeBrowserProductionStabilitySession,
+            RuntimeBrowserProductionStabilityReadyState = runtimeBrowserProductionStabilityReadyState,
+            RuntimeBrowserProductionContinuitySession = runtimeBrowserProductionContinuitySession,
+            RuntimeBrowserProductionContinuityReadyState = runtimeBrowserProductionContinuityReadyState,
+            RuntimeBrowserLiveAssuranceSession = runtimeBrowserLiveAssuranceSession,
+            RuntimeBrowserLiveAssuranceReadyState = runtimeBrowserLiveAssuranceReadyState,
+            RuntimeBrowserSteadyOperationReadinessSession = runtimeBrowserSteadyOperationReadinessSession,
+            RuntimeBrowserSteadyOperationReadinessReadyState = runtimeBrowserSteadyOperationReadinessReadyState,
+            RuntimeTailExtension = runtimeBrowserTailExtension
         };
 
         report.Summary = BuildSummary(report);
@@ -2463,7 +2902,88 @@ public sealed class BrowserSelfTestReportService
             $"browserAccomplishmentSession={(report.RuntimeBrowserAccomplishmentSession.IsReady ? "ok" : "fail")}",
             $"browserAccomplishmentReadyState={(report.RuntimeBrowserAccomplishmentReadyState.IsReady ? "ok" : "fail")}",
             $"browserCompletionReadinessSession={(report.RuntimeBrowserCompletionReadinessSession.IsReady ? "ok" : "fail")}",
-            $"browserCompletionReadinessReadyState={(report.RuntimeBrowserCompletionReadinessReadyState.IsReady ? "ok" : "fail")}"
+            $"browserCompletionReadinessReadyState={(report.RuntimeBrowserCompletionReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserOperationalReadinessSession={(report.RuntimeBrowserOperationalReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserOperationalReadinessReadyState={(report.RuntimeBrowserOperationalReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserDeploymentReadinessSession={(report.RuntimeBrowserDeploymentReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserDeploymentReadinessReadyState={(report.RuntimeBrowserDeploymentReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserReleaseReadinessSession={(report.RuntimeBrowserReleaseReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserReleaseReadinessReadyState={(report.RuntimeBrowserReleaseReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserLaunchAssuranceSession={(report.RuntimeBrowserLaunchAssuranceSession.IsReady ? "ok" : "fail")}",
+            $"browserLaunchAssuranceReadyState={(report.RuntimeBrowserLaunchAssuranceReadyState.IsReady ? "ok" : "fail")}",
+            $"browserGoLiveReadinessSession={(report.RuntimeBrowserGoLiveReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserGoLiveReadinessReadyState={(report.RuntimeBrowserGoLiveReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserServiceActivationSession={(report.RuntimeBrowserServiceActivationSession.IsReady ? "ok" : "fail")}",
+            $"browserServiceActivationReadyState={(report.RuntimeBrowserServiceActivationReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSteadyOperationSession={(report.RuntimeBrowserSteadyOperationSession.IsReady ? "ok" : "fail")}",
+            $"browserSteadyOperationReadyState={(report.RuntimeBrowserSteadyOperationReadyState.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeStabilitySession={(report.RuntimeBrowserRuntimeStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeStabilityReadyState={(report.RuntimeBrowserRuntimeStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSessionStabilitySession={(report.RuntimeBrowserSessionStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserSessionStabilityReadyState={(report.RuntimeBrowserSessionStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserStateStabilitySession={(report.RuntimeBrowserStateStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserStateStabilityReadyState={(report.RuntimeBrowserStateStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserInteractionStabilitySession={(report.RuntimeBrowserInteractionStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserInteractionStabilityReadyState={(report.RuntimeBrowserInteractionStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserContinuationAssuranceSession={(report.RuntimeBrowserContinuationAssuranceSession.IsReady ? "ok" : "fail")}",
+            $"browserContinuationAssuranceReadyState={(report.RuntimeBrowserContinuationAssuranceReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSustainmentReadinessSession={(report.RuntimeBrowserSustainmentReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserSustainmentReadinessReadyState={(report.RuntimeBrowserSustainmentReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserLiveOperabilitySession={(report.RuntimeBrowserLiveOperabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserLiveOperabilityReadyState={(report.RuntimeBrowserLiveOperabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeOperabilitySession={(report.RuntimeBrowserRuntimeOperabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeOperabilityReadyState={(report.RuntimeBrowserRuntimeOperabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserServiceAssuranceSession={(report.RuntimeBrowserServiceAssuranceSession.IsReady ? "ok" : "fail")}",
+            $"browserServiceAssuranceReadyState={(report.RuntimeBrowserServiceAssuranceReadyState.IsReady ? "ok" : "fail")}",
+            $"browserProductionReadinessSession={(report.RuntimeBrowserProductionReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserProductionReadinessReadyState={(report.RuntimeBrowserProductionReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserProductionAssuranceSession={(report.RuntimeBrowserProductionAssuranceSession.IsReady ? "ok" : "fail")}",
+            $"browserProductionAssuranceReadyState={(report.RuntimeBrowserProductionAssuranceReadyState.IsReady ? "ok" : "fail")}",
+            $"browserLiveStabilitySession={(report.RuntimeBrowserLiveStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserLiveStabilityReadyState={(report.RuntimeBrowserLiveStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSteadyStateReadinessSession={(report.RuntimeBrowserSteadyStateReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserSteadyStateReadinessReadyState={(report.RuntimeBrowserSteadyStateReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserOperationalStabilitySession={(report.RuntimeBrowserOperationalStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserOperationalStabilityReadyState={(report.RuntimeBrowserOperationalStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserDeploymentStabilitySession={(report.RuntimeBrowserDeploymentStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserDeploymentStabilityReadyState={(report.RuntimeBrowserDeploymentStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserReleaseStabilitySession={(report.RuntimeBrowserReleaseStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserReleaseStabilityReadyState={(report.RuntimeBrowserReleaseStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserLaunchStabilitySession={(report.RuntimeBrowserLaunchStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserLaunchStabilityReadyState={(report.RuntimeBrowserLaunchStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserGoLiveStabilitySession={(report.RuntimeBrowserGoLiveStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserGoLiveStabilityReadyState={(report.RuntimeBrowserGoLiveStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserServiceContinuitySession={(report.RuntimeBrowserServiceContinuitySession.IsReady ? "ok" : "fail")}",
+            $"browserServiceContinuityReadyState={(report.RuntimeBrowserServiceContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeContinuitySession={(report.RuntimeBrowserRuntimeContinuitySession.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeContinuityReadyState={(report.RuntimeBrowserRuntimeContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSessionContinuitySession={(report.RuntimeBrowserSessionContinuitySession.IsReady ? "ok" : "fail")}",
+            $"browserSessionContinuityReadyState={(report.RuntimeBrowserSessionContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserStateContinuitySession={(report.RuntimeBrowserStateContinuitySession.IsReady ? "ok" : "fail")}",
+            $"browserStateContinuityReadyState={(report.RuntimeBrowserStateContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserInteractionContinuitySession={(report.RuntimeBrowserInteractionContinuitySession.IsReady ? "ok" : "fail")}",
+            $"browserInteractionContinuityReadyState={(report.RuntimeBrowserInteractionContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserFlowContinuitySession={(report.RuntimeBrowserFlowContinuitySession.IsReady ? "ok" : "fail")}",
+            $"browserFlowContinuityReadyState={(report.RuntimeBrowserFlowContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserContinuationReadinessSession={(report.RuntimeBrowserContinuationReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserContinuationReadinessReadyState={(report.RuntimeBrowserContinuationReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSustainmentAssuranceSession={(report.RuntimeBrowserSustainmentAssuranceSession.IsReady ? "ok" : "fail")}",
+            $"browserSustainmentAssuranceReadyState={(report.RuntimeBrowserSustainmentAssuranceReadyState.IsReady ? "ok" : "fail")}",
+            $"browserLiveSustainabilitySession={(report.RuntimeBrowserLiveSustainabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserLiveSustainabilityReadyState={(report.RuntimeBrowserLiveSustainabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeSustainabilitySession={(report.RuntimeBrowserRuntimeSustainabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserRuntimeSustainabilityReadyState={(report.RuntimeBrowserRuntimeSustainabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserServiceSustainabilitySession={(report.RuntimeBrowserServiceSustainabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserServiceSustainabilityReadyState={(report.RuntimeBrowserServiceSustainabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserProductionStabilitySession={(report.RuntimeBrowserProductionStabilitySession.IsReady ? "ok" : "fail")}",
+            $"browserProductionStabilityReadyState={(report.RuntimeBrowserProductionStabilityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserProductionContinuitySession={(report.RuntimeBrowserProductionContinuitySession.IsReady ? "ok" : "fail")}",
+            $"browserProductionContinuityReadyState={(report.RuntimeBrowserProductionContinuityReadyState.IsReady ? "ok" : "fail")}",
+            $"browserLiveAssuranceSession={(report.RuntimeBrowserLiveAssuranceSession.IsReady ? "ok" : "fail")}",
+            $"browserLiveAssuranceReadyState={(report.RuntimeBrowserLiveAssuranceReadyState.IsReady ? "ok" : "fail")}",
+            $"browserSteadyOperationReadinessSession={(report.RuntimeBrowserSteadyOperationReadinessSession.IsReady ? "ok" : "fail")}",
+            $"browserSteadyOperationReadinessReadyState={(report.RuntimeBrowserSteadyOperationReadinessReadyState.IsReady ? "ok" : "fail")}",
+            $"runtimeTailExtension={(report.RuntimeTailExtension.IsReady ? "ok" : "fail")}"
         );
     }
 }
@@ -2761,6 +3281,87 @@ public sealed class BrowserSelfTestReport
     [JsonIgnore] public BrowserClientRuntimeBrowserCompletionConfidenceReadyStateResult RuntimeBrowserCompletionConfidenceReadyState { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserCompletionReadinessSessionResult RuntimeBrowserCompletionReadinessSession { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserCompletionReadinessReadyStateResult RuntimeBrowserCompletionReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserOperationalReadinessSessionResult RuntimeBrowserOperationalReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserOperationalReadinessReadyStateResult RuntimeBrowserOperationalReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserDeploymentReadinessSessionResult RuntimeBrowserDeploymentReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserDeploymentReadinessReadyStateResult RuntimeBrowserDeploymentReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserReleaseReadinessSessionResult RuntimeBrowserReleaseReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserReleaseReadinessReadyStateResult RuntimeBrowserReleaseReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLaunchAssuranceSessionResult RuntimeBrowserLaunchAssuranceSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLaunchAssuranceReadyStateResult RuntimeBrowserLaunchAssuranceReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserGoLiveReadinessSessionResult RuntimeBrowserGoLiveReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserGoLiveReadinessReadyStateResult RuntimeBrowserGoLiveReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceActivationSessionResult RuntimeBrowserServiceActivationSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceActivationReadyStateResult RuntimeBrowserServiceActivationReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyOperationSessionResult RuntimeBrowserSteadyOperationSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyOperationReadyStateResult RuntimeBrowserSteadyOperationReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeStabilitySessionResult RuntimeBrowserRuntimeStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeStabilityReadyStateResult RuntimeBrowserRuntimeStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSessionStabilitySessionResult RuntimeBrowserSessionStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSessionStabilityReadyStateResult RuntimeBrowserSessionStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserStateStabilitySessionResult RuntimeBrowserStateStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserStateStabilityReadyStateResult RuntimeBrowserStateStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserInteractionStabilitySessionResult RuntimeBrowserInteractionStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserInteractionStabilityReadyStateResult RuntimeBrowserInteractionStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserContinuationAssuranceSessionResult RuntimeBrowserContinuationAssuranceSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserContinuationAssuranceReadyStateResult RuntimeBrowserContinuationAssuranceReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSustainmentReadinessSessionResult RuntimeBrowserSustainmentReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSustainmentReadinessReadyStateResult RuntimeBrowserSustainmentReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveOperabilitySessionResult RuntimeBrowserLiveOperabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveOperabilityReadyStateResult RuntimeBrowserLiveOperabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeOperabilitySessionResult RuntimeBrowserRuntimeOperabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeOperabilityReadyStateResult RuntimeBrowserRuntimeOperabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceAssuranceSessionResult RuntimeBrowserServiceAssuranceSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceAssuranceReadyStateResult RuntimeBrowserServiceAssuranceReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionReadinessSessionResult RuntimeBrowserProductionReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionReadinessReadyStateResult RuntimeBrowserProductionReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionAssuranceSessionResult RuntimeBrowserProductionAssuranceSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionAssuranceReadyStateResult RuntimeBrowserProductionAssuranceReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveStabilitySessionResult RuntimeBrowserLiveStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveStabilityReadyStateResult RuntimeBrowserLiveStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyStateReadinessSessionResult RuntimeBrowserSteadyStateReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyStateReadinessReadyStateResult RuntimeBrowserSteadyStateReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserOperationalStabilitySessionResult RuntimeBrowserOperationalStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserOperationalStabilityReadyStateResult RuntimeBrowserOperationalStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserDeploymentStabilitySessionResult RuntimeBrowserDeploymentStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserDeploymentStabilityReadyStateResult RuntimeBrowserDeploymentStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserReleaseStabilitySessionResult RuntimeBrowserReleaseStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserReleaseStabilityReadyStateResult RuntimeBrowserReleaseStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLaunchStabilitySessionResult RuntimeBrowserLaunchStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLaunchStabilityReadyStateResult RuntimeBrowserLaunchStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserGoLiveStabilitySessionResult RuntimeBrowserGoLiveStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserGoLiveStabilityReadyStateResult RuntimeBrowserGoLiveStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceContinuitySessionResult RuntimeBrowserServiceContinuitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceContinuityReadyStateResult RuntimeBrowserServiceContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeContinuitySessionResult RuntimeBrowserRuntimeContinuitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeContinuityReadyStateResult RuntimeBrowserRuntimeContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSessionContinuitySessionResult RuntimeBrowserSessionContinuitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSessionContinuityReadyStateResult RuntimeBrowserSessionContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserStateContinuitySessionResult RuntimeBrowserStateContinuitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserStateContinuityReadyStateResult RuntimeBrowserStateContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserInteractionContinuitySessionResult RuntimeBrowserInteractionContinuitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserInteractionContinuityReadyStateResult RuntimeBrowserInteractionContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserFlowContinuitySessionResult RuntimeBrowserFlowContinuitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserFlowContinuityReadyStateResult RuntimeBrowserFlowContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserContinuationReadinessSessionResult RuntimeBrowserContinuationReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserContinuationReadinessReadyStateResult RuntimeBrowserContinuationReadinessReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSustainmentAssuranceSessionResult RuntimeBrowserSustainmentAssuranceSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSustainmentAssuranceReadyStateResult RuntimeBrowserSustainmentAssuranceReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveSustainabilitySessionResult RuntimeBrowserLiveSustainabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveSustainabilityReadyStateResult RuntimeBrowserLiveSustainabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeSustainabilitySessionResult RuntimeBrowserRuntimeSustainabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserRuntimeSustainabilityReadyStateResult RuntimeBrowserRuntimeSustainabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceSustainabilitySessionResult RuntimeBrowserServiceSustainabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserServiceSustainabilityReadyStateResult RuntimeBrowserServiceSustainabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionStabilitySessionResult RuntimeBrowserProductionStabilitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionStabilityReadyStateResult RuntimeBrowserProductionStabilityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionContinuitySessionResult RuntimeBrowserProductionContinuitySession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserProductionContinuityReadyStateResult RuntimeBrowserProductionContinuityReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveAssuranceSessionResult RuntimeBrowserLiveAssuranceSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserLiveAssuranceReadyStateResult RuntimeBrowserLiveAssuranceReadyState { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyOperationReadinessSessionResult RuntimeBrowserSteadyOperationReadinessSession { get; set; } = new();
+    [JsonIgnore] public BrowserClientRuntimeBrowserSteadyOperationReadinessReadyStateResult RuntimeBrowserSteadyOperationReadinessReadyState { get; set; } = new();
+
     [JsonIgnore] public BrowserClientRuntimeBrowserAccomplishmentSessionResult RuntimeBrowserAccomplishmentSession { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserAccomplishmentReadyStateResult RuntimeBrowserAccomplishmentReadyState { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserAttainmentSessionResult RuntimeBrowserAttainmentSession { get; set; } = new();
@@ -2877,6 +3478,7 @@ public sealed class BrowserSelfTestReport
     [JsonIgnore] public BrowserClientRuntimeBrowserDependabilityReadyStateResult RuntimeBrowserDependabilityReadyState { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserCredenceSessionResult RuntimeBrowserCredenceSession { get; set; } = new();
     [JsonIgnore] public BrowserClientRuntimeBrowserCredenceReadyStateResult RuntimeBrowserCredenceReadyState { get; set; } = new();
+    public BrowserRuntimeTailExtensionResult RuntimeTailExtension { get; set; } = new();
     public string Summary { get; set; } = string.Empty;
     public string Json { get; set; } = string.Empty;
 }
@@ -2887,6 +3489,19 @@ public sealed class BrowserSelfTestRequest
     public string ClilocPath { get; set; } = string.Empty;
     public string HuesPath { get; set; } = string.Empty;
 }
+
+public sealed class BrowserRuntimeTailExtensionResult
+{
+    public bool IsReady { get; set; }
+    public string ExtensionVersion { get; set; } = string.Empty;
+    public string SourceStateVersion { get; set; } = string.Empty;
+    public string SourceSessionVersion { get; set; } = string.Empty;
+    public string[] Phases { get; set; } = Array.Empty<string>();
+    public double TotalMs { get; set; }
+    public string Summary { get; set; } = string.Empty;
+    public string Error { get; set; } = string.Empty;
+}
+
 
 
 

@@ -95,7 +95,7 @@
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
         <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
-        <p><strong>Newest layers:</strong> confirmation, completion readiness</p>
+        <p><strong>Newest layers:</strong> operational stability, steady operation readiness</p>
         <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
@@ -198,6 +198,9 @@
         <p><strong>Runtime browser restore ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserRestoreReadyState.IsReady)</p>
         <p><strong>Runtime browser resume session ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserResumeSession.IsReady)</p>
         <p><strong>Runtime browser resume ready state ready:</strong> @FormatBool(_selfTestReport.RuntimeBrowserResumeReadyState.IsReady)</p>
+        <p><strong>Runtime tail extension ready:</strong> @FormatBool(_selfTestReport.RuntimeTailExtension.IsReady)</p>
+        <p><strong>Runtime tail extension version:</strong> @_selfTestReport.RuntimeTailExtension.ExtensionVersion</p>
+        <p><strong>Runtime tail extension phases:</strong> @string.Join(", ", _selfTestReport.RuntimeTailExtension.Phases)</p>
     }
 </div>
 
@@ -2082,6 +2085,20 @@
         }
         catch (Exception ex)
         {
+            try
+            {
+                var localReportSinkService = Services.GetRequiredService<BrowserHost.Services.BrowserLocalReportSinkService>();
+                _selfTestReportSave = await localReportSinkService.SaveSelfTestFailureAsync("Self-test suite failed.", ex);
+            }
+            catch
+            {
+                _selfTestReportSave = new BrowserHost.Services.BrowserLocalReportSaveResult
+                {
+                    Saved = false,
+                    Error = "Failure report save also failed."
+                };
+            }
+
             _selfTestMessage = $"Self-test suite failed: {ex.Message}";
         }
         finally
@@ -2249,3 +2266,4 @@
         return _activeTab == tab ? "tab-button tab-button-active" : "tab-button";
     }
 }
+

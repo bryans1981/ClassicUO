@@ -1,4 +1,4 @@
-# Implementation Roadmap
+﻿# Implementation Roadmap
 
 ## Objective
 
@@ -101,7 +101,9 @@ Current status:
 - The shared utility layer now includes a read-only binary asset provider shape for `/uo` browser asset reads.
 - The experimental browser host now stays on a lighter `net8.0` host path and links only the needed shared browser-seam source files directly.
 - A first shared `BrowserFileSystem` bridge now preloads the bootstrap subset into a real read-only seam provider for browser-host validation.
-- The remaining work is now extending that bridge from bootstrap preloading to on-demand shared-seam reads plus a smaller cleanup list in a few client/UI subsystems.
+- The browser self-test report is now compact again and captures failure envelopes automatically when a batch throws before report construction.
+- The current runtime tail baseline is `runtimeTailExtension=ok`, extending the steady-operation readiness layer with a compact 20-phase stabilization tail.
+- The remaining work is now extending that tail baseline and the shared bridge from the current stable state, plus a smaller cleanup list in a few client/UI subsystems.
 
 ### Milestone 3: Linux Container Packaging
 
@@ -446,4 +448,10 @@ The next validation target is the generated confirmation/verification through ac
 
 
 - 2026-04-02: Active milestone remains the fifth 20-layer browser runtime batch (confirmation/completion-readiness). The generated batch compiles and the page loads again after fixing a duplicate report-property regression and a persistence/perseverance DI cycle. Next validation step is a fresh compact self-test for that batch.
+- 2026-04-14: Active milestone now includes the generated sixth 20-layer browser runtime batch from operational readiness/deployment readiness through live stability/steady state readiness. Next validation target is a compact self-test for that block.
 
+- 2026-04-14: Active milestone now includes the generated seventh 20-layer browser runtime batch from operational stability/deployment stability through live assurance/steady operation readiness. Next validation target is a compact self-test for that block.
+- 2026-04-14: Generated the eighth 20-layer browser runtime batch from operational resilience/deployment resilience through live continuity/steady continuity readiness above the validated steady operation readiness baseline. Next step: one compact self-test for this block.
+- 2026-04-14: Generated the ninth 20-layer browser runtime batch from operational reliability/deployment reliability through live persistence/steady persistence readiness above the validated steady continuity readiness baseline. Next step: one compact self-test for this block.
+- 2026-04-14: Added automatic compact failure-report capture so browser self-test exceptions are saved locally instead of requiring manual error paste before the next runtime batch validation.
+- 2026-04-14: Broke the ninth batch DI cycle by detaching the newest ready-state services from their paired session services, restoring the compact self-test path for the next validation.

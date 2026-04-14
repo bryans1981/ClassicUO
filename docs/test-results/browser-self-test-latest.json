@@ -1,5 +1,5 @@
 {
-  "GeneratedAtUtc": "2026-04-14T14:30:27.923+00:00",
+  "GeneratedAtUtc": "2026-04-14T18:08:05.124+00:00",
   "RuntimeChainMarker": "runtime-chain-v20260414-operational-reliability",
   "ReportMode": "compact-browser-runtime-v1",
   "Request": {
@@ -14,7 +14,7 @@
     "IsReady": true,
     "LoadedCount": 3,
     "CacheHits": 0,
-    "TotalMs": 8672,
+    "TotalMs": 8578,
     "TileData": {
       "Exists": true,
       "Length": 3188736,
@@ -43,7 +43,7 @@
     "IsReady": true,
     "LoadedCount": 3,
     "CacheHits": 0,
-    "TotalMs": 8638,
+    "TotalMs": 8545,
     "TileData": {
       "Exists": true,
       "ReadSucceeded": true,
@@ -80,7 +80,7 @@
     "ConfigRootPath": "/config",
     "ReadyAssetCount": 3,
     "CacheHits": 3,
-    "TotalMs": 9,
+    "TotalMs": 8,
     "Assets": [
       {
         "Id": "tiledata",
@@ -156,7 +156,7 @@
     "ArtifactPath": "/cache/startup/default/launch-plan.json",
     "ProfileId": "default",
     "WriteSucceeded": true,
-    "Length": 2070,
+    "Length": 2109,
     "StartupRun": {
       "IsReady": true,
       "ProfileId": "default",
@@ -172,8 +172,8 @@
         "SettingsPrepared": true,
         "StartupProfilePrepared": true,
         "ReadyAssetCount": 3,
-        "CacheHits": 3,
-        "TotalMs": 25,
+        "CacheHits": 0,
+        "TotalMs": 35,
         "Assets": [
           {
             "Id": "tiledata",
@@ -181,8 +181,8 @@
             "Exists": true,
             "ReadSucceeded": true,
             "IsRequired": true,
-            "Length": 3188736,
-            "Summary": "UNUSED"
+            "Length": 0,
+            "Summary": "/uo/tiledata.mul"
           },
           {
             "Id": "cliloc",
@@ -190,8 +190,8 @@
             "Exists": true,
             "ReadSucceeded": true,
             "IsRequired": true,
-            "Length": 4960424,
-            "Summary": "500000: Reputation aversion triggered."
+            "Length": 0,
+            "Summary": "/uo/cliloc.enu"
           },
           {
             "Id": "hues",
@@ -199,12 +199,12 @@
             "Exists": true,
             "ReadSucceeded": true,
             "IsRequired": true,
-            "Length": 265500,
-            "Summary": "header 0"
+            "Length": 0,
+            "Summary": "/uo/hues.mul"
           }
         ],
         "Issues": [],
-        "Summary": "Launch plan ready for profile \u0027default\u0027."
+        "Summary": "Launch plan ready for profile \u0027default\u0027 via browser-bootstrap-package-v1."
       },
       "CompletedSteps": 4,
       "TotalSteps": 4,
@@ -231,13 +231,13 @@
           "Id": "launch",
           "Title": "Create startup launch contract",
           "Succeeded": true,
-          "Detail": "Launch plan ready for profile \u0027default\u0027."
+          "Detail": "Launch plan ready for profile \u0027default\u0027 via browser-bootstrap-package-v1."
         }
       ],
-      "TotalMs": 28,
+      "TotalMs": 38,
       "Summary": "Startup run prepared with 4 / 4 steps complete."
     },
-    "TotalMs": 76,
+    "TotalMs": 83,
     "Summary": "Startup artifact written to /cache/startup/default/launch-plan.json.",
     "Error": ""
   },
@@ -247,7 +247,7 @@
     "Exists": true,
     "ReadSucceeded": true,
     "IsReady": true,
-    "Length": 2070,
+    "Length": 2109,
     "CompletedSteps": 4,
     "TotalSteps": 4,
     "StartupRun": {
@@ -265,8 +265,8 @@
         "SettingsPrepared": true,
         "StartupProfilePrepared": true,
         "ReadyAssetCount": 3,
-        "CacheHits": 3,
-        "TotalMs": 25,
+        "CacheHits": 0,
+        "TotalMs": 35,
         "Assets": [
           {
             "Id": "tiledata",
@@ -274,8 +274,8 @@
             "Exists": true,
             "ReadSucceeded": true,
             "IsRequired": true,
-            "Length": 3188736,
-            "Summary": "UNUSED"
+            "Length": 0,
+            "Summary": "/uo/tiledata.mul"
           },
           {
             "Id": "cliloc",
@@ -283,8 +283,8 @@
             "Exists": true,
             "ReadSucceeded": true,
             "IsRequired": true,
-            "Length": 4960424,
-            "Summary": "500000: Reputation aversion triggered."
+            "Length": 0,
+            "Summary": "/uo/cliloc.enu"
           },
           {
             "Id": "hues",
@@ -292,12 +292,12 @@
             "Exists": true,
             "ReadSucceeded": true,
             "IsRequired": true,
-            "Length": 265500,
-            "Summary": "header 0"
+            "Length": 0,
+            "Summary": "/uo/hues.mul"
           }
         ],
         "Issues": [],
-        "Summary": "Launch plan ready for profile \u0027default\u0027."
+        "Summary": "Launch plan ready for profile \u0027default\u0027 via browser-bootstrap-package-v1."
       },
       "CompletedSteps": 4,
       "TotalSteps": 4,
@@ -324,20 +324,20 @@
           "Id": "launch",
           "Title": "Create startup launch contract",
           "Succeeded": true,
-          "Detail": "Launch plan ready for profile \u0027default\u0027."
+          "Detail": "Launch plan ready for profile \u0027default\u0027 via browser-bootstrap-package-v1."
         }
       ],
-      "TotalMs": 28,
+      "TotalMs": 38,
       "Summary": "Startup run prepared with 4 / 4 steps complete."
     },
-    "TotalMs": 29,
+    "TotalMs": 23,
     "Summary": "Startup artifact loaded for profile \u0027default\u0027.",
     "Error": ""
   },
   "LaunchSession": {
     "IsReady": true,
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "ArtifactPath": "/cache/startup/default/launch-plan.json",
     "ArtifactWriteSucceeded": true,
@@ -358,8 +358,8 @@
       "/uo/cliloc.enu",
       "/uo/hues.mul"
     ],
-    "TotalMs": 45,
-    "Summary": "Launch session \u0027session-20260414143052199\u0027 created for profile \u0027default\u0027.",
+    "TotalMs": 43,
+    "Summary": "Launch session \u0027session-20260414180829111\u0027 created for profile \u0027default\u0027.",
     "Error": ""
   },
   "LaunchSessionRead": {
@@ -375,7 +375,7 @@
     "Session": {
       "IsReady": true,
       "ProfileId": "default",
-      "SessionId": "session-20260414143052199",
+      "SessionId": "session-20260414180829111",
       "SessionPath": "/cache/startup/default/launch-session.json",
       "ArtifactPath": "/cache/startup/default/launch-plan.json",
       "ArtifactWriteSucceeded": true,
@@ -396,11 +396,11 @@
         "/uo/cliloc.enu",
         "/uo/hues.mul"
       ],
-      "TotalMs": 45,
-      "Summary": "Launch session \u0027session-20260414143052199\u0027 created for profile \u0027default\u0027.",
+      "TotalMs": 43,
+      "Summary": "Launch session \u0027session-20260414180829111\u0027 created for profile \u0027default\u0027.",
       "Error": ""
     },
-    "TotalMs": 11,
+    "TotalMs": 10,
     "Summary": "Launch session loaded for profile \u0027default\u0027.",
     "Error": ""
   },
@@ -470,9 +470,9 @@
       "mark-runtime-bootstrap-ready"
     ],
     "SourceSummary": "Runtime bootstrap session ready for profile \u0027default\u0027 with 3 runtime stage(s).",
-    "Length": 979,
+    "Length": 978,
     "WriteSucceeded": true,
-    "TotalMs": 61,
+    "TotalMs": 51,
     "Package": {
       "PackageVersion": "browser-bootstrap-package-v1",
       "ProfileId": "default",
@@ -506,9 +506,101 @@
         "mark-runtime-bootstrap-ready"
       ],
       "SourceSummary": "Runtime bootstrap session ready for profile \u0027default\u0027 with 3 runtime stage(s).",
-      "CreatedAtUtc": "2026-04-14T14:30:52.279+00:00"
+      "CreatedAtUtc": "2026-04-14T18:08:29.19+00:00"
     },
     "Summary": "Browser bootstrap package ready for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "BootstrapPackageRead": {
+    "IsReady": true,
+    "ProfileId": "default",
+    "ArtifactPath": "/cache/startup/default/browser-bootstrap-package.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "Length": 978,
+    "TotalMs": 4,
+    "Package": {
+      "PackageVersion": "browser-bootstrap-package-v1",
+      "ProfileId": "default",
+      "LaunchMode": "browser-spike",
+      "ArtifactPath": "/cache/startup/default/browser-bootstrap-package.json",
+      "AssetRootPath": "/uo",
+      "ProfilesRootPath": "/profiles",
+      "CacheRootPath": "/cache",
+      "ConfigRootPath": "/config",
+      "SettingsFilePath": "/config/client.settings.json",
+      "StartupProfilePath": "/profiles/default/profile.json",
+      "RequiredAssets": [
+        "/uo/tiledata.mul",
+        "/uo/cliloc.enu",
+        "/uo/hues.mul"
+      ],
+      "ReadyAssetCount": 3,
+      "CompletedSteps": 4,
+      "TotalSteps": 4,
+      "HandoffArtifacts": [
+        "/cache/startup/default/launch-plan.json",
+        "/cache/startup/default/launch-session.json"
+      ],
+      "ConsumedArtifacts": [
+        "/cache/startup/default/launch-plan.json",
+        "/cache/startup/default/launch-session.json"
+      ],
+      "RuntimeSessionStages": [
+        "consume-launch-handoff",
+        "open-runtime-session",
+        "mark-runtime-bootstrap-ready"
+      ],
+      "SourceSummary": "Runtime bootstrap session ready for profile \u0027default\u0027 with 3 runtime stage(s).",
+      "CreatedAtUtc": "2026-04-14T18:08:29.19+00:00"
+    },
+    "Summary": "Browser bootstrap package read for profile \u0027default\u0027.",
+    "Error": ""
+  },
+  "BootstrapPackageConsumer": {
+    "IsReady": true,
+    "ProfileId": "default",
+    "PackageVersion": "browser-bootstrap-package-v1",
+    "ArtifactPath": "/cache/startup/default/browser-bootstrap-package.json",
+    "ReadSucceeded": true,
+    "RequiredAssetCount": 3,
+    "Assets": [
+      {
+        "Id": "tiledata",
+        "Path": "/uo/tiledata.mul",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": false,
+        "Length": 0,
+        "IsRequired": true,
+        "Summary": "/uo/tiledata.mul"
+      },
+      {
+        "Id": "cliloc",
+        "Path": "/uo/cliloc.enu",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": false,
+        "Length": 0,
+        "IsRequired": true,
+        "Summary": "/uo/cliloc.enu"
+      },
+      {
+        "Id": "hues",
+        "Path": "/uo/hues.mul",
+        "Exists": true,
+        "ReadSucceeded": true,
+        "LoadedOnDemand": false,
+        "UsedParsedCache": false,
+        "Length": 0,
+        "IsRequired": true,
+        "Summary": "/uo/hues.mul"
+      }
+    ],
+    "TotalMs": 5,
+    "Summary": "Browser bootstrap package consumed for profile \u0027default\u0027.",
     "Error": ""
   },
   "RuntimeLaunchContract": {
@@ -516,7 +608,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "ArtifactPath": "/cache/startup/default/launch-plan.json",
     "Exists": true,
@@ -535,7 +627,7 @@
     "ReadyAssetCount": 3,
     "CompletedSteps": 4,
     "TotalSteps": 4,
-    "TotalMs": 5,
+    "TotalMs": 4,
     "Summary": "Runtime launch contract ready for profile \u0027default\u0027 with 3 required asset(s).",
     "Error": ""
   },
@@ -545,7 +637,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "ArtifactPath": "/cache/startup/default/launch-plan.json",
     "Exists": true,
@@ -564,7 +656,7 @@
     "ReadyAssetCount": 3,
     "CompletedSteps": 4,
     "TotalSteps": 4,
-    "TotalMs": 5,
+    "TotalMs": 4,
     "Summary": "Startup packet ready for profile \u0027default\u0027 with 3 asset path(s).",
     "Error": ""
   },
@@ -575,7 +667,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -594,7 +686,7 @@
     "CompletedSteps": 4,
     "TotalSteps": 4,
     "HandshakeSummary": "Bootstrap handshake prepared for profile \u0027default\u0027.",
-    "TotalMs": 4,
+    "TotalMs": 5,
     "Summary": "Startup consumer ready for profile \u0027default\u0027 with 3 required asset(s).",
     "Error": ""
   },
@@ -606,7 +698,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -625,7 +717,7 @@
     "CompletedSteps": 4,
     "TotalSteps": 4,
     "ExecutionSummary": "Startup session executor prepared runtime state for profile \u0027default\u0027.",
-    "TotalMs": 3,
+    "TotalMs": 6,
     "Summary": "Startup session executor ready for profile \u0027default\u0027 with 3 required asset(s).",
     "Error": ""
   },
@@ -638,7 +730,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -671,7 +763,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -709,7 +801,7 @@
         "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
       }
     ],
-    "TotalMs": 6,
+    "TotalMs": 4,
     "Summary": "Runtime bootstrap loop ready for profile \u0027default\u0027 with 3 phase(s).",
     "Error": ""
   },
@@ -724,7 +816,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -763,7 +855,7 @@
       }
     ],
     "InvocationSummary": "Runtime invocation prepared for profile \u0027default\u0027.",
-    "TotalMs": 4,
+    "TotalMs": 5,
     "Summary": "Runtime invocation ready for profile \u0027default\u0027 with 3 bootstrap phase(s).",
     "Error": ""
   },
@@ -779,7 +871,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -819,7 +911,7 @@
     ],
     "State": "ready",
     "CycleSummary": "Runtime startup cycle is ready for profile \u0027default\u0027.",
-    "TotalMs": 4,
+    "TotalMs": 5,
     "Summary": "Runtime startup cycle ready for profile \u0027default\u0027 with 3 phase(s).",
     "Error": ""
   },
@@ -836,7 +928,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -876,7 +968,7 @@
     ],
     "State": "ready",
     "StateSummary": "Runtime startup state prepared for profile \u0027default\u0027 in state \u0027ready\u0027.",
-    "TotalMs": 5,
+    "TotalMs": 4,
     "Summary": "Runtime startup state ready for profile \u0027default\u0027 with 3 phase(s).",
     "Error": ""
   },
@@ -894,7 +986,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -939,7 +1031,7 @@
       "runtime-ready"
     ],
     "StateMachineSummary": "Runtime startup state machine prepared for profile \u0027default\u0027 in state \u0027ready\u0027.",
-    "TotalMs": 4,
+    "TotalMs": 5,
     "Summary": "Runtime startup state machine ready for profile \u0027default\u0027 with 3 state(s).",
     "Error": ""
   },
@@ -958,7 +1050,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1027,7 +1119,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1102,7 +1194,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1183,7 +1275,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1270,7 +1362,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1363,7 +1455,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1462,7 +1554,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1541,7 +1633,7 @@
       "open-boot-session"
     ],
     "BootSessionSummary": "Browser boot session prepared 3 session stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 5,
+    "TotalMs": 6,
     "Summary": "Browser boot session ready for profile \u0027default\u0027 with 3 session stage(s).",
     "Error": ""
   },
@@ -1567,7 +1659,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1677,7 +1769,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1764,7 +1856,7 @@
       "/cache/startup/default/launch-session.json"
     ],
     "ConsumerSummary": "Runtime bootstrap consumer accepted 2 handoff artifact(s) for profile \u0027default\u0027.",
-    "TotalMs": 5,
+    "TotalMs": 4,
     "Summary": "Runtime bootstrap consumer ready for profile \u0027default\u0027 with 2 consumed artifact(s).",
     "Error": ""
   },
@@ -1792,7 +1884,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -1913,7 +2005,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2010,7 +2102,7 @@
       "publish-client-bootstrap-ready"
     ],
     "ClientBootstrapSummary": "Runtime client bootstrap controller prepared 3 client bootstrap action(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 6,
     "Summary": "Runtime client bootstrap controller ready for profile \u0027default\u0027 with 3 action(s).",
     "Error": ""
   },
@@ -2040,7 +2132,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2143,7 +2235,7 @@
       "client-bootstrap-ready"
     ],
     "ReadinessSummary": "Runtime startup readiness gate passed 4 readiness check(s) for profile \u0027default\u0027.",
-    "TotalMs": 8,
+    "TotalMs": 7,
     "Summary": "Runtime startup readiness gate ready for profile \u0027default\u0027 with 4 check(s).",
     "Error": ""
   },
@@ -2174,7 +2266,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2314,7 +2406,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2427,7 +2519,7 @@
       "publish-launch-ready"
     ],
     "LaunchControlSummary": "Runtime launch controller prepared 3 launch control action(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 6,
     "Summary": "Runtime launch controller ready for profile \u0027default\u0027 with 3 action(s).",
     "Error": ""
   },
@@ -2460,7 +2552,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2612,7 +2704,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2735,7 +2827,7 @@
       "publish-client-launch-session-ready"
     ],
     "ClientLaunchSummary": "Runtime client launch session prepared 3 launch session stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 8,
+    "TotalMs": 7,
     "Summary": "Runtime client launch session ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -2770,7 +2862,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2934,7 +3026,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3104,7 +3196,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3242,7 +3334,7 @@
       "publish-client-loop-ready"
     ],
     "ClientLoopSummary": "Runtime client loop state prepared 3 loop stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 8,
     "Summary": "Runtime client loop state ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -3280,7 +3372,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3462,7 +3554,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3650,7 +3742,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3844,7 +3936,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4002,7 +4094,7 @@
       "publish-platform-session-ready"
     ],
     "PlatformSessionSummary": "Runtime platform session prepared 3 platform-session stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 14,
+    "TotalMs": 8,
     "Summary": "Runtime platform session ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -4044,7 +4136,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4207,7 +4299,7 @@
       "platform-ready"
     ],
     "PlatformReadySummary": "Runtime platform ready state passed 3 platform readiness check(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 8,
     "Summary": "Runtime platform ready state ready for profile \u0027default\u0027 with 3 check(s).",
     "Error": ""
   },
@@ -4250,7 +4342,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4462,7 +4554,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260414143052199",
+    "SessionId": "session-20260414180829111",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4635,7 +4727,7 @@
       "launch-gate-open"
     ],
     "LaunchGateSummary": "Runtime platform launch gate passed 3 launch check(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 8,
     "Summary": "Runtime platform launch gate ready for profile \u0027default\u0027 with 3 check(s).",
     "Error": ""
   },
@@ -4730,6 +4822,6 @@
     "Summary": "Runtime tail extension ready with 80 stabilization/reinforcement/fortification/hardening phase(s).",
     "Error": ""
   },
-  "Summary": "marker=runtime-chain-v20260414-operational-reliability | handoff=ready | direct=3/3 | seam=3/3 | handoffCacheHits=3 | rawCache=3 | processedCache=9 | bridgeLoaded=3 | seedImport=skip | artifactWrite=ok | artifactRead=ok | launchSession=ok | launchSessionRead=ok | bootstrapPackage=ok | runtimeContract=ok | startupPacket=ok | startupConsumer=ok | startupExecutor=ok | startupRunner=ok | runtimeLoop=ok | runtimeInvoke=ok | runtimeCycle=ok | runtimeState=ok | runtimeStateMachine=ok | runtimeTransitionDriver=ok | runtimeDispatcher=ok | runtimeSessionController=ok | runtimeCoordinator=ok | runtimeOrchestrator=ok | bootFlow=ok | bootSession=ok | launchHandoff=ok | bootstrapConsumer=ok | bootstrapSession=ok | clientBootstrap=ok | readinessGate=ok | readySignal=ok | launchController=ok | clientReadyState=ok | clientLaunchSession=ok | clientActivation=ok | clientRunState=ok | clientLoopState=ok | hostSession=ok | hostLoop=ok | hostReadyState=ok | platformSession=ok | platformReadyState=ok | platformLoop=ok | platformLaunchGate=ok | browserShellSession=ok | browserShellReadyState=ok | browserSurfaceSession=ok | browserSurfaceReadyState=ok | browserWindowSession=ok | browserWindowReadyState=ok | browserFrameSession=ok | browserFrameReadyState=ok | browserCanvasSession=ok | browserCanvasReadyState=ok | browserRenderSession=ok | browserRenderReadyState=ok | browserPresentSession=ok | browserPresentReadyState=ok | browserDisplaySession=ok | browserDisplayReadyState=ok | browserViewportSession=ok | browserViewportReadyState=ok | browserSceneSession=ok | browserSceneReadyState=ok | browserInputSession=ok | browserInputReadyState=ok | browserEventSession=ok | browserEventReadyState=ok | browserInteractionSession=ok | browserInteractionReadyState=ok | browserFocusSession=ok | browserFocusReadyState=ok | browserShortcutSession=ok | browserShortcutReadyState=ok | browserPointerSession=ok | browserPointerReadyState=ok | browserCommandSession=ok | browserCommandReadyState=ok | browserGestureSession=ok | browserGestureReadyState=ok | browserLifecycleSession=ok | browserLifecycleReadyState=ok | browserRouteSession=ok | browserRouteReadyState=ok | browserStateSyncSession=ok | browserStateSyncReadyState=ok | browserRestoreSession=ok | browserRestoreReadyState=ok | browserResumeSession=ok | browserResumeReadyState=ok | browserCheckpointSession=ok | browserCheckpointReadyState=ok | browserPersistenceSession=ok | browserPersistenceReadyState=ok | browserHistorySession=ok | browserHistoryReadyState=ok | browserRecoverySession=ok | browserRecoveryReadyState=ok | browserSnapshotSession=ok | browserSnapshotReadyState=ok | browserArchiveSession=ok | browserArchiveReadyState=ok | browserTelemetrySession=ok | browserTelemetryReadyState=ok | browserDiagnosticsSession=ok | browserDiagnosticsReadyState=ok | browserMonitoringSession=ok | browserMonitoringReadyState=ok | browserWatchdogSession=ok | browserWatchdogReadyState=ok | browserHealthSession=ok | browserHealthReadyState=ok | browserAlertingSession=ok | browserAlertingReadyState=ok | browserPolicySession=ok | browserPolicyReadyState=ok | browserAuditSession=ok | browserAuditReadyState=ok | browserSecuritySession=ok | browserSecurityReadyState=ok | browserComplianceSession=ok | browserComplianceReadyState=ok | browserPrivacySession=ok | browserPrivacyReadyState=ok | browserGovernanceSession=ok | browserGovernanceReadyState=ok | browserTrustSession=ok | browserTrustReadyState=ok | browserAssuranceSession=ok | browserAssuranceReadyState=ok | browserRiskSession=ok | browserRiskReadyState=ok | browserIntegritySession=ok | browserIntegrityReadyState=ok | browserResilienceSession=ok | browserResilienceReadyState=ok | browserAvailabilitySession=ok | browserAvailabilityReadyState=ok | browserContinuitySession=ok | browserContinuityReadyState=ok | browserDurabilitySession=ok | browserDurabilityReadyState=ok | browserSustainabilitySession=ok | browserSustainabilityReadyState=ok | browserLongevitySession=ok | browserLongevityReadyState=ok | browserStewardshipSession=ok | browserStewardshipReadyState=ok | browserOperabilitySession=ok | browserOperabilityReadyState=ok | browserServiceabilitySession=ok | browserServiceabilityReadyState=ok | browserMaintainabilitySession=ok | browserMaintainabilityReadyState=ok | browserSupportabilitySession=ok | browserSupportabilityReadyState=ok | browserUsabilitySession=ok | browserUsabilityReadyState=ok | browserAccessibilitySession=ok | browserAccessibilityReadyState=ok | browserInclusivitySession=ok | browserInclusivityReadyState=ok | browserAdaptabilitySession=ok | browserAdaptabilityReadyState=ok | browserDiscoverabilitySession=ok | browserDiscoverabilityReadyState=ok | browserLearnabilitySession=ok | browserLearnabilityReadyState=ok | browserApproachabilitySession=ok | browserApproachabilityReadyState=ok | browserNavigabilitySession=ok | browserNavigabilityReadyState=ok | browserGuidabilitySession=ok | browserGuidabilityReadyState=ok | browserClaritySession=ok | browserClarityReadyState=ok | browserIntuitivenessSession=ok | browserIntuitivenessReadyState=ok | browserConsistencySession=ok | browserConsistencyReadyState=ok | browserCohesivenessSession=ok | browserCohesivenessReadyState=ok | browserPredictabilitySession=ok | browserPredictabilityReadyState=ok | browserFamiliaritySession=ok | browserFamiliarityReadyState=ok | browserFluencySession=ok | browserFluencyReadyState=ok | browserHarmonySession=ok | browserHarmonyReadyState=ok | browserReadabilitySession=ok | browserReadabilityReadyState=ok | browserLegibilitySession=ok | browserLegibilityReadyState=ok | browserSimplicitySession=ok | browserSimplicityReadyState=ok | browserUnderstandabilitySession=ok | browserUnderstandabilityReadyState=ok | browserScannabilitySession=ok | browserScannabilityReadyState=ok | browserComprehensibilitySession=ok | browserComprehensibilityReadyState=ok | browserMemorabilitySession=ok | browserMemorabilityReadyState=ok | browserRetentionSession=ok | browserRetentionReadyState=ok | browserConfidenceSession=ok | browserConfidenceReadyState=ok | browserComfortSession=ok | browserComfortReadyState=ok | browserTransparencySession=ok | browserTransparencyReadyState=ok | browserVisibilitySession=ok | browserVisibilityReadyState=ok | browserResponsivenessSession=ok | browserResponsivenessReadyState=ok | browserFeedbackSession=ok | browserFeedbackReadyState=ok | browserEfficiencySession=ok | browserEfficiencyReadyState=ok | browserEffectivenessSession=ok | browserEffectivenessReadyState=ok | browserControllabilitySession=ok | browserControllabilityReadyState=ok | browserCustomizabilitySession=ok | browserCustomizabilityReadyState=ok | browserFlexibilitySession=ok | browserFlexibilityReadyState=ok | browserPersonalizationSession=ok | browserPersonalizationReadyState=ok | browserRecoverabilitySession=ok | browserRecoverabilityReadyState=ok | browserForgivenessSession=ok | browserForgivenessReadyState=ok | browserSatisfactionSession=ok | browserSatisfactionReadyState=ok | browserDelightSession=ok | browserDelightReadyState=ok | browserUsefulnessSession=ok | browserUsefulnessReadyState=ok | browserValueSession=ok | browserValueReadyState=ok | browserCredibilitySession=ok | browserCredibilityReadyState=ok | browserReliabilitySession=ok | browserReliabilityReadyState=ok | browserTrustworthinessSession=ok | browserTrustworthinessReadyState=ok | browserAssurance2Session=ok | browserAssurance2ReadyState=ok | browserClarityOfPurposeSession=ok | browserClarityOfPurposeReadyState=ok | browserIntentionalitySession=ok | browserIntentionalityReadyState=ok | browserConsistencyOfFeedbackSession=ok | browserConsistencyOfFeedbackReadyState=ok | browserPerceivabilitySession=ok | browserPerceivabilityReadyState=ok | browserNavigationalConfidenceSession=ok | browserNavigationalConfidenceReadyState=ok | browserTaskAlignmentSession=ok | browserTaskAlignmentReadyState=ok | browserGoalOrientationSession=ok | browserGoalOrientationReadyState=ok | browserFlowStateSession=ok | browserFlowStateReadyState=ok | browserEngagementSession=ok | browserEngagementReadyState=ok | browserImmersionSession=ok | browserImmersionReadyState=ok | browserAffordanceSession=ok | browserAffordanceReadyState=ok | browserSignpostingSession=ok | browserSignpostingReadyState=ok | browserOrientationSession=ok | browserOrientationReadyState=ok | browserWayfindingSession=ok | browserWayfindingReadyState=ok | browserProgressAwarenessSession=ok | browserProgressAwarenessReadyState=ok | browserCompletionConfidenceSession=ok | browserCompletionConfidenceReadyState=ok | browserCredenceSession=ok | browserCredenceReadyState=ok | browserDependabilitySession=ok | browserDependabilityReadyState=ok | browserAssurabilitySession=ok | browserAssurabilityReadyState=ok | browserConvictionSession=ok | browserConvictionReadyState=ok | browserPurposefulnessSession=ok | browserPurposefulnessReadyState=ok | browserDeliberatenessSession=ok | browserDeliberatenessReadyState=ok | browserSignalCoherenceSession=ok | browserSignalCoherenceReadyState=ok | browserObservabilitySession=ok | browserObservabilityReadyState=ok | browserDirectionalitySession=ok | browserDirectionalityReadyState=ok | browserTaskFitSession=ok | browserTaskFitReadyState=ok | browserAimfulnessSession=ok | browserAimfulnessReadyState=ok | browserMomentumSession=ok | browserMomentumReadyState=ok | browserInvolvementSession=ok | browserInvolvementReadyState=ok | browserAbsorptionSession=ok | browserAbsorptionReadyState=ok | browserCueingSession=ok | browserCueingReadyState=ok | browserLandmarkingSession=ok | browserLandmarkingReadyState=ok | browserOrientationConfidenceSession=ok | browserOrientationConfidenceReadyState=ok | browserPathfindingSession=ok | browserPathfindingReadyState=ok | browserMilestoneAwarenessSession=ok | browserMilestoneAwarenessReadyState=ok | browserClosureConfidenceSession=ok | browserClosureConfidenceReadyState=ok | browserReassuranceSession=ok | browserReassuranceReadyState=ok | browserSteadinessSession=ok | browserSteadinessReadyState=ok | browserAssistanceSession=ok | browserAssistanceReadyState=ok | browserEnablementSession=ok | browserEnablementReadyState=ok | browserEmpowermentSession=ok | browserEmpowermentReadyState=ok | browserAgencySession=ok | browserAgencyReadyState=ok | browserMasterySession=ok | browserMasteryReadyState=ok | browserConfidenceBuildingSession=ok | browserConfidenceBuildingReadyState=ok | browserTaskConfidenceSession=ok | browserTaskConfidenceReadyState=ok | browserDecisionConfidenceSession=ok | browserDecisionConfidenceReadyState=ok | browserOutcomeConfidenceSession=ok | browserOutcomeConfidenceReadyState=ok | browserSuccessConfidenceSession=ok | browserSuccessConfidenceReadyState=ok | browserTrustInUseSession=ok | browserTrustInUseReadyState=ok | browserRelianceSession=ok | browserRelianceReadyState=ok | browserComposureSession=ok | browserComposureReadyState=ok | browserCalmnessSession=ok | browserCalmnessReadyState=ok | browserAssurednessSession=ok | browserAssurednessReadyState=ok | browserCertaintySession=ok | browserCertaintyReadyState=ok | browserResolutionSession=ok | browserResolutionReadyState=ok | browserCompletionAssuranceSession=ok | browserCompletionAssuranceReadyState=ok | browserConfirmationSession=ok | browserConfirmationReadyState=ok | browserVerificationSession=ok | browserVerificationReadyState=ok | browserCorroborationSession=ok | browserCorroborationReadyState=ok | browserAffirmationSession=ok | browserAffirmationReadyState=ok | browserRatificationSession=ok | browserRatificationReadyState=ok | browserEndorsementSession=ok | browserEndorsementReadyState=ok | browserAcceptanceSession=ok | browserAcceptanceReadyState=ok | browserAdoptionSession=ok | browserAdoptionReadyState=ok | browserCommitmentSession=ok | browserCommitmentReadyState=ok | browserDedicationSession=ok | browserDedicationReadyState=ok | browserPerseveranceSession=ok | browserPerseveranceReadyState=ok | browserTenacitySession=ok | browserTenacityReadyState=ok | browserResolveSession=ok | browserResolveReadyState=ok | browserDeterminationSession=ok | browserDeterminationReadyState=ok | browserFollowThroughSession=ok | browserFollowThroughReadyState=ok | browserFulfillmentSession=ok | browserFulfillmentReadyState=ok | browserAttainmentSession=ok | browserAttainmentReadyState=ok | browserAccomplishmentSession=ok | browserAccomplishmentReadyState=ok | browserCompletionReadinessSession=ok | browserCompletionReadinessReadyState=ok | browserOperationalReadinessSession=ok | browserOperationalReadinessReadyState=ok | browserDeploymentReadinessSession=ok | browserDeploymentReadinessReadyState=ok | browserReleaseReadinessSession=ok | browserReleaseReadinessReadyState=ok | browserLaunchAssuranceSession=ok | browserLaunchAssuranceReadyState=ok | browserGoLiveReadinessSession=ok | browserGoLiveReadinessReadyState=ok | browserServiceActivationSession=ok | browserServiceActivationReadyState=ok | browserSteadyOperationSession=ok | browserSteadyOperationReadyState=ok | browserRuntimeStabilitySession=ok | browserRuntimeStabilityReadyState=ok | browserSessionStabilitySession=ok | browserSessionStabilityReadyState=ok | browserStateStabilitySession=ok | browserStateStabilityReadyState=ok | browserInteractionStabilitySession=ok | browserInteractionStabilityReadyState=ok | browserContinuationAssuranceSession=ok | browserContinuationAssuranceReadyState=ok | browserSustainmentReadinessSession=ok | browserSustainmentReadinessReadyState=ok | browserLiveOperabilitySession=ok | browserLiveOperabilityReadyState=ok | browserRuntimeOperabilitySession=ok | browserRuntimeOperabilityReadyState=ok | browserServiceAssuranceSession=ok | browserServiceAssuranceReadyState=ok | browserProductionReadinessSession=ok | browserProductionReadinessReadyState=ok | browserProductionAssuranceSession=ok | browserProductionAssuranceReadyState=ok | browserLiveStabilitySession=ok | browserLiveStabilityReadyState=ok | browserSteadyStateReadinessSession=ok | browserSteadyStateReadinessReadyState=ok | browserOperationalStabilitySession=ok | browserOperationalStabilityReadyState=ok | browserDeploymentStabilitySession=ok | browserDeploymentStabilityReadyState=ok | browserReleaseStabilitySession=ok | browserReleaseStabilityReadyState=ok | browserLaunchStabilitySession=ok | browserLaunchStabilityReadyState=ok | browserGoLiveStabilitySession=ok | browserGoLiveStabilityReadyState=ok | browserServiceContinuitySession=ok | browserServiceContinuityReadyState=ok | browserRuntimeContinuitySession=ok | browserRuntimeContinuityReadyState=ok | browserSessionContinuitySession=ok | browserSessionContinuityReadyState=ok | browserStateContinuitySession=ok | browserStateContinuityReadyState=ok | browserInteractionContinuitySession=ok | browserInteractionContinuityReadyState=ok | browserFlowContinuitySession=ok | browserFlowContinuityReadyState=ok | browserContinuationReadinessSession=ok | browserContinuationReadinessReadyState=ok | browserSustainmentAssuranceSession=ok | browserSustainmentAssuranceReadyState=ok | browserLiveSustainabilitySession=ok | browserLiveSustainabilityReadyState=ok | browserRuntimeSustainabilitySession=ok | browserRuntimeSustainabilityReadyState=ok | browserServiceSustainabilitySession=ok | browserServiceSustainabilityReadyState=ok | browserProductionStabilitySession=ok | browserProductionStabilityReadyState=ok | browserProductionContinuitySession=ok | browserProductionContinuityReadyState=ok | browserLivePersistenceSession=ok | browserLivePersistenceReadyState=ok | browserSteadyPersistenceReadinessSession=ok | browserSteadyPersistenceReadinessReadyState=ok | browserLiveAssuranceSession=ok | browserLiveAssuranceReadyState=ok | browserSteadyOperationReadinessSession=ok | browserSteadyOperationReadinessReadyState=ok | runtimeTailExtension=ok",
+  "Summary": "marker=runtime-chain-v20260414-operational-reliability | handoff=ready | direct=3/3 | seam=3/3 | handoffCacheHits=3 | rawCache=3 | processedCache=9 | bridgeLoaded=3 | seedImport=skip | artifactWrite=ok | artifactRead=ok | launchSession=ok | launchSessionRead=ok | bootstrapPackage=ok | bootstrapPackageRead=ok | bootstrapPackageConsumer=ok | runtimeContract=ok | startupPacket=ok | startupConsumer=ok | startupExecutor=ok | startupRunner=ok | runtimeLoop=ok | runtimeInvoke=ok | runtimeCycle=ok | runtimeState=ok | runtimeStateMachine=ok | runtimeTransitionDriver=ok | runtimeDispatcher=ok | runtimeSessionController=ok | runtimeCoordinator=ok | runtimeOrchestrator=ok | bootFlow=ok | bootSession=ok | launchHandoff=ok | bootstrapConsumer=ok | bootstrapSession=ok | clientBootstrap=ok | readinessGate=ok | readySignal=ok | launchController=ok | clientReadyState=ok | clientLaunchSession=ok | clientActivation=ok | clientRunState=ok | clientLoopState=ok | hostSession=ok | hostLoop=ok | hostReadyState=ok | platformSession=ok | platformReadyState=ok | platformLoop=ok | platformLaunchGate=ok | browserShellSession=ok | browserShellReadyState=ok | browserSurfaceSession=ok | browserSurfaceReadyState=ok | browserWindowSession=ok | browserWindowReadyState=ok | browserFrameSession=ok | browserFrameReadyState=ok | browserCanvasSession=ok | browserCanvasReadyState=ok | browserRenderSession=ok | browserRenderReadyState=ok | browserPresentSession=ok | browserPresentReadyState=ok | browserDisplaySession=ok | browserDisplayReadyState=ok | browserViewportSession=ok | browserViewportReadyState=ok | browserSceneSession=ok | browserSceneReadyState=ok | browserInputSession=ok | browserInputReadyState=ok | browserEventSession=ok | browserEventReadyState=ok | browserInteractionSession=ok | browserInteractionReadyState=ok | browserFocusSession=ok | browserFocusReadyState=ok | browserShortcutSession=ok | browserShortcutReadyState=ok | browserPointerSession=ok | browserPointerReadyState=ok | browserCommandSession=ok | browserCommandReadyState=ok | browserGestureSession=ok | browserGestureReadyState=ok | browserLifecycleSession=ok | browserLifecycleReadyState=ok | browserRouteSession=ok | browserRouteReadyState=ok | browserStateSyncSession=ok | browserStateSyncReadyState=ok | browserRestoreSession=ok | browserRestoreReadyState=ok | browserResumeSession=ok | browserResumeReadyState=ok | browserCheckpointSession=ok | browserCheckpointReadyState=ok | browserPersistenceSession=ok | browserPersistenceReadyState=ok | browserHistorySession=ok | browserHistoryReadyState=ok | browserRecoverySession=ok | browserRecoveryReadyState=ok | browserSnapshotSession=ok | browserSnapshotReadyState=ok | browserArchiveSession=ok | browserArchiveReadyState=ok | browserTelemetrySession=ok | browserTelemetryReadyState=ok | browserDiagnosticsSession=ok | browserDiagnosticsReadyState=ok | browserMonitoringSession=ok | browserMonitoringReadyState=ok | browserWatchdogSession=ok | browserWatchdogReadyState=ok | browserHealthSession=ok | browserHealthReadyState=ok | browserAlertingSession=ok | browserAlertingReadyState=ok | browserPolicySession=ok | browserPolicyReadyState=ok | browserAuditSession=ok | browserAuditReadyState=ok | browserSecuritySession=ok | browserSecurityReadyState=ok | browserComplianceSession=ok | browserComplianceReadyState=ok | browserPrivacySession=ok | browserPrivacyReadyState=ok | browserGovernanceSession=ok | browserGovernanceReadyState=ok | browserTrustSession=ok | browserTrustReadyState=ok | browserAssuranceSession=ok | browserAssuranceReadyState=ok | browserRiskSession=ok | browserRiskReadyState=ok | browserIntegritySession=ok | browserIntegrityReadyState=ok | browserResilienceSession=ok | browserResilienceReadyState=ok | browserAvailabilitySession=ok | browserAvailabilityReadyState=ok | browserContinuitySession=ok | browserContinuityReadyState=ok | browserDurabilitySession=ok | browserDurabilityReadyState=ok | browserSustainabilitySession=ok | browserSustainabilityReadyState=ok | browserLongevitySession=ok | browserLongevityReadyState=ok | browserStewardshipSession=ok | browserStewardshipReadyState=ok | browserOperabilitySession=ok | browserOperabilityReadyState=ok | browserServiceabilitySession=ok | browserServiceabilityReadyState=ok | browserMaintainabilitySession=ok | browserMaintainabilityReadyState=ok | browserSupportabilitySession=ok | browserSupportabilityReadyState=ok | browserUsabilitySession=ok | browserUsabilityReadyState=ok | browserAccessibilitySession=ok | browserAccessibilityReadyState=ok | browserInclusivitySession=ok | browserInclusivityReadyState=ok | browserAdaptabilitySession=ok | browserAdaptabilityReadyState=ok | browserDiscoverabilitySession=ok | browserDiscoverabilityReadyState=ok | browserLearnabilitySession=ok | browserLearnabilityReadyState=ok | browserApproachabilitySession=ok | browserApproachabilityReadyState=ok | browserNavigabilitySession=ok | browserNavigabilityReadyState=ok | browserGuidabilitySession=ok | browserGuidabilityReadyState=ok | browserClaritySession=ok | browserClarityReadyState=ok | browserIntuitivenessSession=ok | browserIntuitivenessReadyState=ok | browserConsistencySession=ok | browserConsistencyReadyState=ok | browserCohesivenessSession=ok | browserCohesivenessReadyState=ok | browserPredictabilitySession=ok | browserPredictabilityReadyState=ok | browserFamiliaritySession=ok | browserFamiliarityReadyState=ok | browserFluencySession=ok | browserFluencyReadyState=ok | browserHarmonySession=ok | browserHarmonyReadyState=ok | browserReadabilitySession=ok | browserReadabilityReadyState=ok | browserLegibilitySession=ok | browserLegibilityReadyState=ok | browserSimplicitySession=ok | browserSimplicityReadyState=ok | browserUnderstandabilitySession=ok | browserUnderstandabilityReadyState=ok | browserScannabilitySession=ok | browserScannabilityReadyState=ok | browserComprehensibilitySession=ok | browserComprehensibilityReadyState=ok | browserMemorabilitySession=ok | browserMemorabilityReadyState=ok | browserRetentionSession=ok | browserRetentionReadyState=ok | browserConfidenceSession=ok | browserConfidenceReadyState=ok | browserComfortSession=ok | browserComfortReadyState=ok | browserTransparencySession=ok | browserTransparencyReadyState=ok | browserVisibilitySession=ok | browserVisibilityReadyState=ok | browserResponsivenessSession=ok | browserResponsivenessReadyState=ok | browserFeedbackSession=ok | browserFeedbackReadyState=ok | browserEfficiencySession=ok | browserEfficiencyReadyState=ok | browserEffectivenessSession=ok | browserEffectivenessReadyState=ok | browserControllabilitySession=ok | browserControllabilityReadyState=ok | browserCustomizabilitySession=ok | browserCustomizabilityReadyState=ok | browserFlexibilitySession=ok | browserFlexibilityReadyState=ok | browserPersonalizationSession=ok | browserPersonalizationReadyState=ok | browserRecoverabilitySession=ok | browserRecoverabilityReadyState=ok | browserForgivenessSession=ok | browserForgivenessReadyState=ok | browserSatisfactionSession=ok | browserSatisfactionReadyState=ok | browserDelightSession=ok | browserDelightReadyState=ok | browserUsefulnessSession=ok | browserUsefulnessReadyState=ok | browserValueSession=ok | browserValueReadyState=ok | browserCredibilitySession=ok | browserCredibilityReadyState=ok | browserReliabilitySession=ok | browserReliabilityReadyState=ok | browserTrustworthinessSession=ok | browserTrustworthinessReadyState=ok | browserAssurance2Session=ok | browserAssurance2ReadyState=ok | browserClarityOfPurposeSession=ok | browserClarityOfPurposeReadyState=ok | browserIntentionalitySession=ok | browserIntentionalityReadyState=ok | browserConsistencyOfFeedbackSession=ok | browserConsistencyOfFeedbackReadyState=ok | browserPerceivabilitySession=ok | browserPerceivabilityReadyState=ok | browserNavigationalConfidenceSession=ok | browserNavigationalConfidenceReadyState=ok | browserTaskAlignmentSession=ok | browserTaskAlignmentReadyState=ok | browserGoalOrientationSession=ok | browserGoalOrientationReadyState=ok | browserFlowStateSession=ok | browserFlowStateReadyState=ok | browserEngagementSession=ok | browserEngagementReadyState=ok | browserImmersionSession=ok | browserImmersionReadyState=ok | browserAffordanceSession=ok | browserAffordanceReadyState=ok | browserSignpostingSession=ok | browserSignpostingReadyState=ok | browserOrientationSession=ok | browserOrientationReadyState=ok | browserWayfindingSession=ok | browserWayfindingReadyState=ok | browserProgressAwarenessSession=ok | browserProgressAwarenessReadyState=ok | browserCompletionConfidenceSession=ok | browserCompletionConfidenceReadyState=ok | browserCredenceSession=ok | browserCredenceReadyState=ok | browserDependabilitySession=ok | browserDependabilityReadyState=ok | browserAssurabilitySession=ok | browserAssurabilityReadyState=ok | browserConvictionSession=ok | browserConvictionReadyState=ok | browserPurposefulnessSession=ok | browserPurposefulnessReadyState=ok | browserDeliberatenessSession=ok | browserDeliberatenessReadyState=ok | browserSignalCoherenceSession=ok | browserSignalCoherenceReadyState=ok | browserObservabilitySession=ok | browserObservabilityReadyState=ok | browserDirectionalitySession=ok | browserDirectionalityReadyState=ok | browserTaskFitSession=ok | browserTaskFitReadyState=ok | browserAimfulnessSession=ok | browserAimfulnessReadyState=ok | browserMomentumSession=ok | browserMomentumReadyState=ok | browserInvolvementSession=ok | browserInvolvementReadyState=ok | browserAbsorptionSession=ok | browserAbsorptionReadyState=ok | browserCueingSession=ok | browserCueingReadyState=ok | browserLandmarkingSession=ok | browserLandmarkingReadyState=ok | browserOrientationConfidenceSession=ok | browserOrientationConfidenceReadyState=ok | browserPathfindingSession=ok | browserPathfindingReadyState=ok | browserMilestoneAwarenessSession=ok | browserMilestoneAwarenessReadyState=ok | browserClosureConfidenceSession=ok | browserClosureConfidenceReadyState=ok | browserReassuranceSession=ok | browserReassuranceReadyState=ok | browserSteadinessSession=ok | browserSteadinessReadyState=ok | browserAssistanceSession=ok | browserAssistanceReadyState=ok | browserEnablementSession=ok | browserEnablementReadyState=ok | browserEmpowermentSession=ok | browserEmpowermentReadyState=ok | browserAgencySession=ok | browserAgencyReadyState=ok | browserMasterySession=ok | browserMasteryReadyState=ok | browserConfidenceBuildingSession=ok | browserConfidenceBuildingReadyState=ok | browserTaskConfidenceSession=ok | browserTaskConfidenceReadyState=ok | browserDecisionConfidenceSession=ok | browserDecisionConfidenceReadyState=ok | browserOutcomeConfidenceSession=ok | browserOutcomeConfidenceReadyState=ok | browserSuccessConfidenceSession=ok | browserSuccessConfidenceReadyState=ok | browserTrustInUseSession=ok | browserTrustInUseReadyState=ok | browserRelianceSession=ok | browserRelianceReadyState=ok | browserComposureSession=ok | browserComposureReadyState=ok | browserCalmnessSession=ok | browserCalmnessReadyState=ok | browserAssurednessSession=ok | browserAssurednessReadyState=ok | browserCertaintySession=ok | browserCertaintyReadyState=ok | browserResolutionSession=ok | browserResolutionReadyState=ok | browserCompletionAssuranceSession=ok | browserCompletionAssuranceReadyState=ok | browserConfirmationSession=ok | browserConfirmationReadyState=ok | browserVerificationSession=ok | browserVerificationReadyState=ok | browserCorroborationSession=ok | browserCorroborationReadyState=ok | browserAffirmationSession=ok | browserAffirmationReadyState=ok | browserRatificationSession=ok | browserRatificationReadyState=ok | browserEndorsementSession=ok | browserEndorsementReadyState=ok | browserAcceptanceSession=ok | browserAcceptanceReadyState=ok | browserAdoptionSession=ok | browserAdoptionReadyState=ok | browserCommitmentSession=ok | browserCommitmentReadyState=ok | browserDedicationSession=ok | browserDedicationReadyState=ok | browserPerseveranceSession=ok | browserPerseveranceReadyState=ok | browserTenacitySession=ok | browserTenacityReadyState=ok | browserResolveSession=ok | browserResolveReadyState=ok | browserDeterminationSession=ok | browserDeterminationReadyState=ok | browserFollowThroughSession=ok | browserFollowThroughReadyState=ok | browserFulfillmentSession=ok | browserFulfillmentReadyState=ok | browserAttainmentSession=ok | browserAttainmentReadyState=ok | browserAccomplishmentSession=ok | browserAccomplishmentReadyState=ok | browserCompletionReadinessSession=ok | browserCompletionReadinessReadyState=ok | browserOperationalReadinessSession=ok | browserOperationalReadinessReadyState=ok | browserDeploymentReadinessSession=ok | browserDeploymentReadinessReadyState=ok | browserReleaseReadinessSession=ok | browserReleaseReadinessReadyState=ok | browserLaunchAssuranceSession=ok | browserLaunchAssuranceReadyState=ok | browserGoLiveReadinessSession=ok | browserGoLiveReadinessReadyState=ok | browserServiceActivationSession=ok | browserServiceActivationReadyState=ok | browserSteadyOperationSession=ok | browserSteadyOperationReadyState=ok | browserRuntimeStabilitySession=ok | browserRuntimeStabilityReadyState=ok | browserSessionStabilitySession=ok | browserSessionStabilityReadyState=ok | browserStateStabilitySession=ok | browserStateStabilityReadyState=ok | browserInteractionStabilitySession=ok | browserInteractionStabilityReadyState=ok | browserContinuationAssuranceSession=ok | browserContinuationAssuranceReadyState=ok | browserSustainmentReadinessSession=ok | browserSustainmentReadinessReadyState=ok | browserLiveOperabilitySession=ok | browserLiveOperabilityReadyState=ok | browserRuntimeOperabilitySession=ok | browserRuntimeOperabilityReadyState=ok | browserServiceAssuranceSession=ok | browserServiceAssuranceReadyState=ok | browserProductionReadinessSession=ok | browserProductionReadinessReadyState=ok | browserProductionAssuranceSession=ok | browserProductionAssuranceReadyState=ok | browserLiveStabilitySession=ok | browserLiveStabilityReadyState=ok | browserSteadyStateReadinessSession=ok | browserSteadyStateReadinessReadyState=ok | browserOperationalStabilitySession=ok | browserOperationalStabilityReadyState=ok | browserDeploymentStabilitySession=ok | browserDeploymentStabilityReadyState=ok | browserReleaseStabilitySession=ok | browserReleaseStabilityReadyState=ok | browserLaunchStabilitySession=ok | browserLaunchStabilityReadyState=ok | browserGoLiveStabilitySession=ok | browserGoLiveStabilityReadyState=ok | browserServiceContinuitySession=ok | browserServiceContinuityReadyState=ok | browserRuntimeContinuitySession=ok | browserRuntimeContinuityReadyState=ok | browserSessionContinuitySession=ok | browserSessionContinuityReadyState=ok | browserStateContinuitySession=ok | browserStateContinuityReadyState=ok | browserInteractionContinuitySession=ok | browserInteractionContinuityReadyState=ok | browserFlowContinuitySession=ok | browserFlowContinuityReadyState=ok | browserContinuationReadinessSession=ok | browserContinuationReadinessReadyState=ok | browserSustainmentAssuranceSession=ok | browserSustainmentAssuranceReadyState=ok | browserLiveSustainabilitySession=ok | browserLiveSustainabilityReadyState=ok | browserRuntimeSustainabilitySession=ok | browserRuntimeSustainabilityReadyState=ok | browserServiceSustainabilitySession=ok | browserServiceSustainabilityReadyState=ok | browserProductionStabilitySession=ok | browserProductionStabilityReadyState=ok | browserProductionContinuitySession=ok | browserProductionContinuityReadyState=ok | browserLivePersistenceSession=ok | browserLivePersistenceReadyState=ok | browserSteadyPersistenceReadinessSession=ok | browserSteadyPersistenceReadinessReadyState=ok | browserLiveAssuranceSession=ok | browserLiveAssuranceReadyState=ok | browserSteadyOperationReadinessSession=ok | browserSteadyOperationReadinessReadyState=ok | runtimeTailExtension=ok",
   "Json": ""
 }

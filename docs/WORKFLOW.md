@@ -139,6 +139,9 @@ The default operator interaction for this project is:
 - When a batch exposes a DI cycle in the browser runtime chain, break the newest edge first and re-run the compact self-test before adding more layers.
 - The current stable tail baseline is `runtimeTailExtension=ok`; future routine work should extend from that point unless a blocker is found.
 - The current active browser handoff is now the concrete `Browser bootstrap package` artifact, not further synthetic readiness layers. Future routine work should consume that package and move the active UI toward real client-bootstrap integration instead of extending the synthetic tail.
+- The current bootstrap-package follow-up is the package readback path: `Browser bootstrap package readback` should validate the artifact as a consumable handoff before any further client-bootstrap work.
+- The bootstrap-package readback is now paired with a package consumer stage, so the launch path consumes the package-backed handoff rather than only validating the artifact on disk.
+- The active operator surface should now focus on the bootstrap package, launch/session persistence, and real client-bootstrap integration; the large synthetic runtime tail is archived validation only.
 
 ## Issue Triage
 

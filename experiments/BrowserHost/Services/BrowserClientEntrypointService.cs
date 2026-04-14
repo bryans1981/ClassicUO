@@ -9,15 +9,15 @@ public interface IBrowserClientEntrypoint
 
 public sealed class BrowserClientEntrypointService : IBrowserClientEntrypoint
 {
-    private readonly IBrowserClientBootstrapAdapter _bootstrapAdapter;
+    private readonly IBrowserClientBootstrapPackageConsumer _bootstrapPackageConsumer;
     private readonly BrowserStorageService _storageService;
 
     public BrowserClientEntrypointService(
-        IBrowserClientBootstrapAdapter bootstrapAdapter,
+        IBrowserClientBootstrapPackageConsumer bootstrapPackageConsumer,
         BrowserStorageService storageService
     )
     {
-        _bootstrapAdapter = bootstrapAdapter;
+        _bootstrapPackageConsumer = bootstrapPackageConsumer;
         _storageService = storageService;
     }
 
@@ -26,14 +26,18 @@ public sealed class BrowserClientEntrypointService : IBrowserClientEntrypoint
         string normalizedProfileId = NormalizeProfileId(profileId);
         DateTimeOffset started = DateTimeOffset.UtcNow;
 
-        BrowserClientStartupContext startupContext = await _bootstrapAdapter.PrepareStartupContextAsync(request);
+        BrowserClientBootstrapPackageConsumerResult bootstrapPackageConsumer = await _bootstrapPackageConsumer.ConsumeAsync(profileId);
         string settingsFilePath = BrowserVirtualPaths.ConfigFile("client.settings.json");
         string startupProfilePath = BrowserVirtualPaths.ProfileFile(normalizedProfileId, "profile.json");
 
         BrowserFilePreparation settingsPreparation = await EnsureJsonFileAsync(settingsFilePath, "{}");
         BrowserFilePreparation profilePreparation = await EnsureJsonFileAsync(startupProfilePath, "{}");
 
-        BrowserClientLaunchAsset[] assets = startupContext.Assets.Select(
+        BrowserClientStartupAsset[] startupAssets = bootstrapPackageConsumer.Assets.Length > 0
+            ? bootstrapPackageConsumer.Assets
+            : Array.Empty<BrowserClientStartupAsset>();
+
+        BrowserClientLaunchAsset[] assets = startupAssets.Select(
             static asset => new BrowserClientLaunchAsset
             {
                 Id = asset.Id,
@@ -57,7 +61,7 @@ public sealed class BrowserClientEntrypointService : IBrowserClientEntrypoint
             )
             .ToArray();
 
-        bool isReady = startupContext.IsReady
+        bool isReady = bootstrapPackageConsumer.IsReady
             && settingsPreparation.Succeeded
             && profilePreparation.Succeeded
             && issues.Length == 0;
@@ -66,20 +70,20 @@ public sealed class BrowserClientEntrypointService : IBrowserClientEntrypoint
         {
             IsReady = isReady,
             ProfileId = normalizedProfileId,
-            AssetRootPath = startupContext.AssetRootPath,
-            ProfilesRootPath = startupContext.ProfilesRootPath,
-            CacheRootPath = startupContext.CacheRootPath,
-            ConfigRootPath = startupContext.ConfigRootPath,
+            AssetRootPath = BrowserVirtualPaths.AssetsRoot,
+            ProfilesRootPath = BrowserVirtualPaths.ProfilesRoot,
+            CacheRootPath = BrowserVirtualPaths.CacheRoot,
+            ConfigRootPath = BrowserVirtualPaths.ConfigRoot,
             SettingsFilePath = settingsFilePath,
             StartupProfilePath = startupProfilePath,
             SettingsPrepared = settingsPreparation.Succeeded,
             StartupProfilePrepared = profilePreparation.Succeeded,
-            ReadyAssetCount = startupContext.ReadyAssetCount,
-            CacheHits = startupContext.CacheHits,
+            ReadyAssetCount = bootstrapPackageConsumer.RequiredAssetCount,
+            CacheHits = 0,
             TotalMs = (DateTimeOffset.UtcNow - started).TotalMilliseconds,
             Assets = assets,
             Issues = issues,
-            Summary = BuildSummary(isReady, normalizedProfileId, issues.Length)
+            Summary = BuildSummary(isReady, normalizedProfileId, issues.Length, bootstrapPackageConsumer.PackageVersion)
         };
     }
 
@@ -120,11 +124,11 @@ public sealed class BrowserClientEntrypointService : IBrowserClientEntrypoint
         return string.IsNullOrWhiteSpace(normalized) ? "default" : normalized;
     }
 
-    private static string BuildSummary(bool isReady, string profileId, int issueCount)
+    private static string BuildSummary(bool isReady, string profileId, int issueCount, string packageVersion)
     {
         return isReady
-            ? $"Launch plan ready for profile '{profileId}'."
-            : $"Launch plan blocked for profile '{profileId}' with {issueCount} issue(s).";
+            ? $"Launch plan ready for profile '{profileId}' via {packageVersion}."
+            : $"Launch plan blocked for profile '{profileId}' with {issueCount} issue(s) via {packageVersion}.";
     }
 }
 

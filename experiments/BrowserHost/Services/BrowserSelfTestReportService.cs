@@ -23,6 +23,8 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientLaunchSession _launchSession;
     private readonly IBrowserClientLaunchSessionReader _launchSessionReader;
     private readonly IBrowserClientBootstrapPackage _bootstrapPackage;
+    private readonly IBrowserClientBootstrapPackageReader _bootstrapPackageReader;
+    private readonly IBrowserClientBootstrapPackageConsumer _bootstrapPackageConsumer;
     private readonly IBrowserClientRuntimeLaunchContract _runtimeLaunchContract;
     private readonly IBrowserClientStartupPacket _startupPacket;
     private readonly IBrowserClientStartupConsumer _startupConsumer;
@@ -510,6 +512,8 @@ public sealed class BrowserSelfTestReportService
         IBrowserClientLaunchSession launchSession,
         IBrowserClientLaunchSessionReader launchSessionReader,
         IBrowserClientBootstrapPackage bootstrapPackage,
+        IBrowserClientBootstrapPackageReader bootstrapPackageReader,
+        IBrowserClientBootstrapPackageConsumer bootstrapPackageConsumer,
         IBrowserClientRuntimeLaunchContract runtimeLaunchContract,
         IBrowserClientStartupPacket startupPacket,
         IBrowserClientStartupConsumer startupConsumer,
@@ -995,6 +999,8 @@ public sealed class BrowserSelfTestReportService
         _launchSession = launchSession;
         _launchSessionReader = launchSessionReader;
         _bootstrapPackage = bootstrapPackage;
+        _bootstrapPackageReader = bootstrapPackageReader;
+        _bootstrapPackageConsumer = bootstrapPackageConsumer;
         _runtimeLaunchContract = runtimeLaunchContract;
         _startupPacket = startupPacket;
         _startupConsumer = startupConsumer;
@@ -1499,6 +1505,8 @@ public sealed class BrowserSelfTestReportService
         BrowserClientLaunchSession launchSession = await _launchSession.CreateLaunchSessionAsync(effectiveRequest);
         BrowserClientLaunchSessionRead launchSessionRead = await _launchSessionReader.ReadLaunchSessionAsync();
         BrowserClientBootstrapPackageResult bootstrapPackage = await _bootstrapPackage.CreateAsync();
+        BrowserClientBootstrapPackageReadResult bootstrapPackageRead = await _bootstrapPackageReader.ReadAsync(bootstrapPackage.ProfileId);
+        BrowserClientBootstrapPackageConsumerResult bootstrapPackageConsumer = await _bootstrapPackageConsumer.ConsumeAsync(bootstrapPackage.ProfileId);
         BrowserClientRuntimeLaunchContractResult runtimeLaunchContract = await _runtimeLaunchContract.BuildAsync();
         BrowserClientStartupPacketResult startupPacket = await _startupPacket.BuildAsync();
         BrowserClientStartupConsumerResult startupConsumer = await _startupConsumer.ConsumeAsync();
@@ -2095,6 +2103,8 @@ public sealed class BrowserSelfTestReportService
             LaunchSession = launchSession,
             LaunchSessionRead = launchSessionRead,
             BootstrapPackage = bootstrapPackage,
+            BootstrapPackageRead = bootstrapPackageRead,
+            BootstrapPackageConsumer = bootstrapPackageConsumer,
             RuntimeLaunchContract = runtimeLaunchContract,
             StartupPacket = startupPacket,
             StartupConsumer = startupConsumer,
@@ -2597,6 +2607,8 @@ public sealed class BrowserSelfTestReportService
             $"launchSession={(report.LaunchSession.WriteSucceeded ? "ok" : "fail")}",
             $"launchSessionRead={(report.LaunchSessionRead.ReadSucceeded ? "ok" : "fail")}",
             $"bootstrapPackage={(report.BootstrapPackage.IsReady ? "ok" : "fail")}",
+            $"bootstrapPackageRead={(report.BootstrapPackageRead.IsReady ? "ok" : "fail")}",
+            $"bootstrapPackageConsumer={(report.BootstrapPackageConsumer.IsReady ? "ok" : "fail")}",
             $"runtimeContract={(report.RuntimeLaunchContract.IsReady ? "ok" : "fail")}",
             $"startupPacket={(report.StartupPacket.IsReady ? "ok" : "fail")}",
             $"startupConsumer={(report.StartupConsumer.IsReady ? "ok" : "fail")}",
@@ -3096,6 +3108,8 @@ public sealed class BrowserSelfTestReport
     public BrowserClientLaunchSession LaunchSession { get; set; } = new();
     public BrowserClientLaunchSessionRead LaunchSessionRead { get; set; } = new();
     public BrowserClientBootstrapPackageResult BootstrapPackage { get; set; } = new();
+    public BrowserClientBootstrapPackageReadResult BootstrapPackageRead { get; set; } = new();
+    public BrowserClientBootstrapPackageConsumerResult BootstrapPackageConsumer { get; set; } = new();
     public BrowserClientRuntimeLaunchContractResult RuntimeLaunchContract { get; set; } = new();
     public BrowserClientStartupPacketResult StartupPacket { get; set; } = new();
     public BrowserClientStartupConsumerResult StartupConsumer { get; set; } = new();

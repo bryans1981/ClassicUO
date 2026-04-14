@@ -65,6 +65,9 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the startup path now includes a first runtime bootstrap session above the runtime bootstrap consumer, and the one-click self-test records whether that runtime-session startup layer is ready
 - the current stable tail baseline is `runtimeTailExtension=ok`, which extends the steady-operation readiness layer with a compact 20-phase stabilization tail
 - the current active browser handoff is now the concrete `Browser bootstrap package` artifact written to `/cache/startup/default/browser-bootstrap-package.json`; the synthetic tail remains validated, but it is no longer the active implementation path
+- `Current Tests` should now focus on the bootstrap package readback and launch/session persistence; the long runtime-tail ladder has been moved to archived validation context
+- The active page now surfaces the bootstrap package artifact, package readback, and launch-session path near the top, while the synthetic runtime ladder remains archived for reference only
+- the bootstrap package is now also consumed by a package-consumer stage, so the launch plan now flows through a package-backed handoff rather than only a file readback
 
 ### Main-code integration progress
 
@@ -137,7 +140,7 @@ Test:
 
 ### Next code objective
 
-Extend the runtime bootstrap consumer/session layers into the next browser entrypoint step, ideally by shaping the first executable runtime client bootstrap controller around that consumed handoff state.
+Extend the runtime bootstrap consumer/session layers into the next browser entrypoint step, ideally by shaping the first executable runtime client bootstrap controller around the package-backed handoff and trimming the remaining synthetic tail surface from the active path.
 
 
 

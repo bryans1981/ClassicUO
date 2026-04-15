@@ -198,7 +198,7 @@ Current focus should remain:
 1. Move the browser host from scaffolding into the actual product path.
 2. Consume the bootstrap package into real client-bootstrap integration.
 3. Land the browser-native execution path needed for a playable browser client, with WebAssembly/WebGL-style rendering, input, and websocket runtime behavior as the reference target.
-4. Use the browser-native canvas host as the active visible render step while the broader client bootstrap path continues.
+4. Use the browser-native canvas host and canvas frame as the active visible render step while the broader client bootstrap path continues.
 5. Keep browser validation batched and focused on end-to-end working slices instead of isolated proof steps.
 
 ## Confirmed Project Facts

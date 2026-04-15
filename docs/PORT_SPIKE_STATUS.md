@@ -80,6 +80,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
  - the browser-native browser runtime ready-state now sits above the browser runtime and is the current browser-runtime baseline in the compact report
  - the browser-native browser host ready-state now sits above the browser host and is the current browser-host baseline in the compact report
  - the browser-native canvas host now mounts a real browser canvas and probes a render context, giving us the first concrete browser-render step above the render controller
+ - the browser-native canvas frame now clears and paints the mounted canvas, giving us the first visible browser-render frame above the canvas host
 
 ### Main-code integration progress
 

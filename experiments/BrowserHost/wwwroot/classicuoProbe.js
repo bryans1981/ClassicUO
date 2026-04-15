@@ -147,6 +147,65 @@ window.classicuoRender = {
         error: error?.message || String(error)
       };
     }
+  },
+  renderCanvasFrame: function (containerId, canvasId, width, height, contextType, text, backgroundColor, foregroundColor) {
+    try {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) {
+        return {
+          rendered: false,
+          contextType: contextType || '',
+          text: text || '',
+          error: 'canvas-not-found'
+        };
+      }
+
+      canvas.width = width || canvas.width;
+      canvas.height = height || canvas.height;
+
+      const result = {
+        rendered: false,
+        contextType: contextType || '',
+        text: text || '',
+        error: ''
+      };
+
+      if (result.contextType === 'webgl2' || result.contextType === 'webgl') {
+        const gl = canvas.getContext(result.contextType);
+        if (!gl) {
+          result.error = 'webgl-context-unavailable';
+          return result;
+        }
+
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.clearColor(15 / 255, 23 / 255, 42 / 255, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        result.rendered = true;
+        return result;
+      }
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        result.error = '2d-context-unavailable';
+        return result;
+      }
+
+      ctx.fillStyle = backgroundColor || '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = foregroundColor || '#f8fafc';
+      ctx.font = '24px sans-serif';
+      ctx.fillText(text || 'ClassicUO browser canvas ready', 24, 48);
+      result.rendered = true;
+      result.contextType = '2d';
+      return result;
+    } catch (error) {
+      return {
+        rendered: false,
+        contextType: contextType || '',
+        text: text || '',
+        error: error?.message || String(error)
+      };
+    }
   }
 };
 

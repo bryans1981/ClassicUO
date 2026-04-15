@@ -36,6 +36,7 @@ public sealed class BrowserSelfTestReportService
       private readonly IBrowserClientNativeBrowserInputController _nativeBrowserInputController;
       private readonly IBrowserClientNativeBrowserNetworkController _nativeBrowserNetworkController;
       private readonly IBrowserClientNativeBrowserTransportController _nativeBrowserTransportController;
+      private readonly IBrowserClientNativeBrowserRuntimeExecutionController _nativeBrowserRuntimeExecutionController;
       private readonly IBrowserClientRuntimeLaunchContract _runtimeLaunchContract;
     private readonly IBrowserClientStartupPacket _startupPacket;
     private readonly IBrowserClientStartupConsumer _startupConsumer;
@@ -536,6 +537,7 @@ public sealed class BrowserSelfTestReportService
           IBrowserClientNativeBrowserInputController nativeBrowserInputController,
           IBrowserClientNativeBrowserNetworkController nativeBrowserNetworkController,
           IBrowserClientNativeBrowserTransportController nativeBrowserTransportController,
+          IBrowserClientNativeBrowserRuntimeExecutionController nativeBrowserRuntimeExecutionController,
           IBrowserClientRuntimeLaunchContract runtimeLaunchContract,
         IBrowserClientStartupPacket startupPacket,
         IBrowserClientStartupConsumer startupConsumer,
@@ -1034,6 +1036,7 @@ public sealed class BrowserSelfTestReportService
           _nativeBrowserInputController = nativeBrowserInputController;
           _nativeBrowserNetworkController = nativeBrowserNetworkController;
           _nativeBrowserTransportController = nativeBrowserTransportController;
+          _nativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController;
           _runtimeLaunchContract = runtimeLaunchContract;
         _startupPacket = startupPacket;
         _startupConsumer = startupConsumer;
@@ -1551,6 +1554,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientNativeBrowserInputControllerResult nativeBrowserInputController = await _nativeBrowserInputController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserNetworkControllerResult nativeBrowserNetworkController = await _nativeBrowserNetworkController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserTransportControllerResult nativeBrowserTransportController = await _nativeBrowserTransportController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
+        BrowserClientNativeBrowserRuntimeExecutionControllerResult nativeBrowserRuntimeExecutionController = await _nativeBrowserRuntimeExecutionController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientRuntimeLaunchContractResult runtimeLaunchContract = await _runtimeLaunchContract.BuildAsync();
         BrowserClientStartupPacketResult startupPacket = await _startupPacket.BuildAsync();
         BrowserClientStartupConsumerResult startupConsumer = await _startupConsumer.ConsumeAsync();
@@ -2160,6 +2164,7 @@ public sealed class BrowserSelfTestReportService
             NativeBrowserInputController = nativeBrowserInputController,
             NativeBrowserNetworkController = nativeBrowserNetworkController,
             NativeBrowserTransportController = nativeBrowserTransportController,
+            NativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController,
             RuntimeLaunchContract = runtimeLaunchContract,
             StartupPacket = startupPacket,
             StartupConsumer = startupConsumer,
@@ -2675,6 +2680,7 @@ public sealed class BrowserSelfTestReportService
             $"nativeBrowserInputController={(report.NativeBrowserInputController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserNetworkController={(report.NativeBrowserNetworkController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserTransportController={(report.NativeBrowserTransportController.IsReady ? "ok" : "fail")}",
+            $"nativeBrowserRuntimeExecutionController={(report.NativeBrowserRuntimeExecutionController.IsReady ? "ok" : "fail")}",
             $"runtimeContract={(report.RuntimeLaunchContract.IsReady ? "ok" : "fail")}",
             $"startupPacket={(report.StartupPacket.IsReady ? "ok" : "fail")}",
             $"startupConsumer={(report.StartupConsumer.IsReady ? "ok" : "fail")}",
@@ -3187,6 +3193,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientNativeBrowserInputControllerResult NativeBrowserInputController { get; set; } = new();
     public BrowserClientNativeBrowserNetworkControllerResult NativeBrowserNetworkController { get; set; } = new();
     public BrowserClientNativeBrowserTransportControllerResult NativeBrowserTransportController { get; set; } = new();
+    public BrowserClientNativeBrowserRuntimeExecutionControllerResult NativeBrowserRuntimeExecutionController { get; set; } = new();
     public BrowserClientRuntimeLaunchContractResult RuntimeLaunchContract { get; set; } = new();
     public BrowserClientStartupPacketResult StartupPacket { get; set; } = new();
     public BrowserClientStartupConsumerResult StartupConsumer { get; set; } = new();

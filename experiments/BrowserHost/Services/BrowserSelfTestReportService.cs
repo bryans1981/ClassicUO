@@ -27,6 +27,7 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientBootstrapPackageConsumer _bootstrapPackageConsumer;
     private readonly IBrowserClientNativeExecutionPlan _nativeExecutionPlan;
     private readonly IBrowserClientNativeRuntimeShell _nativeRuntimeShell;
+    private readonly IBrowserClientNativeLaunchController _nativeLaunchController;
     private readonly IBrowserClientRuntimeLaunchContract _runtimeLaunchContract;
     private readonly IBrowserClientStartupPacket _startupPacket;
     private readonly IBrowserClientStartupConsumer _startupConsumer;
@@ -518,6 +519,7 @@ public sealed class BrowserSelfTestReportService
         IBrowserClientBootstrapPackageConsumer bootstrapPackageConsumer,
         IBrowserClientNativeExecutionPlan nativeExecutionPlan,
         IBrowserClientNativeRuntimeShell nativeRuntimeShell,
+        IBrowserClientNativeLaunchController nativeLaunchController,
         IBrowserClientRuntimeLaunchContract runtimeLaunchContract,
         IBrowserClientStartupPacket startupPacket,
         IBrowserClientStartupConsumer startupConsumer,
@@ -1007,6 +1009,7 @@ public sealed class BrowserSelfTestReportService
         _bootstrapPackageConsumer = bootstrapPackageConsumer;
         _nativeExecutionPlan = nativeExecutionPlan;
         _nativeRuntimeShell = nativeRuntimeShell;
+        _nativeLaunchController = nativeLaunchController;
         _runtimeLaunchContract = runtimeLaunchContract;
         _startupPacket = startupPacket;
         _startupConsumer = startupConsumer;
@@ -1515,6 +1518,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientBootstrapPackageConsumerResult bootstrapPackageConsumer = await _bootstrapPackageConsumer.ConsumeAsync(bootstrapPackage.ProfileId);
         BrowserClientNativeExecutionPlanResult nativeExecutionPlan = await _nativeExecutionPlan.PrepareAsync(bootstrapPackage.ProfileId);
         BrowserClientNativeRuntimeShellResult nativeRuntimeShell = await _nativeRuntimeShell.PrepareAsync(bootstrapPackage.ProfileId);
+        BrowserClientNativeLaunchControllerResult nativeLaunchController = await _nativeLaunchController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientRuntimeLaunchContractResult runtimeLaunchContract = await _runtimeLaunchContract.BuildAsync();
         BrowserClientStartupPacketResult startupPacket = await _startupPacket.BuildAsync();
         BrowserClientStartupConsumerResult startupConsumer = await _startupConsumer.ConsumeAsync();
@@ -2115,6 +2119,7 @@ public sealed class BrowserSelfTestReportService
             BootstrapPackageConsumer = bootstrapPackageConsumer,
             NativeExecutionPlan = nativeExecutionPlan,
             NativeRuntimeShell = nativeRuntimeShell,
+            NativeLaunchController = nativeLaunchController,
             RuntimeLaunchContract = runtimeLaunchContract,
             StartupPacket = startupPacket,
             StartupConsumer = startupConsumer,
@@ -2621,6 +2626,7 @@ public sealed class BrowserSelfTestReportService
             $"bootstrapPackageConsumer={(report.BootstrapPackageConsumer.IsReady ? "ok" : "fail")}",
             $"nativeExecutionPlan={(report.NativeExecutionPlan.IsReady ? "ok" : "fail")}",
             $"nativeRuntimeShell={(report.NativeRuntimeShell.IsReady ? "ok" : "fail")}",
+            $"nativeLaunchController={(report.NativeLaunchController.IsReady ? "ok" : "fail")}",
             $"runtimeContract={(report.RuntimeLaunchContract.IsReady ? "ok" : "fail")}",
             $"startupPacket={(report.StartupPacket.IsReady ? "ok" : "fail")}",
             $"startupConsumer={(report.StartupConsumer.IsReady ? "ok" : "fail")}",
@@ -3124,6 +3130,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientBootstrapPackageConsumerResult BootstrapPackageConsumer { get; set; } = new();
     public BrowserClientNativeExecutionPlanResult NativeExecutionPlan { get; set; } = new();
     public BrowserClientNativeRuntimeShellResult NativeRuntimeShell { get; set; } = new();
+    public BrowserClientNativeLaunchControllerResult NativeLaunchController { get; set; } = new();
     public BrowserClientRuntimeLaunchContractResult RuntimeLaunchContract { get; set; } = new();
     public BrowserClientStartupPacketResult StartupPacket { get; set; } = new();
     public BrowserClientStartupConsumerResult StartupConsumer { get; set; } = new();

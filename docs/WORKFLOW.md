@@ -147,6 +147,7 @@ The default operator interaction for this project is:
 - GitHub Actions should ignore browser-spike and docs-only changes for `Build-Test`, and `Deploy` should only run after a successful `Build-Test` completion.
 - Current browser-native baseline: the launch plan now consumes the seam-backed handoff directly, and the browser-native execution plan should remain the active validation target while the report receiver is healthy on `http://localhost:5100`.
 - The browser-native execution plan now also exposes a browser-native runtime shell summary; keep that as the current product-facing baseline while we move toward actual rendering/input/network integration.
+- The browser-native websocket session controller now validates the transport endpoint and runtime execution mode; keep that as the current product-facing session baseline while we move toward an actual runtime handshake.
 
 ## Issue Triage
 
@@ -419,5 +420,6 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-15: Added a browser-native browser network controller on top of the browser input controller and runtime launch contract. This is the current browser-network baseline.
 - 2026-04-15: Added a browser-native browser transport controller on top of the browser network controller. This is the current browser-transport baseline and the first websocket/runtime integration marker.
 - 2026-04-15: Added a browser-native browser runtime execution controller on top of the browser transport controller. This is the current browser-runtime-execution baseline.
+- 2026-04-15: Added a browser-native websocket session controller on top of the browser runtime execution controller. This is the current browser-session handshake baseline and the first explicit websocket handshake layer.
 - 2026-04-15: Added a browser-native browser session controller on top of the browser runtime execution controller. This is the current browser-session baseline.
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.

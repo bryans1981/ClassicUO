@@ -37,6 +37,7 @@ public sealed class BrowserSelfTestReportService
       private readonly IBrowserClientNativeBrowserNetworkController _nativeBrowserNetworkController;
       private readonly IBrowserClientNativeBrowserTransportController _nativeBrowserTransportController;
       private readonly IBrowserClientNativeBrowserRuntimeExecutionController _nativeBrowserRuntimeExecutionController;
+      private readonly IBrowserClientNativeBrowserWebSocketSessionController _nativeBrowserWebSocketSessionController;
       private readonly IBrowserClientNativeBrowserSessionController _nativeBrowserSessionController;
       private readonly IBrowserClientRuntimeLaunchContract _runtimeLaunchContract;
     private readonly IBrowserClientStartupPacket _startupPacket;
@@ -536,10 +537,11 @@ public sealed class BrowserSelfTestReportService
           IBrowserClientNativeBrowserSurfaceController nativeBrowserSurfaceController,
           IBrowserClientNativeBrowserRenderController nativeBrowserRenderController,
           IBrowserClientNativeBrowserInputController nativeBrowserInputController,
-          IBrowserClientNativeBrowserNetworkController nativeBrowserNetworkController,
-          IBrowserClientNativeBrowserTransportController nativeBrowserTransportController,
-          IBrowserClientNativeBrowserRuntimeExecutionController nativeBrowserRuntimeExecutionController,
-          IBrowserClientNativeBrowserSessionController nativeBrowserSessionController,
+            IBrowserClientNativeBrowserNetworkController nativeBrowserNetworkController,
+            IBrowserClientNativeBrowserTransportController nativeBrowserTransportController,
+            IBrowserClientNativeBrowserRuntimeExecutionController nativeBrowserRuntimeExecutionController,
+            IBrowserClientNativeBrowserWebSocketSessionController nativeBrowserWebSocketSessionController,
+            IBrowserClientNativeBrowserSessionController nativeBrowserSessionController,
           IBrowserClientRuntimeLaunchContract runtimeLaunchContract,
         IBrowserClientStartupPacket startupPacket,
         IBrowserClientStartupConsumer startupConsumer,
@@ -1036,10 +1038,11 @@ public sealed class BrowserSelfTestReportService
           _nativeBrowserSurfaceController = nativeBrowserSurfaceController;
           _nativeBrowserRenderController = nativeBrowserRenderController;
           _nativeBrowserInputController = nativeBrowserInputController;
-          _nativeBrowserNetworkController = nativeBrowserNetworkController;
-          _nativeBrowserTransportController = nativeBrowserTransportController;
-          _nativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController;
-          _nativeBrowserSessionController = nativeBrowserSessionController;
+            _nativeBrowserNetworkController = nativeBrowserNetworkController;
+            _nativeBrowserTransportController = nativeBrowserTransportController;
+            _nativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController;
+            _nativeBrowserWebSocketSessionController = nativeBrowserWebSocketSessionController;
+            _nativeBrowserSessionController = nativeBrowserSessionController;
           _runtimeLaunchContract = runtimeLaunchContract;
         _startupPacket = startupPacket;
         _startupConsumer = startupConsumer;
@@ -1558,6 +1561,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientNativeBrowserNetworkControllerResult nativeBrowserNetworkController = await _nativeBrowserNetworkController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserTransportControllerResult nativeBrowserTransportController = await _nativeBrowserTransportController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRuntimeExecutionControllerResult nativeBrowserRuntimeExecutionController = await _nativeBrowserRuntimeExecutionController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
+        BrowserClientNativeBrowserWebSocketSessionControllerResult nativeBrowserWebSocketSessionController = await _nativeBrowserWebSocketSessionController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserSessionControllerResult nativeBrowserSessionController = await _nativeBrowserSessionController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientRuntimeLaunchContractResult runtimeLaunchContract = await _runtimeLaunchContract.BuildAsync();
         BrowserClientStartupPacketResult startupPacket = await _startupPacket.BuildAsync();
@@ -2169,6 +2173,7 @@ public sealed class BrowserSelfTestReportService
             NativeBrowserNetworkController = nativeBrowserNetworkController,
             NativeBrowserTransportController = nativeBrowserTransportController,
             NativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController,
+            NativeBrowserWebSocketSessionController = nativeBrowserWebSocketSessionController,
             NativeBrowserSessionController = nativeBrowserSessionController,
             RuntimeLaunchContract = runtimeLaunchContract,
             StartupPacket = startupPacket,
@@ -2683,10 +2688,11 @@ public sealed class BrowserSelfTestReportService
             $"nativeBrowserSurfaceController={(report.NativeBrowserSurfaceController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserRenderController={(report.NativeBrowserRenderController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserInputController={(report.NativeBrowserInputController.IsReady ? "ok" : "fail")}",
-            $"nativeBrowserNetworkController={(report.NativeBrowserNetworkController.IsReady ? "ok" : "fail")}",
-            $"nativeBrowserTransportController={(report.NativeBrowserTransportController.IsReady ? "ok" : "fail")}",
-            $"nativeBrowserRuntimeExecutionController={(report.NativeBrowserRuntimeExecutionController.IsReady ? "ok" : "fail")}",
-            $"nativeBrowserSessionController={(report.NativeBrowserSessionController.IsReady ? "ok" : "fail")}",
+              $"nativeBrowserNetworkController={(report.NativeBrowserNetworkController.IsReady ? "ok" : "fail")}",
+              $"nativeBrowserTransportController={(report.NativeBrowserTransportController.IsReady ? "ok" : "fail")}",
+              $"nativeBrowserRuntimeExecutionController={(report.NativeBrowserRuntimeExecutionController.IsReady ? "ok" : "fail")}",
+              $"nativeBrowserWebSocketSessionController={(report.NativeBrowserWebSocketSessionController.IsReady ? "ok" : "fail")}",
+              $"nativeBrowserSessionController={(report.NativeBrowserSessionController.IsReady ? "ok" : "fail")}",
             $"runtimeContract={(report.RuntimeLaunchContract.IsReady ? "ok" : "fail")}",
             $"startupPacket={(report.StartupPacket.IsReady ? "ok" : "fail")}",
             $"startupConsumer={(report.StartupConsumer.IsReady ? "ok" : "fail")}",
@@ -3200,6 +3206,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientNativeBrowserNetworkControllerResult NativeBrowserNetworkController { get; set; } = new();
     public BrowserClientNativeBrowserTransportControllerResult NativeBrowserTransportController { get; set; } = new();
     public BrowserClientNativeBrowserRuntimeExecutionControllerResult NativeBrowserRuntimeExecutionController { get; set; } = new();
+    public BrowserClientNativeBrowserWebSocketSessionControllerResult NativeBrowserWebSocketSessionController { get; set; } = new();
     public BrowserClientNativeBrowserSessionControllerResult NativeBrowserSessionController { get; set; } = new();
     public BrowserClientRuntimeLaunchContractResult RuntimeLaunchContract { get; set; } = new();
     public BrowserClientStartupPacketResult StartupPacket { get; set; } = new();

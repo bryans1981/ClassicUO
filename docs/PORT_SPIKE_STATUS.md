@@ -72,6 +72,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the report receiver at `http://localhost:5100` must stay healthy for the one-click self-test flow; a dead receiver shows up as `TypeError: Failed to fetch` in the browser even when the client itself is fine
 - the browser-native execution plan now reports a browser-native runtime shell summary so the active operator surface stays aligned with the final browser client instead of the older synthetic tail
 - the browser spike now supports a no-click self-test URL via `?autoSelfTest=1` or `?runSelfTest=1`, which runs the current self-test suite on page load and saves the report locally
+- the browser-native websocket session controller now validates the transport endpoint and runtime execution mode before the browser session controller, giving us the first explicit websocket handshake baseline
 
 ### Main-code integration progress
 

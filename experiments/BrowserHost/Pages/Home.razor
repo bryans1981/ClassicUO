@@ -96,7 +96,7 @@
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
         <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
-        <p><strong>Newest layers:</strong> browser-native runtime shell controller</p>
+        <p><strong>Newest layers:</strong> browser-native websocket session controller</p>
         <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
@@ -167,6 +167,9 @@
         <p><strong>Browser native runtime execution controller:</strong> @FormatBool(_selfTestReport.NativeBrowserRuntimeExecutionController.IsReady)</p>
         <p><strong>Browser native runtime execution controller version:</strong> @_selfTestReport.NativeBrowserRuntimeExecutionController.NativeBrowserRuntimeExecutionVersion</p>
         <p><strong>Browser native runtime execution controller summary:</strong> @_selfTestReport.NativeBrowserRuntimeExecutionController.Summary</p>
+        <p><strong>Browser native websocket session controller:</strong> @FormatBool(_selfTestReport.NativeBrowserWebSocketSessionController.IsReady)</p>
+        <p><strong>Browser native websocket session controller version:</strong> @_selfTestReport.NativeBrowserWebSocketSessionController.NativeBrowserWebSocketSessionVersion</p>
+        <p><strong>Browser native websocket session controller summary:</strong> @_selfTestReport.NativeBrowserWebSocketSessionController.Summary</p>
         <p><strong>Browser native browser session controller:</strong> @FormatBool(_selfTestReport.NativeBrowserSessionController.IsReady)</p>
         <p><strong>Browser native browser session controller version:</strong> @_selfTestReport.NativeBrowserSessionController.NativeBrowserSessionVersion</p>
         <p><strong>Browser native browser session controller summary:</strong> @_selfTestReport.NativeBrowserSessionController.Summary</p>

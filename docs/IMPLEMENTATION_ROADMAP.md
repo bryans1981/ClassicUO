@@ -106,6 +106,7 @@ Current status:
 - The remaining work is now extending that tail baseline and the shared bridge from the current stable state, plus a smaller cleanup list in a few client/UI subsystems.
 - The browser-native execution plan is now the active product-facing baseline, and the launch-plan path consumes the live seam-backed handoff directly instead of depending on the stale bootstrap-package artifact.
 - The browser-native execution plan now carries a browser-native runtime shell summary, which is the next active product-facing handoff before rendering/input/network integration work.
+- The browser-native websocket session controller now validates the transport endpoint and runtime execution mode, giving us the first explicit websocket handshake baseline before the final browser runtime integration work.
 - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

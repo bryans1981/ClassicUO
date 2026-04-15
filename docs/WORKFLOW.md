@@ -148,6 +148,7 @@ The default operator interaction for this project is:
 - Current browser-native baseline: the launch plan now consumes the seam-backed handoff directly, and the browser-native execution plan should remain the active validation target while the report receiver is healthy on `http://localhost:5100`.
 - The browser-native execution plan now also exposes a browser-native runtime shell summary; keep that as the current product-facing baseline while we move toward actual rendering/input/network integration.
 - The browser-native websocket session controller now validates the transport endpoint and runtime execution mode; keep that as the current product-facing session baseline while we move toward an actual runtime handshake.
+- The browser-native websocket runtime execution controller now performs a real browser websocket connect/read against the report host; keep that as the current product-facing runtime-execution baseline.
 
 ## Issue Triage
 
@@ -422,4 +423,5 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-15: Added a browser-native browser runtime execution controller on top of the browser transport controller. This is the current browser-runtime-execution baseline.
 - 2026-04-15: Added a browser-native websocket session controller on top of the browser runtime execution controller. This is the current browser-session handshake baseline and the first explicit websocket handshake layer.
 - 2026-04-15: Added a browser-native browser session controller on top of the browser runtime execution controller. This is the current browser-session baseline.
+- 2026-04-15: Added a browser-native websocket runtime execution controller on top of the websocket session controller. This is the current browser-runtime-execution handshake baseline and the first live browser websocket connect/read.
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.

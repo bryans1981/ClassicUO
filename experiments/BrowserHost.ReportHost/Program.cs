@@ -1,3 +1,5 @@
+using System.Net.WebSockets;
+using System.Text;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,11 +19,41 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 app.UseCors(CorsPolicy);
+app.UseWebSockets();
 
 string reportsRoot = Path.Combine(app.Environment.ContentRootPath, "..", "..", "docs", "test-results");
 Directory.CreateDirectory(reportsRoot);
 
 app.MapGet("/health", () => Results.Ok(new { ok = true }));
+
+app.Map("/browser-runtime", async context =>
+{
+    if (!context.WebSockets.IsWebSocketRequest)
+    {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await context.Response.WriteAsync("WebSocket request required.");
+        return;
+    }
+
+    using WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync(new WebSocketAcceptContext
+    {
+        SubProtocol = "browser-runtime-v1"
+    });
+    byte[] payload = Encoding.UTF8.GetBytes("""{"ok":true,"protocol":"browser-runtime-v1","state":"connected"}""");
+    await webSocket.SendAsync(payload, WebSocketMessageType.Text, endOfMessage: true, CancellationToken.None);
+
+    var receiveBuffer = new byte[1024];
+    while (webSocket.State == WebSocketState.Open)
+    {
+        WebSocketReceiveResult receiveResult = await webSocket.ReceiveAsync(receiveBuffer, CancellationToken.None);
+
+        if (receiveResult.MessageType == WebSocketMessageType.Close)
+        {
+            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client.", CancellationToken.None);
+            break;
+        }
+    }
+});
 
 app.MapPost(
     "/api/self-test-reports",

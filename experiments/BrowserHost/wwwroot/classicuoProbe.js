@@ -15,6 +15,67 @@ window.classicuoProbe = {
       userAgent: hasWindow ? window.navigator.userAgent : '',
       origin: hasWindow ? window.location.origin : ''
     };
+  },
+
+  connectBrowserRuntimeWebSocket: function (endpoint, protocol) {
+    return new Promise((resolve) => {
+      try {
+        const socket = protocol
+          ? new WebSocket(endpoint, protocol)
+          : new WebSocket(endpoint);
+        const result = {
+          endpoint,
+          protocol: protocol || '',
+          opened: false,
+          messageReceived: false,
+          message: '',
+          closed: false,
+          closeCode: 0,
+          error: ''
+        };
+        const cleanup = () => {
+          socket.onopen = null;
+          socket.onmessage = null;
+          socket.onerror = null;
+          socket.onclose = null;
+        };
+
+        socket.onopen = () => {
+          result.opened = true;
+        };
+
+        socket.onmessage = (message) => {
+          result.messageReceived = true;
+          result.message = typeof message.data === 'string' ? message.data : '';
+          socket.close(1000, 'browser-runtime-probe');
+        };
+
+        socket.onerror = () => {
+          result.error = 'websocket-error';
+          result.closed = true;
+          cleanup();
+          resolve(result);
+        };
+
+        socket.onclose = (event) => {
+          result.closed = true;
+          result.closeCode = event.code;
+          cleanup();
+          resolve(result);
+        };
+      } catch (error) {
+        resolve({
+          endpoint,
+          protocol: protocol || '',
+          opened: false,
+          messageReceived: false,
+          message: '',
+          closed: true,
+          closeCode: 0,
+          error: error?.message || String(error)
+        });
+      }
+    });
   }
 };
 

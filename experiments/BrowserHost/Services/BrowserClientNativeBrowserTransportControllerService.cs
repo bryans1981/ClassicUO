@@ -54,7 +54,7 @@ public sealed class BrowserClientNativeBrowserTransportControllerService : IBrow
             "bind-native-browser-network-controller",
             "publish-browser-native-browser-transport"
         ];
-        result.TransportEndpoint = result.IsReady ? "ws://localhost:5099/browser-runtime" : string.Empty;
+        result.TransportEndpoint = result.IsReady ? "ws://localhost:5100/browser-runtime" : string.Empty;
         result.TotalMs = (DateTimeOffset.UtcNow - started).TotalMilliseconds;
         result.Summary = result.IsReady
             ? $"Browser-native browser transport controller ready for profile '{result.ProfileId}' with {result.NativeBrowserTransportStages.Length} stage(s)."

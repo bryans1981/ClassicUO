@@ -73,6 +73,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the browser-native execution plan now reports a browser-native runtime shell summary so the active operator surface stays aligned with the final browser client instead of the older synthetic tail
 - the browser spike now supports a no-click self-test URL via `?autoSelfTest=1` or `?runSelfTest=1`, which runs the current self-test suite on page load and saves the report locally
 - the browser-native websocket session controller now validates the transport endpoint and runtime execution mode before the browser session controller, giving us the first explicit websocket handshake baseline
+- the browser-native websocket runtime execution controller now performs a real browser websocket connect/read against the report host and is the current live websocket execution baseline
 
 ### Main-code integration progress
 
@@ -164,7 +165,8 @@ Extend the runtime bootstrap consumer/session layers into the next browser entry
 - 2026-04-15: The browser-native browser transport controller now sits above the browser-network controller and is the current browser-transport baseline in the compact self-test report.
 - 2026-04-15: The browser-native browser runtime execution controller now sits above the browser-transport controller and is the current browser-runtime-execution baseline in the compact self-test report.
 - 2026-04-15: The browser-native browser session controller now sits above the browser-runtime-execution controller and is the current browser-session baseline in the compact self-test report.
-- 2026-04-15: The no-click browser self-test runner now preflights `http://localhost:5099` and `http://localhost:5100/health` before opening Edge, so cold-start validation is less likely to time out.
+- 2026-04-15: The browser-native websocket runtime execution controller now sits above the websocket session controller and is the current live websocket execution baseline in the compact self-test report.
+  - 2026-04-15: The no-click browser self-test runner now preflights `http://localhost:5099` and `http://localhost:5100/health` before opening Edge, so cold-start validation is less likely to time out.
 
 
 

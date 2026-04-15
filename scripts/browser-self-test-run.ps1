@@ -7,7 +7,7 @@ param(
 
 $edgePath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
 $browserProfileRoot = Join-Path $env:TEMP 'ClassicUO-BrowserSelfTest'
-$browserProfilePath = Join-Path $browserProfileRoot 'EdgeProfile'
+$browserProfilePath = Join-Path $browserProfileRoot ('EdgeProfile-' + [DateTimeOffset]::UtcNow.ToString('yyyyMMddHHmmss'))
 
 if (-not (Test-Path $edgePath)) {
     throw "Microsoft Edge was not found at $edgePath."
@@ -48,6 +48,7 @@ $before = (Get-Item $ReportPath).LastWriteTimeUtc
 $browserProc = $null
 
 try {
+    Remove-Item -LiteralPath $browserProfilePath -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
     $browserProc = Start-Process -FilePath $edgePath -ArgumentList "--new-window --user-data-dir=`"$browserProfilePath`" `"$Url`"" -PassThru
     Start-Sleep -Seconds 2

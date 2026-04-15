@@ -96,7 +96,7 @@
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
         <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
-        <p><strong>Newest layers:</strong> browser-native websocket session controller</p>
+        <p><strong>Newest layers:</strong> browser-native websocket runtime execution controller</p>
         <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
@@ -170,6 +170,9 @@
         <p><strong>Browser native websocket session controller:</strong> @FormatBool(_selfTestReport.NativeBrowserWebSocketSessionController.IsReady)</p>
         <p><strong>Browser native websocket session controller version:</strong> @_selfTestReport.NativeBrowserWebSocketSessionController.NativeBrowserWebSocketSessionVersion</p>
         <p><strong>Browser native websocket session controller summary:</strong> @_selfTestReport.NativeBrowserWebSocketSessionController.Summary</p>
+        <p><strong>Browser native websocket runtime execution controller:</strong> @FormatBool(_selfTestReport.NativeBrowserWebSocketRuntimeExecutionController.IsReady)</p>
+        <p><strong>Browser native websocket runtime execution controller version:</strong> @_selfTestReport.NativeBrowserWebSocketRuntimeExecutionController.NativeBrowserWebSocketRuntimeExecutionVersion</p>
+        <p><strong>Browser native websocket runtime execution controller summary:</strong> @_selfTestReport.NativeBrowserWebSocketRuntimeExecutionController.Summary</p>
         <p><strong>Browser native browser session controller:</strong> @FormatBool(_selfTestReport.NativeBrowserSessionController.IsReady)</p>
         <p><strong>Browser native browser session controller version:</strong> @_selfTestReport.NativeBrowserSessionController.NativeBrowserSessionVersion</p>
         <p><strong>Browser native browser session controller summary:</strong> @_selfTestReport.NativeBrowserSessionController.Summary</p>

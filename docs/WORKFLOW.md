@@ -144,6 +144,7 @@ The default operator interaction for this project is:
 - Prefer feature-sized batches that move a final product slice forward, even if they include multiple related steps, instead of one-item-at-a-time proof work.
 - Do not use broad vertical-slice execution as the default plan; prefer feature-sized batches plus parallel disjoint work when it materially reduces time to a working client.
 - Minimize pauses for confirmation unless a browser test, a blocker, or a product decision is genuinely required.
+- GitHub Actions should ignore browser-spike and docs-only changes for `Build-Test`, and `Deploy` should only run after a successful `Build-Test` completion.
 - Current browser-native baseline: the launch plan now consumes the seam-backed handoff directly, and the browser-native execution plan should remain the active validation target while the report receiver is healthy on `http://localhost:5100`.
 - The browser-native execution plan now also exposes a browser-native runtime shell summary; keep that as the current product-facing baseline while we move toward actual rendering/input/network integration.
 

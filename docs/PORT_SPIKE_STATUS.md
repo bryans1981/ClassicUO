@@ -155,6 +155,7 @@ Extend the runtime bootstrap consumer/session layers into the next browser entry
 - 2026-04-15: The no-click runner now uses an isolated Edge profile and closes the browser automatically after the self-test report updates, unless explicitly kept open.
 - 2026-04-15: The browser-native client bootstrap controller now sits above the native launch controller and is validated by the compact self-test report.
 - 2026-04-15: The browser-native browser runtime controller now sits above the native client bootstrap controller and is the current product-facing runtime baseline in the compact self-test report.
+- 2026-04-15: The browser-native browser host controller now sits above the browser runtime and is the current browser-host baseline in the compact self-test report.
 
 
 

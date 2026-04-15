@@ -412,3 +412,4 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-15: The no-click self-test runner now launches Edge in an isolated temp profile and closes it automatically after the report updates unless `-KeepBrowserOpen` is passed.
 - 2026-04-15: Added a browser-native client bootstrap controller above the native launch controller so the active product path has one more real handoff step before the final browser client runtime.
 - 2026-04-15: Added a browser-native browser runtime controller on top of the native client bootstrap controller, render readiness, input readiness, and launch control. This is the current active browser-runtime baseline.
+- 2026-04-15: Added a browser-native browser host controller on top of the browser runtime, render readiness, input readiness, and launch control. This is the current browser-host baseline.

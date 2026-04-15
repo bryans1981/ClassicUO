@@ -44,6 +44,7 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientNativeBrowserRuntimeExecutionSlice _nativeBrowserRuntimeExecutionSlice;
     private readonly IBrowserClientNativeBrowserRuntimeNetworkSlice _nativeBrowserRuntimeNetworkSlice;
     private readonly IBrowserClientNativeBrowserRuntimeSessionSlice _nativeBrowserRuntimeSessionSlice;
+    private readonly IBrowserClientNativeBrowserRuntimeSessionState _nativeBrowserRuntimeSessionState;
       private readonly IBrowserClientNativeBrowserNetworkController _nativeBrowserNetworkController;
       private readonly IBrowserClientNativeBrowserTransportController _nativeBrowserTransportController;
       private readonly IBrowserClientNativeBrowserRuntimeExecutionController _nativeBrowserRuntimeExecutionController;
@@ -559,6 +560,7 @@ public sealed class BrowserSelfTestReportService
         IBrowserClientNativeBrowserRuntimeExecutionSlice nativeBrowserRuntimeExecutionSlice,
         IBrowserClientNativeBrowserRuntimeNetworkSlice nativeBrowserRuntimeNetworkSlice,
         IBrowserClientNativeBrowserRuntimeSessionSlice nativeBrowserRuntimeSessionSlice,
+        IBrowserClientNativeBrowserRuntimeSessionState nativeBrowserRuntimeSessionState,
             IBrowserClientNativeBrowserNetworkController nativeBrowserNetworkController,
             IBrowserClientNativeBrowserTransportController nativeBrowserTransportController,
             IBrowserClientNativeBrowserRuntimeExecutionController nativeBrowserRuntimeExecutionController,
@@ -1072,6 +1074,7 @@ public sealed class BrowserSelfTestReportService
         _nativeBrowserRuntimeExecutionSlice = nativeBrowserRuntimeExecutionSlice;
         _nativeBrowserRuntimeNetworkSlice = nativeBrowserRuntimeNetworkSlice;
         _nativeBrowserRuntimeSessionSlice = nativeBrowserRuntimeSessionSlice;
+        _nativeBrowserRuntimeSessionState = nativeBrowserRuntimeSessionState;
         _nativeBrowserNetworkController = nativeBrowserNetworkController;
         _nativeBrowserTransportController = nativeBrowserTransportController;
         _nativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController;
@@ -1604,6 +1607,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientNativeBrowserRuntimeExecutionSliceResult nativeBrowserRuntimeExecutionSlice = await _nativeBrowserRuntimeExecutionSlice.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRuntimeNetworkSliceResult nativeBrowserRuntimeNetworkSlice = await _nativeBrowserRuntimeNetworkSlice.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRuntimeSessionSliceResult nativeBrowserRuntimeSessionSlice = await _nativeBrowserRuntimeSessionSlice.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
+        BrowserClientNativeBrowserRuntimeSessionStateResult nativeBrowserRuntimeSessionState = await _nativeBrowserRuntimeSessionState.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserNetworkControllerResult nativeBrowserNetworkController = await _nativeBrowserNetworkController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserTransportControllerResult nativeBrowserTransportController = await _nativeBrowserTransportController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRuntimeExecutionControllerResult nativeBrowserRuntimeExecutionController = await _nativeBrowserRuntimeExecutionController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
@@ -2228,6 +2232,7 @@ public sealed class BrowserSelfTestReportService
             NativeBrowserRuntimeExecutionSlice = nativeBrowserRuntimeExecutionSlice,
             NativeBrowserRuntimeNetworkSlice = nativeBrowserRuntimeNetworkSlice,
             NativeBrowserRuntimeSessionSlice = nativeBrowserRuntimeSessionSlice,
+            NativeBrowserRuntimeSessionState = nativeBrowserRuntimeSessionState,
             NativeBrowserNetworkController = nativeBrowserNetworkController,
             NativeBrowserTransportController = nativeBrowserTransportController,
             NativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController,
@@ -2758,6 +2763,7 @@ public sealed class BrowserSelfTestReportService
         $"nativeBrowserRuntimeExecutionSlice={(report.NativeBrowserRuntimeExecutionSlice.IsReady ? "ok" : "fail")}",
         $"nativeBrowserRuntimeNetworkSlice={(report.NativeBrowserRuntimeNetworkSlice.IsReady ? "ok" : "fail")}",
         $"nativeBrowserRuntimeSessionSlice={(report.NativeBrowserRuntimeSessionSlice.IsReady ? "ok" : "fail")}",
+        $"nativeBrowserRuntimeSessionState={(report.NativeBrowserRuntimeSessionState.IsReady ? "ok" : "fail")}",
               $"nativeBrowserNetworkController={(report.NativeBrowserNetworkController.IsReady ? "ok" : "fail")}",
               $"nativeBrowserTransportController={(report.NativeBrowserTransportController.IsReady ? "ok" : "fail")}",
               $"nativeBrowserRuntimeExecutionController={(report.NativeBrowserRuntimeExecutionController.IsReady ? "ok" : "fail")}",
@@ -3285,6 +3291,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientNativeBrowserRuntimeExecutionSliceResult NativeBrowserRuntimeExecutionSlice { get; set; } = new();
     public BrowserClientNativeBrowserRuntimeNetworkSliceResult NativeBrowserRuntimeNetworkSlice { get; set; } = new();
     public BrowserClientNativeBrowserRuntimeSessionSliceResult NativeBrowserRuntimeSessionSlice { get; set; } = new();
+    public BrowserClientNativeBrowserRuntimeSessionStateResult NativeBrowserRuntimeSessionState { get; set; } = new();
     public BrowserClientNativeBrowserNetworkControllerResult NativeBrowserNetworkController { get; set; } = new();
     public BrowserClientNativeBrowserTransportControllerResult NativeBrowserTransportController { get; set; } = new();
     public BrowserClientNativeBrowserRuntimeExecutionControllerResult NativeBrowserRuntimeExecutionController { get; set; } = new();

@@ -96,7 +96,7 @@
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
         <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
-        <p><strong>Newest layers:</strong> browser-native runtime session slice</p>
+        <p><strong>Newest layers:</strong> browser-native runtime session state</p>
         <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
@@ -191,6 +191,9 @@
         <p><strong>Browser native runtime session slice:</strong> @FormatBool(_selfTestReport.NativeBrowserRuntimeSessionSlice.IsReady)</p>
         <p><strong>Browser native runtime session slice version:</strong> @_selfTestReport.NativeBrowserRuntimeSessionSlice.NativeBrowserRuntimeSessionSliceVersion</p>
         <p><strong>Browser native runtime session slice summary:</strong> @_selfTestReport.NativeBrowserRuntimeSessionSlice.Summary</p>
+        <p><strong>Browser native runtime session state:</strong> @FormatBool(_selfTestReport.NativeBrowserRuntimeSessionState.IsReady)</p>
+        <p><strong>Browser native runtime session state version:</strong> @_selfTestReport.NativeBrowserRuntimeSessionState.NativeBrowserRuntimeSessionStateVersion</p>
+        <p><strong>Browser native runtime session state summary:</strong> @_selfTestReport.NativeBrowserRuntimeSessionState.Summary</p>
         <p><strong>Browser native browser network controller:</strong> @FormatBool(_selfTestReport.NativeBrowserNetworkController.IsReady)</p>
         <p><strong>Browser native browser network controller version:</strong> @_selfTestReport.NativeBrowserNetworkController.NativeBrowserNetworkVersion</p>
         <p><strong>Browser native browser network controller summary:</strong> @_selfTestReport.NativeBrowserNetworkController.Summary</p>

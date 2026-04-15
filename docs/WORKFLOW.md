@@ -135,6 +135,7 @@ The default operator interaction for this project is:
 - When browser validation is required, prefer a single current action over multiple scattered panel checks.
 - Save browser validation output automatically into the local repo when possible, so results can be reviewed directly without copy/paste.
 - Ask the operator for manual transcription only when the browser cannot yet write a usable report locally or when a true visual judgment is required.
+- Prefer a no-click validation URL when possible, such as an `autoSelfTest=1` query that runs the current self-test suite on page load and still saves the report locally.
 - Continue to use `Current Tests` only for the active path; move older checks into archived sections once they are no longer part of the main workflow.
 - Default validation batch size is 20 runtime layers per browser self-test only when we are still extending the synthetic chain; for the final product path, prefer larger feature-sized batches that cover a full working slice end to end.
 - When a batch exposes a DI cycle in the browser runtime chain, break the newest edge first and re-run the compact self-test before adding more layers.
@@ -144,6 +145,7 @@ The default operator interaction for this project is:
 - Do not use broad vertical-slice execution as the default plan; prefer feature-sized batches plus parallel disjoint work when it materially reduces time to a working client.
 - Minimize pauses for confirmation unless a browser test, a blocker, or a product decision is genuinely required.
 - Current browser-native baseline: the launch plan now consumes the seam-backed handoff directly, and the browser-native execution plan should remain the active validation target while the report receiver is healthy on `http://localhost:5100`.
+- The browser-native execution plan now also exposes a browser-native runtime shell summary; keep that as the current product-facing baseline while we move toward actual rendering/input/network integration.
 
 ## Issue Triage
 

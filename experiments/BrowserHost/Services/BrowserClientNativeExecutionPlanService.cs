@@ -56,6 +56,18 @@ public sealed class BrowserClientNativeExecutionPlanService : IBrowserClientNati
             launchSessionRead.Exists ? "launch-session-present" : "launch-session-missing"
         ];
         result.IsReady = packageConsumer.IsReady && launchSessionRead.IsReady;
+        result.BrowserNativeRuntimeShellVersion = "browser-native-runtime-shell-v1";
+        result.BrowserNativeRuntimeShellStages =
+        [
+            "bind-browser-render-surface",
+            "bind-browser-input-surface",
+            "bind-browser-transport-session",
+            "publish-browser-native-runtime-shell"
+        ];
+        result.BrowserNativeRuntimeShellReady = result.IsReady;
+        result.BrowserNativeRuntimeShellSummary = result.BrowserNativeRuntimeShellReady
+            ? $"Browser native runtime shell ready for profile '{result.ProfileId}' with {result.BrowserNativeRuntimeShellStages.Length} stage(s)."
+            : $"Browser native runtime shell blocked for profile '{result.ProfileId}' with {result.BrowserNativeRuntimeShellStages.Length} stage(s).";
         result.Summary = result.IsReady
             ? $"Browser-native execution plan ready for profile '{result.ProfileId}' with {result.ReadinessChecks.Length} check(s)."
             : $"Browser-native execution plan blocked for profile '{result.ProfileId}' with {result.ReadinessChecks.Length} check(s).";
@@ -82,6 +94,10 @@ public sealed class BrowserClientNativeExecutionPlanResult
     public string AssetMode { get; set; } = string.Empty;
     public string EnvironmentMode { get; set; } = string.Empty;
     public string TargetRuntime { get; set; } = string.Empty;
+    public bool BrowserNativeRuntimeShellReady { get; set; }
+    public string BrowserNativeRuntimeShellVersion { get; set; } = string.Empty;
+    public string[] BrowserNativeRuntimeShellStages { get; set; } = Array.Empty<string>();
+    public string BrowserNativeRuntimeShellSummary { get; set; } = string.Empty;
     public string[] RequiredAssets { get; set; } = Array.Empty<string>();
     public int RequiredAssetCount { get; set; }
     public int ReadyAssetCount { get; set; }

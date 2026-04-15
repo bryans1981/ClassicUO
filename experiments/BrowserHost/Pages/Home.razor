@@ -11,6 +11,7 @@
 @inject BrowserHost.Services.IBrowserClientLaunchSessionReader BrowserClientLaunchSessionReader
 @inject BrowserHost.Services.BrowserFileSystemBridgeService BrowserFileSystemBridgeService
 @inject BrowserHost.Services.BrowserVirtualFileBridgeService BridgeService
+@inject NavigationManager NavigationManager
 @inject IServiceProvider Services
 
 <PageTitle>ClassicUO Browser Spike</PageTitle>
@@ -130,6 +131,9 @@
         <p><strong>Bootstrap package consumer summary:</strong> @_selfTestReport.BootstrapPackageConsumer.Summary</p>
         <p><strong>Browser native execution plan:</strong> @FormatBool(_selfTestReport.NativeExecutionPlan.IsReady)</p>
         <p><strong>Browser native execution mode:</strong> @_selfTestReport.NativeExecutionPlan.ExecutionMode</p>
+        <p><strong>Browser native runtime shell:</strong> @FormatBool(_selfTestReport.NativeExecutionPlan.BrowserNativeRuntimeShellReady)</p>
+        <p><strong>Browser native runtime shell version:</strong> @_selfTestReport.NativeExecutionPlan.BrowserNativeRuntimeShellVersion</p>
+        <p><strong>Browser native runtime shell summary:</strong> @_selfTestReport.NativeExecutionPlan.BrowserNativeRuntimeShellSummary</p>
         <p><strong>Browser native execution summary:</strong> @_selfTestReport.NativeExecutionPlan.Summary</p>
         <p><strong>Launch session path:</strong> @_selfTestReport.LaunchSession.SessionPath</p>
         <p><strong>Launch session summary:</strong> @_selfTestReport.LaunchSession.Summary</p>
@@ -1316,11 +1320,18 @@
     private string _preloadPath = "/uo/TestDoc.txt";
     private string _preloadMessage = "Preload a `/uo` file into browser memory to simulate a hot asset cache.";
     private string _activeTab = "current";
+    private bool _autoRunSelfTestRequested;
 
     protected override async Task OnInitializedAsync()
     {
+        _autoRunSelfTestRequested = ShouldAutoRunSelfTest();
         await RunProbe();
         await RefreshFiles();
+
+        if (_autoRunSelfTestRequested)
+        {
+            await RunSelfTestSuite();
+        }
     }
 
     private async Task RunProbe()
@@ -2197,6 +2208,31 @@
     private string GetTabClass(string tab)
     {
         return _activeTab == tab ? "tab-button tab-button-active" : "tab-button";
+    }
+
+    private bool ShouldAutoRunSelfTest()
+    {
+        Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (string.IsNullOrWhiteSpace(uri.Query))
+        {
+            return false;
+        }
+
+        foreach (var pair in uri.Query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries))
+        {
+            string[] parts = pair.Split('=', 2);
+            string key = Uri.UnescapeDataString(parts[0]);
+            string value = parts.Length > 1 ? Uri.UnescapeDataString(parts[1]) : "1";
+
+            if (string.Equals(key, "autoSelfTest", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(key, "runSelfTest", StringComparison.OrdinalIgnoreCase))
+            {
+                return !string.Equals(value, "0", StringComparison.OrdinalIgnoreCase) &&
+                       !string.Equals(value, "false", StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        return false;
     }
 }
 

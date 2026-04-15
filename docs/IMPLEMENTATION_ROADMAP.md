@@ -105,6 +105,8 @@ Current status:
 - The current runtime tail baseline is `runtimeTailExtension=ok`, extending the steady-operation readiness layer with a compact 20-phase stabilization tail.
 - The remaining work is now extending that tail baseline and the shared bridge from the current stable state, plus a smaller cleanup list in a few client/UI subsystems.
 - The browser-native execution plan is now the active product-facing baseline, and the launch-plan path consumes the live seam-backed handoff directly instead of depending on the stale bootstrap-package artifact.
+- The browser-native execution plan now carries a browser-native runtime shell summary, which is the next active product-facing handoff before rendering/input/network integration work.
+- The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging
 

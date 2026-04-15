@@ -23,6 +23,7 @@ This is not a public SaaS product plan. It is a private multi-user hosting proje
 2. Package the system so it can run consistently in Linux containers.
 3. Add multi-user support with isolated profiles, settings, and launch configuration.
 4. Keep the codebase maintainable enough to sync selected upstream changes.
+5. Move from proof-of-concept scaffolding into the final browser product as soon as the browser path is stable enough to do so.
 
 ## Non-Goals For Now
 
@@ -135,13 +136,14 @@ The default operator interaction for this project is:
 - Save browser validation output automatically into the local repo when possible, so results can be reviewed directly without copy/paste.
 - Ask the operator for manual transcription only when the browser cannot yet write a usable report locally or when a true visual judgment is required.
 - Continue to use `Current Tests` only for the active path; move older checks into archived sections once they are no longer part of the main workflow.
-- Default validation batch size is 20 runtime layers per browser self-test.
+- Default validation batch size is 20 runtime layers per browser self-test only when we are still extending the synthetic chain; for the final product path, prefer larger feature-sized batches that cover a full working slice end to end.
 - When a batch exposes a DI cycle in the browser runtime chain, break the newest edge first and re-run the compact self-test before adding more layers.
-- The current stable tail baseline is `runtimeTailExtension=ok`; future routine work should extend from that point unless a blocker is found.
-- The current active browser handoff is now the concrete `Browser bootstrap package` artifact, not further synthetic readiness layers. Future routine work should consume that package and move the active UI toward real client-bootstrap integration instead of extending the synthetic tail.
-- The current bootstrap-package follow-up is the package readback path: `Browser bootstrap package readback` should validate the artifact as a consumable handoff before any further client-bootstrap work.
-- The bootstrap-package readback is now paired with a package consumer stage, so the launch path consumes the package-backed handoff rather than only validating the artifact on disk.
-- The active operator surface should now focus on the bootstrap package, launch/session persistence, and real client-bootstrap integration; the large synthetic runtime tail is archived validation only.
+- The current active browser handoff is the concrete `Browser bootstrap package` artifact, and the active work should now consume it into real client-bootstrap flow rather than extending the synthetic tail further.
+- The active operator surface should focus on the bootstrap package, launch/session persistence, and real client-bootstrap integration; the large synthetic runtime tail is archived validation only.
+- Prefer feature-sized batches that move a final product slice forward, even if they include multiple related steps, instead of one-item-at-a-time proof work.
+- Do not use broad vertical-slice execution as the default plan; prefer feature-sized batches plus parallel disjoint work when it materially reduces time to a working client.
+- Minimize pauses for confirmation unless a browser test, a blocker, or a product decision is genuinely required.
+- Current browser-native baseline: the launch plan now consumes the seam-backed handoff directly, and the browser-native execution plan should remain the active validation target while the report receiver is healthy on `http://localhost:5100`.
 
 ## Issue Triage
 
@@ -182,10 +184,10 @@ A task is done only when:
 
 Current focus should remain:
 
-1. Define and validate a custom browser-port path from the open-source client.
-2. Prove a minimal browser host, asset access layer, and websocket network path.
-3. Convert remaining deep System.IO usage in asset and client loaders only after the shared browser filesystem seam is stable.
-4. Package a minimal Linux-hosted proof of concept only after those browser spikes work.
+1. Move the browser host from scaffolding into the actual product path.
+2. Consume the bootstrap package into real client-bootstrap integration.
+3. Land the browser-native execution path needed for a playable browser client, with WebAssembly/WebGL-style rendering, input, and websocket runtime behavior as the reference target.
+4. Keep browser validation batched and focused on end-to-end working slices instead of isolated proof steps.
 
 ## Confirmed Project Facts
 
@@ -241,6 +243,7 @@ These facts are now confirmed and should guide future decisions:
 - The shared utility layer now supports a read-only binary asset provider shape for `/uo` paths, separate from writable profile/config storage.
 - The browser-port effort has now covered the major direct filesystem clusters including asset loaders, profile/state managers, data tables, world-map support, container persistence, and UltimaLive.
 - The remaining direct System.IO usage in the client is now a smaller cleanup set rather than a major architectural blocker.
+- The official ClassicUO web-client reference uses browser-native execution with WebAssembly and WebGL as the target shape for the playable client.
 
 
 

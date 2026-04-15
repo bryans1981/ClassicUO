@@ -68,6 +68,8 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - `Current Tests` should now focus on the bootstrap package readback and launch/session persistence; the long runtime-tail ladder has been moved to archived validation context
 - The active page now surfaces the bootstrap package artifact, package readback, and launch-session path near the top, while the synthetic runtime ladder remains archived for reference only
 - the bootstrap package is now also consumed by a package-consumer stage, so the launch plan now flows through a package-backed handoff rather than only a file readback
+- the launch plan now consumes the live seam-backed handoff directly, which breaks the stale package dependency and keeps the browser-native execution plan on the active path
+- the report receiver at `http://localhost:5100` must stay healthy for the one-click self-test flow; a dead receiver shows up as `TypeError: Failed to fetch` in the browser even when the client itself is fine
 
 ### Main-code integration progress
 
@@ -140,7 +142,12 @@ Test:
 
 ### Next code objective
 
-Extend the runtime bootstrap consumer/session layers into the next browser entrypoint step, ideally by shaping the first executable runtime client bootstrap controller around the package-backed handoff and trimming the remaining synthetic tail surface from the active path.
+Extend the runtime bootstrap consumer/session layers into the next browser entrypoint step, ideally by shaping the first executable runtime client bootstrap controller around the package-backed handoff and then moving straight into browser-native rendering/input/network runtime slices for the final browser client.
+
+### Decision Log
+
+- 2026-04-15: Skip broad vertical-slice execution as the default path. Use feature-sized batches, parallel disjoint work, and machine-readable validation reports to move toward the final browser client faster.
+- 2026-04-15: The official ClassicUO browser target uses WebAssembly and WebGL; our next client-facing work should aim at that browser-native execution shape rather than more scaffolding-only layers.
 
 
 

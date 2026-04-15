@@ -25,6 +25,7 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientBootstrapPackage _bootstrapPackage;
     private readonly IBrowserClientBootstrapPackageReader _bootstrapPackageReader;
     private readonly IBrowserClientBootstrapPackageConsumer _bootstrapPackageConsumer;
+    private readonly IBrowserClientNativeExecutionPlan _nativeExecutionPlan;
     private readonly IBrowserClientRuntimeLaunchContract _runtimeLaunchContract;
     private readonly IBrowserClientStartupPacket _startupPacket;
     private readonly IBrowserClientStartupConsumer _startupConsumer;
@@ -514,6 +515,7 @@ public sealed class BrowserSelfTestReportService
         IBrowserClientBootstrapPackage bootstrapPackage,
         IBrowserClientBootstrapPackageReader bootstrapPackageReader,
         IBrowserClientBootstrapPackageConsumer bootstrapPackageConsumer,
+        IBrowserClientNativeExecutionPlan nativeExecutionPlan,
         IBrowserClientRuntimeLaunchContract runtimeLaunchContract,
         IBrowserClientStartupPacket startupPacket,
         IBrowserClientStartupConsumer startupConsumer,
@@ -1001,6 +1003,7 @@ public sealed class BrowserSelfTestReportService
         _bootstrapPackage = bootstrapPackage;
         _bootstrapPackageReader = bootstrapPackageReader;
         _bootstrapPackageConsumer = bootstrapPackageConsumer;
+        _nativeExecutionPlan = nativeExecutionPlan;
         _runtimeLaunchContract = runtimeLaunchContract;
         _startupPacket = startupPacket;
         _startupConsumer = startupConsumer;
@@ -1507,6 +1510,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientBootstrapPackageResult bootstrapPackage = await _bootstrapPackage.CreateAsync();
         BrowserClientBootstrapPackageReadResult bootstrapPackageRead = await _bootstrapPackageReader.ReadAsync(bootstrapPackage.ProfileId);
         BrowserClientBootstrapPackageConsumerResult bootstrapPackageConsumer = await _bootstrapPackageConsumer.ConsumeAsync(bootstrapPackage.ProfileId);
+        BrowserClientNativeExecutionPlanResult nativeExecutionPlan = await _nativeExecutionPlan.PrepareAsync(bootstrapPackage.ProfileId);
         BrowserClientRuntimeLaunchContractResult runtimeLaunchContract = await _runtimeLaunchContract.BuildAsync();
         BrowserClientStartupPacketResult startupPacket = await _startupPacket.BuildAsync();
         BrowserClientStartupConsumerResult startupConsumer = await _startupConsumer.ConsumeAsync();
@@ -2105,6 +2109,7 @@ public sealed class BrowserSelfTestReportService
             BootstrapPackage = bootstrapPackage,
             BootstrapPackageRead = bootstrapPackageRead,
             BootstrapPackageConsumer = bootstrapPackageConsumer,
+            NativeExecutionPlan = nativeExecutionPlan,
             RuntimeLaunchContract = runtimeLaunchContract,
             StartupPacket = startupPacket,
             StartupConsumer = startupConsumer,
@@ -2609,6 +2614,7 @@ public sealed class BrowserSelfTestReportService
             $"bootstrapPackage={(report.BootstrapPackage.IsReady ? "ok" : "fail")}",
             $"bootstrapPackageRead={(report.BootstrapPackageRead.IsReady ? "ok" : "fail")}",
             $"bootstrapPackageConsumer={(report.BootstrapPackageConsumer.IsReady ? "ok" : "fail")}",
+            $"nativeExecutionPlan={(report.NativeExecutionPlan.IsReady ? "ok" : "fail")}",
             $"runtimeContract={(report.RuntimeLaunchContract.IsReady ? "ok" : "fail")}",
             $"startupPacket={(report.StartupPacket.IsReady ? "ok" : "fail")}",
             $"startupConsumer={(report.StartupConsumer.IsReady ? "ok" : "fail")}",
@@ -3110,6 +3116,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientBootstrapPackageResult BootstrapPackage { get; set; } = new();
     public BrowserClientBootstrapPackageReadResult BootstrapPackageRead { get; set; } = new();
     public BrowserClientBootstrapPackageConsumerResult BootstrapPackageConsumer { get; set; } = new();
+    public BrowserClientNativeExecutionPlanResult NativeExecutionPlan { get; set; } = new();
     public BrowserClientRuntimeLaunchContractResult RuntimeLaunchContract { get; set; } = new();
     public BrowserClientStartupPacketResult StartupPacket { get; set; } = new();
     public BrowserClientStartupConsumerResult StartupConsumer { get; set; } = new();

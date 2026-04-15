@@ -104,6 +104,7 @@ Current status:
 - The browser self-test report is now compact again and captures failure envelopes automatically when a batch throws before report construction.
 - The current runtime tail baseline is `runtimeTailExtension=ok`, extending the steady-operation readiness layer with a compact 20-phase stabilization tail.
 - The remaining work is now extending that tail baseline and the shared bridge from the current stable state, plus a smaller cleanup list in a few client/UI subsystems.
+- The browser-native execution plan is now the active product-facing baseline, and the launch-plan path consumes the live seam-backed handoff directly instead of depending on the stale bootstrap-package artifact.
 
 ### Milestone 3: Linux Container Packaging
 
@@ -459,3 +460,5 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-14: Trimmed the active browser test surface to emphasize the bootstrap package, package readback, and launch/session persistence. The synthetic runtime tail remains validated for reference, but it is no longer the primary operator path.
 - 2026-04-14: The page now surfaces the bootstrap package artifact, package readback, and launch-session summary near the top. The next implementation work is to keep shrinking the synthetic validation surface and move toward a concrete client-bootstrap path.
 - 2026-04-14: Added a package-consumer stage above bootstrap-package readback so the launch flow consumes the package-backed handoff instead of only checking the file on disk.
+- 2026-04-15: Operating decision updated: do not default to broad vertical slices. Prefer feature-sized batches, parallel disjoint work, and machine-readable validation to speed up delivery of the final browser client.
+- 2026-04-15: Official browser-client reference uses WebAssembly and WebGL; next implementation slices should target browser-native execution shape instead of additional scaffolding-only layers.

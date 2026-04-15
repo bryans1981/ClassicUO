@@ -9,72 +9,60 @@ public interface IBrowserClientNativeBrowserHostController
 
 public sealed class BrowserClientNativeBrowserHostControllerService : IBrowserClientNativeBrowserHostController
 {
-    private readonly IBrowserClientNativeBrowserRuntime _nativeBrowserRuntime;
-    private readonly IBrowserClientRuntimeBrowserRenderReadyState _browserRenderReadyState;
-    private readonly IBrowserClientRuntimeBrowserInputReadyState _browserInputReadyState;
+    private readonly IBrowserClientRuntimeBrowserSurfaceReadyState _browserSurfaceReadyState;
     private readonly IBrowserClientRuntimeLaunchController _runtimeLaunchController;
 
     public BrowserClientNativeBrowserHostControllerService(
-        IBrowserClientNativeBrowserRuntime nativeBrowserRuntime,
-        IBrowserClientRuntimeBrowserRenderReadyState browserRenderReadyState,
-        IBrowserClientRuntimeBrowserInputReadyState browserInputReadyState,
+        IBrowserClientRuntimeBrowserSurfaceReadyState browserSurfaceReadyState,
         IBrowserClientRuntimeLaunchController runtimeLaunchController
     )
     {
-        _nativeBrowserRuntime = nativeBrowserRuntime;
-        _browserRenderReadyState = browserRenderReadyState;
-        _browserInputReadyState = browserInputReadyState;
+        _browserSurfaceReadyState = browserSurfaceReadyState;
         _runtimeLaunchController = runtimeLaunchController;
     }
 
     public async ValueTask<BrowserClientNativeBrowserHostControllerResult> PrepareAsync(BrowserRuntimeBootstrapRequest? request = null, string profileId = "default")
     {
         DateTimeOffset started = DateTimeOffset.UtcNow;
-        BrowserClientNativeBrowserRuntimeResult nativeBrowserRuntime = await _nativeBrowserRuntime.PrepareAsync(request, profileId);
-        BrowserClientRuntimeBrowserRenderReadyStateResult browserRenderReadyState = await _browserRenderReadyState.BuildAsync(profileId);
-        BrowserClientRuntimeBrowserInputReadyStateResult browserInputReadyState = await _browserInputReadyState.BuildAsync(profileId);
+        BrowserClientRuntimeBrowserSurfaceReadyStateResult browserSurfaceReadyState = await _browserSurfaceReadyState.BuildAsync(profileId);
         BrowserClientRuntimeLaunchControllerResult runtimeLaunchController = await _runtimeLaunchController.ControlAsync(profileId);
 
         BrowserClientNativeBrowserHostControllerResult result = new()
         {
-            ProfileId = nativeBrowserRuntime.ProfileId,
-            AssetRootPath = nativeBrowserRuntime.AssetRootPath,
-            ProfilesRootPath = nativeBrowserRuntime.ProfilesRootPath,
-            CacheRootPath = nativeBrowserRuntime.CacheRootPath,
-            ConfigRootPath = nativeBrowserRuntime.ConfigRootPath,
-            SettingsFilePath = nativeBrowserRuntime.SettingsFilePath,
-            StartupProfilePath = nativeBrowserRuntime.StartupProfilePath,
-            ReadyAssetCount = nativeBrowserRuntime.ReadyAssetCount,
-            CacheHits = nativeBrowserRuntime.CacheHits,
-            NativeBrowserRuntimeReady = nativeBrowserRuntime.IsReady,
-            NativeBrowserRuntimeVersion = nativeBrowserRuntime.NativeBrowserRuntimeVersion,
-            NativeBrowserRuntimeSummary = nativeBrowserRuntime.Summary,
-            BrowserRenderReady = browserRenderReadyState.IsReady,
-            BrowserRenderReadyVersion = browserRenderReadyState.BrowserRenderReadyStateVersion,
-            BrowserRenderSummary = browserRenderReadyState.Summary,
-            BrowserInputReady = browserInputReadyState.IsReady,
-            BrowserInputReadyVersion = browserInputReadyState.BrowserInputReadyStateVersion,
-            BrowserInputSummary = browserInputReadyState.Summary,
+            ProfileId = browserSurfaceReadyState.ProfileId,
+            AssetRootPath = browserSurfaceReadyState.AssetRootPath,
+            ProfilesRootPath = browserSurfaceReadyState.ProfilesRootPath,
+            CacheRootPath = browserSurfaceReadyState.CacheRootPath,
+            ConfigRootPath = browserSurfaceReadyState.ConfigRootPath,
+            SettingsFilePath = browserSurfaceReadyState.SettingsFilePath,
+            StartupProfilePath = browserSurfaceReadyState.StartupProfilePath,
+            ReadyAssetCount = browserSurfaceReadyState.ReadyAssetCount,
+            CacheHits = 0,
+            NativeBrowserRuntimeReady = browserSurfaceReadyState.IsReady,
+            NativeBrowserRuntimeVersion = browserSurfaceReadyState.BrowserSurfaceReadyStateVersion,
+            NativeBrowserRuntimeSummary = browserSurfaceReadyState.BrowserSurfaceReadySummary,
+            BrowserRenderReady = browserSurfaceReadyState.IsReady,
+            BrowserRenderReadyVersion = browserSurfaceReadyState.BrowserSurfaceReadyStateVersion,
+            BrowserRenderSummary = browserSurfaceReadyState.BrowserSurfaceReadySummary,
+            BrowserInputReady = browserSurfaceReadyState.IsReady,
+            BrowserInputReadyVersion = browserSurfaceReadyState.BrowserSurfaceReadyStateVersion,
+            BrowserInputSummary = browserSurfaceReadyState.BrowserSurfaceReadySummary,
             LaunchReady = runtimeLaunchController.IsReady,
             LaunchControllerVersion = runtimeLaunchController.LaunchControllerVersion,
             LaunchSummary = runtimeLaunchController.Summary
         };
 
-        result.RequiredAssets = nativeBrowserRuntime.RequiredAssets;
+        result.RequiredAssets = browserSurfaceReadyState.RequiredAssets;
         result.ReadinessChecks =
         [
-            nativeBrowserRuntime.IsReady ? "native-browser-runtime-ready" : "native-browser-runtime-blocked",
-            browserRenderReadyState.IsReady ? "browser-render-ready" : "browser-render-blocked",
-            browserInputReadyState.IsReady ? "browser-input-ready" : "browser-input-blocked",
+            browserSurfaceReadyState.IsReady ? "browser-surface-ready" : "browser-surface-blocked",
             runtimeLaunchController.IsReady ? "runtime-launch-ready" : "runtime-launch-blocked"
         ];
         result.IsReady = result.ReadinessChecks.All(static check => check.EndsWith("-ready", StringComparison.Ordinal));
-        result.NativeBrowserHostVersion = "browser-native-browser-host-v1";
+        result.NativeBrowserHostVersion = "browser-native-browser-host-v2";
         result.NativeBrowserHostStages =
         [
-            "bind-native-browser-runtime",
-            "bind-browser-render-ready-state",
-            "bind-browser-input-ready-state",
+            "bind-browser-surface-ready-state",
             "bind-runtime-launch-controller",
             "publish-browser-native-browser-host"
         ];

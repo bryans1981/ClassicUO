@@ -10,18 +10,21 @@ public interface IBrowserClientNativeBrowserRuntime
 public sealed class BrowserClientNativeBrowserRuntimeService : IBrowserClientNativeBrowserRuntime
 {
     private readonly IBrowserClientNativeClientBootstrapController _nativeClientBootstrapController;
+    private readonly IBrowserClientNativeBrowserRuntimeSessionController _nativeBrowserRuntimeSessionController;
     private readonly IBrowserClientRuntimeBrowserRenderReadyState _browserRenderReadyState;
     private readonly IBrowserClientRuntimeBrowserInputReadyState _browserInputReadyState;
     private readonly IBrowserClientRuntimeLaunchController _runtimeLaunchController;
 
     public BrowserClientNativeBrowserRuntimeService(
         IBrowserClientNativeClientBootstrapController nativeClientBootstrapController,
+        IBrowserClientNativeBrowserRuntimeSessionController nativeBrowserRuntimeSessionController,
         IBrowserClientRuntimeBrowserRenderReadyState browserRenderReadyState,
         IBrowserClientRuntimeBrowserInputReadyState browserInputReadyState,
         IBrowserClientRuntimeLaunchController runtimeLaunchController
     )
     {
         _nativeClientBootstrapController = nativeClientBootstrapController;
+        _nativeBrowserRuntimeSessionController = nativeBrowserRuntimeSessionController;
         _browserRenderReadyState = browserRenderReadyState;
         _browserInputReadyState = browserInputReadyState;
         _runtimeLaunchController = runtimeLaunchController;
@@ -31,6 +34,7 @@ public sealed class BrowserClientNativeBrowserRuntimeService : IBrowserClientNat
     {
         DateTimeOffset started = DateTimeOffset.UtcNow;
         BrowserClientNativeClientBootstrapControllerResult nativeClientBootstrapController = await _nativeClientBootstrapController.PrepareAsync(request, profileId);
+        BrowserClientNativeBrowserRuntimeSessionControllerResult nativeBrowserRuntimeSessionController = await _nativeBrowserRuntimeSessionController.PrepareAsync(request, profileId);
         BrowserClientRuntimeBrowserRenderReadyStateResult browserRenderReadyState = await _browserRenderReadyState.BuildAsync(profileId);
         BrowserClientRuntimeBrowserInputReadyStateResult browserInputReadyState = await _browserInputReadyState.BuildAsync(profileId);
         BrowserClientRuntimeLaunchControllerResult runtimeLaunchController = await _runtimeLaunchController.ControlAsync(profileId);
@@ -49,6 +53,9 @@ public sealed class BrowserClientNativeBrowserRuntimeService : IBrowserClientNat
             NativeClientBootstrapReady = nativeClientBootstrapController.IsReady,
             NativeClientBootstrapVersion = nativeClientBootstrapController.NativeClientBootstrapVersion,
             NativeClientBootstrapSummary = nativeClientBootstrapController.Summary,
+            NativeBrowserRuntimeSessionReady = nativeBrowserRuntimeSessionController.IsReady,
+            NativeBrowserRuntimeSessionVersion = nativeBrowserRuntimeSessionController.NativeBrowserRuntimeSessionVersion,
+            NativeBrowserRuntimeSessionSummary = nativeBrowserRuntimeSessionController.Summary,
             BrowserRenderReady = browserRenderReadyState.IsReady,
             BrowserRenderReadyVersion = browserRenderReadyState.BrowserRenderReadyStateVersion,
             BrowserRenderSummary = browserRenderReadyState.Summary,
@@ -64,15 +71,17 @@ public sealed class BrowserClientNativeBrowserRuntimeService : IBrowserClientNat
         result.ReadinessChecks =
         [
             nativeClientBootstrapController.IsReady ? "native-client-bootstrap-ready" : "native-client-bootstrap-blocked",
+            nativeBrowserRuntimeSessionController.IsReady ? "native-browser-runtime-session-ready" : "native-browser-runtime-session-blocked",
             browserRenderReadyState.IsReady ? "browser-render-ready" : "browser-render-blocked",
             browserInputReadyState.IsReady ? "browser-input-ready" : "browser-input-blocked",
             runtimeLaunchController.IsReady ? "runtime-launch-ready" : "runtime-launch-blocked"
         ];
         result.IsReady = result.ReadinessChecks.All(static check => check.EndsWith("-ready", StringComparison.Ordinal));
-        result.NativeBrowserRuntimeVersion = "browser-native-browser-runtime-v1";
+        result.NativeBrowserRuntimeVersion = "browser-native-browser-runtime-v2";
         result.NativeBrowserRuntimeStages =
         [
             "bind-native-client-bootstrap",
+            "bind-native-browser-runtime-session-controller",
             "bind-browser-render-ready-state",
             "bind-browser-input-ready-state",
             "bind-runtime-launch-controller",
@@ -104,6 +113,9 @@ public sealed class BrowserClientNativeBrowserRuntimeResult
     public bool NativeClientBootstrapReady { get; set; }
     public string NativeClientBootstrapVersion { get; set; } = string.Empty;
     public string NativeClientBootstrapSummary { get; set; } = string.Empty;
+    public bool NativeBrowserRuntimeSessionReady { get; set; }
+    public string NativeBrowserRuntimeSessionVersion { get; set; } = string.Empty;
+    public string NativeBrowserRuntimeSessionSummary { get; set; } = string.Empty;
     public bool BrowserRenderReady { get; set; }
     public string BrowserRenderReadyVersion { get; set; } = string.Empty;
     public string BrowserRenderSummary { get; set; } = string.Empty;

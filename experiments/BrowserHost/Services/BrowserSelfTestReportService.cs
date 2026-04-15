@@ -40,6 +40,7 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientNativeBrowserCanvasInputBridge _nativeBrowserCanvasInputBridge;
     private readonly IBrowserClientNativeBrowserFramePump _nativeBrowserFramePump;
     private readonly IBrowserClientNativeBrowserInputController _nativeBrowserInputController;
+    private readonly IBrowserClientNativeBrowserRuntimeLoop _nativeBrowserRuntimeLoop;
       private readonly IBrowserClientNativeBrowserNetworkController _nativeBrowserNetworkController;
       private readonly IBrowserClientNativeBrowserTransportController _nativeBrowserTransportController;
       private readonly IBrowserClientNativeBrowserRuntimeExecutionController _nativeBrowserRuntimeExecutionController;
@@ -551,6 +552,7 @@ public sealed class BrowserSelfTestReportService
           IBrowserClientNativeBrowserCanvasInputBridge nativeBrowserCanvasInputBridge,
           IBrowserClientNativeBrowserFramePump nativeBrowserFramePump,
           IBrowserClientNativeBrowserInputController nativeBrowserInputController,
+          IBrowserClientNativeBrowserRuntimeLoop nativeBrowserRuntimeLoop,
             IBrowserClientNativeBrowserNetworkController nativeBrowserNetworkController,
             IBrowserClientNativeBrowserTransportController nativeBrowserTransportController,
             IBrowserClientNativeBrowserRuntimeExecutionController nativeBrowserRuntimeExecutionController,
@@ -1060,6 +1062,7 @@ public sealed class BrowserSelfTestReportService
         _nativeBrowserCanvasInputBridge = nativeBrowserCanvasInputBridge;
         _nativeBrowserFramePump = nativeBrowserFramePump;
         _nativeBrowserInputController = nativeBrowserInputController;
+        _nativeBrowserRuntimeLoop = nativeBrowserRuntimeLoop;
             _nativeBrowserNetworkController = nativeBrowserNetworkController;
             _nativeBrowserTransportController = nativeBrowserTransportController;
             _nativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController;
@@ -1588,6 +1591,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientNativeBrowserCanvasInputBridgeResult nativeBrowserCanvasInputBridge = await _nativeBrowserCanvasInputBridge.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserFramePumpResult nativeBrowserFramePump = await _nativeBrowserFramePump.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserInputControllerResult nativeBrowserInputController = await _nativeBrowserInputController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
+        BrowserClientNativeBrowserRuntimeLoopResult nativeBrowserRuntimeLoop = await _nativeBrowserRuntimeLoop.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserNetworkControllerResult nativeBrowserNetworkController = await _nativeBrowserNetworkController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserTransportControllerResult nativeBrowserTransportController = await _nativeBrowserTransportController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRuntimeExecutionControllerResult nativeBrowserRuntimeExecutionController = await _nativeBrowserRuntimeExecutionController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
@@ -2208,6 +2212,7 @@ public sealed class BrowserSelfTestReportService
             NativeBrowserCanvasInputBridge = nativeBrowserCanvasInputBridge,
             NativeBrowserFramePump = nativeBrowserFramePump,
             NativeBrowserInputController = nativeBrowserInputController,
+            NativeBrowserRuntimeLoop = nativeBrowserRuntimeLoop,
             NativeBrowserNetworkController = nativeBrowserNetworkController,
             NativeBrowserTransportController = nativeBrowserTransportController,
             NativeBrowserRuntimeExecutionController = nativeBrowserRuntimeExecutionController,
@@ -2734,6 +2739,7 @@ public sealed class BrowserSelfTestReportService
         $"nativeBrowserCanvasInputBridge={(report.NativeBrowserCanvasInputBridge.IsReady ? "ok" : "fail")}",
         $"nativeBrowserFramePump={(report.NativeBrowserFramePump.IsReady ? "ok" : "fail")}",
         $"nativeBrowserInputController={(report.NativeBrowserInputController.IsReady ? "ok" : "fail")}",
+        $"nativeBrowserRuntimeLoop={(report.NativeBrowserRuntimeLoop.IsReady ? "ok" : "fail")}",
               $"nativeBrowserNetworkController={(report.NativeBrowserNetworkController.IsReady ? "ok" : "fail")}",
               $"nativeBrowserTransportController={(report.NativeBrowserTransportController.IsReady ? "ok" : "fail")}",
               $"nativeBrowserRuntimeExecutionController={(report.NativeBrowserRuntimeExecutionController.IsReady ? "ok" : "fail")}",
@@ -3257,6 +3263,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientNativeBrowserCanvasInputBridgeResult NativeBrowserCanvasInputBridge { get; set; } = new();
     public BrowserClientNativeBrowserFramePumpResult NativeBrowserFramePump { get; set; } = new();
     public BrowserClientNativeBrowserInputControllerResult NativeBrowserInputController { get; set; } = new();
+    public BrowserClientNativeBrowserRuntimeLoopResult NativeBrowserRuntimeLoop { get; set; } = new();
     public BrowserClientNativeBrowserNetworkControllerResult NativeBrowserNetworkController { get; set; } = new();
     public BrowserClientNativeBrowserTransportControllerResult NativeBrowserTransportController { get; set; } = new();
     public BrowserClientNativeBrowserRuntimeExecutionControllerResult NativeBrowserRuntimeExecutionController { get; set; } = new();

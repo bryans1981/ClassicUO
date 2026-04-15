@@ -83,6 +83,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
  - the browser-native canvas frame now clears and paints the mounted canvas, giving us the first visible browser-render frame above the canvas host
 - the browser-native canvas input bridge now installs pointer and keyboard listeners on the rendered canvas and probes them with synthetic events, giving us the first concrete browser input bridge above the input controller
 - the browser-native frame pump now starts a live render/update heartbeat on the canvas and probes it before stopping, giving us the first concrete browser runtime loop above the canvas frame
+- the browser-native runtime loop now sits above the frame pump and input controller, giving us the first product-facing browser runtime heartbeat on the visible render path
 
 ### Main-code integration progress
 

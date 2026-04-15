@@ -488,5 +488,6 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native canvas frame now clears and paints the mounted canvas; this is the first visible browser-render frame above the canvas host.
 - 2026-04-15: The browser-native canvas input bridge now installs pointer and keyboard listeners on the rendered canvas and probes them with synthetic events; this is the first concrete browser input bridge above the input controller.
 - 2026-04-15: The browser-native frame pump now runs a live render/update heartbeat on top of the canvas frame; this is the current browser-runtime heartbeat above the visible render path.
+- 2026-04-15: The browser-native runtime loop now sits above the frame pump and input controller; this is the current product-facing browser-runtime heartbeat above the visible render path.
 - 2026-04-15: The browser-native browser session controller is now the active browser-session baseline. Next work should move from browser-session control into actual websocket session/runtime execution wiring.
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.

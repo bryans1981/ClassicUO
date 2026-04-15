@@ -153,6 +153,7 @@ The default operator interaction for this project is:
  - The browser-native runtime session controller now sits above the websocket runtime-session handoff and is the current browser-runtime-session baseline.
  - The browser-native browser runtime controller now consumes the browser-runtime-session layer and remains the current browser-runtime baseline.
  - The browser-native browser runtime ready-state now sits above the browser runtime and is the current browser-runtime baseline exposed in the compact report.
+ - The browser-native browser host ready-state now sits above the browser host and is the current browser-host baseline exposed in the compact report.
 
 ## Issue Triage
 
@@ -432,4 +433,5 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
  - 2026-04-15: Added a browser-native runtime session controller above the websocket runtime-session controller. This is now the current browser-runtime-session baseline.
  - 2026-04-15: The browser-native browser runtime controller now consumes the browser-runtime-session layer and remains the current browser-runtime baseline.
  - 2026-04-15: Added a browser-native browser runtime ready-state above the browser runtime and exposed it in the compact report as the current browser-runtime baseline.
+ - 2026-04-15: Added a browser-native browser host ready-state above the browser host and exposed it in the compact report as the current browser-host baseline.
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.

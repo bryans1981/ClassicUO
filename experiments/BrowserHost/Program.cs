@@ -246,6 +246,7 @@ builder.Services.AddScoped<IBrowserClientNativeBrowserSurfaceController, Browser
 builder.Services.AddScoped<IBrowserClientNativeBrowserRenderController, BrowserClientNativeBrowserRenderControllerService>();
 builder.Services.AddScoped<IBrowserClientNativeBrowserInputController, BrowserClientNativeBrowserInputControllerService>();
 builder.Services.AddScoped<IBrowserClientNativeBrowserNetworkController, BrowserClientNativeBrowserNetworkControllerService>();
+builder.Services.AddScoped<IBrowserClientNativeBrowserTransportController, BrowserClientNativeBrowserTransportControllerService>();
 builder.Services.AddScoped<IBrowserClientRuntimeLaunchContract, BrowserClientRuntimeLaunchContractService>();
 builder.Services.AddScoped<IBrowserClientStartupPacket, BrowserClientStartupPacketService>();
 builder.Services.AddScoped<IBrowserClientStartupConsumer, BrowserClientStartupConsumerService>();

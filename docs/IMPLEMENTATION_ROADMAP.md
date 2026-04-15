@@ -473,4 +473,5 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native browser render controller is now the active browser-render baseline. Next work should move from browser-render control into the actual browser input/network integration path.
 - 2026-04-15: The browser-native browser input controller is now the active browser-input baseline. Next work should move from browser-input control into the actual browser network integration path.
 - 2026-04-15: The browser-native browser network controller is now the active browser-network baseline. Next work should move from browser-network control into actual websocket/runtime integration.
+- 2026-04-15: The browser-native browser transport controller is now the active browser-transport baseline. Next work should move from browser-transport control into actual websocket/runtime execution wiring.
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.

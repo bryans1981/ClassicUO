@@ -239,6 +239,7 @@ builder.Services.AddScoped<IBrowserClientBootstrapPackageConsumer, BrowserClient
 builder.Services.AddScoped<IBrowserClientNativeExecutionPlan, BrowserClientNativeExecutionPlanService>();
 builder.Services.AddScoped<IBrowserClientNativeRuntimeShell, BrowserClientNativeRuntimeShellService>();
 builder.Services.AddScoped<IBrowserClientNativeLaunchController, BrowserClientNativeLaunchControllerService>();
+builder.Services.AddScoped<IBrowserClientNativeClientBootstrapController, BrowserClientNativeClientBootstrapControllerService>();
 builder.Services.AddScoped<IBrowserClientRuntimeLaunchContract, BrowserClientRuntimeLaunchContractService>();
 builder.Services.AddScoped<IBrowserClientStartupPacket, BrowserClientStartupPacketService>();
 builder.Services.AddScoped<IBrowserClientStartupConsumer, BrowserClientStartupConsumerService>();

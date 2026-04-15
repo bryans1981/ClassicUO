@@ -466,3 +466,4 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: Official browser-client reference uses WebAssembly and WebGL; next implementation slices should target browser-native execution shape instead of additional scaffolding-only layers.
 - 2026-04-15: The browser-native runtime shell controller is now part of the compact self-test baseline, and the no-click runner validates it directly from the saved local report.
 - 2026-04-15: The no-click self-test browser now closes automatically after a report update by default, reducing browser window clutter during repeated validation runs.
+- 2026-04-15: The browser-native client bootstrap controller is now the next active handoff above the native launch controller. Keep the self-test compact report as the validation gate while moving toward the final browser client runtime.

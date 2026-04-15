@@ -479,5 +479,6 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native browser transport controller is now the active browser-transport baseline. Next work should move from browser-transport control into actual websocket/runtime execution wiring.
 - 2026-04-15: The browser-native browser runtime execution controller is now the active browser-runtime-execution baseline. Next work should move from browser-runtime-execution control into actual websocket session/runtime execution wiring.
  - 2026-04-15: The browser-native websocket runtime session controller is now the browser-session handoff layer above the live websocket execution path.
+ - 2026-04-15: The browser-native runtime session controller is now the browser-runtime-session baseline above the websocket runtime-session controller.
  - 2026-04-15: The browser-native browser session controller is now the active browser-session baseline. Next work should move from browser-session control into actual websocket session/runtime execution wiring.
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.

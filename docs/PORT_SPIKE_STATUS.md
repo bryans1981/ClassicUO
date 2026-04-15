@@ -156,6 +156,8 @@ Extend the runtime bootstrap consumer/session layers into the next browser entry
 - 2026-04-15: The browser-native client bootstrap controller now sits above the native launch controller and is validated by the compact self-test report.
 - 2026-04-15: The browser-native browser runtime controller now sits above the native client bootstrap controller and is the current product-facing runtime baseline in the compact self-test report.
 - 2026-04-15: The browser-native browser host controller now sits above the browser runtime and is the current browser-host baseline in the compact self-test report.
+- 2026-04-15: The browser-native browser surface controller now sits above the browser host controller and is the current browser-surface baseline in the compact self-test report.
+- 2026-04-15: The no-click browser self-test runner now preflights `http://localhost:5099` and `http://localhost:5100/health` before opening Edge, so cold-start validation is less likely to time out.
 
 
 

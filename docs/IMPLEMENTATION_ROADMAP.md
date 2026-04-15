@@ -469,3 +469,5 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native client bootstrap controller is now the next active handoff above the native launch controller. Keep the self-test compact report as the validation gate while moving toward the final browser client runtime.
 - 2026-04-15: The browser-native browser runtime controller is now the active runtime baseline. Next work should move from the controller into actual browser runtime integration rather than additional bootstrap handoffs.
 - 2026-04-15: The browser-native browser host controller is now the active browser-host baseline. Next work should move from browser-host control into the actual browser rendering/input/network integration path.
+- 2026-04-15: The browser-native browser surface controller is now the active browser-surface baseline. Next work should move from browser-surface control into the actual browser rendering/input/network integration path.
+- 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.

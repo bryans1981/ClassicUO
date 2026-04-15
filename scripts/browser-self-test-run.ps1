@@ -17,6 +17,33 @@ if (-not (Test-Path $ReportPath)) {
     throw "Report file was not found at $ReportPath."
 }
 
+function Wait-ForEndpoint {
+    param(
+        [string]$EndpointUrl,
+        [int]$TimeoutSeconds = 60
+    )
+
+    $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+    while ((Get-Date) -lt $deadline) {
+        try {
+            $response = Invoke-WebRequest -Uri $EndpointUrl -UseBasicParsing -TimeoutSec 5
+            if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
+                return
+            }
+        } catch {
+        }
+
+        Start-Sleep -Seconds 2
+    }
+
+    throw "Timed out waiting for $EndpointUrl."
+}
+
+$browserBaseUrl = [uri]$Url
+$serviceBaseUrl = '{0}://{1}:{2}' -f $browserBaseUrl.Scheme, $browserBaseUrl.Host, $browserBaseUrl.Port
+Wait-ForEndpoint -EndpointUrl $serviceBaseUrl -TimeoutSeconds $TimeoutSeconds
+Wait-ForEndpoint -EndpointUrl 'http://localhost:5100/health' -TimeoutSeconds $TimeoutSeconds
+
 $before = (Get-Item $ReportPath).LastWriteTimeUtc
 $browserProc = $null
 

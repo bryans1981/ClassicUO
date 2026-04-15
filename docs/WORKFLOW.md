@@ -419,4 +419,5 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-15: Added a browser-native browser network controller on top of the browser input controller and runtime launch contract. This is the current browser-network baseline.
 - 2026-04-15: Added a browser-native browser transport controller on top of the browser network controller. This is the current browser-transport baseline and the first websocket/runtime integration marker.
 - 2026-04-15: Added a browser-native browser runtime execution controller on top of the browser transport controller. This is the current browser-runtime-execution baseline.
+- 2026-04-15: Added a browser-native browser session controller on top of the browser runtime execution controller. This is the current browser-session baseline.
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.

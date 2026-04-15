@@ -81,6 +81,8 @@ We have a working experimental browser host at `experiments/BrowserHost`.
  - the browser-native browser host ready-state now sits above the browser host and is the current browser-host baseline in the compact report
  - the browser-native canvas host now mounts a real browser canvas and probes a render context, giving us the first concrete browser-render step above the render controller
  - the browser-native canvas frame now clears and paints the mounted canvas, giving us the first visible browser-render frame above the canvas host
+- the browser-native canvas input bridge now installs pointer and keyboard listeners on the rendered canvas and probes them with synthetic events, giving us the first concrete browser input bridge above the input controller
+- the browser-native frame pump now starts a live render/update heartbeat on the canvas and probes it before stopping, giving us the first concrete browser runtime loop above the canvas frame
 
 ### Main-code integration progress
 

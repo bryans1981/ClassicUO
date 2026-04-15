@@ -220,6 +220,7 @@ const classicuoRoots = {
   config: '/config'
 };
 const classicuoReadCache = new Map();
+const classicuoFramePumps = new Map();
 const hostedSeedManifestPath = '/local-uo/manifest.json';
 
 function normalizeVirtualPath(path) {
@@ -1197,6 +1198,315 @@ window.classicuoFs = {
       result.error = error instanceof Error ? error.message : String(error);
       return result;
     }
+  },
+
+  installCanvasInputBridge: function (canvasId) {
+    const state = window.__classicuoCanvasInputBridge ?? (window.__classicuoCanvasInputBridge = new Map());
+    const existing = state.get(canvasId) ?? {
+      active: false,
+      installed: false,
+      pointerDownCount: 0,
+      pointerUpCount: 0,
+      pointerMoveCount: 0,
+      keyDownCount: 0,
+      keyUpCount: 0,
+      focusCount: 0,
+      blurCount: 0,
+      lastEvent: '',
+      handler: null
+    };
+
+    if (existing.installed && existing.handler) {
+      const canvas = document.getElementById(canvasId);
+      if (canvas) {
+        canvas.focus();
+      }
+
+      state.set(canvasId, existing);
+      return {
+        installed: true,
+        active: existing.active,
+        pointerDownCount: existing.pointerDownCount,
+        pointerUpCount: existing.pointerUpCount,
+        pointerMoveCount: existing.pointerMoveCount,
+        keyDownCount: existing.keyDownCount,
+        keyUpCount: existing.keyUpCount,
+        focusCount: existing.focusCount,
+        blurCount: existing.blurCount,
+        lastEvent: existing.lastEvent,
+        error: ''
+      };
+    }
+
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+      return {
+        installed: false,
+        active: false,
+        pointerDownCount: 0,
+        pointerUpCount: 0,
+        pointerMoveCount: 0,
+        keyDownCount: 0,
+        keyUpCount: 0,
+        focusCount: 0,
+        blurCount: 0,
+        lastEvent: '',
+        error: 'canvas-not-found'
+      };
+    }
+
+    canvas.tabIndex = 0;
+    canvas.style.outline = 'none';
+
+    const handler = (event) => {
+      const current = state.get(canvasId);
+      if (!current) {
+        return;
+      }
+
+      current.active = true;
+      current.lastEvent = event.type;
+
+      switch (event.type) {
+        case 'pointerdown':
+          current.pointerDownCount += 1;
+          break;
+        case 'pointerup':
+          current.pointerUpCount += 1;
+          break;
+        case 'pointermove':
+          current.pointerMoveCount += 1;
+          break;
+        case 'keydown':
+          current.keyDownCount += 1;
+          break;
+        case 'keyup':
+          current.keyUpCount += 1;
+          break;
+        case 'focus':
+          current.focusCount += 1;
+          break;
+        case 'blur':
+          current.blurCount += 1;
+          break;
+      }
+
+      state.set(canvasId, current);
+    };
+
+    ['pointerdown', 'pointerup', 'pointermove', 'keydown', 'keyup', 'focus', 'blur'].forEach((eventName) => {
+      canvas.addEventListener(eventName, handler);
+    });
+
+    existing.installed = true;
+    existing.active = false;
+    existing.handler = handler;
+    state.set(canvasId, existing);
+    canvas.focus();
+
+    return {
+      installed: true,
+      active: existing.active,
+      pointerDownCount: existing.pointerDownCount,
+      pointerUpCount: existing.pointerUpCount,
+      pointerMoveCount: existing.pointerMoveCount,
+      keyDownCount: existing.keyDownCount,
+      keyUpCount: existing.keyUpCount,
+      focusCount: existing.focusCount,
+      blurCount: existing.blurCount,
+      lastEvent: existing.lastEvent,
+      error: ''
+    };
+  },
+
+  probeCanvasInputBridge: function (canvasId) {
+    const state = window.__classicuoCanvasInputBridge?.get(canvasId);
+    if (!state || !state.installed) {
+      return {
+        installed: false,
+        active: false,
+        pointerDownCount: 0,
+        pointerUpCount: 0,
+        pointerMoveCount: 0,
+        keyDownCount: 0,
+        keyUpCount: 0,
+        focusCount: 0,
+        blurCount: 0,
+        lastEvent: '',
+        error: 'bridge-not-installed'
+      };
+    }
+
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+      return {
+        installed: true,
+        active: false,
+        pointerDownCount: state.pointerDownCount,
+        pointerUpCount: state.pointerUpCount,
+        pointerMoveCount: state.pointerMoveCount,
+        keyDownCount: state.keyDownCount,
+        keyUpCount: state.keyUpCount,
+        focusCount: state.focusCount,
+        blurCount: state.blurCount,
+        lastEvent: state.lastEvent,
+        error: 'canvas-not-found'
+      };
+    }
+
+    canvas.focus();
+    const pointerEventInit = {
+      bubbles: true,
+      cancelable: true,
+      pointerId: 1,
+      clientX: 8,
+      clientY: 8,
+      button: 0,
+      buttons: 1
+    };
+
+    canvas.dispatchEvent(new PointerEvent('pointerdown', pointerEventInit));
+    canvas.dispatchEvent(new PointerEvent('pointerup', { ...pointerEventInit, buttons: 0 }));
+    canvas.dispatchEvent(new PointerEvent('pointermove', { ...pointerEventInit, buttons: 0 }));
+    canvas.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key: 'A', code: 'KeyA' }));
+    canvas.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, cancelable: true, key: 'A', code: 'KeyA' }));
+
+    const updated = window.__classicuoCanvasInputBridge.get(canvasId);
+    return {
+      installed: true,
+      active: updated.active,
+      pointerDownCount: updated.pointerDownCount,
+      pointerUpCount: updated.pointerUpCount,
+      pointerMoveCount: updated.pointerMoveCount,
+      keyDownCount: updated.keyDownCount,
+      keyUpCount: updated.keyUpCount,
+      focusCount: updated.focusCount,
+      blurCount: updated.blurCount,
+      lastEvent: updated.lastEvent,
+      error: ''
+    };
+  },
+
+  startCanvasFramePump: function (canvasId, text, intervalMs) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+      return {
+        started: false,
+        active: false,
+        frameCount: 0,
+        intervalMs: 0,
+        lastFrameAt: '',
+        error: 'canvas-not-found'
+      };
+    }
+
+    const existing = classicuoFramePumps.get(canvasId);
+    if (existing?.timerId) {
+      return {
+        started: true,
+        active: existing.active,
+        frameCount: existing.frameCount,
+        intervalMs: existing.intervalMs,
+        lastFrameAt: existing.lastFrameAt,
+        error: existing.error || ''
+      };
+    }
+
+    const state = {
+      active: true,
+      frameCount: 0,
+      intervalMs: Math.max(16, intervalMs || 16),
+      lastFrameAt: '',
+      error: '',
+      timerId: 0,
+      text: text || 'ClassicUO browser frame pump'
+    };
+
+    state.timerId = window.setInterval(() => {
+      try {
+        if (!state.active) {
+          return;
+        }
+
+        state.frameCount += 1;
+        state.lastFrameAt = new Date().toISOString();
+        const contextType = canvas.getContext('webgl2') ? 'webgl2' : (canvas.getContext('webgl') ? 'webgl' : '2d');
+        window.classicuoRender.renderCanvasFrame(
+          canvas.parentElement?.id || '',
+          canvasId,
+          canvas.width,
+          canvas.height,
+          contextType,
+          `${state.text} #${state.frameCount}`,
+          '#0f172a',
+          '#f8fafc'
+        );
+      } catch (error) {
+        state.error = error?.message || String(error);
+      }
+    }, state.intervalMs);
+
+    classicuoFramePumps.set(canvasId, state);
+    return {
+      started: true,
+      active: true,
+      frameCount: 0,
+      intervalMs: state.intervalMs,
+      lastFrameAt: state.lastFrameAt,
+      error: ''
+    };
+  },
+
+  probeCanvasFramePump: function (canvasId) {
+    const state = classicuoFramePumps.get(canvasId);
+    if (!state) {
+      return {
+        started: false,
+        active: false,
+        frameCount: 0,
+        intervalMs: 0,
+        lastFrameAt: '',
+        error: 'frame-pump-not-started'
+      };
+    }
+
+    return {
+      started: true,
+      active: state.active,
+      frameCount: state.frameCount,
+      intervalMs: state.intervalMs,
+      lastFrameAt: state.lastFrameAt,
+      error: state.error || ''
+    };
+  },
+
+  stopCanvasFramePump: function (canvasId) {
+    const state = classicuoFramePumps.get(canvasId);
+    if (!state) {
+      return {
+        started: false,
+        active: false,
+        frameCount: 0,
+        intervalMs: 0,
+        lastFrameAt: '',
+        error: 'frame-pump-not-started'
+      };
+    }
+
+    if (state.timerId) {
+      clearInterval(state.timerId);
+    }
+
+    state.active = false;
+    classicuoFramePumps.set(canvasId, state);
+    return {
+      started: true,
+      active: false,
+      frameCount: state.frameCount,
+      intervalMs: state.intervalMs,
+      lastFrameAt: state.lastFrameAt,
+      error: state.error || ''
+    };
   },
 
   downloadTextFile: async function (fileName, contents) {

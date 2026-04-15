@@ -158,6 +158,7 @@ The default operator interaction for this project is:
 - The browser-native frame pump now starts a live render/update heartbeat on top of the canvas frame; keep that as the current browser-runtime heartbeat above the visible render path.
 - The browser-native runtime loop now sits above the frame pump and input controller; keep that as the current product-facing browser-runtime heartbeat while we move toward the final browser client.
 - The browser-native runtime execution slice now combines runtime loop, transport, and websocket/session layers; keep that as the current product-facing runtime execution snapshot while we move toward the final browser client.
+- The browser-native runtime network slice now combines runtime execution, network controller, and transport controller; keep that as the current product-facing browser-network snapshot while we move toward the final browser client.
 
 ## Issue Triage
 

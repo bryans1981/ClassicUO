@@ -491,5 +491,6 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native runtime loop now sits above the frame pump and input controller; this is the current product-facing browser-runtime heartbeat above the visible render path.
 - 2026-04-15: The browser-native runtime execution slice now combines runtime loop, transport, and websocket/session layers into one product-facing runtime execution snapshot above the runtime loop.
 - 2026-04-15: The browser-native runtime network slice now combines runtime execution, network controller, and transport controller into the current browser-network snapshot above the runtime execution slice.
+- 2026-04-15: The browser-native runtime session slice now combines the runtime-network baseline with the browser-session controller and is the current product-facing runtime session snapshot.
 - 2026-04-15: The browser-native browser session controller is now the active browser-session baseline. Next work should move from browser-session control into actual websocket session/runtime execution wiring.
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.

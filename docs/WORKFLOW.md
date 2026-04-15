@@ -440,4 +440,5 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
  - 2026-04-15: The browser-native browser runtime controller now consumes the browser-runtime-session layer and remains the current browser-runtime baseline.
  - 2026-04-15: Added a browser-native browser runtime ready-state above the browser runtime and exposed it in the compact report as the current browser-runtime baseline.
  - 2026-04-15: Added a browser-native browser host ready-state above the browser host and exposed it in the compact report as the current browser-host baseline.
+- 2026-04-15: The browser-native runtime session slice now combines the runtime-network baseline with the browser-session controller and is the current product-facing runtime session snapshot.
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.

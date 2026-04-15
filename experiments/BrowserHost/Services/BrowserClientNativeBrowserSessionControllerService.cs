@@ -9,65 +9,65 @@ public interface IBrowserClientNativeBrowserSessionController
 
 public sealed class BrowserClientNativeBrowserSessionControllerService : IBrowserClientNativeBrowserSessionController
 {
-    private readonly IBrowserClientNativeBrowserWebSocketRuntimeExecutionController _nativeBrowserWebSocketRuntimeExecutionController;
+    private readonly IBrowserClientNativeBrowserWebSocketRuntimeSessionController _nativeBrowserWebSocketRuntimeSessionController;
     private readonly IBrowserClientRuntimeBrowserSessionStabilityReadyState _browserSessionStabilityReadyState;
 
     public BrowserClientNativeBrowserSessionControllerService(
-        IBrowserClientNativeBrowserWebSocketRuntimeExecutionController nativeBrowserWebSocketRuntimeExecutionController,
+        IBrowserClientNativeBrowserWebSocketRuntimeSessionController nativeBrowserWebSocketRuntimeSessionController,
         IBrowserClientRuntimeBrowserSessionStabilityReadyState browserSessionStabilityReadyState
     )
     {
-        _nativeBrowserWebSocketRuntimeExecutionController = nativeBrowserWebSocketRuntimeExecutionController;
+        _nativeBrowserWebSocketRuntimeSessionController = nativeBrowserWebSocketRuntimeSessionController;
         _browserSessionStabilityReadyState = browserSessionStabilityReadyState;
     }
 
     public async ValueTask<BrowserClientNativeBrowserSessionControllerResult> PrepareAsync(BrowserRuntimeBootstrapRequest? request = null, string profileId = "default")
     {
         DateTimeOffset started = DateTimeOffset.UtcNow;
-        BrowserClientNativeBrowserWebSocketRuntimeExecutionControllerResult nativeBrowserWebSocketRuntimeExecutionController = await _nativeBrowserWebSocketRuntimeExecutionController.PrepareAsync(request, profileId);
+        BrowserClientNativeBrowserWebSocketRuntimeSessionControllerResult nativeBrowserWebSocketRuntimeSessionController = await _nativeBrowserWebSocketRuntimeSessionController.PrepareAsync(request, profileId);
         BrowserClientRuntimeBrowserSessionStabilityReadyStateResult browserSessionStabilityReadyState = await _browserSessionStabilityReadyState.BuildAsync(profileId);
 
         BrowserClientNativeBrowserSessionControllerResult result = new()
         {
-            ProfileId = nativeBrowserWebSocketRuntimeExecutionController.ProfileId,
-            AssetRootPath = nativeBrowserWebSocketRuntimeExecutionController.AssetRootPath,
-            ProfilesRootPath = nativeBrowserWebSocketRuntimeExecutionController.ProfilesRootPath,
-            CacheRootPath = nativeBrowserWebSocketRuntimeExecutionController.CacheRootPath,
-            ConfigRootPath = nativeBrowserWebSocketRuntimeExecutionController.ConfigRootPath,
-            SettingsFilePath = nativeBrowserWebSocketRuntimeExecutionController.SettingsFilePath,
-            StartupProfilePath = nativeBrowserWebSocketRuntimeExecutionController.StartupProfilePath,
-            ReadyAssetCount = nativeBrowserWebSocketRuntimeExecutionController.ReadyAssetCount,
-            CacheHits = nativeBrowserWebSocketRuntimeExecutionController.CacheHits,
-            NativeBrowserRuntimeExecutionReady = nativeBrowserWebSocketRuntimeExecutionController.NativeBrowserWebSocketSessionReady,
-            NativeBrowserRuntimeExecutionVersion = nativeBrowserWebSocketRuntimeExecutionController.NativeBrowserWebSocketSessionVersion,
-            NativeBrowserRuntimeExecutionSummary = nativeBrowserWebSocketRuntimeExecutionController.NativeBrowserWebSocketSessionSummary,
-            NativeBrowserWebSocketSessionReady = nativeBrowserWebSocketRuntimeExecutionController.IsReady,
-            NativeBrowserWebSocketSessionVersion = nativeBrowserWebSocketRuntimeExecutionController.NativeBrowserWebSocketRuntimeExecutionVersion,
-            NativeBrowserWebSocketSessionSummary = nativeBrowserWebSocketRuntimeExecutionController.Summary,
-            WebSocketSessionEndpoint = nativeBrowserWebSocketRuntimeExecutionController.WebSocketRuntimeExecutionEndpoint,
-            WebSocketSessionScheme = nativeBrowserWebSocketRuntimeExecutionController.WebSocketSessionScheme,
-            WebSocketSessionProtocol = nativeBrowserWebSocketRuntimeExecutionController.WebSocketRuntimeExecutionProtocol,
+            ProfileId = nativeBrowserWebSocketRuntimeSessionController.ProfileId,
+            AssetRootPath = nativeBrowserWebSocketRuntimeSessionController.AssetRootPath,
+            ProfilesRootPath = nativeBrowserWebSocketRuntimeSessionController.ProfilesRootPath,
+            CacheRootPath = nativeBrowserWebSocketRuntimeSessionController.CacheRootPath,
+            ConfigRootPath = nativeBrowserWebSocketRuntimeSessionController.ConfigRootPath,
+            SettingsFilePath = nativeBrowserWebSocketRuntimeSessionController.SettingsFilePath,
+            StartupProfilePath = nativeBrowserWebSocketRuntimeSessionController.StartupProfilePath,
+            ReadyAssetCount = nativeBrowserWebSocketRuntimeSessionController.ReadyAssetCount,
+            CacheHits = nativeBrowserWebSocketRuntimeSessionController.CacheHits,
+            NativeBrowserRuntimeExecutionReady = nativeBrowserWebSocketRuntimeSessionController.NativeBrowserWebSocketRuntimeExecutionReady,
+            NativeBrowserRuntimeExecutionVersion = nativeBrowserWebSocketRuntimeSessionController.NativeBrowserWebSocketRuntimeExecutionVersion,
+            NativeBrowserRuntimeExecutionSummary = nativeBrowserWebSocketRuntimeSessionController.NativeBrowserWebSocketRuntimeExecutionSummary,
+            NativeBrowserWebSocketSessionReady = nativeBrowserWebSocketRuntimeSessionController.IsReady,
+            NativeBrowserWebSocketSessionVersion = nativeBrowserWebSocketRuntimeSessionController.NativeBrowserWebSocketRuntimeSessionVersion,
+            NativeBrowserWebSocketSessionSummary = nativeBrowserWebSocketRuntimeSessionController.Summary,
+            WebSocketSessionEndpoint = nativeBrowserWebSocketRuntimeSessionController.WebSocketRuntimeExecutionEndpoint,
+            WebSocketSessionScheme = "ws",
+            WebSocketSessionProtocol = nativeBrowserWebSocketRuntimeSessionController.WebSocketRuntimeExecutionProtocol,
             BrowserSessionStabilityReady = browserSessionStabilityReadyState.IsReady,
             BrowserSessionStabilityReadyStateVersion = browserSessionStabilityReadyState.BrowserSessionStabilityReadyStateVersion,
             BrowserSessionStabilitySummary = browserSessionStabilityReadyState.Summary,
-            TransportMode = nativeBrowserWebSocketRuntimeExecutionController.TransportMode,
-            TransportEndpoint = nativeBrowserWebSocketRuntimeExecutionController.WebSocketRuntimeExecutionEndpoint,
-            RuntimeExecutionMode = nativeBrowserWebSocketRuntimeExecutionController.WebSocketRuntimeExecutionMode,
-            LaunchMode = nativeBrowserWebSocketRuntimeExecutionController.LaunchMode,
-            ContractVersion = nativeBrowserWebSocketRuntimeExecutionController.ContractVersion
+            TransportMode = nativeBrowserWebSocketRuntimeSessionController.TransportMode,
+            TransportEndpoint = nativeBrowserWebSocketRuntimeSessionController.WebSocketRuntimeExecutionEndpoint,
+            RuntimeExecutionMode = nativeBrowserWebSocketRuntimeSessionController.WebSocketRuntimeExecutionMode,
+            LaunchMode = nativeBrowserWebSocketRuntimeSessionController.LaunchMode,
+            ContractVersion = nativeBrowserWebSocketRuntimeSessionController.ContractVersion
         };
 
-        result.RequiredAssets = nativeBrowserWebSocketRuntimeExecutionController.RequiredAssets;
+        result.RequiredAssets = nativeBrowserWebSocketRuntimeSessionController.RequiredAssets;
         result.ReadinessChecks =
         [
-            nativeBrowserWebSocketRuntimeExecutionController.IsReady ? "native-browser-websocket-runtime-execution-ready" : "native-browser-websocket-runtime-execution-blocked",
+            nativeBrowserWebSocketRuntimeSessionController.IsReady ? "native-browser-websocket-runtime-session-ready" : "native-browser-websocket-runtime-session-blocked",
             browserSessionStabilityReadyState.IsReady ? "browser-session-stability-ready" : "browser-session-stability-blocked"
         ];
         result.IsReady = result.ReadinessChecks.All(static check => check.EndsWith("-ready", StringComparison.Ordinal));
-        result.NativeBrowserSessionVersion = "browser-native-browser-session-controller-v3";
+        result.NativeBrowserSessionVersion = "browser-native-browser-session-controller-v4";
         result.NativeBrowserSessionStages =
         [
-            "bind-native-browser-websocket-runtime-execution-controller",
+            "bind-native-browser-websocket-runtime-session-controller",
             "bind-browser-session-stability-ready-state",
             "publish-browser-native-browser-session"
         ];

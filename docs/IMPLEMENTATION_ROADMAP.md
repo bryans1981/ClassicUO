@@ -107,8 +107,9 @@ Current status:
 - The browser-native execution plan is now the active product-facing baseline, and the launch-plan path consumes the live seam-backed handoff directly instead of depending on the stale bootstrap-package artifact.
 - The browser-native execution plan now carries a browser-native runtime shell summary, which is the next active product-facing handoff before rendering/input/network integration work.
 - The browser-native websocket session controller now validates the transport endpoint and runtime execution mode, giving us the first explicit websocket handshake baseline before the final browser runtime integration work.
- - The browser-native websocket runtime execution controller now performs a real browser websocket connect/read against the report host, giving us the first live websocket execution baseline before final browser runtime integration work.
+- The browser-native websocket runtime execution controller now performs a real browser websocket connect/read against the report host, giving us the first live websocket execution baseline before final browser runtime integration work.
  - The browser-native websocket runtime session controller now sits above that live websocket execution path and gives us the current browser-session handoff layer.
+ - The browser-native runtime ready-state now sits above the browser runtime and gives us the current browser-runtime baseline exposed in the compact report.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging
@@ -481,5 +482,6 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native websocket runtime session controller is now the browser-session handoff layer above the live websocket execution path.
 - 2026-04-15: The browser-native runtime session controller is now the browser-runtime-session baseline above the websocket runtime-session controller.
 - 2026-04-15: The browser-native browser runtime controller now consumes the browser-runtime-session layer and is the current browser-runtime baseline.
+- 2026-04-15: The browser-native browser runtime ready-state now sits above the browser runtime and is the current browser-runtime baseline exposed in the compact report.
 - 2026-04-15: The browser-native browser session controller is now the active browser-session baseline. Next work should move from browser-session control into actual websocket session/runtime execution wiring.
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.

@@ -27,10 +27,11 @@ public sealed class BrowserSelfTestReportService
     private readonly IBrowserClientBootstrapPackageConsumer _bootstrapPackageConsumer;
     private readonly IBrowserClientNativeExecutionPlan _nativeExecutionPlan;
     private readonly IBrowserClientNativeRuntimeShell _nativeRuntimeShell;
-      private readonly IBrowserClientNativeLaunchController _nativeLaunchController;
-      private readonly IBrowserClientNativeClientBootstrapController _nativeClientBootstrapController;
-      private readonly IBrowserClientNativeBrowserRuntime _nativeBrowserRuntime;
-      private readonly IBrowserClientNativeBrowserHostController _nativeBrowserHostController;
+    private readonly IBrowserClientNativeLaunchController _nativeLaunchController;
+    private readonly IBrowserClientNativeClientBootstrapController _nativeClientBootstrapController;
+    private readonly IBrowserClientNativeBrowserRuntime _nativeBrowserRuntime;
+    private readonly IBrowserClientNativeBrowserRuntimeReadyState _nativeBrowserRuntimeReadyState;
+    private readonly IBrowserClientNativeBrowserHostController _nativeBrowserHostController;
       private readonly IBrowserClientNativeBrowserSurfaceController _nativeBrowserSurfaceController;
       private readonly IBrowserClientNativeBrowserRenderController _nativeBrowserRenderController;
       private readonly IBrowserClientNativeBrowserInputController _nativeBrowserInputController;
@@ -535,6 +536,7 @@ public sealed class BrowserSelfTestReportService
           IBrowserClientNativeLaunchController nativeLaunchController,
           IBrowserClientNativeClientBootstrapController nativeClientBootstrapController,
           IBrowserClientNativeBrowserRuntime nativeBrowserRuntime,
+          IBrowserClientNativeBrowserRuntimeReadyState nativeBrowserRuntimeReadyState,
           IBrowserClientNativeBrowserHostController nativeBrowserHostController,
           IBrowserClientNativeBrowserSurfaceController nativeBrowserSurfaceController,
           IBrowserClientNativeBrowserRenderController nativeBrowserRenderController,
@@ -1038,6 +1040,7 @@ public sealed class BrowserSelfTestReportService
           _nativeLaunchController = nativeLaunchController;
           _nativeClientBootstrapController = nativeClientBootstrapController;
           _nativeBrowserRuntime = nativeBrowserRuntime;
+          _nativeBrowserRuntimeReadyState = nativeBrowserRuntimeReadyState;
           _nativeBrowserHostController = nativeBrowserHostController;
           _nativeBrowserSurfaceController = nativeBrowserSurfaceController;
           _nativeBrowserRenderController = nativeBrowserRenderController;
@@ -1560,6 +1563,7 @@ public sealed class BrowserSelfTestReportService
         BrowserClientNativeLaunchControllerResult nativeLaunchController = await _nativeLaunchController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeClientBootstrapControllerResult nativeClientBootstrapController = await _nativeClientBootstrapController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRuntimeResult nativeBrowserRuntime = await _nativeBrowserRuntime.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
+        BrowserClientNativeBrowserRuntimeReadyStateResult nativeBrowserRuntimeReadyState = await _nativeBrowserRuntimeReadyState.BuildAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserHostControllerResult nativeBrowserHostController = await _nativeBrowserHostController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserSurfaceControllerResult nativeBrowserSurfaceController = await _nativeBrowserSurfaceController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRenderControllerResult nativeBrowserRenderController = await _nativeBrowserRenderController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
@@ -2174,6 +2178,7 @@ public sealed class BrowserSelfTestReportService
             NativeLaunchController = nativeLaunchController,
             NativeClientBootstrapController = nativeClientBootstrapController,
             NativeBrowserRuntime = nativeBrowserRuntime,
+            NativeBrowserRuntimeReadyState = nativeBrowserRuntimeReadyState,
             NativeBrowserHostController = nativeBrowserHostController,
             NativeBrowserSurfaceController = nativeBrowserSurfaceController,
             NativeBrowserRenderController = nativeBrowserRenderController,
@@ -2694,6 +2699,7 @@ public sealed class BrowserSelfTestReportService
             $"nativeLaunchController={(report.NativeLaunchController.IsReady ? "ok" : "fail")}",
             $"nativeClientBootstrapController={(report.NativeClientBootstrapController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserRuntime={(report.NativeBrowserRuntime.IsReady ? "ok" : "fail")}",
+            $"nativeBrowserRuntimeReadyState={(report.NativeBrowserRuntimeReadyState.IsReady ? "ok" : "fail")}",
             $"nativeBrowserHostController={(report.NativeBrowserHostController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserSurfaceController={(report.NativeBrowserSurfaceController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserRenderController={(report.NativeBrowserRenderController.IsReady ? "ok" : "fail")}",
@@ -3211,6 +3217,7 @@ public sealed class BrowserSelfTestReport
     public BrowserClientNativeLaunchControllerResult NativeLaunchController { get; set; } = new();
     public BrowserClientNativeClientBootstrapControllerResult NativeClientBootstrapController { get; set; } = new();
     public BrowserClientNativeBrowserRuntimeResult NativeBrowserRuntime { get; set; } = new();
+    public BrowserClientNativeBrowserRuntimeReadyStateResult NativeBrowserRuntimeReadyState { get; set; } = new();
     public BrowserClientNativeBrowserHostControllerResult NativeBrowserHostController { get; set; } = new();
     public BrowserClientNativeBrowserSurfaceControllerResult NativeBrowserSurfaceController { get; set; } = new();
     public BrowserClientNativeBrowserRenderControllerResult NativeBrowserRenderController { get; set; } = new();

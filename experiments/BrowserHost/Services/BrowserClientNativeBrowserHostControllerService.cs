@@ -59,7 +59,7 @@ public sealed class BrowserClientNativeBrowserHostControllerService : IBrowserCl
             runtimeLaunchController.IsReady ? "runtime-launch-ready" : "runtime-launch-blocked"
         ];
         result.IsReady = result.ReadinessChecks.All(static check => check.EndsWith("-ready", StringComparison.Ordinal));
-        result.NativeBrowserHostVersion = "browser-native-browser-host-v2";
+        result.NativeBrowserHostVersion = "browser-native-browser-host-v4";
         result.NativeBrowserHostStages =
         [
             "bind-browser-surface-ready-state",

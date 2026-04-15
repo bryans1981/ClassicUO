@@ -77,6 +77,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
  - the browser-native websocket runtime session controller now sits above that live websocket execution path and is the current browser-session handoff layer
  - the browser-native runtime session controller now sits above the websocket runtime-session handoff and is the current browser-runtime-session baseline
  - the browser-native browser runtime controller now consumes the browser-runtime-session layer and is the current browser-runtime baseline
+ - the browser-native browser runtime ready-state now sits above the browser runtime and is the current browser-runtime baseline in the compact report
 
 ### Main-code integration progress
 
@@ -172,6 +173,7 @@ Extend the runtime bootstrap consumer/session layers into the next browser entry
  - 2026-04-15: The browser-native websocket runtime execution controller now sits above the websocket session controller and is the current live websocket execution baseline in the compact self-test report.
  - 2026-04-15: The browser-native runtime session controller now sits above the websocket runtime-session controller and is the current browser-runtime-session baseline in the compact self-test report.
  - 2026-04-15: The browser-native browser runtime controller now consumes the browser-runtime-session layer and is the current browser-runtime baseline in the compact self-test report.
+ - 2026-04-15: The browser-native browser runtime ready-state now sits above the browser runtime and is the current browser-runtime baseline in the compact self-test report.
   - 2026-04-15: The no-click browser self-test runner now preflights `http://localhost:5099` and `http://localhost:5100/health` before opening Edge, so cold-start validation is less likely to time out.
 
 

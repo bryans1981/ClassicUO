@@ -79,6 +79,77 @@ window.classicuoProbe = {
   }
 };
 
+window.classicuoRender = {
+  ensureCanvasHost: function (containerId, canvasId, width, height) {
+    try {
+      const result = {
+        containerId: containerId || '',
+        canvasId: canvasId || '',
+        width: width || 0,
+        height: height || 0,
+        mounted: false,
+        created: false,
+        contextType: '',
+        contextAcquired: false,
+        error: ''
+      };
+
+      let container = document.getElementById(result.containerId);
+      if (!container) {
+        container = document.createElement('div');
+        container.id = result.containerId;
+        document.body.appendChild(container);
+      }
+
+      result.mounted = true;
+
+      let canvas = document.getElementById(result.canvasId);
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = result.canvasId;
+        container.innerHTML = '';
+        container.appendChild(canvas);
+        result.created = true;
+      }
+
+      canvas.width = result.width;
+      canvas.height = result.height;
+
+      const contextTypes = ['webgl2', 'webgl', '2d'];
+      for (const contextType of contextTypes) {
+        try {
+          const context = canvas.getContext(contextType);
+          if (context) {
+            result.contextType = contextType;
+            result.contextAcquired = true;
+            break;
+          }
+        } catch (error) {
+          // Try the next context type.
+        }
+      }
+
+      if (!result.contextAcquired) {
+        result.error = 'context-unavailable';
+      }
+
+      return result;
+    } catch (error) {
+      return {
+        containerId: containerId || '',
+        canvasId: canvasId || '',
+        width: width || 0,
+        height: height || 0,
+        mounted: false,
+        created: false,
+        contextType: '',
+        contextAcquired: false,
+        error: error?.message || String(error)
+      };
+    }
+  }
+};
+
 function hasOpfsApi() {
   return !!(navigator.storage && navigator.storage.getDirectory);
 }

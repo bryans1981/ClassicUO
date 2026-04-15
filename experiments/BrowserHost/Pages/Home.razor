@@ -96,7 +96,7 @@
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
         <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
-        <p><strong>Newest layers:</strong> browser-native websocket runtime execution controller</p>
+        <p><strong>Newest layers:</strong> browser-native canvas host</p>
         <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
@@ -161,6 +161,11 @@
         <p><strong>Browser native browser render controller:</strong> @FormatBool(_selfTestReport.NativeBrowserRenderController.IsReady)</p>
         <p><strong>Browser native browser render controller version:</strong> @_selfTestReport.NativeBrowserRenderController.NativeBrowserRenderVersion</p>
         <p><strong>Browser native browser render controller summary:</strong> @_selfTestReport.NativeBrowserRenderController.Summary</p>
+        <div id="classicuo-native-canvas-host" class="browser-native-canvas-host"></div>
+        <p><strong>Browser native canvas host:</strong> @FormatBool(_selfTestReport.NativeBrowserCanvasHost.IsReady)</p>
+        <p><strong>Browser native canvas host version:</strong> @_selfTestReport.NativeBrowserCanvasHost.NativeBrowserCanvasHostVersion</p>
+        <p><strong>Browser native canvas host context:</strong> @_selfTestReport.NativeBrowserCanvasHost.BrowserCanvasContextType</p>
+        <p><strong>Browser native canvas host summary:</strong> @_selfTestReport.NativeBrowserCanvasHost.Summary</p>
         <p><strong>Browser native browser input controller:</strong> @FormatBool(_selfTestReport.NativeBrowserInputController.IsReady)</p>
         <p><strong>Browser native browser input controller version:</strong> @_selfTestReport.NativeBrowserInputController.NativeBrowserInputVersion</p>
         <p><strong>Browser native browser input controller summary:</strong> @_selfTestReport.NativeBrowserInputController.Summary</p>

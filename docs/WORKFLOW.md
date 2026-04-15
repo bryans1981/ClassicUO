@@ -153,7 +153,8 @@ The default operator interaction for this project is:
  - The browser-native runtime session controller now sits above the websocket runtime-session handoff and is the current browser-runtime-session baseline.
  - The browser-native browser runtime controller now consumes the browser-runtime-session layer and remains the current browser-runtime baseline.
  - The browser-native browser runtime ready-state now sits above the browser runtime and is the current browser-runtime baseline exposed in the compact report.
- - The browser-native browser host ready-state now sits above the browser host and is the current browser-host baseline exposed in the compact report.
+- The browser-native browser host ready-state now sits above the browser host and is the current browser-host baseline exposed in the compact report.
+- The browser-native canvas host now mounts a real browser canvas and probes a render context; keep that as the next visible browser-render step above the render controller.
 
 ## Issue Triage
 
@@ -197,7 +198,8 @@ Current focus should remain:
 1. Move the browser host from scaffolding into the actual product path.
 2. Consume the bootstrap package into real client-bootstrap integration.
 3. Land the browser-native execution path needed for a playable browser client, with WebAssembly/WebGL-style rendering, input, and websocket runtime behavior as the reference target.
-4. Keep browser validation batched and focused on end-to-end working slices instead of isolated proof steps.
+4. Use the browser-native canvas host as the active visible render step while the broader client bootstrap path continues.
+5. Keep browser validation batched and focused on end-to-end working slices instead of isolated proof steps.
 
 ## Confirmed Project Facts
 

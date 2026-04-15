@@ -79,6 +79,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
  - the browser-native browser runtime controller now consumes the browser-runtime-session layer and is the current browser-runtime baseline
  - the browser-native browser runtime ready-state now sits above the browser runtime and is the current browser-runtime baseline in the compact report
  - the browser-native browser host ready-state now sits above the browser host and is the current browser-host baseline in the compact report
+ - the browser-native canvas host now mounts a real browser canvas and probes a render context, giving us the first concrete browser-render step above the render controller
 
 ### Main-code integration progress
 

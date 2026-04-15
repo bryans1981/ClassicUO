@@ -150,6 +150,7 @@ Extend the runtime bootstrap consumer/session layers into the next browser entry
 
 - 2026-04-15: Skip broad vertical-slice execution as the default path. Use feature-sized batches, parallel disjoint work, and machine-readable validation reports to move toward the final browser client faster.
 - 2026-04-15: The official ClassicUO browser target uses WebAssembly and WebGL; our next client-facing work should aim at that browser-native execution shape rather than more scaffolding-only layers.
+- 2026-04-15: The browser-native runtime shell controller is now part of the compact self-test baseline, and the no-click runner validates it directly from the saved local report.
 
 
 

@@ -464,3 +464,4 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-14: Added a package-consumer stage above bootstrap-package readback so the launch flow consumes the package-backed handoff instead of only checking the file on disk.
 - 2026-04-15: Operating decision updated: do not default to broad vertical slices. Prefer feature-sized batches, parallel disjoint work, and machine-readable validation to speed up delivery of the final browser client.
 - 2026-04-15: Official browser-client reference uses WebAssembly and WebGL; next implementation slices should target browser-native execution shape instead of additional scaffolding-only layers.
+- 2026-04-15: The browser-native runtime shell controller is now part of the compact self-test baseline, and the no-click runner validates it directly from the saved local report.

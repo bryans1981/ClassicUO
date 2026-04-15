@@ -96,7 +96,7 @@
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
         <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
-        <p><strong>Newest layers:</strong> operational stability, steady operation readiness</p>
+        <p><strong>Newest layers:</strong> browser-native runtime shell controller</p>
         <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
@@ -134,6 +134,9 @@
         <p><strong>Browser native runtime shell:</strong> @FormatBool(_selfTestReport.NativeExecutionPlan.BrowserNativeRuntimeShellReady)</p>
         <p><strong>Browser native runtime shell version:</strong> @_selfTestReport.NativeExecutionPlan.BrowserNativeRuntimeShellVersion</p>
         <p><strong>Browser native runtime shell summary:</strong> @_selfTestReport.NativeExecutionPlan.BrowserNativeRuntimeShellSummary</p>
+        <p><strong>Browser native runtime shell controller:</strong> @FormatBool(_selfTestReport.NativeRuntimeShell.IsReady)</p>
+        <p><strong>Browser native runtime shell controller version:</strong> @_selfTestReport.NativeRuntimeShell.BrowserNativeRuntimeShellVersion</p>
+        <p><strong>Browser native runtime shell controller summary:</strong> @_selfTestReport.NativeRuntimeShell.BrowserNativeRuntimeShellSummary</p>
         <p><strong>Browser native execution summary:</strong> @_selfTestReport.NativeExecutionPlan.Summary</p>
         <p><strong>Launch session path:</strong> @_selfTestReport.LaunchSession.SessionPath</p>
         <p><strong>Launch session summary:</strong> @_selfTestReport.LaunchSession.Summary</p>

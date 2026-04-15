@@ -415,4 +415,6 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-15: Added a browser-native browser host controller on top of the browser runtime, render readiness, input readiness, and launch control. This is the current browser-host baseline.
 - 2026-04-15: Added a browser-native browser surface controller on top of the browser host controller and browser surface readiness. This is the current browser-surface baseline.
 - 2026-04-15: Added a browser-native browser render controller on top of the browser surface controller and browser render readiness. This is the current browser-render baseline.
+- 2026-04-15: Added a browser-native browser input controller on top of the browser render controller and browser input readiness. This is the current browser-input baseline.
+- 2026-04-15: Added a browser-native browser network controller on top of the browser input controller and runtime launch contract. This is the current browser-network baseline.
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.

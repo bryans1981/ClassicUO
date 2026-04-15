@@ -33,6 +33,8 @@ public sealed class BrowserSelfTestReportService
       private readonly IBrowserClientNativeBrowserHostController _nativeBrowserHostController;
       private readonly IBrowserClientNativeBrowserSurfaceController _nativeBrowserSurfaceController;
       private readonly IBrowserClientNativeBrowserRenderController _nativeBrowserRenderController;
+      private readonly IBrowserClientNativeBrowserInputController _nativeBrowserInputController;
+      private readonly IBrowserClientNativeBrowserNetworkController _nativeBrowserNetworkController;
       private readonly IBrowserClientRuntimeLaunchContract _runtimeLaunchContract;
     private readonly IBrowserClientStartupPacket _startupPacket;
     private readonly IBrowserClientStartupConsumer _startupConsumer;
@@ -530,6 +532,8 @@ public sealed class BrowserSelfTestReportService
           IBrowserClientNativeBrowserHostController nativeBrowserHostController,
           IBrowserClientNativeBrowserSurfaceController nativeBrowserSurfaceController,
           IBrowserClientNativeBrowserRenderController nativeBrowserRenderController,
+          IBrowserClientNativeBrowserInputController nativeBrowserInputController,
+          IBrowserClientNativeBrowserNetworkController nativeBrowserNetworkController,
           IBrowserClientRuntimeLaunchContract runtimeLaunchContract,
         IBrowserClientStartupPacket startupPacket,
         IBrowserClientStartupConsumer startupConsumer,
@@ -1025,6 +1029,8 @@ public sealed class BrowserSelfTestReportService
           _nativeBrowserHostController = nativeBrowserHostController;
           _nativeBrowserSurfaceController = nativeBrowserSurfaceController;
           _nativeBrowserRenderController = nativeBrowserRenderController;
+          _nativeBrowserInputController = nativeBrowserInputController;
+          _nativeBrowserNetworkController = nativeBrowserNetworkController;
           _runtimeLaunchContract = runtimeLaunchContract;
         _startupPacket = startupPacket;
         _startupConsumer = startupConsumer;
@@ -1539,6 +1545,8 @@ public sealed class BrowserSelfTestReportService
         BrowserClientNativeBrowserHostControllerResult nativeBrowserHostController = await _nativeBrowserHostController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserSurfaceControllerResult nativeBrowserSurfaceController = await _nativeBrowserSurfaceController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientNativeBrowserRenderControllerResult nativeBrowserRenderController = await _nativeBrowserRenderController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
+        BrowserClientNativeBrowserInputControllerResult nativeBrowserInputController = await _nativeBrowserInputController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
+        BrowserClientNativeBrowserNetworkControllerResult nativeBrowserNetworkController = await _nativeBrowserNetworkController.PrepareAsync(effectiveRequest, bootstrapPackage.ProfileId);
         BrowserClientRuntimeLaunchContractResult runtimeLaunchContract = await _runtimeLaunchContract.BuildAsync();
         BrowserClientStartupPacketResult startupPacket = await _startupPacket.BuildAsync();
         BrowserClientStartupConsumerResult startupConsumer = await _startupConsumer.ConsumeAsync();
@@ -2145,6 +2153,8 @@ public sealed class BrowserSelfTestReportService
             NativeBrowserHostController = nativeBrowserHostController,
             NativeBrowserSurfaceController = nativeBrowserSurfaceController,
             NativeBrowserRenderController = nativeBrowserRenderController,
+            NativeBrowserInputController = nativeBrowserInputController,
+            NativeBrowserNetworkController = nativeBrowserNetworkController,
             RuntimeLaunchContract = runtimeLaunchContract,
             StartupPacket = startupPacket,
             StartupConsumer = startupConsumer,
@@ -2657,6 +2667,8 @@ public sealed class BrowserSelfTestReportService
             $"nativeBrowserHostController={(report.NativeBrowserHostController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserSurfaceController={(report.NativeBrowserSurfaceController.IsReady ? "ok" : "fail")}",
             $"nativeBrowserRenderController={(report.NativeBrowserRenderController.IsReady ? "ok" : "fail")}",
+            $"nativeBrowserInputController={(report.NativeBrowserInputController.IsReady ? "ok" : "fail")}",
+            $"nativeBrowserNetworkController={(report.NativeBrowserNetworkController.IsReady ? "ok" : "fail")}",
             $"runtimeContract={(report.RuntimeLaunchContract.IsReady ? "ok" : "fail")}",
             $"startupPacket={(report.StartupPacket.IsReady ? "ok" : "fail")}",
             $"startupConsumer={(report.StartupConsumer.IsReady ? "ok" : "fail")}",
@@ -3166,6 +3178,8 @@ public sealed class BrowserSelfTestReport
     public BrowserClientNativeBrowserHostControllerResult NativeBrowserHostController { get; set; } = new();
     public BrowserClientNativeBrowserSurfaceControllerResult NativeBrowserSurfaceController { get; set; } = new();
     public BrowserClientNativeBrowserRenderControllerResult NativeBrowserRenderController { get; set; } = new();
+    public BrowserClientNativeBrowserInputControllerResult NativeBrowserInputController { get; set; } = new();
+    public BrowserClientNativeBrowserNetworkControllerResult NativeBrowserNetworkController { get; set; } = new();
     public BrowserClientRuntimeLaunchContractResult RuntimeLaunchContract { get; set; } = new();
     public BrowserClientStartupPacketResult StartupPacket { get; set; } = new();
     public BrowserClientStartupConsumerResult StartupConsumer { get; set; } = new();

@@ -110,6 +110,7 @@ Current status:
 - The browser-native websocket runtime execution controller now performs a real browser websocket connect/read against the report host, giving us the first live websocket execution baseline before final browser runtime integration work.
  - The browser-native websocket runtime session controller now sits above that live websocket execution path and gives us the current browser-session handoff layer.
  - The browser-native runtime ready-state now sits above the browser runtime and gives us the current browser-runtime baseline exposed in the compact report.
+ - The browser filesystem bootstrap contract now lives in `ClassicUO.Utility`, and the real client now checks for an attached browser storage provider at startup.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

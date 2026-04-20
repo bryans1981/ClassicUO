@@ -159,6 +159,7 @@ The default operator interaction for this project is:
 - The browser-native runtime loop now sits above the frame pump and input controller; keep that as the current product-facing browser-runtime heartbeat while we move toward the final browser client.
 - The browser-native runtime execution slice now combines runtime loop, transport, and websocket/session layers; keep that as the current product-facing runtime execution snapshot while we move toward the final browser client.
 - The browser-native runtime network slice now combines runtime execution, network controller, and transport controller; keep that as the current product-facing browser-network snapshot while we move toward the final browser client.
+- The browser filesystem bootstrap seam now lives in `ClassicUO.Utility`; `ClassicUO.Client` now checks browser startup for an attached storage provider before continuing.
 
 ## Issue Triage
 
@@ -222,6 +223,7 @@ These facts are now confirmed and should guide future decisions:
 - Core boot/config file access now routes through FileSystemHelper.
 - The main asset layer now mostly resolves file existence/open checks through FileSystemHelper and DefReader.
 - BrowserFileSystem now supports a normalized virtual path model and an injectable storage provider.
+- The browser filesystem bootstrap contract is now public in `ClassicUO.Utility`, so the real client can own the startup seam instead of the experiment harness.
 - The IO layer now accepts generic Stream input, which is required for browser-backed asset reads.
 - The shared filesystem seam now supports read, write, append, read/write, file listing, file length, and file copy operations.
 - The browser spike now exposes a root-aware `/uo` asset manifest with file counts, sizes, extensions, and preload visibility.

@@ -270,6 +270,8 @@ namespace ClassicUO.Utility.Platforms
             _provider = provider;
         }
 
+        internal static bool IsProviderConfigured => _provider is not null;
+
         private static PlatformNotSupportedException NotReady(string operation)
         {
             return new PlatformNotSupportedException($"Browser filesystem operation '{operation}' is not implemented yet.");

@@ -32,6 +32,7 @@ namespace ClassicUO
 
         private bool _ignoreNextTextInput;
         private readonly BrowserRuntimeBootstrapState _browserBootstrapState;
+        private readonly BrowserRuntimePolicy _browserRuntimePolicy;
         private readonly float[] _intervalFixedUpdate = new float[2];
         private double _totalElapsed, _currentFpsTime;
         private uint _totalFrames;
@@ -45,6 +46,7 @@ namespace ClassicUO
         public GameController(IPluginHost pluginHost, BrowserRuntimeBootstrapState browserBootstrapState = null)
         {
             _browserBootstrapState = browserBootstrapState;
+            _browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
             GraphicManager = new GraphicsDeviceManager(this);
 
             GraphicManager.PreparingDeviceSettings += (sender, e) =>
@@ -59,10 +61,10 @@ namespace ClassicUO
             Window.ClientSizeChanged += WindowOnClientSizeChanged;
             Window.AllowUserResizing = true;
             Window.Title = $"ClassicUO - {CUOEnviroment.Version}";
-            IsMouseVisible = Settings.GlobalSettings.RunMouseInASeparateThread;
+            IsMouseVisible = _browserRuntimePolicy.UseSeparateMouseThread;
 
-            IsFixedTimeStep = false; // Settings.GlobalSettings.FixedTimeStep;
-            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / 250.0);
+            IsFixedTimeStep = _browserRuntimePolicy.FixedTimeStep;
+            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, _browserRuntimePolicy.TargetFps));
             PluginHost = pluginHost;
         }
 
@@ -107,6 +109,7 @@ namespace ClassicUO
             if (PlatformHelper.IsBrowser && _browserBootstrapState != null)
             {
                 Log.Trace($"Browser startup contract consumed: storageConfigured={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}");
+                Log.Trace($"Browser runtime policy: mouseThread={_browserRuntimePolicy.UseSeparateMouseThread}, fixedTimeStep={_browserRuntimePolicy.FixedTimeStep}, targetFps={_browserRuntimePolicy.TargetFps}");
 
                 if (!_browserBootstrapState.StorageConfigured)
                 {

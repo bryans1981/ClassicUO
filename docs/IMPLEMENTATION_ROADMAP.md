@@ -116,6 +116,7 @@ Current status:
   - The main client now owns a dedicated `BrowserRuntimeBootstrap` helper, which centralizes browser-safe defaults and future storage attachment hooks.
   - The main client browser bootstrap helper now captures a browser startup state snapshot, giving the real entrypoint an explicit browser handoff contract.
   - The browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the main client consumes the browser startup contract instead of only capturing it.
+  - The browser runtime policy is now explicit in the main client and consumed by `GameController`, so browser render and input defaults live in the real client path.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

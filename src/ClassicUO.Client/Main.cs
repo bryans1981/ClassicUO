@@ -212,7 +212,14 @@ namespace ClassicUO
                     Client.ShowErrorMessage(ResGeneral.YourUOClientVersionIsInvalid);
                 }
 
-                PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
+                if (!PlatformHelper.IsBrowser)
+                {
+                    PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
+                }
+                else
+                {
+                    Log.Warn("Browser startup validation failed; skipping external browser launch.");
+                }
             }
             else
             {

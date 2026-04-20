@@ -216,6 +216,7 @@ namespace ClassicUO
             }
             else
             {
+                BrowserRuntimeBootstrap.ApplyBrowserRuntimePolicy();
                 Log.Trace($"Browser bootstrap: storageConfigured={browserBootstrapState.StorageConfigured}, assets={browserBootstrapState.AssetsRootPath}, profiles={browserBootstrapState.ProfilesRootPath}, cache={browserBootstrapState.CacheRootPath}, config={browserBootstrapState.ConfigRootPath}");
 
                 if (!PlatformHelper.IsBrowser)

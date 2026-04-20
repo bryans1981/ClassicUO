@@ -50,6 +50,20 @@ namespace ClassicUO
             }
         }
 
+        public static void ApplyBrowserRuntimePolicy()
+        {
+            if (!PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
+            BrowserRuntimePolicy policy = GetRuntimePolicy();
+            Settings.GlobalSettings.RunMouseInASeparateThread = policy.UseSeparateMouseThread;
+            Settings.GlobalSettings.FixedTimeStep = policy.FixedTimeStep;
+            Settings.GlobalSettings.FPS = policy.TargetFps;
+            Settings.GlobalSettings.IsWindowMaximized = false;
+        }
+
         public static void EnsureBrowserStorageBootstrap()
         {
             if (!PlatformHelper.IsBrowser)

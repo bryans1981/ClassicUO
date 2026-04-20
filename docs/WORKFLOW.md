@@ -169,6 +169,7 @@ The default operator interaction for this project is:
 - The browser runtime policy now also owns browser window resizing and text-input startup defaults, so the real client controls the browser-facing runtime behavior directly.
 - The browser runtime policy now also disables idle sleep in browser mode, so the real client keeps browser timing under its own control instead of using desktop-style sleep behavior.
 - The browser runtime policy now also drives the browser refresh rate in `GameController`, so the real client owns the runtime loop timing instead of re-reading the desktop settings value during initialization.
+- The browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so the browser defaults are visible to the rest of the real client instead of only `GameController`.
 - The browser runtime policy now also disables idle sleep in browser mode, so the real client keeps browser timing under its own control instead of using desktop-style sleep behavior.
 
 ## Issue Triage

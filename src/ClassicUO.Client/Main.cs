@@ -97,8 +97,8 @@ namespace ClassicUO
             };
 #endif
             ReadSettingsFromArgs(args);
-            ApplyBrowserStartupDefaults();
-            EnsureBrowserStorageBootstrap();
+            BrowserRuntimeBootstrap.ApplyBrowserStartupDefaults();
+            BrowserRuntimeBootstrap.EnsureBrowserStorageBootstrap();
 
             if (!PlatformHelper.IsBrowser)
             {
@@ -137,7 +137,7 @@ namespace ClassicUO
                 Settings.GlobalSettings.Save();
             }
 
-            ApplyBrowserStartupDefaults();
+            BrowserRuntimeBootstrap.ApplyBrowserStartupDefaults();
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
             {
@@ -501,36 +501,6 @@ namespace ClassicUO
             }
         }
 
-        private static void ApplyBrowserStartupDefaults()
-        {
-            if (!PlatformHelper.IsBrowser)
-            {
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
-            {
-                Settings.GlobalSettings.UltimaOnlineDirectory = BrowserVirtualPaths.AssetsRoot;
-            }
-
-            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
-            {
-                Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);
-            }
-        }
-
-        private static void EnsureBrowserStorageBootstrap()
-        {
-            if (!PlatformHelper.IsBrowser)
-            {
-                return;
-            }
-
-            if (!BrowserFileSystemBootstrap.IsConfigured)
-            {
-                Log.Warn("Browser storage provider is not configured yet. Browser startup will remain limited until the host attaches one.");
-            }
-        }
     }
 }
 

@@ -31,6 +31,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the browser filesystem bootstrap seam has been promoted into `ClassicUO.Utility`, and the main client now checks for an attached browser storage provider during startup
 - the browser host now links the shared browser filesystem bootstrap helper and attaches the provider through that helper
 - the browser storage provider contract and provider implementations are now public in `ClassicUO.Utility`
+- the main client now owns a dedicated `BrowserRuntimeBootstrap` helper for browser-safe defaults and storage seam checks
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

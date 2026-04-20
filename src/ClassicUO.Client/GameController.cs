@@ -970,10 +970,10 @@ namespace ClassicUO
         private void TakeScreenshot()
         {
             string screenshotsFolder = FileSystemHelper.CreateFolderIfNotExists(
-                PlatformHelper.IsBrowser ? BrowserVirtualPaths.CacheRoot : CUOEnviroment.ExecutablePath,
-                PlatformHelper.IsBrowser ? "client" : "Data",
-                PlatformHelper.IsBrowser ? "screenshots" : "Client",
-                PlatformHelper.IsBrowser ? string.Empty : "Screenshots"
+                PlatformHelper.IsBrowser
+                    ? BrowserVirtualPaths.CacheFile("client")
+                    : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client"),
+                "screenshots"
             );
 
             string path = Path.Combine(

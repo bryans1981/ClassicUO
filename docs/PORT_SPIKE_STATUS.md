@@ -47,6 +47,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path
 - browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile
 - the browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic
+- browser screenshots now root under the shared browser cache path, so capture output stays in the browser filesystem contract instead of desktop data folders
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

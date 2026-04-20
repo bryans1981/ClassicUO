@@ -179,6 +179,7 @@ The default operator interaction for this project is:
 - The browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path.
 - Browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile.
 - The browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic.
+- Browser screenshots now root under the shared browser cache path, so capture output stays in the browser filesystem contract instead of desktop data folders.
 
 ## Issue Triage
 

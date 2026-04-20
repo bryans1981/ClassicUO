@@ -73,6 +73,20 @@ namespace ClassicUO
             Settings.GlobalSettings.IsWindowMaximized = false;
         }
 
+        public static void ApplyBrowserProfileDefaults(Profile profile)
+        {
+            if (!PlatformHelper.IsBrowser || profile == null)
+            {
+                return;
+            }
+
+            profile.WindowClientBounds = new Point(1280, 720);
+            profile.GameWindowPosition = new Point(0, 0);
+            profile.GameWindowSize = new Point(1280, 720);
+            profile.GameWindowFullSize = false;
+            profile.WindowBorderless = false;
+        }
+
         public static void EnsureBrowserStorageBootstrap()
         {
             if (!PlatformHelper.IsBrowser)

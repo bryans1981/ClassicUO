@@ -41,6 +41,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so browser defaults are visible to the rest of the real client
 - the browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path
 - the browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions
+- the browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

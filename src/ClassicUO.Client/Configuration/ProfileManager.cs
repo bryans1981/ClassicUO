@@ -51,6 +51,7 @@ namespace ClassicUO.Configuration
             CurrentProfile.ServerName = servername;
             CurrentProfile.CharacterName = charactername;
 
+            BrowserRuntimeBootstrap.ApplyBrowserProfileDefaults(CurrentProfile);
             ValidateFields(CurrentProfile);
         }
 

@@ -172,6 +172,7 @@ The default operator interaction for this project is:
 - The browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so the browser defaults are visible to the rest of the real client instead of only `GameController`.
 - The browser startup defaults now also set the browser profile root explicitly, so profile persistence is owned by the real client startup path instead of only the `ProfileManager` fallback.
 - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
+- The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer instead of the desktop fallback values.
 - The browser runtime policy now also disables idle sleep in browser mode, so the real client keeps browser timing under its own control instead of using desktop-style sleep behavior.
 
 ## Issue Triage

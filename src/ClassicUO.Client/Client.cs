@@ -7,6 +7,7 @@ using ClassicUO.Game.Data;
 using ClassicUO.IO;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
+using ClassicUO.Utility.Platforms;
 using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using SDL3;
@@ -230,6 +231,12 @@ namespace ClassicUO
 
         public static void ShowErrorMessage(string msg)
         {
+            if (PlatformHelper.IsBrowser)
+            {
+                Log.Error(msg);
+                return;
+            }
+
             SDL.SDL_ShowSimpleMessageBox(SDL.SDL_MessageBoxFlags.SDL_MESSAGEBOX_ERROR, "ERROR", msg, IntPtr.Zero);
         }
     }

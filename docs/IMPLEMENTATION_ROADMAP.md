@@ -126,6 +126,7 @@ Current status:
   - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer.
   - The browser profile load path now also disables `ReduceFPSWhenInactive`, and the browser runtime policy now owns inactive FPS throttling directly, so browser timing stays out of desktop-style inactive throttling.
   - The main startup validation path now skips external browser launching in browser mode, so a browser-side startup failure does not try to spawn another browser.
+  - The browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

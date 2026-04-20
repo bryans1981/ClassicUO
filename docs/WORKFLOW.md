@@ -176,6 +176,7 @@ The default operator interaction for this project is:
 - The browser profile load path now also disables `ReduceFPSWhenInactive`, and the browser runtime policy now owns inactive FPS throttling directly, so browser timing does not fall back to desktop-style inactive behavior.
 - The browser runtime policy now also disables idle sleep in browser mode, so the real client keeps browser timing under its own control instead of using desktop-style sleep behavior.
 - The main startup validation path now skips external browser launching in browser mode, so a browser-side startup failure does not try to spawn another browser.
+- The browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path.
 
 ## Issue Triage
 

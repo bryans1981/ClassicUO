@@ -42,7 +42,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path
 - the browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions
 - the browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer
-- the browser profile load path now also disables `ReduceFPSWhenInactive`, so browser timing stays out of desktop-style inactive throttling
+- the browser profile load path now also disables `ReduceFPSWhenInactive`, and the browser runtime policy now owns inactive FPS throttling directly, so browser timing stays out of desktop-style inactive throttling
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

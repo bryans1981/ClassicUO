@@ -444,13 +444,13 @@ namespace ClassicUO
                 _currentFpsTime = 0;
             }
 
-            double x = _intervalFixedUpdate[
-                !IsActive
+            bool reduceFpsWhenInactive =
+                _browserRuntimePolicy.ReduceFpsWhenInactive
+                && !IsActive
                 && ProfileManager.CurrentProfile != null
-                && ProfileManager.CurrentProfile.ReduceFPSWhenInactive
-                    ? 1
-                    : 0
-            ];
+                && ProfileManager.CurrentProfile.ReduceFPSWhenInactive;
+
+            double x = _intervalFixedUpdate[reduceFpsWhenInactive ? 1 : 0];
             _suppressedDraw = false;
 
             if (_totalElapsed > x)

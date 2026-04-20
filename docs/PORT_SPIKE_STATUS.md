@@ -37,6 +37,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the browser runtime policy is now explicit in the main client and consumed by `GameController`, so browser render and input defaults are owned by the real client path
 - the browser runtime policy now also owns browser window resizing and text-input startup defaults, so browser-facing runtime behavior is controlled in the real client path
 - the browser runtime policy now also disables idle sleep in browser mode, so browser timing stays under the real client path instead of desktop-style sleep behavior
+- the browser runtime policy now also drives the browser refresh rate in `GameController`, so browser loop timing is owned by the real client path during initialization
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

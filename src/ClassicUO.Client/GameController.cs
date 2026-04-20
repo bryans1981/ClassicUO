@@ -117,7 +117,7 @@ namespace ClassicUO
                 }
             }
 
-            SetRefreshRate(Settings.GlobalSettings.FPS);
+            SetRefreshRate(PlatformHelper.IsBrowser ? _browserRuntimePolicy.TargetFps : Settings.GlobalSettings.FPS);
             _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
 
             _filter = HandleSdlEvent;

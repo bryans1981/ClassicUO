@@ -119,6 +119,7 @@ Current status:
   - The browser runtime policy is now explicit in the main client and consumed by `GameController`, so browser render and input defaults live in the real client path.
   - The browser runtime policy now also owns browser window resizing and text-input startup defaults, so the real client controls the browser-facing runtime behavior directly.
   - The browser runtime policy now also disables idle sleep in browser mode, so browser timing stays under the real client path instead of desktop-style sleep behavior.
+  - The browser runtime policy now also drives the browser refresh rate in `GameController`, so browser loop timing is owned by the real client path during initialization.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

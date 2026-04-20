@@ -85,6 +85,7 @@ namespace ClassicUO
             profile.GameWindowSize = new Point(1280, 720);
             profile.GameWindowFullSize = false;
             profile.WindowBorderless = false;
+            profile.ReduceFPSWhenInactive = false;
         }
 
         public static void EnsureBrowserStorageBootstrap()

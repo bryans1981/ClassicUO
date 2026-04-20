@@ -173,6 +173,7 @@ The default operator interaction for this project is:
 - The browser startup defaults now also set the browser profile root explicitly, so profile persistence is owned by the real client startup path instead of only the `ProfileManager` fallback.
 - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
 - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer instead of the desktop fallback values.
+- The browser profile load path now also disables `ReduceFPSWhenInactive`, so the browser runtime does not fall back to desktop-style inactive throttling.
 - The browser runtime policy now also disables idle sleep in browser mode, so the real client keeps browser timing under its own control instead of using desktop-style sleep behavior.
 
 ## Issue Triage

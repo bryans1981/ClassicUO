@@ -124,6 +124,7 @@ Current status:
   - The browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path.
   - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
   - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer.
+  - The browser profile load path now also disables `ReduceFPSWhenInactive`, so browser timing stays out of desktop-style inactive throttling.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

@@ -363,6 +363,11 @@ namespace ClassicUO
 
         public void SetWindowPositionBySettings()
         {
+            if (PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
             var borderSizesRetrieved = SDL_GetWindowBordersSize(Window.Handle, out int top, out int left, out _, out _);
 
             if (!borderSizesRetrieved)

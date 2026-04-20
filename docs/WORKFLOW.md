@@ -178,6 +178,7 @@ The default operator interaction for this project is:
 - The main startup validation path now skips external browser launching in browser mode, so a browser-side startup failure does not try to spawn another browser.
 - The browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path.
 - Browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile.
+- The browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic.
 
 ## Issue Triage
 

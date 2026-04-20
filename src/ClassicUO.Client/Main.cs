@@ -99,6 +99,7 @@ namespace ClassicUO
             ReadSettingsFromArgs(args);
             BrowserRuntimeBootstrap.ApplyBrowserStartupDefaults();
             BrowserRuntimeBootstrap.EnsureBrowserStorageBootstrap();
+            BrowserRuntimeBootstrapState browserBootstrapState = BrowserRuntimeBootstrap.CaptureState();
 
             if (!PlatformHelper.IsBrowser)
             {
@@ -215,6 +216,8 @@ namespace ClassicUO
             }
             else
             {
+                Log.Trace($"Browser bootstrap: storageConfigured={browserBootstrapState.StorageConfigured}, assets={browserBootstrapState.AssetsRootPath}, profiles={browserBootstrapState.ProfilesRootPath}, cache={browserBootstrapState.CacheRootPath}, config={browserBootstrapState.ConfigRootPath}");
+
                 if (!PlatformHelper.IsBrowser)
                 {
                     switch (Settings.GlobalSettings.ForceDriver)

@@ -163,6 +163,7 @@ The default operator interaction for this project is:
 - The browser host now links the shared browser filesystem bootstrap helper, so the provider attachment path is owned by the shared seam instead of the experiment-only bridge.
 - The browser storage provider contract and the read-only/rooted provider implementations are now public in `ClassicUO.Utility`, so the browser client can consume them as shared infrastructure instead of host-private types.
 - The browser startup helper now lives in `ClassicUO.Client` as `BrowserRuntimeBootstrap`, which owns browser-safe defaults, provider checks, and future storage attachment hooks.
+- `BrowserRuntimeBootstrap` now also captures a browser bootstrap state snapshot so the real client has an explicit browser-startup contract in the main project.
 
 ## Issue Triage
 
@@ -230,6 +231,7 @@ These facts are now confirmed and should guide future decisions:
 - The browser host now attaches the shared browser storage provider through the new public bootstrap helper, keeping the provider wiring centralized.
 - The browser storage bootstrap helper now exposes read-only asset and rooted provider factory methods as the shared browser storage contract.
 - The browser client now has a dedicated `BrowserRuntimeBootstrap` helper in the main project, keeping browser startup logic out of `Main`.
+- The browser client bootstrap helper now exposes an explicit captured state snapshot for browser startup, making the browser handoff easier to consume from the real client path.
 - The IO layer now accepts generic Stream input, which is required for browser-backed asset reads.
 - The shared filesystem seam now supports read, write, append, read/write, file listing, file length, and file copy operations.
 - The browser spike now exposes a root-aware `/uo` asset manifest with file counts, sizes, extensions, and preload visibility.

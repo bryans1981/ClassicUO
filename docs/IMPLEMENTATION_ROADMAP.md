@@ -114,6 +114,7 @@ Current status:
  - The browser host now links the shared browser filesystem bootstrap helper and uses it to attach the browser storage provider through the shared seam.
  - The browser storage provider contract and provider implementations are now public in `ClassicUO.Utility`, which is the shared contract the browser client should consume.
  - The main client now owns a dedicated `BrowserRuntimeBootstrap` helper, which centralizes browser-safe defaults and future storage attachment hooks.
+ - The main client browser bootstrap helper now captures a browser startup state snapshot, giving the real entrypoint an explicit browser handoff contract.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

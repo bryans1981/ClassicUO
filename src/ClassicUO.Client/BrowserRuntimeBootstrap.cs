@@ -134,7 +134,8 @@ namespace ClassicUO
             AllowWindowResizing = false,
             EnableTextInput = true,
             AllowIdleSleep = false,
-            ReduceFpsWhenInactive = false
+            ReduceFpsWhenInactive = false,
+            LoadPlugins = false
         };
 
         public static BrowserRuntimePolicy DesktopDefault { get; } = new BrowserRuntimePolicy
@@ -145,7 +146,8 @@ namespace ClassicUO
             AllowWindowResizing = true,
             EnableTextInput = true,
             AllowIdleSleep = true,
-            ReduceFpsWhenInactive = true
+            ReduceFpsWhenInactive = true,
+            LoadPlugins = true
         };
 
         public bool UseSeparateMouseThread { get; set; }
@@ -155,5 +157,6 @@ namespace ClassicUO
         public bool EnableTextInput { get; set; }
         public bool AllowIdleSleep { get; set; }
         public bool ReduceFpsWhenInactive { get; set; }
+        public bool LoadPlugins { get; set; }
     }
 }

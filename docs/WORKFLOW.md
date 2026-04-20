@@ -180,6 +180,7 @@ The default operator interaction for this project is:
 - Browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile.
 - The browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic.
 - Browser screenshots now root under the shared browser cache path, so capture output stays in the browser filesystem contract instead of desktop data folders.
+- Browser plugin loading is now owned by the browser runtime policy, so the main client no longer hard-codes a browser-mode startup branch for plugins.
 
 ## Issue Triage
 

@@ -48,6 +48,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile
 - the browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic
 - browser screenshots now root under the shared browser cache path, so capture output stays in the browser filesystem contract instead of desktop data folders
+- browser plugin loading is now owned by the browser runtime policy, so the main client no longer hard-codes a browser-mode startup branch for plugins
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

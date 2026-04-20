@@ -127,6 +127,7 @@ Current status:
   - The browser profile load path now also disables `ReduceFPSWhenInactive`, and the browser runtime policy now owns inactive FPS throttling directly, so browser timing stays out of desktop-style inactive throttling.
   - The main startup validation path now skips external browser launching in browser mode, so a browser-side startup failure does not try to spawn another browser.
   - The browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path.
+  - Browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

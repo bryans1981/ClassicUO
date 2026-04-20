@@ -177,12 +177,15 @@ namespace ClassicUO
 
         protected override void UnloadContent()
         {
-            SDL_GetWindowBordersSize(Window.Handle, out int top, out int left, out _, out _);
+            if (!PlatformHelper.IsBrowser)
+            {
+                SDL_GetWindowBordersSize(Window.Handle, out int top, out int left, out _, out _);
 
-            Settings.GlobalSettings.WindowPosition = new Point(
-                Math.Max(0, Window.ClientBounds.X - left),
-                Math.Max(0, Window.ClientBounds.Y - top)
-            );
+                Settings.GlobalSettings.WindowPosition = new Point(
+                    Math.Max(0, Window.ClientBounds.X - left),
+                    Math.Max(0, Window.ClientBounds.Y - top)
+                );
+            }
 
             Audio?.StopMusic();
             Settings.GlobalSettings.Save();

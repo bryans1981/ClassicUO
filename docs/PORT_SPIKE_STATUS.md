@@ -387,3 +387,4 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-20: Updated the no-click self-test runner to open Edge minimized by default while keeping the same saved-report validation flow.
 - 2026-04-20: Hardened the no-click self-test runner to use Edge's minimized launch flag and minimized window style together.
 - 2026-04-20: Main-project browser startup now uses browser-safe defaults in `ClassicUO.Client`; the next product-facing work should stay in the real client path rather than the experiment launcher.
+- 2026-04-20: The main client now routes browser crash logs and screenshots to browser cache roots, removing another desktop-only path assumption from the browser execution path.

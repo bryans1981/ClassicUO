@@ -83,7 +83,9 @@ namespace ClassicUO
                 sb.AppendLine();
 
                 Log.Panic(e.ExceptionObject.ToString());
-                string path = Path.Combine(CUOEnviroment.ExecutablePath, "Logs");
+                string path = PlatformHelper.IsBrowser
+                    ? BrowserVirtualPaths.CacheFile("logs")
+                    : Path.Combine(CUOEnviroment.ExecutablePath, "Logs");
 
                 if (!FileSystemHelper.DirectoryExists(path))
                     FileSystemHelper.CreateDirectory(path);

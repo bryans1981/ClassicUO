@@ -501,3 +501,4 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native browser session controller is now the active browser-session baseline. Next work should move from browser-session control into actual websocket session/runtime execution wiring.
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.
 - 2026-04-20: Main-project browser startup now defaults to browser-safe assets, profiles, config, and client version values in `ClassicUO.Client`. Next work should stay in the real client path and avoid adding more experiment-launcher layers.
+- 2026-04-20: Browser crash logs and screenshots now route to browser cache roots in the main client, removing another desktop-only path assumption from the browser execution path.

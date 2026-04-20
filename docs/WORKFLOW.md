@@ -448,3 +448,4 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-20: The no-click self-test runner now opens Edge minimized by default so repeated validation does not clutter the desktop.
 - 2026-04-20: The no-click self-test runner now uses Edge's `--start-minimized` launch flag plus minimized window style to keep browser windows out of the way during automated validation.
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.
+- 2026-04-20: Browser focus is moving back to the main `ClassicUO.Client` project. Browser startup now defaults to browser-safe assets, profiles, config, and client version values inside the real client entrypoint instead of keeping the experiment launcher active.

@@ -95,6 +95,7 @@ namespace ClassicUO
             };
 #endif
             ReadSettingsFromArgs(args);
+            ApplyBrowserStartupDefaults();
 
             if (!PlatformHelper.IsBrowser)
             {
@@ -132,6 +133,8 @@ namespace ClassicUO
                 Settings.GlobalSettings = new Settings();
                 Settings.GlobalSettings.Save();
             }
+
+            ApplyBrowserStartupDefaults();
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
             {
@@ -492,6 +495,24 @@ namespace ClassicUO
 
                         break;
                 }
+            }
+        }
+
+        private static void ApplyBrowserStartupDefaults()
+        {
+            if (!PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
+            {
+                Settings.GlobalSettings.UltimaOnlineDirectory = BrowserVirtualPaths.AssetsRoot;
+            }
+
+            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
+            {
+                Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);
             }
         }
     }

@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using ClassicUO.Utility;
+using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Configuration
@@ -20,14 +21,16 @@ namespace ClassicUO.Configuration
             {
                 if (string.IsNullOrEmpty(_rootPath))
                 {
-                    if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
-                    {
-                        _rootPath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Profiles");
-                    }
-                    else
-                    {
-                        _rootPath = Settings.GlobalSettings.ProfilesPath;
-                    }
+                if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
+                {
+                    _rootPath = PlatformHelper.IsBrowser
+                        ? BrowserVirtualPaths.ProfilesRoot
+                        : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Profiles");
+                }
+                else
+                {
+                    _rootPath = Settings.GlobalSettings.ProfilesPath;
+                }
                 }
 
                 return _rootPath;

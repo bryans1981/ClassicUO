@@ -53,6 +53,19 @@ namespace ClassicUO.Utility
 
     public static class ClientVersionHelper
     {
+        public static string ToVersionString(ClientVersion version)
+        {
+            int raw = (int)version;
+            int major = (raw >> 24) & 0xFF;
+            int minor = (raw >> 16) & 0xFF;
+            int build = (raw >> 8) & 0xFF;
+            int revision = raw & 0xFF;
+
+            return revision == 0
+                ? $"{major}.{minor}.{build}.0"
+                : $"{major}.{minor}.{build}.{(char) revision}";
+        }
+
         public static bool TryParseFromFile(string clientpath, out string version)
         {
             version = null;

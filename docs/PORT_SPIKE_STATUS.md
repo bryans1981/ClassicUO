@@ -29,6 +29,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - browser asset readers for `tiledata.mul`, `cliloc.enu`, and `hues.mul`
 - client-facing browser asset service that now drives the current test panels instead of direct probe services
 - the browser filesystem bootstrap seam has been promoted into `ClassicUO.Utility`, and the main client now checks for an attached browser storage provider during startup
+- the browser host now links the shared browser filesystem bootstrap helper and attaches the provider through that helper
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

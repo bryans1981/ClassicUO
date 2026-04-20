@@ -462,7 +462,7 @@ namespace ClassicUO
                 _suppressedDraw = true;
                 SuppressDraw();
 
-                if (!gameTime.IsRunningSlowly)
+                if (_browserRuntimePolicy.AllowIdleSleep && !gameTime.IsRunningSlowly)
                 {
                     Thread.Sleep(1);
                 }

@@ -94,7 +94,8 @@ namespace ClassicUO
             FixedTimeStep = false,
             TargetFps = 60,
             AllowWindowResizing = false,
-            EnableTextInput = true
+            EnableTextInput = true,
+            AllowIdleSleep = false
         };
 
         public static BrowserRuntimePolicy DesktopDefault { get; } = new BrowserRuntimePolicy
@@ -103,7 +104,8 @@ namespace ClassicUO
             FixedTimeStep = Settings.GlobalSettings?.FixedTimeStep ?? false,
             TargetFps = Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60,
             AllowWindowResizing = true,
-            EnableTextInput = true
+            EnableTextInput = true,
+            AllowIdleSleep = true
         };
 
         public bool UseSeparateMouseThread { get; set; }
@@ -111,5 +113,6 @@ namespace ClassicUO
         public int TargetFps { get; set; }
         public bool AllowWindowResizing { get; set; }
         public bool EnableTextInput { get; set; }
+        public bool AllowIdleSleep { get; set; }
     }
 }

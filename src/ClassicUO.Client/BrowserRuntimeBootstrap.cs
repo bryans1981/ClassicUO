@@ -44,6 +44,11 @@ namespace ClassicUO
                 Settings.GlobalSettings.UltimaOnlineDirectory = BrowserVirtualPaths.AssetsRoot;
             }
 
+            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
+            {
+                Settings.GlobalSettings.ProfilesPath = BrowserVirtualPaths.ProfilesRoot;
+            }
+
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
             {
                 Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);

@@ -121,6 +121,7 @@ Current status:
   - The browser runtime policy now also disables idle sleep in browser mode, so browser timing stays under the real client path instead of desktop-style sleep behavior.
   - The browser runtime policy now also drives the browser refresh rate in `GameController`, so browser loop timing is owned by the real client path during initialization.
   - The browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so browser defaults are visible to the rest of the real client.
+  - The browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

@@ -8,6 +8,27 @@ namespace ClassicUO.Utility.Platforms
     {
         public static bool IsConfigured => BrowserFileSystem.IsProviderConfigured;
 
+        public static IBrowserStorageProvider CreateReadOnlyAssetProvider(IBrowserBinaryAssetSource source)
+        {
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return new BrowserBinaryAssetStorageProvider(source);
+        }
+
+        public static IBrowserStorageProvider CreateRootedProvider
+        (
+            IBrowserStorageProvider assetsProvider,
+            IBrowserStorageProvider profilesProvider,
+            IBrowserStorageProvider cacheProvider,
+            IBrowserStorageProvider configProvider
+        )
+        {
+            return new RootedBrowserStorageProvider(assetsProvider, profilesProvider, cacheProvider, configProvider);
+        }
+
         public static void ConfigureProvider(IBrowserStorageProvider provider)
         {
             if (provider is null)
@@ -16,6 +37,11 @@ namespace ClassicUO.Utility.Platforms
             }
 
             BrowserFileSystem.SetProvider(provider);
+        }
+
+        public static void ConfigureReadOnlyAssetProvider(IBrowserBinaryAssetSource source)
+        {
+            ConfigureProvider(CreateReadOnlyAssetProvider(source));
         }
     }
 }

@@ -127,7 +127,7 @@ public sealed class BrowserFileSystemBridgeService
             return;
         }
 
-        BrowserFileSystemBootstrap.ConfigureProvider(new BrowserBinaryAssetStorageProvider(_binaryAssetSource));
+        BrowserFileSystemBootstrap.ConfigureReadOnlyAssetProvider(_binaryAssetSource);
         _providerActivated = true;
     }
 }

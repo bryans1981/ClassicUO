@@ -34,7 +34,7 @@ namespace ClassicUO.Utility.Platforms
         bool TryReadFile(string path, out ReadOnlyMemory<byte> bytes);
     }
 
-    internal sealed class BrowserBinaryAssetStorageProvider : IBrowserStorageProvider
+    public sealed class BrowserBinaryAssetStorageProvider : IBrowserStorageProvider
     {
         private readonly IBrowserBinaryAssetSource _source;
 
@@ -107,7 +107,7 @@ namespace ClassicUO.Utility.Platforms
         }
     }
 
-    internal sealed class RootedBrowserStorageProvider : IBrowserStorageProvider
+    public sealed class RootedBrowserStorageProvider : IBrowserStorageProvider
     {
         private readonly IBrowserStorageProvider _assetsProvider;
         private readonly IBrowserStorageProvider _profilesProvider;
@@ -386,7 +386,7 @@ namespace ClassicUO.Utility.Platforms
         }
     }
 
-    internal sealed class InMemoryBrowserStorageProvider : IBrowserStorageProvider
+    public sealed class InMemoryBrowserStorageProvider : IBrowserStorageProvider
     {
         private readonly Dictionary<string, byte[]> _files = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> _directories = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -596,7 +596,7 @@ namespace ClassicUO.Utility.Platforms
         }
     }
 
-    internal sealed class InMemoryBrowserBinaryAssetSource : IBrowserBinaryAssetSource
+    public sealed class InMemoryBrowserBinaryAssetSource : IBrowserBinaryAssetSource
     {
         private readonly Dictionary<string, byte[]> _files = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
 

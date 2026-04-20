@@ -51,9 +51,17 @@ $browserProc = $null
 try {
     Remove-Item -LiteralPath $browserProfilePath -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
+    $browserArguments = "--new-window --user-data-dir=`"$browserProfilePath`""
+
+    if ($KeepBrowserMinimized) {
+        $browserArguments += " --start-minimized"
+    }
+
+    $browserArguments += " `"$Url`""
+
     $browserStartProcess = @{
         FilePath = $edgePath
-        ArgumentList = "--new-window --user-data-dir=`"$browserProfilePath`" `"$Url`""
+        ArgumentList = $browserArguments
         PassThru = $true
     }
 

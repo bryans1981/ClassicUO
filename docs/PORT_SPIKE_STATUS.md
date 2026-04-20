@@ -385,3 +385,4 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-20: Added the browser-native runtime session assurance above the runtime-session ready-state and live browser-session controller to keep the active product-facing baseline moving toward the real browser client path.
 - 2026-04-20: Added the browser-native runtime launch snapshot above the runtime-session assurance and runtime launch contract to keep the active product-facing baseline moving toward the real browser client path.
 - 2026-04-20: Updated the no-click self-test runner to open Edge minimized by default while keeping the same saved-report validation flow.
+- 2026-04-20: Hardened the no-click self-test runner to use Edge's minimized launch flag and minimized window style together.

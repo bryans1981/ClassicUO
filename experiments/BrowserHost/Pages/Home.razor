@@ -96,7 +96,7 @@
     {
         <p><strong>Generated:</strong> @_selfTestReport.GeneratedAtUtc.ToString("u")</p>
         <p><strong>Report mode:</strong> @_selfTestReport.ReportMode</p>
-        <p><strong>Newest layers:</strong> browser-native runtime session ready-state</p>
+        <p><strong>Newest layers:</strong> browser-native runtime session assurance</p>
         <p><strong>Runtime chain marker:</strong> @_selfTestReport.RuntimeChainMarker</p>
         <p><strong>Summary:</strong> @_selfTestReport.Summary</p>
         @if (_selfTestReportSave is not null)
@@ -197,6 +197,9 @@
         <p><strong>Browser native runtime session ready-state:</strong> @FormatBool(_selfTestReport.NativeBrowserRuntimeSessionReadyState.IsReady)</p>
         <p><strong>Browser native runtime session ready-state version:</strong> @_selfTestReport.NativeBrowserRuntimeSessionReadyState.NativeBrowserRuntimeSessionReadyStateVersion</p>
         <p><strong>Browser native runtime session ready-state summary:</strong> @_selfTestReport.NativeBrowserRuntimeSessionReadyState.Summary</p>
+        <p><strong>Browser native runtime session assurance:</strong> @FormatBool(_selfTestReport.NativeBrowserRuntimeSessionAssurance.IsReady)</p>
+        <p><strong>Browser native runtime session assurance version:</strong> @_selfTestReport.NativeBrowserRuntimeSessionAssurance.NativeBrowserRuntimeSessionAssuranceVersion</p>
+        <p><strong>Browser native runtime session assurance summary:</strong> @_selfTestReport.NativeBrowserRuntimeSessionAssurance.Summary</p>
         <p><strong>Browser native browser network controller:</strong> @FormatBool(_selfTestReport.NativeBrowserNetworkController.IsReady)</p>
         <p><strong>Browser native browser network controller version:</strong> @_selfTestReport.NativeBrowserNetworkController.NativeBrowserNetworkVersion</p>
         <p><strong>Browser native browser network controller summary:</strong> @_selfTestReport.NativeBrowserNetworkController.Summary</p>

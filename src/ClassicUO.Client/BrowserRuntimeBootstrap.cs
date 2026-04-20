@@ -4,6 +4,7 @@ using ClassicUO.Configuration;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Platforms;
 using ClassicUO.Utility.Logging;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace ClassicUO
@@ -53,6 +54,9 @@ namespace ClassicUO
             {
                 Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);
             }
+
+            Settings.GlobalSettings.WindowPosition = new Point(0, 0);
+            Settings.GlobalSettings.WindowSize = new Point(1280, 720);
         }
 
         public static void ApplyBrowserRuntimePolicy()

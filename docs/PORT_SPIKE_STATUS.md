@@ -33,6 +33,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the browser storage provider contract and provider implementations are now public in `ClassicUO.Utility`
 - the main client now owns a dedicated `BrowserRuntimeBootstrap` helper for browser-safe defaults and storage seam checks
 - the main client browser bootstrap helper now also captures a browser startup state snapshot for the real entrypoint path
+- the browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the real client consumes the browser startup contract instead of only capturing it
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

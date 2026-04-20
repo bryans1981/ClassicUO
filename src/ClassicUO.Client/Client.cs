@@ -206,13 +206,13 @@ namespace ClassicUO
         public static GameController Game { get; private set; }
 
 
-        public static void Run(IPluginHost pluginHost)
+        public static void Run(IPluginHost pluginHost, BrowserRuntimeBootstrapState browserBootstrapState = null)
         {
             Debug.Assert(Game == null);
 
             Log.Trace("Running game...");
 
-            using (Game = new GameController(pluginHost))
+            using (Game = new GameController(pluginHost, browserBootstrapState))
             {
                 // https://github.com/FNA-XNA/FNA/wiki/7:-FNA-Environment-Variables#fna_graphics_enable_highdpi
                 CUOEnviroment.IsHighDPI = Environment.GetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI") == "1";

@@ -112,9 +112,10 @@ Current status:
  - The browser-native runtime ready-state now sits above the browser runtime and gives us the current browser-runtime baseline exposed in the compact report.
  - The browser filesystem bootstrap contract now lives in `ClassicUO.Utility`, and the real client now checks for an attached browser storage provider at startup.
  - The browser host now links the shared browser filesystem bootstrap helper and uses it to attach the browser storage provider through the shared seam.
- - The browser storage provider contract and provider implementations are now public in `ClassicUO.Utility`, which is the shared contract the browser client should consume.
- - The main client now owns a dedicated `BrowserRuntimeBootstrap` helper, which centralizes browser-safe defaults and future storage attachment hooks.
- - The main client browser bootstrap helper now captures a browser startup state snapshot, giving the real entrypoint an explicit browser handoff contract.
+  - The browser storage provider contract and provider implementations are now public in `ClassicUO.Utility`, which is the shared contract the browser client should consume.
+  - The main client now owns a dedicated `BrowserRuntimeBootstrap` helper, which centralizes browser-safe defaults and future storage attachment hooks.
+  - The main client browser bootstrap helper now captures a browser startup state snapshot, giving the real entrypoint an explicit browser handoff contract.
+  - The browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the main client consumes the browser startup contract instead of only capturing it.
   - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 
 ### Milestone 3: Linux Container Packaging

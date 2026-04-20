@@ -31,6 +31,7 @@ namespace ClassicUO
         private SDL_EventFilter _filter;
 
         private bool _ignoreNextTextInput;
+        private readonly BrowserRuntimeBootstrapState _browserBootstrapState;
         private readonly float[] _intervalFixedUpdate = new float[2];
         private double _totalElapsed, _currentFpsTime;
         private uint _totalFrames;
@@ -41,8 +42,9 @@ namespace ClassicUO
         private bool _pluginsInitialized = false;
         private float _displayScale;
 
-        public GameController(IPluginHost pluginHost)
+        public GameController(IPluginHost pluginHost, BrowserRuntimeBootstrapState browserBootstrapState = null)
         {
+            _browserBootstrapState = browserBootstrapState;
             GraphicManager = new GraphicsDeviceManager(this);
 
             GraphicManager.PreparingDeviceSettings += (sender, e) =>
@@ -101,6 +103,16 @@ namespace ClassicUO
             }
 
             GraphicManager.ApplyChanges();
+
+            if (PlatformHelper.IsBrowser && _browserBootstrapState != null)
+            {
+                Log.Trace($"Browser startup contract consumed: storageConfigured={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}");
+
+                if (!_browserBootstrapState.StorageConfigured)
+                {
+                    Log.Warn("Browser storage provider is not configured. Browser runtime startup is limited.");
+                }
+            }
 
             SetRefreshRate(Settings.GlobalSettings.FPS);
             _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);

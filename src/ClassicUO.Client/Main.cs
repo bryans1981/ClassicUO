@@ -234,7 +234,7 @@ namespace ClassicUO
                     }
                 }
 
-                Client.Run(pluginHost);
+                Client.Run(pluginHost, browserBootstrapState);
             }
 
             Log.Trace("Closing...");

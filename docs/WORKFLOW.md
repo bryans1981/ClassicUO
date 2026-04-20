@@ -164,6 +164,7 @@ The default operator interaction for this project is:
 - The browser storage provider contract and the read-only/rooted provider implementations are now public in `ClassicUO.Utility`, so the browser client can consume them as shared infrastructure instead of host-private types.
 - The browser startup helper now lives in `ClassicUO.Client` as `BrowserRuntimeBootstrap`, which owns browser-safe defaults, provider checks, and future storage attachment hooks.
 - `BrowserRuntimeBootstrap` now also captures a browser bootstrap state snapshot so the real client has an explicit browser-startup contract in the main project.
+- The browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the real client consumes the browser startup contract instead of only capturing it.
 
 ## Issue Triage
 

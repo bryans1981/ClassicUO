@@ -2,6 +2,7 @@ param(
     [string]$Url = 'http://localhost:5099/?autoSelfTest=1',
     [string]$ReportPath = (Join-Path (Join-Path $PSScriptRoot '..') 'docs\test-results\browser-self-test-latest.json'),
     [int]$TimeoutSeconds = 120,
+    [switch]$KeepBrowserMinimized = $true,
     [switch]$KeepBrowserOpen
 )
 
@@ -50,7 +51,17 @@ $browserProc = $null
 try {
     Remove-Item -LiteralPath $browserProfilePath -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
-    $browserProc = Start-Process -FilePath $edgePath -ArgumentList "--new-window --user-data-dir=`"$browserProfilePath`" `"$Url`"" -PassThru
+    $browserStartProcess = @{
+        FilePath = $edgePath
+        ArgumentList = "--new-window --user-data-dir=`"$browserProfilePath`" `"$Url`""
+        PassThru = $true
+    }
+
+    if ($KeepBrowserMinimized) {
+        $browserStartProcess.WindowStyle = 'Minimized'
+    }
+
+    $browserProc = Start-Process @browserStartProcess
     Start-Sleep -Seconds 2
 
     $deadline = (Get-Date).AddSeconds($TimeoutSeconds)

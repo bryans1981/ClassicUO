@@ -495,5 +495,7 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The browser-native runtime session state now combines the runtime-session slice with the runtime-session controller and is the current product-facing runtime session snapshot.
 - 2026-04-15: The browser-native runtime session ready-state now combines the runtime-session state with the browser-session stability ready-state and is the current product-facing runtime session snapshot.
 - 2026-04-20: The browser-native runtime session assurance now combines the runtime-session ready-state with the live browser-session controller and is the current product-facing runtime session snapshot.
+- 2026-04-20: The browser-native runtime launch snapshot now combines the runtime-session assurance with the runtime launch contract and is the current product-facing launch snapshot.
+- 2026-04-20: The no-click self-test runner now opens Edge minimized by default while preserving the same report-driven validation path.
 - 2026-04-15: The browser-native browser session controller is now the active browser-session baseline. Next work should move from browser-session control into actual websocket session/runtime execution wiring.
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.

@@ -35,6 +35,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the main client browser bootstrap helper now also captures a browser startup state snapshot for the real entrypoint path
 - the browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the real client consumes the browser startup contract instead of only capturing it
 - the browser runtime policy is now explicit in the main client and consumed by `GameController`, so browser render and input defaults are owned by the real client path
+- the browser runtime policy now also owns browser window resizing and text-input startup defaults, so browser-facing runtime behavior is controlled in the real client path
 - bootstrap aggregation service and runtime bootstrap subsystem with dedicated request/state model files
 - browser spike UI reorganized around `Current Tests`, `Imports & Assets`, and archived diagnostics
 - one-click self-test suite for batched browser validation with automatic local report saving into the repo and reduced manual reporting

@@ -166,6 +166,7 @@ The default operator interaction for this project is:
 - `BrowserRuntimeBootstrap` now also captures a browser bootstrap state snapshot so the real client has an explicit browser-startup contract in the main project.
 - The browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the real client consumes the browser startup contract instead of only capturing it.
 - The browser runtime policy is now explicit in the main client and consumed by `GameController`, so browser render and input defaults live in the real client path.
+- The browser runtime policy now also owns browser window resizing and text-input startup defaults, so the real client controls the browser-facing runtime behavior directly.
 
 ## Issue Triage
 

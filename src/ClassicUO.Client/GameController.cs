@@ -59,7 +59,7 @@ namespace ClassicUO
             SetVSync(false);
 
             Window.ClientSizeChanged += WindowOnClientSizeChanged;
-            Window.AllowUserResizing = true;
+            Window.AllowUserResizing = _browserRuntimePolicy.AllowWindowResizing;
             Window.Title = $"ClassicUO - {CUOEnviroment.Version}";
             IsMouseVisible = _browserRuntimePolicy.UseSeparateMouseThread;
 
@@ -123,7 +123,10 @@ namespace ClassicUO
             _filter = HandleSdlEvent;
             SDL_SetEventFilter(_filter, IntPtr.Zero);
 
-            Microsoft.Xna.Framework.Input.TextInputEXT.StartTextInput();
+            if (_browserRuntimePolicy.EnableTextInput)
+            {
+                Microsoft.Xna.Framework.Input.TextInputEXT.StartTextInput();
+            }
 
             _displayScale = DpiScale;
 

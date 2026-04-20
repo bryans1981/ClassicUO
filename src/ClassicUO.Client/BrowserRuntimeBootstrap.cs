@@ -92,18 +92,24 @@ namespace ClassicUO
         {
             UseSeparateMouseThread = false,
             FixedTimeStep = false,
-            TargetFps = 60
+            TargetFps = 60,
+            AllowWindowResizing = false,
+            EnableTextInput = true
         };
 
         public static BrowserRuntimePolicy DesktopDefault { get; } = new BrowserRuntimePolicy
         {
             UseSeparateMouseThread = Settings.GlobalSettings?.RunMouseInASeparateThread ?? true,
             FixedTimeStep = Settings.GlobalSettings?.FixedTimeStep ?? false,
-            TargetFps = Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60
+            TargetFps = Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60,
+            AllowWindowResizing = true,
+            EnableTextInput = true
         };
 
         public bool UseSeparateMouseThread { get; set; }
         public bool FixedTimeStep { get; set; }
         public int TargetFps { get; set; }
+        public bool AllowWindowResizing { get; set; }
+        public bool EnableTextInput { get; set; }
     }
 }

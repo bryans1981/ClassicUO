@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.Network.Socket;
@@ -8,6 +9,7 @@ namespace ClassicUO.Network.Socket;
 sealed class TcpSocketWrapper : SocketWrapper
 {
     private TcpClient _socket;
+    private int _disconnectNotified;
 
     public override bool IsConnected => _socket?.Client?.Connected ?? false;
 
@@ -21,6 +23,7 @@ sealed class TcpSocketWrapper : SocketWrapper
 
         _socket = new TcpClient();
         _socket.NoDelay = true;
+        _disconnectNotified = 0;
 
         try
         {
@@ -85,6 +88,7 @@ sealed class TcpSocketWrapper : SocketWrapper
 
     public override void Disconnect()
     {
+        SignalDisconnected();
         _socket?.Close();
         Dispose();
     }
@@ -92,5 +96,13 @@ sealed class TcpSocketWrapper : SocketWrapper
     public override void Dispose()
     {
         _socket?.Dispose();
+    }
+
+    private void SignalDisconnected()
+    {
+        if (Interlocked.Exchange(ref _disconnectNotified, 1) == 0)
+        {
+            InvokeOnDisconnected();
+        }
     }
 }

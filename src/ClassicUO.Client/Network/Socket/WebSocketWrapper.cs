@@ -23,6 +23,7 @@ sealed class WebSocketWrapper : SocketWrapper
     private ClientWebSocket _webSocket;
     private TcpSocket _rawSocket;
     private Task _receiveTask;
+    private int _disconnectNotified;
 
     public override bool IsConnected => _webSocket?.State is WebSocketState.Connecting or WebSocketState.Open;
     public override EndPoint LocalEndPoint => _rawSocket?.LocalEndPoint;
@@ -88,6 +89,7 @@ sealed class WebSocketWrapper : SocketWrapper
 
         _tokenSource = tokenSource ?? new CancellationTokenSource();
         _receiveStream = new CircularBuffer();
+        _disconnectNotified = 0;
 
         try
         {
@@ -218,7 +220,11 @@ sealed class WebSocketWrapper : SocketWrapper
         }
 
         if (!IsCanceled)
+        {
             InvokeOnError(SocketError.ConnectionReset);
+        }
+
+        SignalDisconnected();
     }
 
     // This is probably unnecessary, but WebSocket frames can be up to 2^63 bytes so we put some cap on it, yet to see packets larger than 4KB come through.
@@ -258,6 +264,7 @@ sealed class WebSocketWrapper : SocketWrapper
         }
         finally
         {
+            SignalDisconnected();
             _webSocket?.Dispose();
             _webSocket = null;
             _rawSocket?.Dispose();
@@ -268,5 +275,13 @@ sealed class WebSocketWrapper : SocketWrapper
     public override void Dispose()
     {
         Disconnect();
+    }
+
+    private void SignalDisconnected()
+    {
+        if (Interlocked.Exchange(ref _disconnectNotified, 1) == 0)
+        {
+            InvokeOnDisconnected();
+        }
     }
 }

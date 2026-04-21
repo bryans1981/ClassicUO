@@ -544,4 +544,6 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-21: Browser networking now returns loopback for `LocalIP` instead of probing a desktop socket endpoint.
 - 2026-04-21: Browser networking now skips the desktop local-endpoint probe in `NetClient.LocalIP` and returns loopback directly.
 - 2026-04-21: Browser startup now owns the `ENU` language default in `BrowserRuntimeBootstrap` instead of letting `Main` manage browser locale fallback.
+- 2026-04-21: Browser startup now forces `ForceDriver = 0` so browser mode never inherits a desktop renderer override.
+- 2026-04-21: Browser startup now pins `ForceDriver = 0` in the browser bootstrap helper.
 - 2026-04-21: Browser mode now skips `UltimaLive.Enable()` during asset load so the browser client stays on the browser-safe runtime path.

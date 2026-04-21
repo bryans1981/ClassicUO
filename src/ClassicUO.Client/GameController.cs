@@ -602,13 +602,16 @@ namespace ClassicUO
 
         private void WindowOnClientSizeChanged(int width, int height)
         {
-            if (!IsWindowMaximized() && Window.AllowUserResizing)
+            if (!PlatformHelper.IsBrowser && !IsWindowMaximized() && Window.AllowUserResizing)
             {
                 if (ProfileManager.CurrentProfile != null)
                     ProfileManager.CurrentProfile.WindowClientBounds = new Point(width, height);
             }
 
-            SetWindowSize(width, height);
+            if (!PlatformHelper.IsBrowser)
+            {
+                SetWindowSize(width, height);
+            }
 
             WorldViewportGump viewport = UIManager.GetGump<WorldViewportGump>();
 

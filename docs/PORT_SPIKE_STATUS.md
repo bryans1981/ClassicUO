@@ -48,6 +48,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile
 - the browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic
 - browser login and options flows now avoid desktop window resize and maximize behavior in browser mode, so the browser path stays centered on the playable client instead of native window mechanics
+- the browser client-size change path now skips native resize writes in browser mode, so canvas/window updates stay out of desktop window mechanics
 - browser screenshots now root under the shared browser cache path, so capture output stays in the browser filesystem contract instead of desktop data folders
 - browser plugin loading is now owned by the browser runtime policy, so the main client no longer hard-codes a browser-mode startup branch for plugins
 - GitHub Actions for build-test and deploy are now manual-only so browser-client work can stay on local validation without generating repeat CI noise

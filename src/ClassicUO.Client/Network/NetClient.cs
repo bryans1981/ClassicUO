@@ -135,7 +135,7 @@ namespace ClassicUO.Network
             var isWebsocketAddress =
                 ip.StartsWith("ws://", StringComparison.OrdinalIgnoreCase)
                 || ip.StartsWith("wss://", StringComparison.OrdinalIgnoreCase);
-            var addr = $"{(isWebsocketAddress ? "" : "tcp://")}{ip}:{port}";
+            var addr = isWebsocketAddress ? ip : $"tcp://{ip}:{port}";
 
             if (!Uri.TryCreate(addr, UriKind.RelativeOrAbsolute, out var uri))
                 throw new UriFormatException($"NetClient::Connect() invalid Uri {addr}");

@@ -45,7 +45,7 @@ namespace ClassicUO
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.IP))
             {
-                Settings.GlobalSettings.IP = "ws://127.0.0.1";
+                Settings.GlobalSettings.IP = "ws://127.0.0.1:2594";
             }
             else if (!Settings.GlobalSettings.IP.StartsWith("ws://", StringComparison.OrdinalIgnoreCase)
                 && !Settings.GlobalSettings.IP.StartsWith("wss://", StringComparison.OrdinalIgnoreCase))

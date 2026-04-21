@@ -129,6 +129,24 @@ namespace ClassicUO.Configuration
                 settingsToSave.Password = string.Empty;
             }
 
+            if (PlatformHelper.IsBrowser)
+            {
+                settingsToSave.Username = string.Empty;
+                settingsToSave.Password = string.Empty;
+                settingsToSave.SaveAccount = false;
+                settingsToSave.AutoLogin = false;
+                settingsToSave.Reconnect = false;
+                settingsToSave.ReconnectTime = 0;
+                settingsToSave.LoginMusic = false;
+                settingsToSave.LoginMusicVolume = 0;
+                settingsToSave.LastServerNum = 0;
+                settingsToSave.LastServerName = string.Empty;
+                settingsToSave.OverrideFile = string.Empty;
+                settingsToSave.ScreenScale = 1f;
+                settingsToSave.Encryption = 0;
+                settingsToSave.IgnoreRelayIp = true;
+            }
+
             settingsToSave.ProfilesPath = string.Empty;
 
             // NOTE: We can do any other settings clean-ups here before we save them

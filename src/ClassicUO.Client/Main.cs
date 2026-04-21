@@ -650,6 +650,11 @@ namespace ClassicUO
                         break;
 
                     case "language":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring language override in browser mode.");
+                            break;
+                        }
 
                         switch (value?.ToUpperInvariant())
                         {

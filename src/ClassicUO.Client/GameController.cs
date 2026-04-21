@@ -172,7 +172,10 @@ namespace ClassicUO
 
             SetScene(new LoginScene(UO.World));
 #endif
-            SetWindowPositionBySettings();
+            if (!PlatformHelper.IsBrowser)
+            {
+                SetWindowPositionBySettings();
+            }
         }
 
         protected override void UnloadContent()

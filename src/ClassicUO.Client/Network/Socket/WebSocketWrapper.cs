@@ -36,14 +36,35 @@ sealed class WebSocketWrapper : SocketWrapper
     {
         var copy = Shared.Rent(count);
         Buffer.BlockCopy(buffer, offset, copy, 0, count);
-        SendCopyAsync(copy, count);
+        _ = SendCopyAsync(copy, count);
     }
 
-    private async void SendCopyAsync(byte[] copy, int count)
+    private async Task SendCopyAsync(byte[] copy, int count)
     {
         try
         {
+            if (_webSocket == null || _tokenSource == null || _tokenSource.IsCancellationRequested)
+            {
+                return;
+            }
+
             await _webSocket.SendAsync(copy.AsMemory().Slice(0, count), WebSocketMessageType.Binary, true, _tokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // Disconnect or reconnect in progress.
+        }
+        catch (ObjectDisposedException)
+        {
+            // Disconnect or reconnect in progress.
+        }
+        catch (WebSocketException ex)
+        {
+            Log.Trace($"WebSocket send error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Log.Trace($"Unexpected websocket send error: {ex}");
         }
         finally
         {
@@ -91,6 +112,16 @@ sealed class WebSocketWrapper : SocketWrapper
         {
             Log.Error($"Unknown Error {ex.GetType().Name} while connecting to {uri} {ex}");
             InvokeOnError(SocketError.SocketError);
+        }
+        finally
+        {
+            if (!IsConnected)
+            {
+                _webSocket?.Dispose();
+                _webSocket = null;
+                _rawSocket?.Dispose();
+                _rawSocket = null;
+            }
         }
     }
 

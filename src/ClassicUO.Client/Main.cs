@@ -294,6 +294,12 @@ namespace ClassicUO
                         break;
 
                     case "highdpi":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring high-DPI override in browser mode.");
+                            break;
+                        }
+
                         CUOEnviroment.IsHighDPI = true;
 
                         break;

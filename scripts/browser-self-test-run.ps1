@@ -2,16 +2,21 @@ param(
     [string]$Url = 'http://localhost:5099/?autoSelfTest=1',
     [string]$ReportPath = (Join-Path (Join-Path $PSScriptRoot '..') 'docs\test-results\browser-self-test-latest.json'),
     [int]$TimeoutSeconds = 120,
+    [string]$BrowserPath = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
     [switch]$KeepBrowserMinimized = $true,
     [switch]$KeepBrowserOpen
 )
 
-$edgePath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
 $browserProfileRoot = Join-Path $env:TEMP 'ClassicUO-BrowserSelfTest'
 $browserProfilePath = Join-Path $browserProfileRoot ('EdgeProfile-' + [DateTimeOffset]::UtcNow.ToString('yyyyMMddHHmmss'))
 
-if (-not (Test-Path $edgePath)) {
-    throw "Microsoft Edge was not found at $edgePath."
+if (-not (Test-Path $BrowserPath)) {
+    $fallbackEdgePath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+    if (Test-Path $fallbackEdgePath) {
+        $BrowserPath = $fallbackEdgePath
+    } else {
+        throw "Chrome was not found at $BrowserPath and Edge was not found at $fallbackEdgePath."
+    }
 }
 
 if (-not (Test-Path $ReportPath)) {
@@ -60,7 +65,7 @@ try {
     $browserArguments += " `"$Url`""
 
     $browserStartProcess = @{
-        FilePath = $edgePath
+        FilePath = $BrowserPath
         ArgumentList = $browserArguments
         PassThru = $true
     }

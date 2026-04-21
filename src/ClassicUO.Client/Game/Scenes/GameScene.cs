@@ -12,6 +12,7 @@ using ClassicUO.Renderer;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
+using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL3;
@@ -96,7 +97,10 @@ namespace ClassicUO.Game.Scenes
         {
             base.Load();
 
-            Client.Game.Window.AllowUserResizing = true;
+            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
+            bool isBrowser = PlatformHelper.IsBrowser;
+
+            Client.Game.Window.AllowUserResizing = browserRuntimePolicy.AllowWindowResizing;
 
             Camera.Zoom = ProfileManager.CurrentProfile.DefaultScale;
             Camera.Bounds.X = Math.Max(0, ProfileManager.CurrentProfile.GameWindowPosition.X);
@@ -128,25 +132,28 @@ namespace ClassicUO.Game.Scenes
             UIManager.ContainerScale = ProfileManager.CurrentProfile.ContainersScale / 100f;
             Data.MovementSpeed.FastRotation = ProfileManager.CurrentProfile.FastRotation;
 
-            SDL.SDL_SetWindowMinimumSize(Client.Game.Window.Handle, Client.Game.ScaleWithDpi(640), Client.Game.ScaleWithDpi(480));
-
-            if (ProfileManager.CurrentProfile.WindowBorderless)
+            if (!isBrowser)
             {
-                Client.Game.SetWindowBorderless(true);
-            }
-            else if (Settings.GlobalSettings.IsWindowMaximized)
-            {
-                Client.Game.MaximizeWindow();
-            }
-            else if (Settings.GlobalSettings.WindowSize.HasValue)
-            {
-                int w = Settings.GlobalSettings.WindowSize.Value.X;
-                int h = Settings.GlobalSettings.WindowSize.Value.Y;
+                SDL.SDL_SetWindowMinimumSize(Client.Game.Window.Handle, Client.Game.ScaleWithDpi(640), Client.Game.ScaleWithDpi(480));
 
-                w = Math.Max(Client.Game.ScaleWithDpi(640), w);
-                h = Math.Max(Client.Game.ScaleWithDpi(480), h);
+                if (ProfileManager.CurrentProfile.WindowBorderless)
+                {
+                    Client.Game.SetWindowBorderless(true);
+                }
+                else if (Settings.GlobalSettings.IsWindowMaximized)
+                {
+                    Client.Game.MaximizeWindow();
+                }
+                else if (Settings.GlobalSettings.WindowSize.HasValue)
+                {
+                    int w = Settings.GlobalSettings.WindowSize.Value.X;
+                    int h = Settings.GlobalSettings.WindowSize.Value.Y;
 
-                Client.Game.SetWindowSize(w, h);
+                    w = Math.Max(Client.Game.ScaleWithDpi(640), w);
+                    h = Math.Max(Client.Game.ScaleWithDpi(480), h);
+
+                    Client.Game.SetWindowSize(w, h);
+                }
             }
 
             Plugin.OnConnected();
@@ -328,13 +335,16 @@ namespace ClassicUO.Game.Scenes
             _useItemQueue?.Clear();
             _world.MessageManager.MessageReceived -= ChatOnMessageReceived;
 
-            Settings.GlobalSettings.WindowSize = new Point(
-                Client.Game.ClientBounds.Width,
-                Client.Game.ClientBounds.Height
-            );
+            if (!PlatformHelper.IsBrowser)
+            {
+                Settings.GlobalSettings.WindowSize = new Point(
+                    Client.Game.ClientBounds.Width,
+                    Client.Game.ClientBounds.Height
+                );
 
-            Settings.GlobalSettings.IsWindowMaximized = Client.Game.IsWindowMaximized();
-            Client.Game.SetWindowBorderless(false);
+                Settings.GlobalSettings.IsWindowMaximized = Client.Game.IsWindowMaximized();
+                Client.Game.SetWindowBorderless(false);
+            }
 
             base.Unload();
         }

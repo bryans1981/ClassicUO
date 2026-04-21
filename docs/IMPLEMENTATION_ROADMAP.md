@@ -13,6 +13,12 @@ Do this in layers:
 3. Add a thin backend for multi-user control and persistence.
 4. Harden only after the end-to-end flow works.
 
+Current execution rule:
+
+- Keep the remaining work focused on the finished browser client.
+- Favor browser launch, rendering, input, login, and world interaction over more scaffold-only runtime layers.
+- Use synthetic harness work only when it directly unblocks the product path.
+
 ## Target Architecture
 
 ### Client
@@ -120,18 +126,19 @@ Current status:
   - The browser runtime policy now also owns browser window resizing and text-input startup defaults, so the real client controls the browser-facing runtime behavior directly.
   - The browser runtime policy now also disables idle sleep in browser mode, so browser timing stays under the real client path instead of desktop-style sleep behavior.
   - The browser runtime policy now also drives the browser refresh rate in `GameController`, so browser loop timing is owned by the real client path during initialization.
-  - The browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so browser defaults are visible to the rest of the real client.
-  - The browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path.
-  - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
-  - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer.
-  - The browser profile load path now also disables `ReduceFPSWhenInactive`, and the browser runtime policy now owns inactive FPS throttling directly, so browser timing stays out of desktop-style inactive throttling.
-  - The main startup validation path now skips external browser launching in browser mode, so a browser-side startup failure does not try to spawn another browser.
-  - The browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path.
-  - Browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile.
-  - The browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic.
-  - Browser screenshots now root under the shared browser cache path, so capture output stays in the browser filesystem contract instead of desktop data folders.
-  - Browser plugin loading is now owned by the browser runtime policy, so the main client no longer hard-codes a browser-mode startup branch for plugins.
-  - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
+- The browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so browser defaults are visible to the rest of the real client.
+- The browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path.
+- The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
+- The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer.
+- The browser profile load path now also disables `ReduceFPSWhenInactive`, and the browser runtime policy now owns inactive FPS throttling directly, so browser timing stays out of desktop-style inactive throttling.
+- The main startup validation path now skips external browser launching in browser mode, so a browser-side startup failure does not try to spawn another browser.
+- The browser startup validation path now logs errors instead of showing a native SDL dialog, so browser failures stay within the browser-safe path.
+- Browser unload no longer back-writes desktop window placement, so browser shutdown does not leak desktop window state into the saved profile.
+- The browser window-placement routine now short-circuits in browser mode, so browser startup does not use desktop display-bound positioning logic.
+- Browser screenshots now root under the shared browser cache path, so capture output stays in the browser filesystem contract instead of desktop data folders.
+- Browser plugin loading is now owned by the browser runtime policy, so the main client no longer hard-codes a browser-mode startup branch for plugins.
+- The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
+- The browser product work is now explicitly focused on the finished playable client path, not on more synthetic proof layers.
 
 ### Milestone 3: Linux Container Packaging
 

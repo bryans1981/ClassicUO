@@ -8,6 +8,12 @@ Run a private, browser-accessible ClassicUO deployment from Linux containers, us
 
 This is not a public SaaS product plan. It is a private multi-user hosting project.
 
+Current priority:
+
+- Keep the work pointed at the finished browser client, not more proof-of-concept scaffolding.
+- Prefer changes that move us toward a playable browser build with real rendering, input, and network flow.
+- Treat synthetic validation layers as support tooling only when they directly unblock the product path.
+
 ## Working Assumptions
 
 - Usage is private and controlled by the project owner.
@@ -43,6 +49,7 @@ Use these rules when tradeoffs appear:
 4. Treat user isolation as a first-class requirement, not a later cleanup task.
 5. Do not optimize for scale before the single-user browser deployment works.
 6. Document every assumption that affects storage, browser behavior, or sync with upstream.
+7. If a change does not move the browser client toward launch, rendering, input, login, or world interaction, defer it.
 
 ## Project Phases
 

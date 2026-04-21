@@ -66,11 +66,17 @@ namespace ClassicUO
             Settings.CustomSettingsFilepath = null;
             Settings.GlobalSettings.Plugins = Array.Empty<string>();
             Settings.GlobalSettings.UseVerdata = false;
+            Settings.GlobalSettings.SaveAccount = false;
+            Settings.GlobalSettings.AutoLogin = false;
+            Settings.GlobalSettings.Reconnect = false;
+            Settings.GlobalSettings.LoginMusic = false;
+            Settings.GlobalSettings.LoginMusicVolume = 0;
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
             {
                 Settings.GlobalSettings.Language = "ENU";
             }
             Settings.GlobalSettings.ForceDriver = 0;
+            Settings.GlobalSettings.MapsLayouts = string.Empty;
             Settings.GlobalSettings.WindowPosition = new Point(0, 0);
             Settings.GlobalSettings.WindowSize = new Point(1280, 720);
             Settings.GlobalSettings.IgnoreRelayIp = true;

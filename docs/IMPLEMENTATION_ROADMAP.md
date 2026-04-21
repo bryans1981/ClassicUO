@@ -538,4 +538,5 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-21: The browser spike scripts now manage the optional websocket proxy by PID and `proxy.mjs` token so proxy startup and shutdown stay in sync with the browser host.
 - 2026-04-21: Browser startup now forces the websocket proxy port to `2594` in browser mode so browser transport stays on the documented proxy path.
 - 2026-04-21: Browser startup now ignores custom `-settings` paths in browser mode so the browser client stays on the browser config root.
+- 2026-04-21: Browser startup now ignores browser-inapplicable CLI overrides such as `-ip`, `-filesoverride`, `-uopath`, `-profilespath`, `-plugins`, and `-force_driver`, so the browser client stays on the browser transport and storage path.
 - 2026-04-21: Browser mode now skips `UltimaLive.Enable()` during asset load so the browser client stays on the browser-safe runtime path.

@@ -314,6 +314,12 @@ namespace ClassicUO
                         break;
 
                     case "ip":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring IP override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.IP = value;
 
                         break;

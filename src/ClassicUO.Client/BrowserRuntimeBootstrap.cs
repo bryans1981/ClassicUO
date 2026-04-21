@@ -78,6 +78,7 @@ namespace ClassicUO
             Settings.GlobalSettings.LastServerName = string.Empty;
             Settings.GlobalSettings.OverrideFile = string.Empty;
             Settings.GlobalSettings.ScreenScale = 1f;
+            Settings.GlobalSettings.Encryption = 0;
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
             {
                 Settings.GlobalSettings.Language = "ENU";

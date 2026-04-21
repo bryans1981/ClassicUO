@@ -63,6 +63,7 @@ namespace ClassicUO
                 Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);
             }
 
+            Settings.GlobalSettings.Plugins = Array.Empty<string>();
             Settings.GlobalSettings.WindowPosition = new Point(0, 0);
             Settings.GlobalSettings.WindowSize = new Point(1280, 720);
             Settings.GlobalSettings.IgnoreRelayIp = true;

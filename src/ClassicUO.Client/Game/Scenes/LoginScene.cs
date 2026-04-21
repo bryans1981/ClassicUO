@@ -68,7 +68,9 @@ namespace ClassicUO.Game.Scenes
         {
             base.Load();
 
-            Client.Game.Window.AllowUserResizing = false;
+            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
+
+            Client.Game.Window.AllowUserResizing = browserRuntimePolicy.AllowWindowResizing;
 
             _autoLogin = Settings.GlobalSettings.AutoLogin;
 
@@ -86,8 +88,6 @@ namespace ClassicUO.Game.Scenes
                     Connect(Settings.GlobalSettings.Username, Crypter.Decrypt(Settings.GlobalSettings.Password));
                 }
             }
-
-            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
 
             if (browserRuntimePolicy.AllowWindowManagement && Client.Game.IsWindowMaximized())
             {

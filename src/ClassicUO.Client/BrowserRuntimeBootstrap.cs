@@ -72,9 +72,12 @@ namespace ClassicUO
             Settings.GlobalSettings.ReconnectTime = 0;
             Settings.GlobalSettings.LoginMusic = false;
             Settings.GlobalSettings.LoginMusicVolume = 0;
+            Settings.GlobalSettings.Username = string.Empty;
+            Settings.GlobalSettings.Password = string.Empty;
             Settings.GlobalSettings.LastServerNum = 0;
             Settings.GlobalSettings.LastServerName = string.Empty;
             Settings.GlobalSettings.OverrideFile = string.Empty;
+            Settings.GlobalSettings.ScreenScale = 1f;
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
             {
                 Settings.GlobalSettings.Language = "ENU";

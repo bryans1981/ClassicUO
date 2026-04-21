@@ -4053,7 +4053,7 @@ namespace ClassicUO.Game.UI.Gumps
                 if (active && StatusGumpBase.GetStatusGump() != null && UIManager.GetGump<BaseHealthBarGump>(World.Player) is {} bar)
                     bar.Dispose();
             }
-            if (browserRuntimePolicy.AllowWindowManagement)
+            if (!PlatformHelper.IsBrowser)
             {
                 int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
                 int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);

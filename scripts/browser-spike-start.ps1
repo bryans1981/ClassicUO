@@ -14,7 +14,7 @@ $reportPidFile = Join-Path $projectRoot 'experiments\BrowserHost.ReportHost\.rep
 function Test-ManagedProcess {
     param(
         [string]$PidValue,
-        [string]$ExpectedProjectPath
+        [string]$ExpectedCommandLineToken
     )
 
     if (-not $PidValue) {
@@ -36,7 +36,7 @@ function Test-ManagedProcess {
         return $false
     }
 
-    return $commandLine -like "*$ExpectedProjectPath*"
+    return $commandLine -like "*$ExpectedCommandLineToken*"
 }
 
 if (Test-Path $pidFile) {
@@ -61,7 +61,7 @@ if (Test-Path $reportPidFile) {
 $proxyProc = $null
 if (Test-Path $proxyPidFile) {
     $existingProxyPid = Get-Content $proxyPidFile -ErrorAction SilentlyContinue
-    if (Test-ManagedProcess -PidValue $existingProxyPid -ExpectedProjectPath $proxyProjectRoot) {
+    if (Test-ManagedProcess -PidValue $existingProxyPid -ExpectedCommandLineToken 'proxy.mjs') {
         Write-Host "Local websocket proxy is already running at ws://127.0.0.1:2594 (PID $existingProxyPid)."
     } else {
         Remove-Item $proxyPidFile -Force -ErrorAction SilentlyContinue

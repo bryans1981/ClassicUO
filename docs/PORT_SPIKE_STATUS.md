@@ -414,3 +414,4 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-20: The main client now routes browser crash logs and screenshots to browser cache roots, removing another desktop-only path assumption from the browser execution path.
 - 2026-04-21: The browser spike start/stop scripts can manage the optional local websocket proxy in `tools/ws` when Node dependencies are installed. Browser mode now expects `ws://127.0.0.1:2594` by default.
 - 2026-04-21: Browser startup now clears any saved plugin list in browser mode so the browser path stays on the no-plugin bootstrap contract.
+- 2026-04-21: The browser spike scripts now track the optional websocket proxy by PID and `proxy.mjs` token so the local proxy can be started and stopped reliably.

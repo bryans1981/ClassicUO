@@ -130,7 +130,7 @@ namespace ClassicUO.Game.Scenes
             UIManager.ContainerScale = ProfileManager.CurrentProfile.ContainersScale / 100f;
             Data.MovementSpeed.FastRotation = ProfileManager.CurrentProfile.FastRotation;
 
-            if (browserRuntimePolicy.AllowWindowManagement)
+            if (!PlatformHelper.IsBrowser)
             {
                 SDL.SDL_SetWindowMinimumSize(Client.Game.Window.Handle, Client.Game.ScaleWithDpi(640), Client.Game.ScaleWithDpi(480));
 

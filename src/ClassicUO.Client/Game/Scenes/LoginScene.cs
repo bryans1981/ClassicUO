@@ -89,12 +89,12 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
-            if (browserRuntimePolicy.AllowWindowManagement && Client.Game.IsWindowMaximized())
+            if (!PlatformHelper.IsBrowser && Client.Game.IsWindowMaximized())
             {
                 Client.Game.RestoreWindow();
             }
 
-            if (browserRuntimePolicy.AllowWindowManagement)
+            if (!PlatformHelper.IsBrowser)
             {
                 int width = Client.Game.ScaleWithDpi(640);
                 int height = Client.Game.ScaleWithDpi(480);

@@ -496,4 +496,5 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-21: Browser startup now forces `UseVerdata = false` so the browser client stays off desktop verdata loading paths.
 - 2026-04-21: Browser networking now returns loopback for `LocalIP` instead of probing a desktop socket endpoint.
 - 2026-04-21: Browser networking now skips the desktop local-endpoint probe in `NetClient.LocalIP` and returns loopback directly.
+- 2026-04-21: Browser startup now owns the `ENU` language default in `BrowserRuntimeBootstrap` instead of letting `Main` manage browser locale fallback.
 - 2026-04-21: Browser mode now skips `UltimaLive.Enable()` during asset load so the browser path stays off the desktop map-patch hook.

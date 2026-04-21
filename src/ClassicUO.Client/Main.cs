@@ -142,33 +142,25 @@ namespace ClassicUO
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
             {
-                if (PlatformHelper.IsBrowser)
+                Log.Trace("language is not set. Trying to get the OS language.");
+                try
                 {
-                    Log.Trace("language is not set. Using ENU in browser mode.");
-                    Settings.GlobalSettings.Language = "ENU";
-                }
-                else
-                {
-                    Log.Trace("language is not set. Trying to get the OS language.");
-                    try
-                    {
-                        Settings.GlobalSettings.Language = CultureInfo.InstalledUICulture.ThreeLetterWindowsLanguageName;
+                    Settings.GlobalSettings.Language = CultureInfo.InstalledUICulture.ThreeLetterWindowsLanguageName;
 
-                        if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
-                        {
-                            Log.Warn("cannot read the OS language. Rolled back to ENU");
-
-                            Settings.GlobalSettings.Language = "ENU";
-                        }
-
-                        Log.Trace($"language set: '{Settings.GlobalSettings.Language}'");
-                    }
-                    catch
+                    if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
                     {
                         Log.Warn("cannot read the OS language. Rolled back to ENU");
 
                         Settings.GlobalSettings.Language = "ENU";
                     }
+
+                    Log.Trace($"language set: '{Settings.GlobalSettings.Language}'");
+                }
+                catch
+                {
+                    Log.Warn("cannot read the OS language. Rolled back to ENU");
+
+                    Settings.GlobalSettings.Language = "ENU";
                 }
             }
 

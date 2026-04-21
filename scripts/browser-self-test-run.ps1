@@ -8,7 +8,7 @@ param(
 )
 
 $browserProfileRoot = Join-Path $env:TEMP 'ClassicUO-BrowserSelfTest'
-$browserProfilePath = Join-Path $browserProfileRoot ('EdgeProfile-' + [DateTimeOffset]::UtcNow.ToString('yyyyMMddHHmmss'))
+$browserProfilePath = Join-Path $browserProfileRoot 'ChromeProfile'
 
 if (-not (Test-Path $BrowserPath)) {
     $fallbackEdgePath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
@@ -56,7 +56,7 @@ $browserProc = $null
 try {
     Remove-Item -LiteralPath $browserProfilePath -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
-    $browserArguments = "--new-window --user-data-dir=`"$browserProfilePath`""
+    $browserArguments = "--new-window --no-first-run --no-default-browser-check --disable-features=ChromeWhatsNewUI --user-data-dir=`"$browserProfilePath`""
 
     if ($KeepBrowserMinimized) {
         $browserArguments += " --start-minimized"

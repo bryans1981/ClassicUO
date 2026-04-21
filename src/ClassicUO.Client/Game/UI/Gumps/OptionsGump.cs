@@ -1615,140 +1615,132 @@ namespace ClassicUO.Game.UI.Gumps
             box.WantUpdateSize = true;
             rightArea.Add(box);
 
-            SettingsSection section = AddSettingsSection(box, "Game window");
-
-            section.Add
-            (
-                _gameWindowFullsize = AddCheckBox
-                (
-                    null,
-                    ResGumps.AlwaysUseFullsizeGameWindow,
-                    _currentProfile.GameWindowFullSize,
-                    startX,
-                    startY
-                )
-            );
-
-            section.Add
-            (
-                _windowBorderless = AddCheckBox
-                (
-                    null,
-                    ResGumps.BorderlessWindow,
-                    _currentProfile.WindowBorderless,
-                    startX,
-                    startY
-                )
-            );
-            if (PlatformHelper.IsBrowser)
-            {
-                _windowBorderless.IsEnabled = false;
-            }
-
-            section.Add
-            (
-                _gameWindowLock = AddCheckBox
-                (
-                    null,
-                    ResGumps.LockGameWindowMovingResizing,
-                    _currentProfile.GameWindowLock,
-                    startX,
-                    startY
-                )
-            );
-
-            section.Add(AddLabel(null, ResGumps.GamePlayWindowPosition, startX, startY));
-
-            section.AddRight
-            (
-                _gameWindowPositionX = AddInputField
-                (
-                    null,
-                    startX,
-                    startY,
-                    50,
-                    TEXTBOX_HEIGHT,
-                    null,
-                    50,
-                    false,
-                    true
-                ),
-                4
-            );
-
+            int gameWindowSectionBottom = startY;
             var camera = Client.Game.Scene.Camera;
 
-            _gameWindowPositionX.SetText(camera.Bounds.X.ToString());
-
-            section.AddRight
-            (
-                _gameWindowPositionY = AddInputField
-                (
-                    null,
-                    startX,
-                    startY,
-                    50,
-                    TEXTBOX_HEIGHT,
-                    null,
-                    50,
-                    false,
-                    true
-                )
-            );
-
-            _gameWindowPositionY.SetText(camera.Bounds.Y.ToString());
-
-
-            section.Add(AddLabel(null, ResGumps.GamePlayWindowSize, startX, startY));
-
-            section.AddRight
-            (
-                _gameWindowWidth = AddInputField
-                (
-                    null,
-                    startX,
-                    startY,
-                    50,
-                    TEXTBOX_HEIGHT,
-                    null,
-                    50,
-                    false,
-                    true
-                )
-            );
-
-            _gameWindowWidth.SetText(camera.Bounds.Width.ToString());
-
-            section.AddRight
-            (
-                _gameWindowHeight = AddInputField
-                (
-                    null,
-                    startX,
-                    startY,
-                    50,
-                    TEXTBOX_HEIGHT,
-                    null,
-                    50,
-                    false,
-                    true
-                )
-            );
-
-            _gameWindowHeight.SetText(camera.Bounds.Height.ToString());
-
-            if (PlatformHelper.IsBrowser)
+            if (!PlatformHelper.IsBrowser)
             {
-                _gameWindowFullsize.IsEnabled = false;
-                _gameWindowLock.IsEnabled = false;
-                _gameWindowPositionX.IsEnabled = false;
-                _gameWindowPositionY.IsEnabled = false;
-                _gameWindowWidth.IsEnabled = false;
-                _gameWindowHeight.IsEnabled = false;
+                SettingsSection section = AddSettingsSection(box, "Game window");
+
+                section.Add
+                (
+                    _gameWindowFullsize = AddCheckBox
+                    (
+                        null,
+                        ResGumps.AlwaysUseFullsizeGameWindow,
+                        _currentProfile.GameWindowFullSize,
+                        startX,
+                        startY
+                    )
+                );
+
+                section.Add
+                (
+                    _windowBorderless = AddCheckBox
+                    (
+                        null,
+                        ResGumps.BorderlessWindow,
+                        _currentProfile.WindowBorderless,
+                        startX,
+                        startY
+                    )
+                );
+
+                section.Add
+                (
+                    _gameWindowLock = AddCheckBox
+                    (
+                        null,
+                        ResGumps.LockGameWindowMovingResizing,
+                        _currentProfile.GameWindowLock,
+                        startX,
+                        startY
+                    )
+                );
+
+                section.Add(AddLabel(null, ResGumps.GamePlayWindowPosition, startX, startY));
+
+                section.AddRight
+                (
+                    _gameWindowPositionX = AddInputField
+                    (
+                        null,
+                        startX,
+                        startY,
+                        50,
+                        TEXTBOX_HEIGHT,
+                        null,
+                        50,
+                        false,
+                        true
+                    ),
+                    4
+                );
+
+                _gameWindowPositionX.SetText(camera.Bounds.X.ToString());
+
+                section.AddRight
+                (
+                    _gameWindowPositionY = AddInputField
+                    (
+                        null,
+                        startX,
+                        startY,
+                        50,
+                        TEXTBOX_HEIGHT,
+                        null,
+                        50,
+                        false,
+                        true
+                    )
+                );
+
+                _gameWindowPositionY.SetText(camera.Bounds.Y.ToString());
+
+
+                section.Add(AddLabel(null, ResGumps.GamePlayWindowSize, startX, startY));
+
+                section.AddRight
+                (
+                    _gameWindowWidth = AddInputField
+                    (
+                        null,
+                        startX,
+                        startY,
+                        50,
+                        TEXTBOX_HEIGHT,
+                        null,
+                        50,
+                        false,
+                        true
+                    )
+                );
+
+                _gameWindowWidth.SetText(camera.Bounds.Width.ToString());
+
+                section.AddRight
+                (
+                    _gameWindowHeight = AddInputField
+                    (
+                        null,
+                        startX,
+                        startY,
+                        50,
+                        TEXTBOX_HEIGHT,
+                        null,
+                        50,
+                        false,
+                        true
+                    )
+                );
+
+                _gameWindowHeight.SetText(camera.Bounds.Height.ToString());
+
+                gameWindowSectionBottom = section.Bounds.Bottom;
             }
 
             SettingsSection section2 = AddSettingsSection(box, "Zoom");
-            section2.Y = section.Bounds.Bottom + 40;
+            section2.Y = gameWindowSectionBottom + 40;
 
             _sliderScreenZoom = AddHSlider(
                 null,

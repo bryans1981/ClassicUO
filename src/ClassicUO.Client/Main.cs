@@ -463,6 +463,17 @@ namespace ClassicUO
 
                         break;
 
+                    case "screen_scale":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring screen scale override in browser mode.");
+                            break;
+                        }
+
+                        Settings.GlobalSettings.ScreenScale = float.Parse(value);
+
+                        break;
+
                     case "debug":
                         if (PlatformHelper.IsBrowser)
                         {

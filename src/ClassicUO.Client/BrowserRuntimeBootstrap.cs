@@ -45,12 +45,17 @@ namespace ClassicUO
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.IP))
             {
-                Settings.GlobalSettings.IP = "ws://localhost";
+                Settings.GlobalSettings.IP = "ws://127.0.0.1";
             }
             else if (!Settings.GlobalSettings.IP.StartsWith("ws://", StringComparison.OrdinalIgnoreCase)
                 && !Settings.GlobalSettings.IP.StartsWith("wss://", StringComparison.OrdinalIgnoreCase))
             {
                 Settings.GlobalSettings.IP = $"ws://{Settings.GlobalSettings.IP}";
+            }
+
+            if (Settings.GlobalSettings.Port == 2593)
+            {
+                Settings.GlobalSettings.Port = 2594;
             }
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))

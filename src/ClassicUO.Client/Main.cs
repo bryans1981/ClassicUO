@@ -429,21 +429,44 @@ namespace ClassicUO
                         break;
 
                     case "saveaccount":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring save-account override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.SaveAccount = bool.Parse(value);
 
                         break;
 
                     case "autologin":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring auto-login override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.AutoLogin = bool.Parse(value);
 
                         break;
 
                     case "reconnect":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring reconnect override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.Reconnect = bool.Parse(value);
 
                         break;
 
                     case "reconnect_time":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring reconnect time override in browser mode.");
+                            break;
+                        }
 
                         if (!int.TryParse(value, out int reconnectTime) || reconnectTime < 1000)
                         {
@@ -456,22 +479,46 @@ namespace ClassicUO
 
                     case "login_music":
                     case "music":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring login music override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.LoginMusic = bool.Parse(value);
 
                         break;
 
                     case "login_music_volume":
                     case "music_volume":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring login music volume override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.LoginMusicVolume = int.Parse(value);
 
                         break;
 
                     case "fixed_time_step":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring fixed time step override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.FixedTimeStep = bool.Parse(value);
 
                         break;
 
                     case "skiploginscreen":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring skip login screen override in browser mode.");
+                            break;
+                        }
+
                         CUOEnviroment.SkipLoginScreen = true;
 
                         break;
@@ -488,17 +535,34 @@ namespace ClassicUO
                         break;
 
                     case "use_verdata":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring verdata override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.UseVerdata = bool.Parse(value);
 
                         break;
 
                     case "maps_layouts":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring maps layouts override in browser mode.");
+                            break;
+                        }
 
                         Settings.GlobalSettings.MapsLayouts = value;
 
                         break;
 
                     case "encryption":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring encryption override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.Encryption = byte.Parse(value);
 
                         break;
@@ -572,6 +636,11 @@ namespace ClassicUO
                         break;
 
                     case "no_server_ping":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring no-server-ping override in browser mode.");
+                            break;
+                        }
 
                         CUOEnviroment.NoServerPing = true;
 

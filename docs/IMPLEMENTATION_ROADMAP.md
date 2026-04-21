@@ -541,4 +541,6 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-21: Browser startup now ignores browser-inapplicable CLI overrides such as `-ip`, `-port`, `-clientversion`, `-filesoverride`, `-uopath`, `-profilespath`, `-plugins`, `-force_driver`, `-highdpi`, `-packetlog`, `-debug`, `-profiler`, `-saveaccount`, `-autologin`, `-reconnect`, `-reconnect_time`, `-login_music`, `-music`, `-login_music_volume`, `-fixed_time_step`, `-fps`, `-skiploginscreen`, `-lastcharactername`, `-lastcharname`, `-lastservernum`, `-last_server_name`, `-language`, `-use_verdata`, `-maps_layouts`, `-encryption`, and `-no_server_ping`, so the browser client stays on the browser transport and storage path.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.
 - 2026-04-21: Browser startup now forces `UseVerdata = false` so the browser client stays off desktop verdata loading paths.
+- 2026-04-21: Browser networking now returns loopback for `LocalIP` instead of probing a desktop socket endpoint.
+- 2026-04-21: Browser networking now skips the desktop local-endpoint probe in `NetClient.LocalIP` and returns loopback directly.
 - 2026-04-21: Browser mode now skips `UltimaLive.Enable()` during asset load so the browser client stays on the browser-safe runtime path.

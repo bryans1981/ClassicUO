@@ -2,6 +2,7 @@
 
 using ClassicUO.Network.Encryption;
 using ClassicUO.Utility;
+using ClassicUO.Utility.Platforms;
 using ClassicUO.Utility.Logging;
 using System;
 using System.Net;
@@ -64,6 +65,11 @@ namespace ClassicUO.Network
         {
             get
             {
+                if (PlatformHelper.IsBrowser)
+                {
+                    return 0x100007f;
+                }
+
                 if (!_localIP.HasValue)
                 {
                     try

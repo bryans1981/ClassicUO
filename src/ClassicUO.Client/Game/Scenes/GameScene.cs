@@ -285,14 +285,18 @@ namespace ClassicUO.Game.Scenes
                 return;
             }
 
-            ProfileManager.CurrentProfile.GameWindowPosition = new Point(
-                Camera.Bounds.X,
-                Camera.Bounds.Y
-            );
-            ProfileManager.CurrentProfile.GameWindowSize = new Point(
-                Camera.Bounds.Width,
-                Camera.Bounds.Height
-            );
+            if (!PlatformHelper.IsBrowser)
+            {
+                ProfileManager.CurrentProfile.GameWindowPosition = new Point(
+                    Camera.Bounds.X,
+                    Camera.Bounds.Y
+                );
+                ProfileManager.CurrentProfile.GameWindowSize = new Point(
+                    Camera.Bounds.Width,
+                    Camera.Bounds.Height
+                );
+            }
+
             ProfileManager.CurrentProfile.DefaultScale = Camera.Zoom;
 
             Client.Game.Audio?.StopMusic();

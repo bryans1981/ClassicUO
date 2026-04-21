@@ -12,6 +12,7 @@ using ClassicUO.Network;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
+using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework;
 using SDL3;
 using System;
@@ -86,15 +87,18 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
-            if (Client.Game.IsWindowMaximized())
+            if (!PlatformHelper.IsBrowser && Client.Game.IsWindowMaximized())
             {
                 Client.Game.RestoreWindow();
             }
 
-            int width = Client.Game.ScaleWithDpi(640);
-            int height = Client.Game.ScaleWithDpi(480);
-            SDL.SDL_SetWindowMinimumSize(Client.Game.Window.Handle, width, height);
-            Client.Game.SetWindowSize(width, height);
+            if (!PlatformHelper.IsBrowser)
+            {
+                int width = Client.Game.ScaleWithDpi(640);
+                int height = Client.Game.ScaleWithDpi(480);
+                SDL.SDL_SetWindowMinimumSize(Client.Game.Window.Handle, width, height);
+                Client.Game.SetWindowSize(width, height);
+            }
         }
 
 

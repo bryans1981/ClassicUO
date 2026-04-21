@@ -69,6 +69,7 @@ namespace ClassicUO
             Settings.GlobalSettings.SaveAccount = false;
             Settings.GlobalSettings.AutoLogin = false;
             Settings.GlobalSettings.Reconnect = false;
+            Settings.GlobalSettings.ReconnectTime = 0;
             Settings.GlobalSettings.LoginMusic = false;
             Settings.GlobalSettings.LoginMusicVolume = 0;
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))

@@ -21,16 +21,18 @@ namespace ClassicUO.Configuration
             {
                 if (string.IsNullOrEmpty(_rootPath))
                 {
-                if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
-                {
-                    _rootPath = PlatformHelper.IsBrowser
-                        ? BrowserVirtualPaths.ProfilesRoot
-                        : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Profiles");
-                }
-                else
-                {
-                    _rootPath = Settings.GlobalSettings.ProfilesPath;
-                }
+                    if (PlatformHelper.IsBrowser)
+                    {
+                        _rootPath = BrowserVirtualPaths.ProfilesRoot;
+                    }
+                    else if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
+                    {
+                        _rootPath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Profiles");
+                    }
+                    else
+                    {
+                        _rootPath = Settings.GlobalSettings.ProfilesPath;
+                    }
                 }
 
                 return _rootPath;

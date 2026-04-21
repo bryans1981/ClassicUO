@@ -55,7 +55,10 @@ namespace ClassicUO
 
             Settings.GlobalSettings.Port = 2594;
 
-            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
+            if (
+                string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion)
+                || !ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out _)
+            )
             {
                 Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);
             }

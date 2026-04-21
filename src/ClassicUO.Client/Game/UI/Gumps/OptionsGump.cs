@@ -3683,15 +3683,19 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case 3: // video
-                    _windowBorderless.IsChecked = false;
+                    if (!PlatformHelper.IsBrowser)
+                    {
+                        _windowBorderless.IsChecked = false;
+                        _gameWindowWidth.SetText("600");
+                        _gameWindowHeight.SetText("480");
+                        _gameWindowPositionX.SetText("20");
+                        _gameWindowPositionY.SetText("20");
+                        _gameWindowLock.IsChecked = false;
+                        _gameWindowFullsize.IsChecked = false;
+                    }
+
                     _zoomCheckbox.IsChecked = false;
                     _restorezoomCheckbox.IsChecked = false;
-                    _gameWindowWidth.SetText("600");
-                    _gameWindowHeight.SetText("480");
-                    _gameWindowPositionX.SetText("20");
-                    _gameWindowPositionY.SetText("20");
-                    _gameWindowLock.IsChecked = false;
-                    _gameWindowFullsize.IsChecked = false;
                     _enableDeathScreen.IsChecked = true;
                     _enableBlackWhiteEffect.IsChecked = true;
                     Client.Game.Scene.Camera.Zoom = 1f;
@@ -4045,84 +4049,81 @@ namespace ClassicUO.Game.UI.Gumps
                 if (active && StatusGumpBase.GetStatusGump() != null && UIManager.GetGump<BaseHealthBarGump>(World.Player) is {} bar)
                     bar.Dispose();
             }
-
-
-            int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
-            int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);
-
-            if (gameWindowSizeWidth != Client.Game.Scene.Camera.Bounds.Width || gameWindowSizeHeight != Client.Game.Scene.Camera.Bounds.Height)
+            if (!PlatformHelper.IsBrowser)
             {
-                if (vp != null)
+                int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
+                int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);
+
+                if (gameWindowSizeWidth != Client.Game.Scene.Camera.Bounds.Width || gameWindowSizeHeight != Client.Game.Scene.Camera.Bounds.Height)
                 {
-                    var s = new Point(Client.Game.ScaleWithDpi(gameWindowSizeWidth), Client.Game.ScaleWithDpi(gameWindowSizeHeight));
+                    if (vp != null)
+                    {
+                        var s = new Point(Client.Game.ScaleWithDpi(gameWindowSizeWidth), Client.Game.ScaleWithDpi(gameWindowSizeHeight));
 
-                    Point n = vp.ResizeGameWindow(s);
+                        Point n = vp.ResizeGameWindow(s);
 
+                        _gameWindowWidth.SetText(n.X.ToString());
+                        _gameWindowHeight.SetText(n.Y.ToString());
+                    }
+                }
+
+                int.TryParse(_gameWindowPositionX.Text, out int gameWindowPositionX);
+                int.TryParse(_gameWindowPositionY.Text, out int gameWindowPositionY);
+
+                if (gameWindowPositionX != camera.Bounds.X || gameWindowPositionY != camera.Bounds.Y)
+                {
+                    if (vp != null)
+                    {
+                        vp.SetGameWindowPosition(new Point(gameWindowPositionX, gameWindowPositionY));
+                        _currentProfile.GameWindowPosition = vp.Location;
+                    }
+                }
+
+                if (_currentProfile.GameWindowLock != _gameWindowLock.IsChecked)
+                {
+                    if (vp != null)
+                    {
+                        vp.CanMove = !_gameWindowLock.IsChecked;
+                    }
+
+                    _currentProfile.GameWindowLock = _gameWindowLock.IsChecked;
+                }
+
+                if (_currentProfile.GameWindowFullSize != _gameWindowFullsize.IsChecked)
+                {
+                    Point n = Point.Zero, loc = Point.Zero;
+
+                    if (_gameWindowFullsize.IsChecked)
+                    {
+                        if (vp != null)
+                        {
+                            var size = new Point(Client.Game.Window.ClientBounds.Width, Client.Game.Window.ClientBounds.Height);
+                            n = vp.ResizeGameWindow(size);
+                            vp.SetGameWindowPosition(new Point(-5, -5));
+                            _currentProfile.GameWindowPosition = vp.Location;
+                        }
+                    }
+                    else
+                    {
+                        if (vp != null)
+                        {
+                            n = vp.ResizeGameWindow(new Point(600, 480));
+                            vp.SetGameWindowPosition(new Point(20, 20));
+                            _currentProfile.GameWindowPosition = vp.Location;
+                        }
+                    }
+
+                    _gameWindowPositionX.SetText(loc.X.ToString());
+                    _gameWindowPositionY.SetText(loc.Y.ToString());
                     _gameWindowWidth.SetText(n.X.ToString());
                     _gameWindowHeight.SetText(n.Y.ToString());
-                }
-            }
 
-            int.TryParse(_gameWindowPositionX.Text, out int gameWindowPositionX);
-            int.TryParse(_gameWindowPositionY.Text, out int gameWindowPositionY);
-
-            if (gameWindowPositionX != camera.Bounds.X || gameWindowPositionY != camera.Bounds.Y)
-            {
-                if (vp != null)
-                {
-                    vp.SetGameWindowPosition(new Point(gameWindowPositionX, gameWindowPositionY));
-                    _currentProfile.GameWindowPosition = vp.Location;
-                }
-            }
-
-            if (_currentProfile.GameWindowLock != _gameWindowLock.IsChecked)
-            {
-                if (vp != null)
-                {
-                    vp.CanMove = !_gameWindowLock.IsChecked;
+                    _currentProfile.GameWindowFullSize = _gameWindowFullsize.IsChecked;
                 }
 
-                _currentProfile.GameWindowLock = _gameWindowLock.IsChecked;
-            }
-
-            if (_currentProfile.GameWindowFullSize != _gameWindowFullsize.IsChecked)
-            {
-                Point n = Point.Zero, loc = Point.Zero;
-
-                if (_gameWindowFullsize.IsChecked)
+                if (_currentProfile.WindowBorderless != _windowBorderless.IsChecked)
                 {
-                    if (vp != null)
-                    {
-                        var size = new Point(Client.Game.Window.ClientBounds.Width, Client.Game.Window.ClientBounds.Height);
-                        n = vp.ResizeGameWindow(size);
-                        vp.SetGameWindowPosition(new Point(-5, -5));
-                        _currentProfile.GameWindowPosition = vp.Location;
-                    }
-                }
-                else
-                {
-                    if (vp != null)
-                    {
-                        n = vp.ResizeGameWindow(new Point(600, 480));
-                        vp.SetGameWindowPosition(new Point(20, 20));
-                        _currentProfile.GameWindowPosition = vp.Location;
-                    }
-                }
-
-                _gameWindowPositionX.SetText(loc.X.ToString());
-                _gameWindowPositionY.SetText(loc.Y.ToString());
-                _gameWindowWidth.SetText(n.X.ToString());
-                _gameWindowHeight.SetText(n.Y.ToString());
-
-                _currentProfile.GameWindowFullSize = _gameWindowFullsize.IsChecked;
-            }
-
-            if (_currentProfile.WindowBorderless != _windowBorderless.IsChecked)
-            {
-                _currentProfile.WindowBorderless = _windowBorderless.IsChecked;
-
-                if (!PlatformHelper.IsBrowser)
-                {
+                    _currentProfile.WindowBorderless = _windowBorderless.IsChecked;
                     Client.Game.SetWindowBorderless(_windowBorderless.IsChecked);
                 }
             }

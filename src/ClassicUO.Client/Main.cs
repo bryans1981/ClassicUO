@@ -580,6 +580,17 @@ namespace ClassicUO
 
                         break;
 
+                    case "run_mouse_in_separate_thread":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring separate mouse thread override in browser mode.");
+                            break;
+                        }
+
+                        Settings.GlobalSettings.RunMouseInASeparateThread = bool.Parse(value);
+
+                        break;
+
                     case "skiploginscreen":
                         if (PlatformHelper.IsBrowser)
                         {

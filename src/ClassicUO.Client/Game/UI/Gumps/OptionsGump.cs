@@ -12,6 +12,7 @@ using ClassicUO.Network;
 using ClassicUO.Renderer;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
+using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -4110,7 +4111,11 @@ namespace ClassicUO.Game.UI.Gumps
             if (_currentProfile.WindowBorderless != _windowBorderless.IsChecked)
             {
                 _currentProfile.WindowBorderless = _windowBorderless.IsChecked;
-                Client.Game.SetWindowBorderless(_windowBorderless.IsChecked);
+
+                if (!PlatformHelper.IsBrowser)
+                {
+                    Client.Game.SetWindowBorderless(_windowBorderless.IsChecked);
+                }
             }
 
             _currentProfile.UseAlternativeLights = _altLights.IsChecked;

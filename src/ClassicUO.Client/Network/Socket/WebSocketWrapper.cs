@@ -76,6 +76,11 @@ sealed class WebSocketWrapper : SocketWrapper
 
     public override int Read(byte[] buffer)
     {
+        if (_receiveStream == null)
+        {
+            return 0;
+        }
+
         lock (_receiveStream)
         {
             return _receiveStream.Dequeue(buffer, 0, buffer.Length);
@@ -269,6 +274,7 @@ sealed class WebSocketWrapper : SocketWrapper
             _webSocket = null;
             _rawSocket?.Dispose();
             _rawSocket = null;
+            _receiveStream = null;
         }
     }
 

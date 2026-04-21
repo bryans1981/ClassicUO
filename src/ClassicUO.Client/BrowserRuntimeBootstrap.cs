@@ -43,6 +43,16 @@ namespace ClassicUO
             Settings.GlobalSettings.UltimaOnlineDirectory = BrowserVirtualPaths.AssetsRoot;
             Settings.GlobalSettings.ProfilesPath = BrowserVirtualPaths.ProfilesRoot;
 
+            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.IP))
+            {
+                Settings.GlobalSettings.IP = "ws://localhost";
+            }
+            else if (!Settings.GlobalSettings.IP.StartsWith("ws://", StringComparison.OrdinalIgnoreCase)
+                && !Settings.GlobalSettings.IP.StartsWith("wss://", StringComparison.OrdinalIgnoreCase))
+            {
+                Settings.GlobalSettings.IP = $"ws://{Settings.GlobalSettings.IP}";
+            }
+
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
             {
                 Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);

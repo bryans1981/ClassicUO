@@ -174,30 +174,33 @@ namespace ClassicUO
 
             uint flags = 0;
 
-            if (!FileSystemHelper.DirectoryExists(Settings.GlobalSettings.UltimaOnlineDirectory) || !FileSystemHelper.FileExists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
+            if (!PlatformHelper.IsBrowser)
             {
-                flags |= INVALID_UO_DIRECTORY;
-            }
-
-            string clientVersionText = Settings.GlobalSettings.ClientVersion;
-
-            if (!ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out ClientVersion clientVersion))
-            {
-                Log.Warn($"Client version [{clientVersionText}] is invalid, let's try to read the client.exe");
-
-                // mmm something bad happened, try to load from client.exe [windows only]
-                if (!ClientVersionHelper.TryParseFromFile(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "client.exe"), out clientVersionText) || !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion))
+                if (!FileSystemHelper.DirectoryExists(Settings.GlobalSettings.UltimaOnlineDirectory) || !FileSystemHelper.FileExists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
                 {
-                    Log.Error("Invalid client version: " + clientVersionText);
-
-                    flags |= INVALID_UO_VERSION;
+                    flags |= INVALID_UO_DIRECTORY;
                 }
-                else
-                {
-                    Log.Trace($"Found a valid client.exe [{clientVersionText} - {clientVersion}]");
 
-                    // update the wrong/missing client version in settings.json
-                    Settings.GlobalSettings.ClientVersion = clientVersionText;
+                string clientVersionText = Settings.GlobalSettings.ClientVersion;
+
+                if (!ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out ClientVersion clientVersion))
+                {
+                    Log.Warn($"Client version [{clientVersionText}] is invalid, let's try to read the client.exe");
+
+                    // mmm something bad happened, try to load from client.exe [windows only]
+                    if (!ClientVersionHelper.TryParseFromFile(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "client.exe"), out clientVersionText) || !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion))
+                    {
+                        Log.Error("Invalid client version: " + clientVersionText);
+
+                        flags |= INVALID_UO_VERSION;
+                    }
+                    else
+                    {
+                        Log.Trace($"Found a valid client.exe [{clientVersionText} - {clientVersion}]");
+
+                        // update the wrong/missing client version in settings.json
+                        Settings.GlobalSettings.ClientVersion = clientVersionText;
+                    }
                 }
             }
 

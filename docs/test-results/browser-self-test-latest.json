@@ -1,5 +1,5 @@
 {
-  "GeneratedAtUtc": "2026-04-21T12:15:58.437+00:00",
+  "GeneratedAtUtc": "2026-04-21T12:20:13.944+00:00",
   "RuntimeChainMarker": "runtime-chain-v20260414-operational-reliability",
   "ReportMode": "compact-browser-runtime-v1",
   "Request": {
@@ -14,7 +14,7 @@
     "IsReady": true,
     "LoadedCount": 3,
     "CacheHits": 0,
-    "TotalMs": 9024,
+    "TotalMs": 9044,
     "TileData": {
       "Exists": true,
       "Length": 3188736,
@@ -43,7 +43,7 @@
     "IsReady": true,
     "LoadedCount": 3,
     "CacheHits": 0,
-    "TotalMs": 8961,
+    "TotalMs": 9189,
     "TileData": {
       "Exists": true,
       "ReadSucceeded": true,
@@ -80,7 +80,7 @@
     "ConfigRootPath": "/config",
     "ReadyAssetCount": 3,
     "CacheHits": 3,
-    "TotalMs": 11,
+    "TotalMs": 9,
     "Assets": [
       {
         "Id": "tiledata",
@@ -173,7 +173,7 @@
         "StartupProfilePrepared": true,
         "ReadyAssetCount": 3,
         "CacheHits": 3,
-        "TotalMs": 35,
+        "TotalMs": 36,
         "Assets": [
           {
             "Id": "tiledata",
@@ -234,10 +234,10 @@
           "Detail": "Launch plan ready for profile \u0027default\u0027 based on Bootstrap handoff ready with 3 seam-backed asset(s).."
         }
       ],
-      "TotalMs": 38,
+      "TotalMs": 40,
       "Summary": "Startup run prepared with 4 / 4 steps complete."
     },
-    "TotalMs": 86,
+    "TotalMs": 88,
     "Summary": "Startup artifact written to /cache/startup/default/launch-plan.json.",
     "Error": ""
   },
@@ -266,7 +266,7 @@
         "StartupProfilePrepared": true,
         "ReadyAssetCount": 3,
         "CacheHits": 3,
-        "TotalMs": 35,
+        "TotalMs": 36,
         "Assets": [
           {
             "Id": "tiledata",
@@ -327,7 +327,7 @@
           "Detail": "Launch plan ready for profile \u0027default\u0027 based on Bootstrap handoff ready with 3 seam-backed asset(s).."
         }
       ],
-      "TotalMs": 38,
+      "TotalMs": 40,
       "Summary": "Startup run prepared with 4 / 4 steps complete."
     },
     "TotalMs": 33,
@@ -337,7 +337,7 @@
   "LaunchSession": {
     "IsReady": true,
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "ArtifactPath": "/cache/startup/default/launch-plan.json",
     "ArtifactWriteSucceeded": true,
@@ -358,8 +358,8 @@
       "/uo/cliloc.enu",
       "/uo/hues.mul"
     ],
-    "TotalMs": 66,
-    "Summary": "Launch session \u0027session-20260421121642013\u0027 created for profile \u0027default\u0027.",
+    "TotalMs": 65,
+    "Summary": "Launch session \u0027session-20260421122057895\u0027 created for profile \u0027default\u0027.",
     "Error": ""
   },
   "LaunchSessionRead": {
@@ -375,7 +375,7 @@
     "Session": {
       "IsReady": true,
       "ProfileId": "default",
-      "SessionId": "session-20260421121642013",
+      "SessionId": "session-20260421122057895",
       "SessionPath": "/cache/startup/default/launch-session.json",
       "ArtifactPath": "/cache/startup/default/launch-plan.json",
       "ArtifactWriteSucceeded": true,
@@ -396,11 +396,11 @@
         "/uo/cliloc.enu",
         "/uo/hues.mul"
       ],
-      "TotalMs": 66,
-      "Summary": "Launch session \u0027session-20260421121642013\u0027 created for profile \u0027default\u0027.",
+      "TotalMs": 65,
+      "Summary": "Launch session \u0027session-20260421122057895\u0027 created for profile \u0027default\u0027.",
       "Error": ""
     },
-    "TotalMs": 13,
+    "TotalMs": 14,
     "Summary": "Launch session loaded for profile \u0027default\u0027.",
     "Error": ""
   },
@@ -470,9 +470,9 @@
       "mark-runtime-bootstrap-ready"
     ],
     "SourceSummary": "Runtime bootstrap session ready for profile \u0027default\u0027 with 3 runtime stage(s).",
-    "Length": 979,
+    "Length": 975,
     "WriteSucceeded": true,
-    "TotalMs": 71,
+    "TotalMs": 72,
     "Package": {
       "PackageVersion": "browser-bootstrap-package-v1",
       "ProfileId": "default",
@@ -506,7 +506,7 @@
         "mark-runtime-bootstrap-ready"
       ],
       "SourceSummary": "Runtime bootstrap session ready for profile \u0027default\u0027 with 3 runtime stage(s).",
-      "CreatedAtUtc": "2026-04-21T12:16:42.116+00:00"
+      "CreatedAtUtc": "2026-04-21T12:20:58+00:00"
     },
     "Summary": "Browser bootstrap package ready for profile \u0027default\u0027.",
     "Error": ""
@@ -517,8 +517,8 @@
     "ArtifactPath": "/cache/startup/default/browser-bootstrap-package.json",
     "Exists": true,
     "ReadSucceeded": true,
-    "Length": 979,
-    "TotalMs": 6,
+    "Length": 975,
+    "TotalMs": 8,
     "Package": {
       "PackageVersion": "browser-bootstrap-package-v1",
       "ProfileId": "default",
@@ -552,7 +552,7 @@
         "mark-runtime-bootstrap-ready"
       ],
       "SourceSummary": "Runtime bootstrap session ready for profile \u0027default\u0027 with 3 runtime stage(s).",
-      "CreatedAtUtc": "2026-04-21T12:16:42.116+00:00"
+      "CreatedAtUtc": "2026-04-21T12:20:58+00:00"
     },
     "Summary": "Browser bootstrap package read for profile \u0027default\u0027.",
     "Error": ""
@@ -599,7 +599,7 @@
         "Summary": "/uo/hues.mul"
       }
     ],
-    "TotalMs": 8,
+    "TotalMs": 7,
     "Summary": "Browser bootstrap package consumed for profile \u0027default\u0027.",
     "Error": ""
   },
@@ -642,7 +642,7 @@
     ],
     "PackageSummary": "Browser bootstrap package consumed for profile \u0027default\u0027.",
     "LaunchSessionSummary": "Launch session loaded for profile \u0027default\u0027.",
-    "TotalMs": 11,
+    "TotalMs": 13,
     "Summary": "Browser-native execution plan ready for profile \u0027default\u0027 with 4 check(s)."
   },
   "NativeRuntimeShell": {
@@ -686,7 +686,7 @@
     "RenderSummary": "Runtime browser render ready state ready for profile \u0027default\u0027 with 3 check(s).",
     "InputSummary": "Runtime browser input ready state ready for profile \u0027default\u0027 with 3 check(s).",
     "LaunchSummary": "Runtime launch controller ready for profile \u0027default\u0027 with 3 action(s).",
-    "TotalMs": 145,
+    "TotalMs": 144,
     "Summary": "Browser native runtime shell ready for profile \u0027default\u0027 with 4 check(s)."
   },
   "NativeLaunchController": {
@@ -806,7 +806,7 @@
       "browser-input-ready",
       "runtime-launch-ready"
     ],
-    "TotalMs": 320,
+    "TotalMs": 313,
     "Summary": "Browser-native browser runtime ready for profile \u0027default\u0027 with 6 stage(s)."
   },
   "NativeBrowserRuntimeReadyState": {
@@ -845,7 +845,7 @@
     "ReadinessChecks": [
       "native-browser-runtime-ready"
     ],
-    "TotalMs": 174,
+    "TotalMs": 177,
     "Summary": "Browser-native browser runtime ready state ready for profile \u0027default\u0027 with 2 stage(s)."
   },
   "NativeBrowserHostController": {
@@ -886,7 +886,7 @@
       "browser-surface-ready",
       "runtime-launch-ready"
     ],
-    "TotalMs": 15,
+    "TotalMs": 13,
     "Summary": "Browser-native browser host ready for profile \u0027default\u0027 with 3 stage(s)."
   },
   "NativeBrowserHostReadyState": {
@@ -960,7 +960,7 @@
       "native-browser-host-ready",
       "browser-surface-ready"
     ],
-    "TotalMs": 22,
+    "TotalMs": 20,
     "Summary": "Browser-native browser surface controller ready for profile \u0027default\u0027 with 3 stage(s)."
   },
   "NativeBrowserRenderController": {
@@ -995,7 +995,7 @@
       "native-browser-surface-ready",
       "browser-render-ready"
     ],
-    "TotalMs": 30,
+    "TotalMs": 29,
     "Summary": "Browser-native browser render controller ready for profile \u0027default\u0027 with 3 stage(s)."
   },
   "NativeBrowserCanvasHost": {
@@ -1079,7 +1079,7 @@
       "native-browser-canvas-host-ready",
       "browser-canvas-frame-ready"
     ],
-    "TotalMs": 36,
+    "TotalMs": 37,
     "Summary": "Browser-native browser canvas frame ready for profile \u0027default\u0027 with 3 stage(s) using webgl2."
   },
   "NativeBrowserCanvasInputBridge": {
@@ -1163,7 +1163,7 @@
       "native-browser-canvas-frame-ready",
       "browser-frame-pump-deferred"
     ],
-    "TotalMs": 37,
+    "TotalMs": 34,
     "Summary": "Browser-native browser frame pump deferred for profile \u0027default\u0027 with 2 stage(s)."
   },
   "NativeBrowserInputController": {
@@ -1198,7 +1198,7 @@
       "native-browser-render-ready",
       "browser-input-ready"
     ],
-    "TotalMs": 37,
+    "TotalMs": 35,
     "Summary": "Browser-native browser input controller ready for profile \u0027default\u0027 with 3 stage(s)."
   },
   "NativeBrowserRuntimeLoop": {
@@ -1237,7 +1237,7 @@
       "native-browser-frame-pump-ready",
       "native-browser-input-ready"
     ],
-    "TotalMs": 66,
+    "TotalMs": 68,
     "Summary": "Browser-native browser runtime loop ready for profile \u0027default\u0027 with 3 stage(s)."
   },
   "NativeBrowserRuntimeExecutionSlice": {
@@ -1288,7 +1288,7 @@
       "native-browser-websocket-runtime-execution-ready",
       "native-browser-websocket-runtime-session-ready"
     ],
-    "TotalMs": 287,
+    "TotalMs": 285,
     "Summary": "Browser-native browser runtime execution slice ready for profile \u0027default\u0027 with 5 stage(s) and transport websocket-session."
   },
   "NativeBrowserRuntimeNetworkSlice": {
@@ -1346,7 +1346,7 @@
       "native-browser-network-ready",
       "native-browser-transport-ready"
     ],
-    "TotalMs": 374,
+    "TotalMs": 372,
     "Summary": "Browser-native browser runtime network slice ready for profile \u0027default\u0027 with 4 stage(s) and endpoint ws://localhost:5100/browser-runtime."
   },
   "NativeBrowserRuntimeSessionSlice": {
@@ -1427,7 +1427,7 @@
       "native-browser-runtime-network-ready",
       "browser-session-ready"
     ],
-    "TotalMs": 477,
+    "TotalMs": 475,
     "Summary": "Browser-native browser runtime session slice ready for profile \u0027default\u0027 with 3 stage(s) and websocket endpoint ws://localhost:5100/browser-runtime."
   },
   "NativeBrowserRuntimeSessionState": {
@@ -1508,7 +1508,7 @@
       "native-browser-runtime-session-slice-ready",
       "native-browser-runtime-session-controller-ready"
     ],
-    "TotalMs": 564,
+    "TotalMs": 569,
     "Summary": "Browser-native browser runtime session state ready for profile \u0027default\u0027 with 3 stage(s) and websocket session browser-runtime-v1."
   },
   "NativeBrowserRuntimeSessionReadyState": {
@@ -1589,7 +1589,7 @@
       "native-browser-runtime-session-state-ready",
       "browser-session-stability-ready"
     ],
-    "TotalMs": 573,
+    "TotalMs": 575,
     "Summary": "Browser-native browser runtime session ready-state ready for profile \u0027default\u0027 with 3 stage(s) and websocket session browser-runtime-v1."
   },
   "NativeBrowserRuntimeSessionAssurance": {
@@ -1670,7 +1670,7 @@
       "native-browser-runtime-session-ready-state-ready",
       "native-browser-session-controller-ready"
     ],
-    "TotalMs": 674,
+    "TotalMs": 672,
     "Summary": "Browser-native browser runtime session assurance ready for profile \u0027default\u0027 with 3 stage(s) and websocket session browser-runtime-v1."
   },
   "NativeBrowserRuntimeLaunchSnapshot": {
@@ -1750,7 +1750,7 @@
     "LaunchContractIsReady": true,
     "LaunchContractVersion": "v1",
     "LaunchContractMode": "browser-spike",
-    "LaunchContractSessionId": "session-20260421121642013",
+    "LaunchContractSessionId": "session-20260421122057895",
     "LaunchContractSessionPath": "/cache/startup/default/launch-session.json",
     "LaunchContractArtifactPath": "/cache/startup/default/launch-plan.json",
     "LaunchContractSummary": "Runtime launch contract ready for profile \u0027default\u0027 with 3 required asset(s).",
@@ -1758,7 +1758,7 @@
       "native-browser-runtime-session-assurance-ready",
       "runtime-launch-contract-ready"
     ],
-    "TotalMs": 704,
+    "TotalMs": 669,
     "Summary": "Browser-native browser runtime launch snapshot ready for profile \u0027default\u0027 with 3 stage(s) and launch mode browser-spike."
   },
   "NativeBrowserNetworkController": {
@@ -1796,7 +1796,7 @@
       "native-browser-input-ready",
       "runtime-launch-contract-ready"
     ],
-    "TotalMs": 44,
+    "TotalMs": 43,
     "Summary": "Browser-native browser network controller ready for profile \u0027default\u0027 with 3 stage(s)."
   },
   "NativeBrowserTransportController": {
@@ -1830,7 +1830,7 @@
     "ReadinessChecks": [
       "native-browser-network-ready"
     ],
-    "TotalMs": 42,
+    "TotalMs": 45,
     "Summary": "Browser-native browser transport controller ready for profile \u0027default\u0027 with 2 stage(s)."
   },
   "NativeBrowserRuntimeExecutionController": {
@@ -1865,7 +1865,7 @@
     "ReadinessChecks": [
       "native-browser-transport-ready"
     ],
-    "TotalMs": 40,
+    "TotalMs": 41,
     "Summary": "Browser-native browser runtime execution controller ready for profile \u0027default\u0027 with 2 stage(s)."
   },
   "NativeBrowserWebSocketSessionController": {
@@ -1909,7 +1909,7 @@
       "native-browser-transport-ready",
       "native-browser-runtime-execution-ready"
     ],
-    "TotalMs": 83,
+    "TotalMs": 84,
     "Summary": "Browser-native browser websocket session controller ready for profile \u0027default\u0027 with 4 stage(s)."
   },
   "NativeBrowserWebSocketRuntimeExecutionController": {
@@ -1955,7 +1955,7 @@
     "ReadinessChecks": [
       "native-browser-websocket-session-ready"
     ],
-    "TotalMs": 86,
+    "TotalMs": 85,
     "Summary": "Browser-native browser websocket runtime execution controller ready for profile \u0027default\u0027 with 4 stage(s)."
   },
   "NativeBrowserRuntimeSessionController": {
@@ -1978,7 +1978,7 @@
     "NativeBrowserWebSocketRuntimeSessionReady": true,
     "NativeBrowserWebSocketRuntimeSessionVersion": "browser-native-browser-websocket-runtime-session-controller-v1",
     "NativeBrowserWebSocketRuntimeSessionSummary": "Browser-native browser websocket runtime session controller ready for profile \u0027default\u0027 with 3 stage(s).",
-    "WebSocketRuntimeSessionId": "browser-runtime-session-20260421121647308",
+    "WebSocketRuntimeSessionId": "browser-runtime-session-20260421122103143",
     "WebSocketRuntimeSessionState": "connected",
     "WebSocketRuntimeExecutionEndpoint": "ws://localhost:5100/browser-runtime",
     "WebSocketRuntimeExecutionProtocol": "browser-runtime-v1",
@@ -2001,7 +2001,7 @@
       "native-browser-websocket-runtime-session-ready",
       "browser-session-stability-ready"
     ],
-    "TotalMs": 101,
+    "TotalMs": 92,
     "Summary": "Browser-native browser runtime session controller ready for profile \u0027default\u0027 with 3 stage(s)."
   },
   "NativeBrowserSessionController": {
@@ -2045,7 +2045,7 @@
     "ReadinessChecks": [
       "native-browser-runtime-session-ready"
     ],
-    "TotalMs": 113,
+    "TotalMs": 96,
     "Summary": "Browser-native browser session controller ready for profile \u0027default\u0027 with 2 stage(s)."
   },
   "RuntimeLaunchContract": {
@@ -2053,36 +2053,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
-    "SessionPath": "/cache/startup/default/launch-session.json",
-    "ArtifactPath": "/cache/startup/default/launch-plan.json",
-    "Exists": true,
-    "ReadSucceeded": true,
-    "AssetRootPath": "/uo",
-    "ProfilesRootPath": "/profiles",
-    "CacheRootPath": "/cache",
-    "ConfigRootPath": "/config",
-    "SettingsFilePath": "/config/client.settings.json",
-    "StartupProfilePath": "/profiles/default/profile.json",
-    "RequiredAssets": [
-      "/uo/tiledata.mul",
-      "/uo/cliloc.enu",
-      "/uo/hues.mul"
-    ],
-    "ReadyAssetCount": 3,
-    "CompletedSteps": 4,
-    "TotalSteps": 4,
-    "TotalMs": 7,
-    "Summary": "Runtime launch contract ready for profile \u0027default\u0027 with 3 required asset(s).",
-    "Error": ""
-  },
-  "StartupPacket": {
-    "IsReady": true,
-    "PacketVersion": "startup-packet-v1",
-    "ContractVersion": "v1",
-    "LaunchMode": "browser-spike",
-    "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "ArtifactPath": "/cache/startup/default/launch-plan.json",
     "Exists": true,
@@ -2102,6 +2073,35 @@
     "CompletedSteps": 4,
     "TotalSteps": 4,
     "TotalMs": 6,
+    "Summary": "Runtime launch contract ready for profile \u0027default\u0027 with 3 required asset(s).",
+    "Error": ""
+  },
+  "StartupPacket": {
+    "IsReady": true,
+    "PacketVersion": "startup-packet-v1",
+    "ContractVersion": "v1",
+    "LaunchMode": "browser-spike",
+    "ProfileId": "default",
+    "SessionId": "session-20260421122057895",
+    "SessionPath": "/cache/startup/default/launch-session.json",
+    "ArtifactPath": "/cache/startup/default/launch-plan.json",
+    "Exists": true,
+    "ReadSucceeded": true,
+    "AssetRootPath": "/uo",
+    "ProfilesRootPath": "/profiles",
+    "CacheRootPath": "/cache",
+    "ConfigRootPath": "/config",
+    "SettingsFilePath": "/config/client.settings.json",
+    "StartupProfilePath": "/profiles/default/profile.json",
+    "RequiredAssets": [
+      "/uo/tiledata.mul",
+      "/uo/cliloc.enu",
+      "/uo/hues.mul"
+    ],
+    "ReadyAssetCount": 3,
+    "CompletedSteps": 4,
+    "TotalSteps": 4,
+    "TotalMs": 5,
     "Summary": "Startup packet ready for profile \u0027default\u0027 with 3 asset path(s).",
     "Error": ""
   },
@@ -2112,7 +2112,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2143,7 +2143,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2162,7 +2162,7 @@
     "CompletedSteps": 4,
     "TotalSteps": 4,
     "ExecutionSummary": "Startup session executor prepared runtime state for profile \u0027default\u0027.",
-    "TotalMs": 5,
+    "TotalMs": 7,
     "Summary": "Startup session executor ready for profile \u0027default\u0027 with 3 required asset(s).",
     "Error": ""
   },
@@ -2175,7 +2175,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2194,7 +2194,7 @@
     "CompletedSteps": 4,
     "TotalSteps": 4,
     "RunSummary": "Startup session runner simulated a runtime pass for profile \u0027default\u0027.",
-    "TotalMs": 6,
+    "TotalMs": 5,
     "Summary": "Startup session runner ready for profile \u0027default\u0027 with 3 required asset(s).",
     "Error": ""
   },
@@ -2208,7 +2208,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2246,7 +2246,7 @@
         "Detail": "Startup session runner simulated a runtime pass for profile \u0027default\u0027."
       }
     ],
-    "TotalMs": 6,
+    "TotalMs": 5,
     "Summary": "Runtime bootstrap loop ready for profile \u0027default\u0027 with 3 phase(s).",
     "Error": ""
   },
@@ -2261,7 +2261,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2316,7 +2316,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2356,7 +2356,7 @@
     ],
     "State": "ready",
     "CycleSummary": "Runtime startup cycle is ready for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 5,
     "Summary": "Runtime startup cycle ready for profile \u0027default\u0027 with 3 phase(s).",
     "Error": ""
   },
@@ -2373,7 +2373,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2413,7 +2413,7 @@
     ],
     "State": "ready",
     "StateSummary": "Runtime startup state prepared for profile \u0027default\u0027 in state \u0027ready\u0027.",
-    "TotalMs": 6,
+    "TotalMs": 5,
     "Summary": "Runtime startup state ready for profile \u0027default\u0027 with 3 phase(s).",
     "Error": ""
   },
@@ -2431,7 +2431,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2476,7 +2476,7 @@
       "runtime-ready"
     ],
     "StateMachineSummary": "Runtime startup state machine prepared for profile \u0027default\u0027 in state \u0027ready\u0027.",
-    "TotalMs": 6,
+    "TotalMs": 7,
     "Summary": "Runtime startup state machine ready for profile \u0027default\u0027 with 3 state(s).",
     "Error": ""
   },
@@ -2495,7 +2495,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2544,7 +2544,7 @@
       "profile-\u003Eruntime-ready"
     ],
     "DriverSummary": "Runtime startup transition driver advanced profile \u0027default\u0027 through 2 transition(s).",
-    "TotalMs": 7,
+    "TotalMs": 6,
     "Summary": "Runtime startup transition driver ready for profile \u0027default\u0027 with 2 transition(s).",
     "Error": ""
   },
@@ -2564,7 +2564,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2639,7 +2639,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2698,7 +2698,7 @@
       "commit-runtime-ready"
     ],
     "ControllerSummary": "Runtime startup session controller prepared 3 control action(s) for profile \u0027default\u0027.",
-    "TotalMs": 6,
+    "TotalMs": 5,
     "Summary": "Runtime startup session controller ready for profile \u0027default\u0027 with 3 control action(s).",
     "Error": ""
   },
@@ -2720,7 +2720,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2784,7 +2784,7 @@
       "confirm-runtime-handoff"
     ],
     "CoordinatorSummary": "Runtime startup coordinator prepared 3 coordination step(s) for profile \u0027default\u0027.",
-    "TotalMs": 6,
+    "TotalMs": 5,
     "Summary": "Runtime startup coordinator ready for profile \u0027default\u0027 with 3 coordination step(s).",
     "Error": ""
   },
@@ -2807,7 +2807,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2876,7 +2876,7 @@
       "runtime-handoff-complete"
     ],
     "OrchestratorSummary": "Runtime startup orchestrator prepared 3 orchestration stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 5,
+    "TotalMs": 6,
     "Summary": "Runtime startup orchestrator ready for profile \u0027default\u0027 with 3 orchestration stage(s).",
     "Error": ""
   },
@@ -2900,7 +2900,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -2999,7 +2999,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3078,7 +3078,7 @@
       "open-boot-session"
     ],
     "BootSessionSummary": "Browser boot session prepared 3 session stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 5,
     "Summary": "Browser boot session ready for profile \u0027default\u0027 with 3 session stage(s).",
     "Error": ""
   },
@@ -3104,7 +3104,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3187,7 +3187,7 @@
       "/cache/startup/default/launch-session.json"
     ],
     "HandoffSummary": "Runtime launch handoff prepared 2 handoff artifact(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 6,
     "Summary": "Runtime launch handoff ready for profile \u0027default\u0027 with 2 artifact(s).",
     "Error": ""
   },
@@ -3214,7 +3214,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3301,7 +3301,7 @@
       "/cache/startup/default/launch-session.json"
     ],
     "ConsumerSummary": "Runtime bootstrap consumer accepted 2 handoff artifact(s) for profile \u0027default\u0027.",
-    "TotalMs": 8,
+    "TotalMs": 6,
     "Summary": "Runtime bootstrap consumer ready for profile \u0027default\u0027 with 2 consumed artifact(s).",
     "Error": ""
   },
@@ -3329,7 +3329,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3450,7 +3450,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3547,7 +3547,7 @@
       "publish-client-bootstrap-ready"
     ],
     "ClientBootstrapSummary": "Runtime client bootstrap controller prepared 3 client bootstrap action(s) for profile \u0027default\u0027.",
-    "TotalMs": 11,
+    "TotalMs": 6,
     "Summary": "Runtime client bootstrap controller ready for profile \u0027default\u0027 with 3 action(s).",
     "Error": ""
   },
@@ -3577,7 +3577,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3680,7 +3680,7 @@
       "client-bootstrap-ready"
     ],
     "ReadinessSummary": "Runtime startup readiness gate passed 4 readiness check(s) for profile \u0027default\u0027.",
-    "TotalMs": 6,
+    "TotalMs": 7,
     "Summary": "Runtime startup readiness gate ready for profile \u0027default\u0027 with 4 check(s).",
     "Error": ""
   },
@@ -3711,7 +3711,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3819,7 +3819,7 @@
       "client-runtime-ready"
     ],
     "ReadySignalSummary": "Runtime ready signal published 3 readiness signal(s) for profile \u0027default\u0027.",
-    "TotalMs": 8,
+    "TotalMs": 6,
     "Summary": "Runtime ready signal ready for profile \u0027default\u0027 with 3 signal(s).",
     "Error": ""
   },
@@ -3851,7 +3851,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -3964,7 +3964,7 @@
       "publish-launch-ready"
     ],
     "LaunchControlSummary": "Runtime launch controller prepared 3 launch control action(s) for profile \u0027default\u0027.",
-    "TotalMs": 5,
+    "TotalMs": 7,
     "Summary": "Runtime launch controller ready for profile \u0027default\u0027 with 3 action(s).",
     "Error": ""
   },
@@ -3997,7 +3997,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4115,7 +4115,7 @@
       "client-ready"
     ],
     "ReadyStateSummary": "Runtime client ready state prepared 3 ready-state marker(s) for profile \u0027default\u0027.",
-    "TotalMs": 8,
+    "TotalMs": 5,
     "Summary": "Runtime client ready state ready for profile \u0027default\u0027 with 3 marker(s).",
     "Error": ""
   },
@@ -4149,7 +4149,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4272,7 +4272,7 @@
       "publish-client-launch-session-ready"
     ],
     "ClientLaunchSummary": "Runtime client launch session prepared 3 launch session stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 8,
+    "TotalMs": 7,
     "Summary": "Runtime client launch session ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -4307,7 +4307,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4471,7 +4471,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4604,7 +4604,7 @@
       "publish-client-running"
     ],
     "RunStateSummary": "Runtime client run state prepared 3 run-state stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 6,
     "Summary": "Runtime client run state ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -4641,7 +4641,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4779,7 +4779,7 @@
       "publish-client-loop-ready"
     ],
     "ClientLoopSummary": "Runtime client loop state prepared 3 loop stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 10,
+    "TotalMs": 8,
     "Summary": "Runtime client loop state ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -4817,7 +4817,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -4999,7 +4999,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -5187,7 +5187,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -5381,7 +5381,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -5539,7 +5539,7 @@
       "publish-platform-session-ready"
     ],
     "PlatformSessionSummary": "Runtime platform session prepared 3 platform-session stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 10,
+    "TotalMs": 6,
     "Summary": "Runtime platform session ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -5581,7 +5581,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -5744,7 +5744,7 @@
       "platform-ready"
     ],
     "PlatformReadySummary": "Runtime platform ready state passed 3 platform readiness check(s) for profile \u0027default\u0027.",
-    "TotalMs": 8,
+    "TotalMs": 6,
     "Summary": "Runtime platform ready state ready for profile \u0027default\u0027 with 3 check(s).",
     "Error": ""
   },
@@ -5787,7 +5787,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -5955,7 +5955,7 @@
       "publish-platform-loop-ready"
     ],
     "PlatformLoopSummary": "Runtime platform loop prepared 3 platform-loop stage(s) for profile \u0027default\u0027.",
-    "TotalMs": 7,
+    "TotalMs": 8,
     "Summary": "Runtime platform loop ready for profile \u0027default\u0027 with 3 stage(s).",
     "Error": ""
   },
@@ -5999,7 +5999,7 @@
     "ContractVersion": "v1",
     "LaunchMode": "browser-spike",
     "ProfileId": "default",
-    "SessionId": "session-20260421121642013",
+    "SessionId": "session-20260421122057895",
     "SessionPath": "/cache/startup/default/launch-session.json",
     "Exists": true,
     "ReadSucceeded": true,
@@ -6263,7 +6263,7 @@
       "harden-compliance-path",
       "harden-operational-path"
     ],
-    "TotalMs": 12,
+    "TotalMs": 11,
     "Summary": "Runtime tail extension ready with 80 stabilization/reinforcement/fortification/hardening phase(s).",
     "Error": ""
   },

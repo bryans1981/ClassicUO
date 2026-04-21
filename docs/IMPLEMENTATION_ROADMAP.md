@@ -546,7 +546,7 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-21: Browser websocket reconnects now create a fresh cancellation token instead of reusing a canceled one from the previous connection.
 - 2026-04-21: Browser websocket reconnects now clear the prior receive-task state so the wrapper can re-enter connect/disconnect cleanly.
 - 2026-04-21: Browser websocket sends are now synchronous-owned again, removing the last fire-and-forget send path in the transport wrapper.
-- 2026-04-21: Browser websocket receive now clears the tracked receive task when the loop exits on its own, so reconnect state does not keep a stale completed task around.
+- 2026-04-21: Browser websocket receive now hands teardown back to `Disconnect()` when the loop exits, so reconnect state and socket cleanup stay in one place.
 - 2026-04-21: Browser startup now ignores custom `-settings` paths in browser mode so the browser client stays on the browser config root.
 - 2026-04-21: Browser startup now ignores browser-inapplicable CLI overrides such as `-ip`, `-port`, `-clientversion`, `-filesoverride`, `-uopath`, `-profilespath`, `-plugins`, `-force_driver`, `-highdpi`, `-packetlog`, `-debug`, `-profiler`, `-saveaccount`, `-autologin`, `-reconnect`, `-reconnect_time`, `-login_music`, `-music`, `-login_music_volume`, `-fixed_time_step`, `-fps`, `-skiploginscreen`, `-lastcharactername`, `-lastcharname`, `-lastservernum`, `-last_server_name`, `-language`, `-use_verdata`, `-maps_layouts`, `-encryption`, and `-no_server_ping`, so the browser client stays on the browser transport and storage path.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.

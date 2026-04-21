@@ -234,8 +234,7 @@ sealed class WebSocketWrapper : SocketWrapper
             InvokeOnError(SocketError.ConnectionReset);
         }
 
-        _receiveTask = null;
-        SignalDisconnected();
+        Disconnect();
     }
 
     // This is probably unnecessary, but WebSocket frames can be up to 2^63 bytes so we put some cap on it, yet to see packets larger than 4KB come through.

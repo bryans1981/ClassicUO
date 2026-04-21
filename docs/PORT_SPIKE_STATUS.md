@@ -428,4 +428,5 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-21: Browser startup now skips the `client.exe` version fallback path when the configured version is invalid.
 - 2026-04-21: Browser startup now normalizes `ClientVersion` to a valid default in `BrowserRuntimeBootstrap`.
 - 2026-04-21: Browser game startup now skips the redundant desktop window-positioning call in `GameController`.
+- 2026-04-21: Browser shutdown now skips the desktop plugin closing hook in `GameController`.
 - 2026-04-21: Browser mode now skips `UltimaLive.Enable()` during asset load so the browser path stays browser-safe.

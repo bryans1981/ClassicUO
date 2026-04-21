@@ -192,7 +192,10 @@ namespace ClassicUO
 
             Audio?.StopMusic();
             Settings.GlobalSettings.Save();
-            Plugin.OnClosing();
+            if (!PlatformHelper.IsBrowser && _pluginsInitialized)
+            {
+                Plugin.OnClosing();
+            }
 
             UO.Unload();
 

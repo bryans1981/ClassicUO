@@ -140,6 +140,7 @@ Current status:
 - Browser plugin loading is now owned by the browser runtime policy, so the main client no longer hard-codes a browser-mode startup branch for plugins.
 - The browser host also supports a no-click self-test URL, which reduces manual operator interaction during the browser-native work.
 - The browser product work is now explicitly focused on the finished playable client path, not on more synthetic proof layers.
+- CI is now manual-only during browser-client development so local testing can stay local and repository pushes do not generate avoidable build-test/deploy noise.
 
 ### Milestone 3: Linux Container Packaging
 

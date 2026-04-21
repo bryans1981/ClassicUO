@@ -51,6 +51,7 @@ Use these rules when tradeoffs appear:
 5. Do not optimize for scale before the single-user browser deployment works.
 6. Document every assumption that affects storage, browser behavior, or sync with upstream.
 7. If a change does not move the browser client toward launch, rendering, input, login, or world interaction, defer it.
+8. Keep GitHub Actions manual-only during browser-client development unless you explicitly ask for a workflow run.
 
 ## Project Phases
 

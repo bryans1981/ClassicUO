@@ -1,26 +1,7 @@
 name: Build-Test
 
 on:
-  push:
-    branches: "*"
-    paths-ignore:
-      - '**/build-release.yml'
-      - 'appveyor.yml'
-      - '**/README.md'
-      - 'docs/**'
-      - 'experiments/BrowserHost/**'
-      - 'experiments/BrowserHost.ReportHost/**'
-      - 'scripts/browser-*.ps1'
-  pull_request:
-    branches: "*"
-    paths-ignore:
-      - '**/build-release.yml'
-      - 'appveyor.yml'
-      - '**/README.md'
-      - 'docs/**'
-      - 'experiments/BrowserHost/**'
-      - 'experiments/BrowserHost.ReportHost/**'
-      - 'scripts/browser-*.ps1'
+  workflow_dispatch: {}
 
 
 env:

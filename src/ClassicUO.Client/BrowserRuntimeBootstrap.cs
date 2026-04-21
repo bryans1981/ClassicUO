@@ -53,10 +53,7 @@ namespace ClassicUO
                 Settings.GlobalSettings.IP = $"ws://{Settings.GlobalSettings.IP}";
             }
 
-            if (Settings.GlobalSettings.Port == 2593)
-            {
-                Settings.GlobalSettings.Port = 2594;
-            }
+            Settings.GlobalSettings.Port = 2594;
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
             {

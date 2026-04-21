@@ -1600,6 +1600,10 @@ namespace ClassicUO.Game.UI.Gumps
                 startX,
                 startY
             );
+            if (PlatformHelper.IsBrowser)
+            {
+                _reduceFPSWhenInactive.IsEnabled = false;
+            }
 
             startY += _reduceFPSWhenInactive.Height + 2;
 
@@ -1636,6 +1640,10 @@ namespace ClassicUO.Game.UI.Gumps
                     startY
                 )
             );
+            if (PlatformHelper.IsBrowser)
+            {
+                _windowBorderless.IsEnabled = false;
+            }
 
             section.Add
             (

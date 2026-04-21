@@ -425,11 +425,23 @@ namespace ClassicUO
                         break;
 
                     case "debug":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring debug override in browser mode.");
+                            break;
+                        }
+
                         CUOEnviroment.Debug = true;
 
                         break;
 
                     case "profiler":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring profiler override in browser mode.");
+                            break;
+                        }
+
                         Profiler.Enabled = bool.Parse(value);
 
                         break;

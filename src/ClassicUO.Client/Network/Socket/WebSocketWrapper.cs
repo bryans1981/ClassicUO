@@ -95,6 +95,7 @@ sealed class WebSocketWrapper : SocketWrapper
         _tokenSource = tokenSource == null || tokenSource.IsCancellationRequested
             ? new CancellationTokenSource()
             : tokenSource;
+        _receiveTask = null;
         _receiveStream = new CircularBuffer();
         _disconnectNotified = 0;
 
@@ -277,6 +278,7 @@ sealed class WebSocketWrapper : SocketWrapper
             _rawSocket?.Dispose();
             _rawSocket = null;
             _receiveStream = null;
+            _receiveTask = null;
         }
     }
 

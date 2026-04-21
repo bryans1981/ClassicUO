@@ -423,6 +423,7 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-21: Browser socket wrappers now surface disconnect exactly once per connection so reconnect logic does not depend on read-side side effects.
 - 2026-04-21: Browser websocket reads now return empty after disconnect so reconnect cycles do not throw on a cleared receive buffer.
 - 2026-04-21: Browser websocket reconnects now create a fresh cancellation token instead of reusing a canceled one from the previous connection.
+- 2026-04-21: Browser websocket reconnects now clear the prior receive-task state so the wrapper can re-enter connect/disconnect cleanly.
 - 2026-04-21: Browser startup now ignores custom `-settings` paths in browser mode so the browser path stays on the browser config root.
 - 2026-04-21: Browser startup now ignores browser-inapplicable CLI overrides such as `-ip`, `-port`, `-clientversion`, `-filesoverride`, `-uopath`, `-profilespath`, `-plugins`, `-force_driver`, `-highdpi`, `-packetlog`, `-debug`, `-profiler`, `-saveaccount`, `-autologin`, `-reconnect`, `-reconnect_time`, `-login_music`, `-music`, `-login_music_volume`, `-fixed_time_step`, `-fps`, `-skiploginscreen`, `-lastcharactername`, `-lastcharname`, `-lastservernum`, `-last_server_name`, `-language`, `-use_verdata`, `-maps_layouts`, `-encryption`, and `-no_server_ping`, so the browser path stays on the browser transport and storage path.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.

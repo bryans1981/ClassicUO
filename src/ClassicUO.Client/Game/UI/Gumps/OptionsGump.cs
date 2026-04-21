@@ -1619,7 +1619,7 @@ namespace ClassicUO.Game.UI.Gumps
             int gameWindowSectionBottom = startY;
             var camera = Client.Game.Scene.Camera;
 
-            if (browserRuntimePolicy.AllowWindowManagement)
+            if (!PlatformHelper.IsBrowser)
             {
                 SettingsSection section = AddSettingsSection(box, "Game window");
 
@@ -3686,7 +3686,7 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case 3: // video
-                    if (browserRuntimePolicy.AllowWindowManagement)
+                    if (!PlatformHelper.IsBrowser)
                     {
                         _windowBorderless.IsChecked = false;
                         _gameWindowWidth.SetText("600");

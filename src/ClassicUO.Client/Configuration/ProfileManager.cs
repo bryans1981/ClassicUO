@@ -89,12 +89,12 @@ namespace ClassicUO.Configuration
                 throw new InvalidDataException();
             }
 
-            if (profile.WindowClientBounds.X < 600)
+            if (!PlatformHelper.IsBrowser && profile.WindowClientBounds.X < 600)
             {
                 profile.WindowClientBounds = new Point(600, profile.WindowClientBounds.Y);
             }
 
-            if (profile.WindowClientBounds.Y < 480)
+            if (!PlatformHelper.IsBrowser && profile.WindowClientBounds.Y < 480)
             {
                 profile.WindowClientBounds = new Point(profile.WindowClientBounds.X, 480);
             }

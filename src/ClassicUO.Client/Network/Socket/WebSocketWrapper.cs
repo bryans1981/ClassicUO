@@ -234,6 +234,7 @@ sealed class WebSocketWrapper : SocketWrapper
             InvokeOnError(SocketError.ConnectionReset);
         }
 
+        _receiveTask = null;
         SignalDisconnected();
     }
 

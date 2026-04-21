@@ -98,8 +98,6 @@ namespace ClassicUO.Game.Scenes
             base.Load();
 
             BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
-            bool isBrowser = PlatformHelper.IsBrowser;
-
             Client.Game.Window.AllowUserResizing = browserRuntimePolicy.AllowWindowResizing;
 
             Camera.Zoom = ProfileManager.CurrentProfile.DefaultScale;
@@ -132,7 +130,7 @@ namespace ClassicUO.Game.Scenes
             UIManager.ContainerScale = ProfileManager.CurrentProfile.ContainersScale / 100f;
             Data.MovementSpeed.FastRotation = ProfileManager.CurrentProfile.FastRotation;
 
-            if (!isBrowser)
+            if (browserRuntimePolicy.AllowWindowManagement)
             {
                 SDL.SDL_SetWindowMinimumSize(Client.Game.Window.Handle, Client.Game.ScaleWithDpi(640), Client.Game.ScaleWithDpi(480));
 

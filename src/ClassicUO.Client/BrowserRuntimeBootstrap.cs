@@ -131,6 +131,7 @@ namespace ClassicUO
             UseSeparateMouseThread = false,
             FixedTimeStep = false,
             TargetFps = 60,
+            AllowWindowManagement = false,
             AllowWindowResizing = false,
             EnableTextInput = true,
             AllowIdleSleep = false,
@@ -143,6 +144,7 @@ namespace ClassicUO
             UseSeparateMouseThread = Settings.GlobalSettings?.RunMouseInASeparateThread ?? true,
             FixedTimeStep = Settings.GlobalSettings?.FixedTimeStep ?? false,
             TargetFps = Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60,
+            AllowWindowManagement = true,
             AllowWindowResizing = true,
             EnableTextInput = true,
             AllowIdleSleep = true,
@@ -153,6 +155,7 @@ namespace ClassicUO
         public bool UseSeparateMouseThread { get; set; }
         public bool FixedTimeStep { get; set; }
         public int TargetFps { get; set; }
+        public bool AllowWindowManagement { get; set; }
         public bool AllowWindowResizing { get; set; }
         public bool EnableTextInput { get; set; }
         public bool AllowIdleSleep { get; set; }

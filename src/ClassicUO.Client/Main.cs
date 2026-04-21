@@ -389,16 +389,34 @@ namespace ClassicUO
 
                     case "lastcharactername":
                     case "lastcharname":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring last character override in browser mode.");
+                            break;
+                        }
+
                         LastCharacterManager.OverrideLastCharacter(value);
 
                         break;
 
                     case "lastservernum":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring last server number override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.LastServerNum = ushort.Parse(value);
 
                         break;
 
                     case "last_server_name":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring last server name override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.LastServerName = value;
                         break;
 

@@ -145,6 +145,12 @@ namespace ClassicUO.Configuration
                 settingsToSave.ScreenScale = 1f;
                 settingsToSave.Encryption = 0;
                 settingsToSave.IgnoreRelayIp = true;
+                settingsToSave.RunMouseInASeparateThread = false;
+                settingsToSave.FixedTimeStep = false;
+                settingsToSave.FPS = 60;
+                settingsToSave.IsWindowMaximized = false;
+                settingsToSave.WindowPosition = new Point(0, 0);
+                settingsToSave.WindowSize = new Point(1280, 720);
             }
 
             settingsToSave.ProfilesPath = string.Empty;

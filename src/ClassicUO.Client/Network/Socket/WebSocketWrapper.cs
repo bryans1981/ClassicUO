@@ -208,21 +208,33 @@ sealed class WebSocketWrapper : SocketWrapper
 
     public override void Disconnect()
     {
-        if (!IsConnected)
-            return;
+        if (_tokenSource != null && !_tokenSource.IsCancellationRequested)
+        {
+            _tokenSource.Cancel();
+        }
 
         try
         {
-            _webSocket?.CloseAsync(WebSocketCloseStatus.NormalClosure, "Disconnect", CancellationToken.None)
-                .ContinueWith(_ => _tokenSource?.Cancel());
+            if (_webSocket != null && _webSocket.State is WebSocketState.Open or WebSocketState.Connecting)
+            {
+                _webSocket.Abort();
+            }
         }
         catch
         {
-            _tokenSource?.Cancel();
+            // Best effort. The browser transport is expected to recover by reconnecting.
+        }
+        finally
+        {
+            _webSocket?.Dispose();
+            _webSocket = null;
+            _rawSocket?.Dispose();
+            _rawSocket = null;
         }
     }
 
     public override void Dispose()
     {
+        Disconnect();
     }
 }

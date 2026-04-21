@@ -1737,6 +1737,15 @@ namespace ClassicUO.Game.UI.Gumps
 
             _gameWindowHeight.SetText(camera.Bounds.Height.ToString());
 
+            if (PlatformHelper.IsBrowser)
+            {
+                _gameWindowFullsize.IsEnabled = false;
+                _gameWindowLock.IsEnabled = false;
+                _gameWindowPositionX.IsEnabled = false;
+                _gameWindowPositionY.IsEnabled = false;
+                _gameWindowWidth.IsEnabled = false;
+                _gameWindowHeight.IsEnabled = false;
+            }
 
             SettingsSection section2 = AddSettingsSection(box, "Zoom");
             section2.Y = section.Bounds.Bottom + 40;

@@ -490,3 +490,4 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-21: Browser startup now clears any saved plugin list in browser mode so the real client does not inherit desktop plugin state into the browser path.
 - 2026-04-21: The browser spike scripts track the optional websocket proxy by PID and `proxy.mjs` token, so start/stop can manage it reliably when Node deps are present.
 - 2026-04-21: Browser startup now forces the websocket proxy port to `2594` in browser mode so stale saved settings cannot keep the wrong shard port.
+- 2026-04-21: Browser startup now ignores custom `-settings` paths in browser mode so the browser client stays on the browser config root.

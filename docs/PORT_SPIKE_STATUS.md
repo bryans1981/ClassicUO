@@ -416,3 +416,4 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-21: Browser startup now clears any saved plugin list in browser mode so the browser path stays on the no-plugin bootstrap contract.
 - 2026-04-21: The browser spike scripts now track the optional websocket proxy by PID and `proxy.mjs` token so the local proxy can be started and stopped reliably.
 - 2026-04-21: Browser startup now forces the websocket proxy port to `2594` in browser mode so browser sessions stay aligned with the local proxy.
+- 2026-04-21: Browser startup now ignores custom `-settings` paths in browser mode so the browser path stays on the browser config root.

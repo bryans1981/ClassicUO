@@ -331,6 +331,12 @@ namespace ClassicUO
                         break;
 
                     case "port":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring port override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.Port = ushort.Parse(value);
 
                         break;
@@ -371,6 +377,12 @@ namespace ClassicUO
                         break;
 
                     case "clientversion":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring client version override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.ClientVersion = value;
 
                         break;

@@ -1562,6 +1562,7 @@ namespace ClassicUO.Game.UI.Gumps
         private void BuildVideo()
         {
             const int PAGE = 3;
+            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
 
             ScrollArea rightArea = new ScrollArea
             (
@@ -1600,7 +1601,7 @@ namespace ClassicUO.Game.UI.Gumps
                 startX,
                 startY
             );
-            if (PlatformHelper.IsBrowser)
+            if (!browserRuntimePolicy.ReduceFpsWhenInactive)
             {
                 _reduceFPSWhenInactive.IsEnabled = false;
             }
@@ -1618,7 +1619,7 @@ namespace ClassicUO.Game.UI.Gumps
             int gameWindowSectionBottom = startY;
             var camera = Client.Game.Scene.Camera;
 
-            if (!PlatformHelper.IsBrowser)
+            if (browserRuntimePolicy.AllowWindowManagement)
             {
                 SettingsSection section = AddSettingsSection(box, "Game window");
 
@@ -3683,7 +3684,7 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case 3: // video
-                    if (!PlatformHelper.IsBrowser)
+                    if (BrowserRuntimeBootstrap.GetRuntimePolicy().AllowWindowManagement)
                     {
                         _windowBorderless.IsChecked = false;
                         _gameWindowWidth.SetText("600");
@@ -3830,6 +3831,7 @@ namespace ClassicUO.Game.UI.Gumps
         private void Apply()
         {
             WorldViewportGump vp = UIManager.GetGump<WorldViewportGump>();
+            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
 
             // general
             if (Settings.GlobalSettings.FPS != _sliderFPS.Value)
@@ -4049,7 +4051,7 @@ namespace ClassicUO.Game.UI.Gumps
                 if (active && StatusGumpBase.GetStatusGump() != null && UIManager.GetGump<BaseHealthBarGump>(World.Player) is {} bar)
                     bar.Dispose();
             }
-            if (!PlatformHelper.IsBrowser)
+            if (browserRuntimePolicy.AllowWindowManagement)
             {
                 int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
                 int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);

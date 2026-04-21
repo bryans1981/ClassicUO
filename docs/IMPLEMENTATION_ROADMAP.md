@@ -533,3 +533,4 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-15: The no-click self-test runner now preflights the browser host and report receiver before opening Edge, which makes automated validation less sensitive to cold-start timing.
 - 2026-04-20: Main-project browser startup now defaults to browser-safe assets, profiles, config, and client version values in `ClassicUO.Client`. Next work should stay in the real client path and avoid adding more experiment-launcher layers.
 - 2026-04-20: Browser crash logs and screenshots now route to browser cache roots in the main client, removing another desktop-only path assumption from the browser execution path.
+- 2026-04-21: Browser startup can optionally bring up the local websocket proxy from `tools/ws` through the spike start/stop scripts when Node dependencies are present. The active browser endpoint remains `ws://127.0.0.1:2594`.

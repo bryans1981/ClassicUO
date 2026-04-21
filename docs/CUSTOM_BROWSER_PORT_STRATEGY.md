@@ -293,3 +293,5 @@ We should stop the port if any of these prove false:
 3. We cannot establish a realistic rendering path without rewriting too much of the client.
 
 If Gate 3 fails, the fallback should be a browser-streamed desktop solution rather than continuing a bad port.
+
+For the local browser spike, the optional websocket proxy is expected at `ws://127.0.0.1:2594` and is managed by the spike start/stop scripts when `tools/ws` Node dependencies are present.

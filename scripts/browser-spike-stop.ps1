@@ -1,4 +1,6 @@
 $projectRoot = Split-Path -Parent $PSScriptRoot
+$proxyProjectRoot = Join-Path $projectRoot 'tools\ws'
+$proxyPidFile = Join-Path $projectRoot 'tools\ws\.wsproxy.pid'
 $pidFile = Join-Path $projectRoot 'experiments\BrowserHost\.browserhost.pid'
 $reportPidFile = Join-Path $projectRoot 'experiments\BrowserHost.ReportHost\.reporthost.pid'
 
@@ -27,4 +29,16 @@ if (Test-Path $reportPidFile) {
     }
 
     Remove-Item $reportPidFile -Force -ErrorAction SilentlyContinue
+}
+
+if (Test-Path $proxyPidFile) {
+    $proxyProcessId = Get-Content $proxyPidFile -ErrorAction SilentlyContinue
+    if ($proxyProcessId -and (Get-Process -Id $proxyProcessId -ErrorAction SilentlyContinue)) {
+        Stop-Process -Id $proxyProcessId -Force
+        Write-Host "Stopped websocket proxy process $proxyProcessId."
+    } else {
+        Write-Host 'No running websocket proxy process was found.'
+    }
+
+    Remove-Item $proxyPidFile -Force -ErrorAction SilentlyContinue
 }

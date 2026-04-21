@@ -6,6 +6,8 @@ param(
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $projectPath = Join-Path $projectRoot 'experiments\BrowserHost\BrowserHost.csproj'
 $reportProjectPath = Join-Path $projectRoot 'experiments\BrowserHost.ReportHost\BrowserHost.ReportHost.csproj'
+$proxyProjectRoot = Join-Path $projectRoot 'tools\ws'
+$proxyPidFile = Join-Path $projectRoot 'tools\ws\.wsproxy.pid'
 $pidFile = Join-Path $projectRoot 'experiments\BrowserHost\.browserhost.pid'
 $reportPidFile = Join-Path $projectRoot 'experiments\BrowserHost.ReportHost\.reporthost.pid'
 
@@ -56,6 +58,29 @@ if (Test-Path $reportPidFile) {
     }
 }
 
+$proxyProc = $null
+if (Test-Path $proxyPidFile) {
+    $existingProxyPid = Get-Content $proxyPidFile -ErrorAction SilentlyContinue
+    if (Test-ManagedProcess -PidValue $existingProxyPid -ExpectedProjectPath $proxyProjectRoot) {
+        Write-Host "Local websocket proxy is already running at ws://127.0.0.1:2594 (PID $existingProxyPid)."
+    } else {
+        Remove-Item $proxyPidFile -Force -ErrorAction SilentlyContinue
+    }
+}
+
+$proxyNode = Get-Command node -ErrorAction SilentlyContinue
+if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $proxyProjectRoot 'node_modules')))
+{
+    $proxyProc = Start-Process node -ArgumentList "proxy.mjs" -WorkingDirectory $proxyProjectRoot -PassThru
+    $proxyProc.Id | Set-Content $proxyPidFile
+    Write-Host "Local websocket proxy URL: ws://127.0.0.1:2594"
+    Write-Host "Local websocket proxy PID: $($proxyProc.Id)"
+}
+elseif (-not (Test-Path (Join-Path $proxyProjectRoot 'node_modules')))
+{
+    Write-Host "Local websocket proxy dependencies are not installed yet. Run `npm install` in tools\ws to enable ws://127.0.0.1:2594."
+}
+
 $reportProc = $null
 if (-not (Test-Path $reportPidFile)) {
     $reportProc = Start-Process dotnet -ArgumentList "run --project `"$reportProjectPath`" --no-launch-profile --urls $ReportUrl" -WorkingDirectory $projectRoot -PassThru
@@ -71,5 +96,9 @@ Write-Host "PID: $($proc.Id)"
 if ($reportProc) {
     Write-Host "Report receiver URL: $ReportUrl"
     Write-Host "Report receiver PID: $($reportProc.Id)"
+}
+if ($proxyProc) {
+    Write-Host "Local websocket proxy URL: ws://127.0.0.1:2594"
+    Write-Host "Local websocket proxy PID: $($proxyProc.Id)"
 }
 Write-Host "To stop it, run: .\\scripts\\browser-spike-stop.ps1"

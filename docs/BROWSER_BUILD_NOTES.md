@@ -266,3 +266,5 @@ Still missing or non-public:
 - Browser runtime artifacts and bootstrap
 - Full asset delivery implementation used by the official web client
 - Auth/session/backend stack used by the official service
+
+The local browser spike now also has an optional test websocket proxy in `tools/ws`, managed by `scripts/browser-spike-start.ps1` and `scripts/browser-spike-stop.ps1` when Node dependencies are installed.

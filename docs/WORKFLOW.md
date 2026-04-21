@@ -486,3 +486,4 @@ Generated the fifth 20-layer browser runtime batch through confirmation/completi
 - 2026-04-15: The no-click browser self-test runner now waits for the browser host and report receiver to answer before opening Edge, reducing false timeouts on cold starts.
 - 2026-04-20: Browser focus is moving back to the main `ClassicUO.Client` project. Browser startup now defaults to browser-safe assets, profiles, config, and client version values inside the real client entrypoint instead of keeping the experiment launcher active.
 - 2026-04-20: The main client now routes browser crash logs and screenshots into browser cache roots as part of the real client path, instead of using desktop executable-folder assumptions.
+- 2026-04-21: The browser spike start/stop scripts can optionally launch and stop the local websocket proxy in `tools/ws` when Node dependencies are installed. Browser startup now expects `ws://127.0.0.1:2594` by default.

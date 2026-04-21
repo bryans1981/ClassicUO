@@ -538,6 +538,11 @@ namespace ClassicUO
                         break;
 
                     case "packetlog":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring packet log in browser mode.");
+                            break;
+                        }
 
                         PacketLogger.Default.Enabled = true;
                         PacketLogger.Default.CreateFile();

@@ -550,4 +550,6 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-21: Browser startup now normalizes `ClientVersion` to a valid default in `BrowserRuntimeBootstrap`.
 - 2026-04-21: Browser game startup now skips the redundant desktop window-positioning call in `GameController`.
 - 2026-04-21: Browser shutdown now skips the desktop plugin closing hook in `GameController`.
+- 2026-04-21: Browser frame updates now skip plugin tick/draw processing when plugins are not loaded.
+- 2026-04-21: Browser frame loop now skips plugin tick/draw work when plugins are not initialized.
 - 2026-04-21: Browser mode now skips `UltimaLive.Enable()` during asset load so the browser client stays on the browser-safe runtime path.

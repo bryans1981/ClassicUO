@@ -461,7 +461,10 @@ namespace ClassicUO
             NetClient.Socket.Statistics.TotalPacketsReceived += (uint)packetsCount;
             NetClient.Socket.Flush();
 
-            Plugin.Tick();
+            if (!PlatformHelper.IsBrowser || _pluginsInitialized)
+            {
+                Plugin.Tick();
+            }
 
             if (Scene != null && Scene.IsLoaded && !Scene.IsDestroyed)
             {
@@ -592,7 +595,10 @@ namespace ClassicUO
             Profiler.ExitContext(Profiler.ProfilerContext.RENDER_FRAME);
             Profiler.EnterContext(Profiler.ProfilerContext.OUT_OF_CONTEXT);
 
-            Plugin.ProcessDrawCmdList(GraphicsDevice);
+            if (!PlatformHelper.IsBrowser || _pluginsInitialized)
+            {
+                Plugin.ProcessDrawCmdList(GraphicsDevice);
+            }
 
             base.Draw(gameTime);
         }

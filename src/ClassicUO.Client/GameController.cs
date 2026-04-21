@@ -268,6 +268,11 @@ namespace ClassicUO
 
         private void SetWindowPosition(int x, int y)
         {
+            if (PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
             SDL_SetWindowPosition(Window.Handle, x, y);
         }
 
@@ -290,6 +295,11 @@ namespace ClassicUO
 
         public void SetWindowBorderless(bool borderless)
         {
+            if (PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
             SDL_WindowFlags flags = (SDL_WindowFlags)SDL_GetWindowFlags(Window.Handle);
 
             if ((flags & SDL_WindowFlags.SDL_WINDOW_BORDERLESS) != 0 && borderless)
@@ -342,6 +352,11 @@ namespace ClassicUO
 
         public void MaximizeWindow()
         {
+            if (PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
             SDL_MaximizeWindow(Window.Handle);
 
             GraphicManager.PreferredBackBufferWidth = Client.Game.Window.ClientBounds.Width;
@@ -351,6 +366,11 @@ namespace ClassicUO
 
         public bool IsWindowMaximized()
         {
+            if (PlatformHelper.IsBrowser)
+            {
+                return false;
+            }
+
             SDL_WindowFlags flags = (SDL_WindowFlags)SDL_GetWindowFlags(Window.Handle);
 
             return (flags & SDL_WindowFlags.SDL_WINDOW_MAXIMIZED) != 0;
@@ -358,6 +378,11 @@ namespace ClassicUO
 
         public void RestoreWindow()
         {
+            if (PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
             SDL_RestoreWindow(Window.Handle);
         }
 

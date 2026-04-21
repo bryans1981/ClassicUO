@@ -325,17 +325,35 @@ namespace ClassicUO
 
                     case "filesoverride":
                     case "uofilesoverride":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring files override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.OverrideFile = value;
 
                         break;
 
                     case "ultimaonlinedirectory":
                     case "uopath":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring Ultima Online directory override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.UltimaOnlineDirectory = value;
 
                         break;
 
                     case "profilespath":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring profiles path override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.ProfilesPath = value;
 
                         break;
@@ -435,6 +453,12 @@ namespace ClassicUO
                         break;
 
                     case "plugins":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring plugin list in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.Plugins = string.IsNullOrEmpty(value) ? new string[0] : value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
                         break;
@@ -456,6 +480,12 @@ namespace ClassicUO
                         break;
 
                     case "force_driver":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring graphics driver selection in browser mode.");
+                            break;
+                        }
+
                         if (byte.TryParse(value, out byte res))
                         {
                             switch (res)

@@ -50,6 +50,7 @@ namespace ClassicUO
 
             Settings.GlobalSettings.WindowPosition = new Point(0, 0);
             Settings.GlobalSettings.WindowSize = new Point(1280, 720);
+            Settings.GlobalSettings.IgnoreRelayIp = true;
         }
 
         public static void ApplyBrowserRuntimePolicy()

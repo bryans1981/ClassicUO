@@ -38,10 +38,10 @@ sealed class WebSocketWrapper : SocketWrapper
     {
         var copy = Shared.Rent(count);
         Buffer.BlockCopy(buffer, offset, copy, 0, count);
-        _ = SendCopyAsync(copy, count);
+        SendCopy(copy, count);
     }
 
-    private async Task SendCopyAsync(byte[] copy, int count)
+    private void SendCopy(byte[] copy, int count)
     {
         try
         {
@@ -50,7 +50,9 @@ sealed class WebSocketWrapper : SocketWrapper
                 return;
             }
 
-            await _webSocket.SendAsync(copy.AsMemory().Slice(0, count), WebSocketMessageType.Binary, true, _tokenSource.Token);
+            _webSocket.SendAsync(copy.AsMemory().Slice(0, count), WebSocketMessageType.Binary, true, _tokenSource.Token)
+                .GetAwaiter()
+                .GetResult();
         }
         catch (OperationCanceledException)
         {

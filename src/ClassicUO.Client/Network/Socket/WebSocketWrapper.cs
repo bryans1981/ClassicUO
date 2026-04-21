@@ -32,7 +32,7 @@ sealed class WebSocketWrapper : SocketWrapper
     private CancellationTokenSource _tokenSource = new();
     private CircularBuffer _receiveStream;
 
-    public override void Connect(Uri uri) => ConnectAsync(uri, _tokenSource).Wait();
+    public override void Connect(Uri uri) => ConnectAsync(uri).Wait();
 
     public override void Send(byte[] buffer, int offset, int count)
     {
@@ -92,7 +92,9 @@ sealed class WebSocketWrapper : SocketWrapper
         if (IsConnected)
             return;
 
-        _tokenSource = tokenSource ?? new CancellationTokenSource();
+        _tokenSource = tokenSource == null || tokenSource.IsCancellationRequested
+            ? new CancellationTokenSource()
+            : tokenSource;
         _receiveStream = new CircularBuffer();
         _disconnectNotified = 0;
 

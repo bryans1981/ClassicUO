@@ -22,6 +22,7 @@ sealed class WebSocketWrapper : SocketWrapper
 
     private ClientWebSocket _webSocket;
     private TcpSocket _rawSocket;
+    private Task _receiveTask;
 
     public override bool IsConnected => _webSocket?.State is WebSocketState.Connecting or WebSocketState.Open;
     public override EndPoint LocalEndPoint => _rawSocket?.LocalEndPoint;
@@ -167,8 +168,8 @@ sealed class WebSocketWrapper : SocketWrapper
 
         Log.Trace($"Connected WebSocket: {uri}");
 
-        // Kicks off the async receiving loop 
-        StartReceiveAsync().ConfigureAwait(false);
+        // Keep the receive loop alive for the lifetime of the websocket connection.
+        _receiveTask = StartReceiveAsync();
     }
 
     private async Task StartReceiveAsync()

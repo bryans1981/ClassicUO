@@ -403,6 +403,12 @@ namespace ClassicUO
                         break;
 
                     case "fps":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring FPS override in browser mode.");
+                            break;
+                        }
+
                         int v = int.Parse(value);
 
                         if (v < Constants.MIN_FPS)

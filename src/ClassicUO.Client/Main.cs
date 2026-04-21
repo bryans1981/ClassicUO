@@ -308,16 +308,34 @@ namespace ClassicUO
                         break;
 
                     case "username":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring username override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.Username = value;
 
                         break;
 
                     case "password":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring password override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.Password = Crypter.Encrypt(value);
 
                         break;
 
                     case "password_enc": // Non-standard setting, similar to `password` but for already encrypted password
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring encrypted password override in browser mode.");
+                            break;
+                        }
+
                         Settings.GlobalSettings.Password = value;
 
                         break;

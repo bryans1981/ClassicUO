@@ -164,7 +164,7 @@ namespace ClassicUO
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
+            if (!PlatformHelper.IsBrowser && string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
             {
                 Settings.GlobalSettings.UltimaOnlineDirectory = CUOEnviroment.ExecutablePath;
             }

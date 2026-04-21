@@ -40,15 +40,8 @@ namespace ClassicUO
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
-            {
-                Settings.GlobalSettings.UltimaOnlineDirectory = BrowserVirtualPaths.AssetsRoot;
-            }
-
-            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
-            {
-                Settings.GlobalSettings.ProfilesPath = BrowserVirtualPaths.ProfilesRoot;
-            }
+            Settings.GlobalSettings.UltimaOnlineDirectory = BrowserVirtualPaths.AssetsRoot;
+            Settings.GlobalSettings.ProfilesPath = BrowserVirtualPaths.ProfilesRoot;
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion))
             {

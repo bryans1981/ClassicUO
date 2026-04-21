@@ -3592,6 +3592,8 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void SetDefault()
         {
+            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
+
             switch (ActivePage)
             {
                 case 1: // general
@@ -3684,7 +3686,7 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case 3: // video
-                    if (BrowserRuntimeBootstrap.GetRuntimePolicy().AllowWindowManagement)
+                    if (browserRuntimePolicy.AllowWindowManagement)
                     {
                         _windowBorderless.IsChecked = false;
                         _gameWindowWidth.SetText("600");

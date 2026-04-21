@@ -431,5 +431,5 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-21: Browser shutdown now skips the desktop plugin closing hook in `GameController`.
 - 2026-04-21: Browser frame updates now skip plugin tick/draw processing when plugins are not loaded.
 - 2026-04-21: Browser frame loop now skips plugin tick/draw work when plugins are not initialized.
-- 2026-04-21: Browser startup now normalizes desktop gameplay toggles like save-account, auto-login, reconnect, reconnect timing, login music, maps layouts, the saved server selection, the saved files override, saved credentials, screen scale, encryption, and the separate mouse-thread setting, and the parser now ignores direct username/password and screen-scale overrides in browser mode.
+- 2026-04-21: Browser startup now normalizes desktop gameplay toggles like save-account, auto-login, reconnect, reconnect timing, login music, maps layouts, the saved server selection, the saved files override, saved credentials, screen scale, encryption, the separate mouse-thread setting, and relay-IP handling, and the parser now ignores direct username/password and screen-scale overrides in browser mode.
 - 2026-04-21: Browser mode now skips `UltimaLive.Enable()` during asset load so the browser path stays browser-safe.

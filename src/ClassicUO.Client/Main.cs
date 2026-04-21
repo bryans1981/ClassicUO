@@ -362,6 +362,17 @@ namespace ClassicUO
 
                         break;
 
+                    case "ignore_relay_ip":
+                        if (PlatformHelper.IsBrowser)
+                        {
+                            Log.Trace("Ignoring relay-IP override in browser mode.");
+                            break;
+                        }
+
+                        Settings.GlobalSettings.IgnoreRelayIp = bool.Parse(value);
+
+                        break;
+
                     case "filesoverride":
                     case "uofilesoverride":
                         if (PlatformHelper.IsBrowser)

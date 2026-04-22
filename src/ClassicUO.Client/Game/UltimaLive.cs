@@ -47,6 +47,12 @@ namespace ClassicUO.Game
 
         public static void Enable()
         {
+            if (ClassicUO.Utility.Platforms.PlatformHelper.IsBrowser)
+            {
+                Log.Trace("Skipping UltimaLive setup in browser mode.");
+                return;
+            }
+
             Log.Trace("Setup packet for UltimaLive");
             PacketHandlers.Handler.Add(0x3F, OnUltimaLivePacket);
             PacketHandlers.Handler.Add(0x40, OnUpdateTerrainPacket);

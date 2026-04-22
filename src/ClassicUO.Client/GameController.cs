@@ -487,7 +487,7 @@ namespace ClassicUO
             }
 
             bool reduceFpsWhenInactive =
-                _browserRuntimePolicy.ReduceFpsWhenInactive
+                !PlatformHelper.IsBrowser
                 && !IsActive
                 && ProfileManager.CurrentProfile != null
                 && ProfileManager.CurrentProfile.ReduceFPSWhenInactive;
@@ -504,7 +504,7 @@ namespace ClassicUO
                 _suppressedDraw = true;
                 SuppressDraw();
 
-                if (_browserRuntimePolicy.AllowIdleSleep && !gameTime.IsRunningSlowly)
+                if (!PlatformHelper.IsBrowser && !gameTime.IsRunningSlowly)
                 {
                     Thread.Sleep(1);
                 }

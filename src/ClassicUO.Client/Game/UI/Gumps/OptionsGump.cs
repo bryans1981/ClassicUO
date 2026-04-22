@@ -1601,7 +1601,7 @@ namespace ClassicUO.Game.UI.Gumps
                 startX,
                 startY
             );
-            if (!browserRuntimePolicy.ReduceFpsWhenInactive)
+            if (PlatformHelper.IsBrowser)
             {
                 _reduceFPSWhenInactive.IsEnabled = false;
             }

@@ -230,20 +230,17 @@ namespace ClassicUO
             {
                 Log.Trace($"Browser bootstrap: storageConfigured={browserBootstrapState.StorageConfigured}, assets={browserBootstrapState.AssetsRootPath}, profiles={browserBootstrapState.ProfilesRootPath}, cache={browserBootstrapState.CacheRootPath}, config={browserBootstrapState.ConfigRootPath}");
 
-                if (!PlatformHelper.IsBrowser)
+                switch (Settings.GlobalSettings.ForceDriver)
                 {
-                    switch (Settings.GlobalSettings.ForceDriver)
-                    {
-                        case 1: // OpenGL
-                            Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "OpenGL");
+                    case 1: // OpenGL
+                        Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "OpenGL");
 
-                            break;
+                        break;
 
-                        case 2: // Vulkan
-                            Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "Vulkan");
+                    case 2: // Vulkan
+                        Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "Vulkan");
 
-                            break;
-                    }
+                        break;
                 }
 
                 Client.Run(pluginHost, browserBootstrapState);

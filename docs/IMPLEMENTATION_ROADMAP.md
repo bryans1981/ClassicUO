@@ -128,6 +128,7 @@ Current status:
 - Browser mode now drives the browser refresh rate directly during initialization, so browser loop timing is owned by the real client path.
 - Browser mode now writes browser defaults back into `Settings.GlobalSettings` during startup, so browser defaults are visible to the rest of the real client.
 - Browser window-size updates now rely on the resize flag directly instead of an extra browser branch in `GameController`, so browser window handling stays aligned with the startup defaults.
+- `GameController` now reads the browser-normalized settings values directly for mouse input, fixed timestep, target FPS, and text input, so the browser startup defaults flow straight into the real client loop.
 - The browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path.
 - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
 - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer.

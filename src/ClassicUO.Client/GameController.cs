@@ -59,10 +59,10 @@ namespace ClassicUO
             Window.ClientSizeChanged += WindowOnClientSizeChanged;
             Window.AllowUserResizing = !PlatformHelper.IsBrowser;
             Window.Title = $"ClassicUO - {CUOEnviroment.Version}";
-            IsMouseVisible = PlatformHelper.IsBrowser ? false : (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true);
+            IsMouseVisible = Settings.GlobalSettings?.RunMouseInASeparateThread ?? true;
 
-            IsFixedTimeStep = PlatformHelper.IsBrowser ? false : (Settings.GlobalSettings?.FixedTimeStep ?? false);
-            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, PlatformHelper.IsBrowser ? 60 : (Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60)));
+            IsFixedTimeStep = Settings.GlobalSettings?.FixedTimeStep ?? false;
+            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60));
             PluginHost = pluginHost;
         }
 
@@ -115,13 +115,13 @@ namespace ClassicUO
                 }
             }
 
-            SetRefreshRate(PlatformHelper.IsBrowser ? 60 : Settings.GlobalSettings.FPS);
+            SetRefreshRate(Settings.GlobalSettings.FPS);
             _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
 
             _filter = HandleSdlEvent;
             SDL_SetEventFilter(_filter, IntPtr.Zero);
 
-            if (PlatformHelper.IsBrowser || (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true))
+            if (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true)
             {
                 Microsoft.Xna.Framework.Input.TextInputEXT.StartTextInput();
             }

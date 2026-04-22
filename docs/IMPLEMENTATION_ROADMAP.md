@@ -568,6 +568,7 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-21: Browser startup now ignores custom `-settings` paths in browser mode so the browser client stays on the browser config root.
 - 2026-04-22: Browser startup now skips the desktop UO-directory and client-version validation branch entirely in browser mode because the bootstrap path owns those values.
 - 2026-04-22: Browser startup validation failures no longer try to launch an external browser.
+- 2026-04-22: Browser game startup now calls the shared window-position helper directly, which still no-ops in browser mode but removes a redundant browser branch.
 - 2026-04-21: Browser startup now ignores browser-inapplicable CLI overrides such as `-ip`, `-port`, `-clientversion`, `-filesoverride`, `-uopath`, `-profilespath`, `-plugins`, `-force_driver`, `-highdpi`, `-packetlog`, `-debug`, `-profiler`, `-saveaccount`, `-autologin`, `-reconnect`, `-reconnect_time`, `-login_music`, `-music`, `-login_music_volume`, `-fixed_time_step`, `-fps`, `-skiploginscreen`, `-lastcharactername`, `-lastcharname`, `-lastservernum`, `-last_server_name`, `-language`, `-use_verdata`, `-maps_layouts`, `-encryption`, and `-no_server_ping`, so the browser client stays on the browser transport and storage path.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.
 - 2026-04-21: Browser startup now forces `UseVerdata = false` so the browser client stays off desktop verdata loading paths.

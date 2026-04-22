@@ -42,6 +42,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - browser window-size updates now rely on the resize flag directly instead of an extra browser branch in `GameController`, so browser window handling stays aligned with the startup defaults
 - `GameController` now reads the browser-normalized settings values directly for mouse input, fixed timestep, target FPS, and text input, so the browser startup defaults flow straight into the real client loop
 - `GameController` now logs the browser bootstrap state whenever it is present, without a separate browser-mode gate in the initialize path
+- the browser startup path now owns the browser defaults directly; `Main` no longer applies a separate browser runtime-policy step after startup validation
 - the browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path
 - the browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions
 - the browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer

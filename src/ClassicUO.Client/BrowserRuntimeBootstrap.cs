@@ -83,19 +83,6 @@ namespace ClassicUO
             Settings.GlobalSettings.IgnoreRelayIp = true;
         }
 
-        public static void ApplyBrowserRuntimePolicy()
-        {
-            if (!PlatformHelper.IsBrowser)
-            {
-                return;
-            }
-
-            Settings.GlobalSettings.RunMouseInASeparateThread = false;
-            Settings.GlobalSettings.FixedTimeStep = false;
-            Settings.GlobalSettings.FPS = 60;
-            Settings.GlobalSettings.IsWindowMaximized = false;
-        }
-
         public static void ApplyBrowserProfileDefaults(Profile profile)
         {
             if (!PlatformHelper.IsBrowser || profile == null)

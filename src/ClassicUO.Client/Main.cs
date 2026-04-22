@@ -21,6 +21,9 @@ namespace ClassicUO
 {
     internal static class Bootstrap
     {
+        private const uint INVALID_UO_DIRECTORY = 0x100;
+        private const uint INVALID_UO_VERSION = 0x200;
+
         [UnmanagedCallersOnly(EntryPoint = "Initialize", CallConvs = new Type[] { typeof(CallConvCdecl) })]
         static unsafe void Initialize(IntPtr* argv, int argc, HostBindings* hostSetup)
         {
@@ -156,46 +159,7 @@ namespace ClassicUO
                 Settings.GlobalSettings.UltimaOnlineDirectory = CUOEnviroment.ExecutablePath;
             }
 
-            const uint INVALID_UO_DIRECTORY = 0x100;
-            const uint INVALID_UO_VERSION = 0x200;
-
-            uint flags = 0;
-
-            if (PlatformHelper.IsBrowser)
-            {
-                Log.Trace("Browser startup: skipping desktop UO-directory and client-version validation.");
-            }
-            else
-            {
-                if (!FileSystemHelper.DirectoryExists(Settings.GlobalSettings.UltimaOnlineDirectory) || !FileSystemHelper.FileExists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
-                {
-                    flags |= INVALID_UO_DIRECTORY;
-                }
-
-                string clientVersionText = Settings.GlobalSettings.ClientVersion;
-
-                if (!ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out ClientVersion clientVersion))
-                {
-                    Log.Warn($"Client version [{clientVersionText}] is invalid, let's try to read the client.exe");
-
-                    if (
-                        !ClientVersionHelper.TryParseFromFile(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "client.exe"), out clientVersionText) ||
-                        !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion)
-                    )
-                    {
-                        Log.Error("Invalid client version: " + clientVersionText);
-
-                        flags |= INVALID_UO_VERSION;
-                    }
-                    else
-                    {
-                        Log.Trace($"Found a valid client.exe [{clientVersionText} - {clientVersion}]");
-
-                        // update the wrong/missing client version in settings.json
-                        Settings.GlobalSettings.ClientVersion = clientVersionText;
-                    }
-                }
-            }
+            uint flags = ValidateDesktopClientInstallation();
 
             if (flags != 0)
             {
@@ -744,6 +708,48 @@ namespace ClassicUO
             Environment.SetEnvironmentVariable("FNA3D_OPENGL_FORCE_COMPATIBILITY_PROFILE", "1");
             Environment.SetEnvironmentVariable(SDL.SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
             Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins"));
+        }
+
+        private static uint ValidateDesktopClientInstallation()
+        {
+            if (PlatformHelper.IsBrowser)
+            {
+                Log.Trace("Browser startup: skipping desktop UO-directory and client-version validation.");
+                return 0;
+            }
+
+            uint flags = 0;
+
+            if (!FileSystemHelper.DirectoryExists(Settings.GlobalSettings.UltimaOnlineDirectory) || !FileSystemHelper.FileExists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
+            {
+                flags |= INVALID_UO_DIRECTORY;
+            }
+
+            string clientVersionText = Settings.GlobalSettings.ClientVersion;
+
+            if (!ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out ClientVersion clientVersion))
+            {
+                Log.Warn($"Client version [{clientVersionText}] is invalid, let's try to read the client.exe");
+
+                if (
+                    !ClientVersionHelper.TryParseFromFile(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "client.exe"), out clientVersionText) ||
+                    !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion)
+                )
+                {
+                    Log.Error("Invalid client version: " + clientVersionText);
+
+                    flags |= INVALID_UO_VERSION;
+                }
+                else
+                {
+                    Log.Trace($"Found a valid client.exe [{clientVersionText} - {clientVersion}]");
+
+                    // update the wrong/missing client version in settings.json
+                    Settings.GlobalSettings.ClientVersion = clientVersionText;
+                }
+            }
+
+            return flags;
         }
 
     }

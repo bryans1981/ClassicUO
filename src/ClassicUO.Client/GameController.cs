@@ -32,7 +32,6 @@ namespace ClassicUO
 
         private bool _ignoreNextTextInput;
         private readonly BrowserRuntimeBootstrapState _browserBootstrapState;
-        private readonly BrowserRuntimePolicy _browserRuntimePolicy;
         private readonly float[] _intervalFixedUpdate = new float[2];
         private double _totalElapsed, _currentFpsTime;
         private uint _totalFrames;
@@ -46,7 +45,6 @@ namespace ClassicUO
         public GameController(IPluginHost pluginHost, BrowserRuntimeBootstrapState browserBootstrapState = null)
         {
             _browserBootstrapState = browserBootstrapState;
-            _browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
             GraphicManager = new GraphicsDeviceManager(this);
 
             GraphicManager.PreparingDeviceSettings += (sender, e) =>
@@ -59,12 +57,12 @@ namespace ClassicUO
             SetVSync(false);
 
             Window.ClientSizeChanged += WindowOnClientSizeChanged;
-            Window.AllowUserResizing = _browserRuntimePolicy.AllowWindowResizing;
+            Window.AllowUserResizing = !PlatformHelper.IsBrowser;
             Window.Title = $"ClassicUO - {CUOEnviroment.Version}";
-            IsMouseVisible = _browserRuntimePolicy.UseSeparateMouseThread;
+            IsMouseVisible = PlatformHelper.IsBrowser ? false : (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true);
 
-            IsFixedTimeStep = _browserRuntimePolicy.FixedTimeStep;
-            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, _browserRuntimePolicy.TargetFps));
+            IsFixedTimeStep = PlatformHelper.IsBrowser ? false : (Settings.GlobalSettings?.FixedTimeStep ?? false);
+            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, PlatformHelper.IsBrowser ? 60 : (Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60)));
             PluginHost = pluginHost;
         }
 
@@ -109,7 +107,7 @@ namespace ClassicUO
             if (PlatformHelper.IsBrowser && _browserBootstrapState != null)
             {
                 Log.Trace($"Browser startup contract consumed: storageConfigured={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}");
-                Log.Trace($"Browser runtime policy: mouseThread={_browserRuntimePolicy.UseSeparateMouseThread}, fixedTimeStep={_browserRuntimePolicy.FixedTimeStep}, targetFps={_browserRuntimePolicy.TargetFps}");
+                Log.Trace($"Browser runtime policy: mouseThread=false, fixedTimeStep=false, targetFps=60");
 
                 if (!_browserBootstrapState.StorageConfigured)
                 {
@@ -117,13 +115,13 @@ namespace ClassicUO
                 }
             }
 
-            SetRefreshRate(PlatformHelper.IsBrowser ? _browserRuntimePolicy.TargetFps : Settings.GlobalSettings.FPS);
+            SetRefreshRate(PlatformHelper.IsBrowser ? 60 : Settings.GlobalSettings.FPS);
             _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
 
             _filter = HandleSdlEvent;
             SDL_SetEventFilter(_filter, IntPtr.Zero);
 
-            if (_browserRuntimePolicy.EnableTextInput)
+            if (PlatformHelper.IsBrowser || (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true))
             {
                 Microsoft.Xna.Framework.Input.TextInputEXT.StartTextInput();
             }
@@ -152,7 +150,7 @@ namespace ClassicUO
             // TODO: temporary fix to avoid crash when laoding plugins
             Settings.GlobalSettings.Encryption = (byte) NetClient.Socket.Load(UO.FileManager.Version, (EncryptionType) Settings.GlobalSettings.Encryption);
 
-            if (!_browserRuntimePolicy.LoadPlugins)
+            if (PlatformHelper.IsBrowser)
             {
                 Log.Trace("Skipping plugin loading in browser mode.");
             }

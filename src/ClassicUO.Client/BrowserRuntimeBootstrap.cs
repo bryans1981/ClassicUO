@@ -26,13 +26,6 @@ namespace ClassicUO
             };
         }
 
-        public static BrowserRuntimePolicy GetRuntimePolicy()
-        {
-            return PlatformHelper.IsBrowser
-                ? BrowserRuntimePolicy.BrowserDefault
-                : BrowserRuntimePolicy.DesktopDefault;
-        }
-
         public static void ApplyBrowserStartupDefaults()
         {
             if (!PlatformHelper.IsBrowser)
@@ -97,10 +90,9 @@ namespace ClassicUO
                 return;
             }
 
-            BrowserRuntimePolicy policy = GetRuntimePolicy();
-            Settings.GlobalSettings.RunMouseInASeparateThread = policy.UseSeparateMouseThread;
-            Settings.GlobalSettings.FixedTimeStep = policy.FixedTimeStep;
-            Settings.GlobalSettings.FPS = policy.TargetFps;
+            Settings.GlobalSettings.RunMouseInASeparateThread = false;
+            Settings.GlobalSettings.FixedTimeStep = false;
+            Settings.GlobalSettings.FPS = 60;
             Settings.GlobalSettings.IsWindowMaximized = false;
         }
 
@@ -155,42 +147,4 @@ namespace ClassicUO
         public string ClientVersion { get; set; } = string.Empty;
     }
 
-    internal sealed class BrowserRuntimePolicy
-    {
-        public static BrowserRuntimePolicy BrowserDefault { get; } = new BrowserRuntimePolicy
-        {
-            UseSeparateMouseThread = false,
-            FixedTimeStep = false,
-            TargetFps = 60,
-            AllowWindowManagement = false,
-            AllowWindowResizing = false,
-            EnableTextInput = true,
-            AllowIdleSleep = false,
-            ReduceFpsWhenInactive = false,
-            LoadPlugins = false
-        };
-
-        public static BrowserRuntimePolicy DesktopDefault { get; } = new BrowserRuntimePolicy
-        {
-            UseSeparateMouseThread = Settings.GlobalSettings?.RunMouseInASeparateThread ?? true,
-            FixedTimeStep = Settings.GlobalSettings?.FixedTimeStep ?? false,
-            TargetFps = Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60,
-            AllowWindowManagement = true,
-            AllowWindowResizing = true,
-            EnableTextInput = true,
-            AllowIdleSleep = true,
-            ReduceFpsWhenInactive = true,
-            LoadPlugins = true
-        };
-
-        public bool UseSeparateMouseThread { get; set; }
-        public bool FixedTimeStep { get; set; }
-        public int TargetFps { get; set; }
-        public bool AllowWindowManagement { get; set; }
-        public bool AllowWindowResizing { get; set; }
-        public bool EnableTextInput { get; set; }
-        public bool AllowIdleSleep { get; set; }
-        public bool ReduceFpsWhenInactive { get; set; }
-        public bool LoadPlugins { get; set; }
-    }
 }

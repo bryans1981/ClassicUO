@@ -174,11 +174,11 @@ The default operator interaction for this project is:
 - The browser startup helper now lives in `ClassicUO.Client` as `BrowserRuntimeBootstrap`, which owns browser-safe defaults, provider checks, and future storage attachment hooks.
 - `BrowserRuntimeBootstrap` now also captures a browser bootstrap state snapshot so the real client has an explicit browser-startup contract in the main project.
 - The browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the real client consumes the browser startup contract instead of only capturing it.
-- The browser runtime policy is now explicit in the main client and consumed by `GameController`, so browser render and input defaults live in the real client path.
-- The browser runtime policy now also owns browser window resizing and text-input startup defaults, so the real client controls the browser-facing runtime behavior directly.
-- The browser runtime policy now also disables idle sleep in browser mode, so the real client keeps browser timing under its own control instead of using desktop-style sleep behavior.
-- The browser runtime policy now also drives the browser refresh rate in `GameController`, so the real client owns the runtime loop timing instead of re-reading the desktop settings value during initialization.
-- The browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so the browser defaults are visible to the rest of the real client instead of only `GameController`.
+- The browser defaults are now owned directly by the bootstrap path and consumed by `GameController`, so browser render and input behavior stays in the real client path without a cached policy object.
+- The browser startup path now owns browser window resizing and text-input defaults directly, so the real client controls browser-facing runtime behavior without an intermediate policy cache.
+- Browser mode now disables idle sleep directly in the main client path, so browser timing stays under its own control instead of using desktop-style sleep behavior.
+- Browser mode now drives the browser refresh rate directly during initialization, so the real client owns runtime loop timing instead of re-reading desktop settings.
+- Browser mode now writes browser defaults back into `Settings.GlobalSettings` during startup, so the rest of the real client sees the same browser-owned defaults.
 - The browser startup defaults now also set the browser profile root explicitly, so profile persistence is owned by the real client startup path instead of only the `ProfileManager` fallback.
 - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
 - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer instead of the desktop fallback values.

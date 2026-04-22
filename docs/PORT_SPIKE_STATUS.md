@@ -34,11 +34,11 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - the main client now owns a dedicated `BrowserRuntimeBootstrap` helper for browser-safe defaults and storage seam checks
 - the main client browser bootstrap helper now also captures a browser startup state snapshot for the real entrypoint path
 - the browser startup state snapshot is now threaded into `Client.Run` and `GameController`, so the real client consumes the browser startup contract instead of only capturing it
-- the browser runtime policy is now explicit in the main client and consumed by `GameController`, so browser render and input defaults are owned by the real client path
-- the browser runtime policy now also owns browser window resizing and text-input startup defaults, so browser-facing runtime behavior is controlled in the real client path
-- the browser runtime policy now also disables idle sleep in browser mode, so browser timing stays under the real client path instead of desktop-style sleep behavior
-- the browser runtime policy now also drives the browser refresh rate in `GameController`, so browser loop timing is owned by the real client path during initialization
-- the browser runtime policy now also writes back into `Settings.GlobalSettings` during browser startup, so browser defaults are visible to the rest of the real client
+- the browser defaults are now owned directly by the bootstrap path and consumed by `GameController`, so browser render and input behavior stays in the real client path without a cached policy object
+- browser startup now owns browser window resizing and text-input defaults directly, so browser-facing runtime behavior is controlled in the real client path without an intermediate policy cache
+- browser mode now disables idle sleep directly in the main client path, so browser timing stays under the real client path instead of desktop-style sleep behavior
+- browser mode now drives the browser refresh rate directly during initialization, so browser loop timing is owned by the real client path
+- browser mode now writes browser defaults back into `Settings.GlobalSettings` during startup, so browser defaults are visible to the rest of the real client
 - the browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path
 - the browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions
 - the browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer

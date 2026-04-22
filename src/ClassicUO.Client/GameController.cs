@@ -190,7 +190,7 @@ namespace ClassicUO
 
             Audio?.StopMusic();
             Settings.GlobalSettings.Save();
-            if (!PlatformHelper.IsBrowser && _pluginsInitialized)
+            if (_pluginsInitialized)
             {
                 Plugin.OnClosing();
             }
@@ -459,7 +459,7 @@ namespace ClassicUO
             NetClient.Socket.Statistics.TotalPacketsReceived += (uint)packetsCount;
             NetClient.Socket.Flush();
 
-            if (!PlatformHelper.IsBrowser || _pluginsInitialized)
+            if (_pluginsInitialized)
             {
                 Plugin.Tick();
             }
@@ -593,7 +593,7 @@ namespace ClassicUO
             Profiler.ExitContext(Profiler.ProfilerContext.RENDER_FRAME);
             Profiler.EnterContext(Profiler.ProfilerContext.OUT_OF_CONTEXT);
 
-            if (!PlatformHelper.IsBrowser || _pluginsInitialized)
+            if (_pluginsInitialized)
             {
                 Plugin.ProcessDrawCmdList(GraphicsDevice);
             }

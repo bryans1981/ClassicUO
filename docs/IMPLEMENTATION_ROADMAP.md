@@ -136,6 +136,7 @@ Current status:
 - `ProfileManager` now applies the profile minimum size clamp through the shared validation path, because browser profiles already normalize to a valid browser window size at load time.
 - The nested `client.exe` browser guard in the startup validation path is gone, so browser mode now relies on the bootstrap-normalized client version instead of a dead inner browser branch.
 - The browser force-driver path in `Main` now relies on the browser startup default of zero instead of a separate browser-mode guard around the desktop switch.
+- Plugin tick, draw, and shutdown now key off `_pluginsInitialized` instead of browser mode checks, because browser startup never initializes plugins.
 - The browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path.
 - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
 - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer.

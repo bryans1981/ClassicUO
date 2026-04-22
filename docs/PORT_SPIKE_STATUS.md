@@ -46,6 +46,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - `Main` now relies on the browser startup defaults for the browser UO root as well, so browser mode does not carry a separate executable-path fallback in the startup path
 - browser save sanitization now lives in `BrowserRuntimeBootstrap`, so `Settings.Save` no longer owns a separate browser-only cleanup block
 - `ProfileManager` now applies the profile minimum size clamp through the shared validation path, because browser profiles already normalize to a valid browser window size at load time
+- the nested `client.exe` browser guard in the startup validation path is gone, so browser mode now relies on the bootstrap-normalized client version instead of a dead inner browser branch
 - the browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path
 - the browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions
 - the browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer

@@ -187,11 +187,10 @@ namespace ClassicUO
                 {
                     Log.Warn($"Client version [{clientVersionText}] is invalid, let's try to read the client.exe");
 
-                    if (!PlatformHelper.IsBrowser &&
-                        (
-                            !ClientVersionHelper.TryParseFromFile(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "client.exe"), out clientVersionText) ||
-                            !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion)
-                        ))
+                    if (
+                        !ClientVersionHelper.TryParseFromFile(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "client.exe"), out clientVersionText) ||
+                        !ClientVersionHelper.IsClientVersionValid(clientVersionText, out clientVersion)
+                    )
                     {
                         Log.Error("Invalid client version: " + clientVersionText);
 

@@ -482,8 +482,7 @@ namespace ClassicUO
             }
 
             bool reduceFpsWhenInactive =
-                !PlatformHelper.IsBrowser
-                && !IsActive
+                !IsActive
                 && ProfileManager.CurrentProfile != null
                 && ProfileManager.CurrentProfile.ReduceFPSWhenInactive;
 

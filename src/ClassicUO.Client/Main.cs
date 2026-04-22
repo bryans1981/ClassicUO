@@ -225,10 +225,6 @@ namespace ClassicUO
                 {
                     PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
                 }
-                else
-                {
-                    Log.Warn("Browser startup validation failed; skipping external browser launch.");
-                }
             }
             else
             {

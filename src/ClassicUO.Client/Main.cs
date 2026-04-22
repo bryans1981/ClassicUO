@@ -154,9 +154,11 @@ namespace ClassicUO
                 }
             }
 
-            if (!PlatformHelper.IsBrowser && string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
+            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
             {
-                Settings.GlobalSettings.UltimaOnlineDirectory = CUOEnviroment.ExecutablePath;
+                Settings.GlobalSettings.UltimaOnlineDirectory = PlatformHelper.IsBrowser
+                    ? BrowserVirtualPaths.AssetsRoot
+                    : CUOEnviroment.ExecutablePath;
             }
 
             uint flags = ValidateDesktopClientInstallation();

@@ -572,6 +572,7 @@ The next validation target is the generated confirmation/verification through ac
 - 2026-04-22: Browser game startup now calls the shared window-position helper directly, which still no-ops in browser mode but removes a redundant browser branch.
 - 2026-04-22: `UltimaLive.Enable()` now self-skips in browser mode, so the client startup path no longer needs a separate browser guard for that desktop-only feature.
 - 2026-04-22: Desktop UO-directory and client-version validation now live in a helper that returns zero in browser mode.
+- 2026-04-22: The UO-directory fallback in `Main` now chooses the browser assets root directly when browser mode is active.
 - 2026-04-22: The frame-loop inactive-FPS check now relies on the profile flag directly; browser mode already normalizes that profile flag off.
 - 2026-04-21: Browser startup now ignores browser-inapplicable CLI overrides such as `-ip`, `-port`, `-clientversion`, `-filesoverride`, `-uopath`, `-profilespath`, `-plugins`, `-force_driver`, `-highdpi`, `-packetlog`, `-debug`, `-profiler`, `-saveaccount`, `-autologin`, `-reconnect`, `-reconnect_time`, `-login_music`, `-music`, `-login_music_volume`, `-fixed_time_step`, `-fps`, `-skiploginscreen`, `-lastcharactername`, `-lastcharname`, `-lastservernum`, `-last_server_name`, `-language`, `-use_verdata`, `-maps_layouts`, `-encryption`, and `-no_server_ping`, so the browser client stays on the browser transport and storage path.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.

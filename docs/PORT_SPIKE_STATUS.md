@@ -452,6 +452,7 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-22: Browser game startup now calls the shared window-position helper directly, which still no-ops in browser mode but removes a redundant browser branch.
 - 2026-04-22: `UltimaLive.Enable()` now self-skips in browser mode, so the client startup path no longer needs a separate browser guard for that desktop-only feature.
 - 2026-04-22: Desktop UO-directory and client-version validation now live in a helper that returns zero in browser mode.
+- 2026-04-22: The UO-directory fallback in `Main` now chooses the browser assets root directly when browser mode is active.
 - 2026-04-22: The frame-loop inactive-FPS check now relies on the profile flag directly; browser mode already normalizes that profile flag off.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.
 - 2026-04-21: Browser startup now forces `UseVerdata = false` so the browser client stays off desktop verdata loading paths.

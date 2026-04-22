@@ -3592,8 +3592,6 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void SetDefault()
         {
-            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
-
             switch (ActivePage)
             {
                 case 1: // general
@@ -3833,8 +3831,6 @@ namespace ClassicUO.Game.UI.Gumps
         private void Apply()
         {
             WorldViewportGump vp = UIManager.GetGump<WorldViewportGump>();
-            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
-
             // general
             if (Settings.GlobalSettings.FPS != _sliderFPS.Value)
             {

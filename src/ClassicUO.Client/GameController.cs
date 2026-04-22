@@ -104,7 +104,7 @@ namespace ClassicUO
 
             GraphicManager.ApplyChanges();
 
-            if (PlatformHelper.IsBrowser && _browserBootstrapState != null)
+            if (_browserBootstrapState != null)
             {
                 Log.Trace($"Browser startup contract consumed: storageConfigured={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}");
                 Log.Trace($"Browser runtime policy: mouseThread=false, fixedTimeStep=false, targetFps=60");

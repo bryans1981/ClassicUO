@@ -1562,7 +1562,6 @@ namespace ClassicUO.Game.UI.Gumps
         private void BuildVideo()
         {
             const int PAGE = 3;
-            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
 
             ScrollArea rightArea = new ScrollArea
             (

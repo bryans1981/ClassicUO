@@ -164,7 +164,7 @@ namespace ClassicUO
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
+            if (!PlatformHelper.IsBrowser && string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
             {
                 Settings.GlobalSettings.UltimaOnlineDirectory = CUOEnviroment.ExecutablePath;
             }
@@ -174,7 +174,11 @@ namespace ClassicUO
 
             uint flags = 0;
 
-            if (!PlatformHelper.IsBrowser)
+            if (PlatformHelper.IsBrowser)
+            {
+                Log.Trace("Browser startup: skipping desktop UO-directory and client-version validation.");
+            }
+            else
             {
                 if (!FileSystemHelper.DirectoryExists(Settings.GlobalSettings.UltimaOnlineDirectory) || !FileSystemHelper.FileExists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
                 {

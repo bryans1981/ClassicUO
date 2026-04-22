@@ -179,6 +179,7 @@ The default operator interaction for this project is:
 - Browser mode now disables idle sleep directly in the main client path, so browser timing stays under its own control instead of using desktop-style sleep behavior.
 - Browser mode now drives the browser refresh rate directly during initialization, so the real client owns runtime loop timing instead of re-reading desktop settings.
 - Browser mode now writes browser defaults back into `Settings.GlobalSettings` during startup, so the rest of the real client sees the same browser-owned defaults.
+- Browser window-size updates now rely on the resize flag directly instead of an extra browser branch in `GameController`, so the window-size path stays aligned with the browser bootstrap defaults.
 - The browser startup defaults now also set the browser profile root explicitly, so profile persistence is owned by the real client startup path instead of only the `ProfileManager` fallback.
 - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
 - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer instead of the desktop fallback values.

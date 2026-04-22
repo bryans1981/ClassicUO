@@ -39,6 +39,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - browser mode now disables idle sleep directly in the main client path, so browser timing stays under the real client path instead of desktop-style sleep behavior
 - browser mode now drives the browser refresh rate directly during initialization, so browser loop timing is owned by the real client path
 - browser mode now writes browser defaults back into `Settings.GlobalSettings` during startup, so browser defaults are visible to the rest of the real client
+- browser window-size updates now rely on the resize flag directly instead of an extra browser branch in `GameController`, so browser window handling stays aligned with the startup defaults
 - the browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path
 - the browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions
 - the browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer

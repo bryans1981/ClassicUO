@@ -637,7 +637,7 @@ namespace ClassicUO
 
         private void WindowOnClientSizeChanged(int width, int height)
         {
-            if (!PlatformHelper.IsBrowser && !IsWindowMaximized() && Window.AllowUserResizing)
+            if (!IsWindowMaximized() && Window.AllowUserResizing)
             {
                 if (ProfileManager.CurrentProfile != null)
                     ProfileManager.CurrentProfile.WindowClientBounds = new Point(width, height);

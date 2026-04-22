@@ -68,9 +68,7 @@ namespace ClassicUO.Game.Scenes
         {
             base.Load();
 
-            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
-
-            Client.Game.Window.AllowUserResizing = browserRuntimePolicy.AllowWindowResizing;
+            Client.Game.Window.AllowUserResizing = !PlatformHelper.IsBrowser;
 
             _autoLogin = Settings.GlobalSettings.AutoLogin;
 

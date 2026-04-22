@@ -97,8 +97,7 @@ namespace ClassicUO.Game.Scenes
         {
             base.Load();
 
-            BrowserRuntimePolicy browserRuntimePolicy = BrowserRuntimeBootstrap.GetRuntimePolicy();
-            Client.Game.Window.AllowUserResizing = browserRuntimePolicy.AllowWindowResizing;
+            Client.Game.Window.AllowUserResizing = !PlatformHelper.IsBrowser;
 
             Camera.Zoom = ProfileManager.CurrentProfile.DefaultScale;
             Camera.Bounds.X = Math.Max(0, ProfileManager.CurrentProfile.GameWindowPosition.X);

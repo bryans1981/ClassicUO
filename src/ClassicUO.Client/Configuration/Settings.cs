@@ -129,31 +129,7 @@ namespace ClassicUO.Configuration
                 settingsToSave.Password = string.Empty;
             }
 
-            if (PlatformHelper.IsBrowser)
-            {
-                settingsToSave.Username = string.Empty;
-                settingsToSave.Password = string.Empty;
-                settingsToSave.SaveAccount = false;
-                settingsToSave.AutoLogin = false;
-                settingsToSave.Reconnect = false;
-                settingsToSave.ReconnectTime = 0;
-                settingsToSave.LoginMusic = false;
-                settingsToSave.LoginMusicVolume = 0;
-                settingsToSave.LastServerNum = 0;
-                settingsToSave.LastServerName = string.Empty;
-                settingsToSave.OverrideFile = string.Empty;
-                settingsToSave.ScreenScale = 1f;
-                settingsToSave.Encryption = 0;
-                settingsToSave.IgnoreRelayIp = true;
-                settingsToSave.RunMouseInASeparateThread = false;
-                settingsToSave.FixedTimeStep = false;
-                settingsToSave.FPS = 60;
-                settingsToSave.IsWindowMaximized = false;
-                settingsToSave.WindowPosition = new Point(0, 0);
-                settingsToSave.WindowSize = new Point(1280, 720);
-            }
-
-            settingsToSave.ProfilesPath = string.Empty;
+            BrowserRuntimeBootstrap.ApplyBrowserSettingsSaveDefaults(settingsToSave);
 
             // NOTE: We can do any other settings clean-ups here before we save them
 

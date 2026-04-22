@@ -98,6 +98,36 @@ namespace ClassicUO
             profile.ReduceFPSWhenInactive = false;
         }
 
+        public static void ApplyBrowserSettingsSaveDefaults(Settings settings)
+        {
+            if (!PlatformHelper.IsBrowser || settings == null)
+            {
+                return;
+            }
+
+            settings.Username = string.Empty;
+            settings.Password = string.Empty;
+            settings.SaveAccount = false;
+            settings.AutoLogin = false;
+            settings.Reconnect = false;
+            settings.ReconnectTime = 0;
+            settings.LoginMusic = false;
+            settings.LoginMusicVolume = 0;
+            settings.LastServerNum = 0;
+            settings.LastServerName = string.Empty;
+            settings.OverrideFile = string.Empty;
+            settings.ScreenScale = 1f;
+            settings.Encryption = 0;
+            settings.IgnoreRelayIp = true;
+            settings.RunMouseInASeparateThread = false;
+            settings.FixedTimeStep = false;
+            settings.FPS = 60;
+            settings.IsWindowMaximized = false;
+            settings.WindowPosition = new Point(0, 0);
+            settings.WindowSize = new Point(1280, 720);
+            settings.ProfilesPath = string.Empty;
+        }
+
         public static void EnsureBrowserStorageBootstrap()
         {
             if (!PlatformHelper.IsBrowser)

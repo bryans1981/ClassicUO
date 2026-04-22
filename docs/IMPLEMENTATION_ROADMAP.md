@@ -133,6 +133,7 @@ Current status:
 - The browser startup path now owns the browser defaults directly; `Main` no longer applies a separate browser runtime-policy step after startup validation.
 - `Main` now relies on the browser startup defaults for the browser UO root as well, so browser mode does not carry a separate executable-path fallback in the startup path.
 - Browser save sanitization now lives in `BrowserRuntimeBootstrap`, so `Settings.Save` no longer owns a separate browser-only cleanup block.
+- `ProfileManager` now applies the profile minimum size clamp through the shared validation path, because browser profiles already normalize to a valid browser window size at load time.
 - The browser startup defaults now also set the browser profile root explicitly, so browser profile persistence is owned by the real client startup path.
 - The browser startup defaults now also set an initial browser window position and size, so the browser host does not inherit desktop placement assumptions.
 - The browser profile load path now applies browser-safe profile window defaults, so game-window state is owned by the real client profile layer.

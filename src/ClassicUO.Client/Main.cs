@@ -101,20 +101,7 @@ namespace ClassicUO
             BrowserRuntimeBootstrap.EnsureBrowserStorageBootstrap();
             BrowserRuntimeBootstrapState browserBootstrapState = BrowserRuntimeBootstrap.CaptureState();
 
-            if (!PlatformHelper.IsBrowser)
-            {
-                if (CUOEnviroment.IsHighDPI)
-                {
-                    Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "1");
-                }
-
-                // NOTE: this is a workaroud to fix d3d11 on windows 11 + scale windows
-                Environment.SetEnvironmentVariable("FNA3D_D3D11_FORCE_BITBLT", "1");
-                Environment.SetEnvironmentVariable("FNA3D_BACKBUFFER_SCALE_NEAREST", "1");
-                Environment.SetEnvironmentVariable("FNA3D_OPENGL_FORCE_COMPATIBILITY_PROFILE", "1");
-                Environment.SetEnvironmentVariable(SDL.SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
-                Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins"));
-            }
+            ApplyDesktopStartupEnvironment();
 
             string globalSettingsPath = Settings.GetSettingsFilepath();
 
@@ -737,6 +724,26 @@ namespace ClassicUO
                         break;
                 }
             }
+        }
+
+        private static void ApplyDesktopStartupEnvironment()
+        {
+            if (PlatformHelper.IsBrowser)
+            {
+                return;
+            }
+
+            if (CUOEnviroment.IsHighDPI)
+            {
+                Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "1");
+            }
+
+            // NOTE: this is a workaroud to fix d3d11 on windows 11 + scale windows
+            Environment.SetEnvironmentVariable("FNA3D_D3D11_FORCE_BITBLT", "1");
+            Environment.SetEnvironmentVariable("FNA3D_BACKBUFFER_SCALE_NEAREST", "1");
+            Environment.SetEnvironmentVariable("FNA3D_OPENGL_FORCE_COMPATIBILITY_PROFILE", "1");
+            Environment.SetEnvironmentVariable(SDL.SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
+            Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins"));
         }
 
     }

@@ -174,10 +174,7 @@ namespace ClassicUO
                     Client.ShowErrorMessage(ResGeneral.YourUOClientVersionIsInvalid);
                 }
 
-                if (!PlatformHelper.IsBrowser)
-                {
-                    PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
-                }
+                LaunchDesktopBrowserLink();
             }
             else
             {
@@ -752,6 +749,14 @@ namespace ClassicUO
             }
 
             return flags;
+        }
+
+        private static void LaunchDesktopBrowserLink()
+        {
+            if (!PlatformHelper.IsBrowser)
+            {
+                PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
+            }
         }
 
     }

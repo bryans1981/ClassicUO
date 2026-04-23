@@ -459,6 +459,7 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-23: Browser desktop window-state persistence now also comes from `BrowserRuntimeBootstrap`, so unload-time window writes stay out of the browser path.
 - 2026-04-23: Browser inactive-frame idle sleep now also comes from `BrowserRuntimeBootstrap`, so the frame loop no longer hard-codes that browser split.
 - 2026-04-23: Browser screenshot storage now also comes from `BrowserRuntimeBootstrap`, so capture output stays on the browser root without an inline branch in `GameController`.
+- 2026-04-23: Browser options window controls now also use `BrowserRuntimeBootstrap`, so the settings UI no longer hard-codes the browser split for desktop window fields.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.
 - 2026-04-21: Browser startup now forces `UseVerdata = false` so the browser client stays off desktop verdata loading paths.
 - 2026-04-21: Browser networking now returns loopback for `LocalIP` instead of probing a desktop socket endpoint.

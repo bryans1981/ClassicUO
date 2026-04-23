@@ -1600,7 +1600,7 @@ namespace ClassicUO.Game.UI.Gumps
                 startX,
                 startY
             );
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 _reduceFPSWhenInactive.IsEnabled = false;
             }
@@ -1618,7 +1618,7 @@ namespace ClassicUO.Game.UI.Gumps
             int gameWindowSectionBottom = startY;
             var camera = Client.Game.Scene.Camera;
 
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 SettingsSection section = AddSettingsSection(box, "Game window");
 
@@ -3683,7 +3683,7 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case 3: // video
-                    if (!PlatformHelper.IsBrowser)
+                    if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
                     {
                         _windowBorderless.IsChecked = false;
                         _gameWindowWidth.SetText("600");
@@ -4048,7 +4048,7 @@ namespace ClassicUO.Game.UI.Gumps
                 if (active && StatusGumpBase.GetStatusGump() != null && UIManager.GetGump<BaseHealthBarGump>(World.Player) is {} bar)
                     bar.Dispose();
             }
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
                 int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);

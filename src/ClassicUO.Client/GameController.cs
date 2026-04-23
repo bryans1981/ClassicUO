@@ -175,7 +175,7 @@ namespace ClassicUO
 
         protected override void UnloadContent()
         {
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldPersistDesktopWindowState())
             {
                 SDL_GetWindowBordersSize(Window.Handle, out int top, out int left, out _, out _);
 

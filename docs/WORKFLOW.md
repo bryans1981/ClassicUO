@@ -151,6 +151,7 @@ The default operator interaction for this project is:
 - The current active browser handoff is the concrete `Browser bootstrap package` artifact, and the active work should now consume it into real client-bootstrap flow rather than extending the synthetic tail further.
 - The active operator surface should focus on the bootstrap package, launch/session persistence, and real client-bootstrap integration; the large synthetic runtime tail is archived validation only.
 - Prefer feature-sized batches that move a final product slice forward, even if they include multiple related steps, instead of one-item-at-a-time proof work.
+- Default to larger feature batches for browser cleanup and client-path work; do not split low-risk cleanup into one-item-at-a-time follow-ups unless a blocker, build failure, or self-test failure forces it.
 - Do not use broad vertical-slice execution as the default plan; prefer feature-sized batches plus parallel disjoint work when it materially reduces time to a working client.
 - Minimize pauses for confirmation unless a browser test, a blocker, or a product decision is genuinely required.
 - GitHub Actions should ignore browser-spike and docs-only changes for `Build-Test`, and `Deploy` should only run after a successful `Build-Test` completion.

@@ -14,6 +14,7 @@ Current priority:
 - Prefer changes that move us toward a playable browser build with real rendering, input, and network flow.
 - Treat synthetic validation layers as support tooling only when they directly unblock the product path.
 - Keep browser-specific window management out of login and game scene load/unload paths unless the browser path truly needs it.
+- Use [Complete Development Plan](docs/COMPLETE_DEVELOPMENT_PLAN.md) as the master milestone list for deciding whether work is active or deferred.
 
 ## Working Assumptions
 

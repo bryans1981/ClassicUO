@@ -171,6 +171,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - Move superseded checks into archived sections once they are no longer part of the active path.
 - Batch browser cleanup work in larger chunks by default; avoid one-item-at-a-time operator loops unless a blocker, build failure, or self-test failure requires it.
 - Keep non-blocking cleanup items in a separate later-work list so the live browser-app milestone stays the only active focus.
+- Treat [Complete Development Plan](docs/COMPLETE_DEVELOPMENT_PLAN.md) as the milestone reference when deciding whether an item is a blocker or deferred cleanup.
 - GitHub Actions `Build-Test` should ignore browser-spike and docs-only changes, and `Deploy` should only run after a successful `Build-Test` completion.
 
 ### Operator commands

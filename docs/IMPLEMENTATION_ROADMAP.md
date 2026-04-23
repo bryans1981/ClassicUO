@@ -18,6 +18,7 @@ Current execution rule:
 - Keep the remaining work focused on the finished browser client.
 - Favor browser launch, rendering, input, login, and world interaction over more scaffold-only runtime layers.
 - Use synthetic harness work only when it directly unblocks the product path.
+- Use [Complete Development Plan](docs/COMPLETE_DEVELOPMENT_PLAN.md) as the master step-by-step milestone list for browser work.
 
 ## Target Architecture
 

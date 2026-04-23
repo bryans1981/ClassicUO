@@ -6,6 +6,7 @@ using ClassicUO.Utility.Platforms;
 using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework;
 using System;
+using System.IO;
 
 namespace ClassicUO
 {
@@ -159,6 +160,13 @@ namespace ClassicUO
         public static bool ShouldUseDesktopIdleSleep()
         {
             return !PlatformHelper.IsBrowser;
+        }
+
+        public static string GetScreenshotRootPath()
+        {
+            return PlatformHelper.IsBrowser
+                ? BrowserVirtualPaths.CacheFile("client")
+                : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
         }
 
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)

@@ -207,6 +207,11 @@ namespace ClassicUO
             return PlatformHelper.IsBrowser;
         }
 
+        public static bool ShouldSkipDesktopPluginLoading()
+        {
+            return PlatformHelper.IsBrowser;
+        }
+
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)
         {
             BrowserFileSystemBootstrap.ConfigureProvider(provider);

@@ -231,7 +231,7 @@ namespace ClassicUO
 
         public static void ShowErrorMessage(string msg)
         {
-            if (PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing() == false)
             {
                 Log.Error(msg);
                 return;

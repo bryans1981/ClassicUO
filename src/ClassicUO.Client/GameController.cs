@@ -150,7 +150,7 @@ namespace ClassicUO
             // TODO: temporary fix to avoid crash when laoding plugins
             Settings.GlobalSettings.Encryption = (byte) NetClient.Socket.Load(UO.FileManager.Version, (EncryptionType) Settings.GlobalSettings.Encryption);
 
-            if (PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldSkipDesktopPluginLoading())
             {
                 Log.Trace("Skipping plugin loading in browser mode.");
             }

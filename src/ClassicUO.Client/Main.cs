@@ -533,7 +533,7 @@ namespace ClassicUO
                         break;
 
                     case "run_mouse_in_separate_thread":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring separate mouse thread override in browser mode.");
                             break;
@@ -544,7 +544,7 @@ namespace ClassicUO
                         break;
 
                     case "skiploginscreen":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring skip login screen override in browser mode.");
                             break;
@@ -555,7 +555,7 @@ namespace ClassicUO
                         break;
 
                     case "plugins":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring plugin list in browser mode.");
                             break;
@@ -566,7 +566,7 @@ namespace ClassicUO
                         break;
 
                     case "use_verdata":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring verdata override in browser mode.");
                             break;
@@ -577,7 +577,7 @@ namespace ClassicUO
                         break;
 
                     case "maps_layouts":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring maps layouts override in browser mode.");
                             break;
@@ -588,7 +588,7 @@ namespace ClassicUO
                         break;
 
                     case "encryption":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring encryption override in browser mode.");
                             break;
@@ -599,7 +599,7 @@ namespace ClassicUO
                         break;
 
                     case "force_driver":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring graphics driver selection in browser mode.");
                             break;
@@ -633,7 +633,7 @@ namespace ClassicUO
                         break;
 
                     case "packetlog":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring packet log in browser mode.");
                             break;
@@ -645,7 +645,7 @@ namespace ClassicUO
                         break;
 
                     case "language":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring language override in browser mode.");
                             break;
@@ -672,7 +672,7 @@ namespace ClassicUO
                         break;
 
                     case "no_server_ping":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring no-server-ping override in browser mode.");
                             break;

@@ -416,7 +416,7 @@ namespace ClassicUO
                         break;
 
                     case "screen_scale":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring screen scale override in browser mode.");
                             break;
@@ -427,7 +427,7 @@ namespace ClassicUO
                         break;
 
                     case "debug":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring debug override in browser mode.");
                             break;
@@ -438,7 +438,7 @@ namespace ClassicUO
                         break;
 
                     case "profiler":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring profiler override in browser mode.");
                             break;
@@ -449,7 +449,7 @@ namespace ClassicUO
                         break;
 
                     case "saveaccount":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring save-account override in browser mode.");
                             break;
@@ -460,7 +460,7 @@ namespace ClassicUO
                         break;
 
                     case "autologin":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring auto-login override in browser mode.");
                             break;
@@ -471,7 +471,7 @@ namespace ClassicUO
                         break;
 
                     case "reconnect":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring reconnect override in browser mode.");
                             break;
@@ -482,7 +482,7 @@ namespace ClassicUO
                         break;
 
                     case "reconnect_time":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring reconnect time override in browser mode.");
                             break;
@@ -499,7 +499,7 @@ namespace ClassicUO
 
                     case "login_music":
                     case "music":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring login music override in browser mode.");
                             break;
@@ -511,7 +511,7 @@ namespace ClassicUO
 
                     case "login_music_volume":
                     case "music_volume":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring login music volume override in browser mode.");
                             break;
@@ -522,7 +522,7 @@ namespace ClassicUO
                         break;
 
                     case "fixed_time_step":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring fixed time step override in browser mode.");
                             break;

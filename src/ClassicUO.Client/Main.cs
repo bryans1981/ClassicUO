@@ -48,7 +48,7 @@ namespace ClassicUO
 
             Log.Start(LogTypes.All);
 
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldInitializeDesktopDllMap())
             {
                 DllMap.Init();
             }
@@ -350,7 +350,7 @@ namespace ClassicUO
                         break;
 
                     case "clientversion":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring client version override in browser mode.");
                             break;
@@ -362,7 +362,7 @@ namespace ClassicUO
 
                     case "lastcharactername":
                     case "lastcharname":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring last character override in browser mode.");
                             break;
@@ -373,7 +373,7 @@ namespace ClassicUO
                         break;
 
                     case "lastservernum":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring last server number override in browser mode.");
                             break;
@@ -384,7 +384,7 @@ namespace ClassicUO
                         break;
 
                     case "last_server_name":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring last server name override in browser mode.");
                             break;
@@ -394,7 +394,7 @@ namespace ClassicUO
                         break;
 
                     case "fps":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring FPS override in browser mode.");
                             break;

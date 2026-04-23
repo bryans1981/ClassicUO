@@ -47,7 +47,7 @@ namespace ClassicUO.Game
 
         public static void Enable()
         {
-            if (ClassicUO.Utility.Platforms.PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldEnableUltimaLive())
             {
                 Log.Trace("Skipping UltimaLive setup in browser mode.");
                 return;

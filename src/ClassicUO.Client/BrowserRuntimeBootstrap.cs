@@ -212,6 +212,21 @@ namespace ClassicUO
             return PlatformHelper.IsBrowser;
         }
 
+        public static bool ShouldInitializeDesktopDllMap()
+        {
+            return !PlatformHelper.IsBrowser;
+        }
+
+        public static bool ShouldPersistDesktopProfileState()
+        {
+            return !PlatformHelper.IsBrowser;
+        }
+
+        public static bool ShouldEnableUltimaLive()
+        {
+            return !PlatformHelper.IsBrowser;
+        }
+
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)
         {
             BrowserFileSystemBootstrap.ConfigureProvider(provider);

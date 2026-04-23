@@ -282,7 +282,7 @@ namespace ClassicUO.Game.Scenes
                 return;
             }
 
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldPersistDesktopProfileState())
             {
                 ProfileManager.CurrentProfile.GameWindowPosition = new Point(
                     Camera.Bounds.X,
@@ -336,7 +336,7 @@ namespace ClassicUO.Game.Scenes
             _useItemQueue?.Clear();
             _world.MessageManager.MessageReceived -= ChatOnMessageReceived;
 
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldPersistDesktopProfileState())
             {
                 Settings.GlobalSettings.WindowSize = new Point(
                     Client.Game.ClientBounds.Width,

@@ -9,7 +9,9 @@ namespace ClassicUO.Utility
 {
     public static class FileSystemHelper
     {
-        public static IClassicUOFileSystem Current { get; } = PlatformHelper.IsBrowser ? new BrowserFileSystem() : new DesktopFileSystem();
+        public static IClassicUOFileSystem Current { get; } = BrowserFileSystemBootstrap.ShouldUseBrowserFileSystem()
+            ? new BrowserFileSystem()
+            : new DesktopFileSystem();
 
         public static bool FileExists(string path) => Current.FileExists(path);
 

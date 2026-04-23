@@ -1,11 +1,17 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 using System;
+using ClassicUO.Utility.Platforms;
 
 namespace ClassicUO.Utility.Platforms
 {
     public static class BrowserFileSystemBootstrap
     {
+        public static bool ShouldUseBrowserFileSystem()
+        {
+            return PlatformHelper.IsBrowser;
+        }
+
         public static bool IsConfigured => BrowserFileSystem.IsProviderConfigured;
 
         public static IBrowserStorageProvider CreateReadOnlyAssetProvider(IBrowserBinaryAssetSource source)

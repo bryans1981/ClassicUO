@@ -202,7 +202,17 @@ namespace ClassicUO
             return 0x100007f;
         }
 
+        public static bool ShouldUseBrowserLocalIpDefault()
+        {
+            return PlatformHelper.IsBrowser;
+        }
+
         public static bool ShouldIgnoreDesktopStartupArgumentOverrides()
+        {
+            return PlatformHelper.IsBrowser;
+        }
+
+        public static bool ShouldIgnoreCustomSettingsPath()
         {
             return PlatformHelper.IsBrowser;
         }

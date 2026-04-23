@@ -466,6 +466,8 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-23: The browser CLI parser now uses the same shared decision for a second batch of desktop startup overrides, including screen scale, debug, profiler, save-account, auto-login, reconnect, reconnect timing, and login music settings.
 - 2026-04-23: The browser CLI parser now uses the same shared decision for the remaining desktop startup overrides, including mouse-thread, skip-login-screen, plugins, verdata, map layouts, encryption, graphics driver, packet logging, language, and no-server-ping settings.
 - 2026-04-23: Browser startup, profile persistence, and UltimaLive now also defer to shared `BrowserRuntimeBootstrap` helpers, which removes another real-client browser batch from the inline platform checks.
+- 2026-04-23: The utility filesystem selector now also defers to a shared browser bootstrap helper, leaving no direct browser platform checks outside the bootstrap files in `src`.
+- 2026-04-23: The remaining browser bootstrap helper references now cover the entire real-client path in `src`, including startup overrides, runtime gating, and the utility file-system selector.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.
 - 2026-04-21: Browser startup now forces `UseVerdata = false` so the browser client stays off desktop verdata loading paths.
 - 2026-04-21: Browser networking now returns loopback for `LocalIP` instead of probing a desktop socket endpoint.

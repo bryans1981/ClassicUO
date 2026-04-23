@@ -227,7 +227,7 @@ namespace ClassicUO
                     // NOTE: All individual settings like `username`, `password`, etc passed in command-line options
                     // will override and overwrite those in the settings file because they have higher priority
                     case "settings":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreCustomSettingsPath())
                         {
                             Log.Trace("Ignoring custom settings path in browser mode.");
                             break;

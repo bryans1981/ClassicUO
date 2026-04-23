@@ -66,7 +66,7 @@ namespace ClassicUO.Network
         {
             get
             {
-                if (PlatformHelper.IsBrowser)
+                if (BrowserRuntimeBootstrap.ShouldUseBrowserLocalIpDefault())
                 {
                     return BrowserRuntimeBootstrap.GetBrowserLocalIpDefault();
                 }

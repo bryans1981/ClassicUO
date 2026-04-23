@@ -1,5 +1,6 @@
 ﻿// SPDX-License-Identifier: BSD-2-Clause
 
+using ClassicUO;
 using System;
 using System.IO;
 using ClassicUO.Utility;
@@ -21,13 +22,9 @@ namespace ClassicUO.Configuration
             {
                 if (string.IsNullOrEmpty(_rootPath))
                 {
-                    if (PlatformHelper.IsBrowser)
+                    if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
                     {
-                        _rootPath = BrowserVirtualPaths.ProfilesRoot;
-                    }
-                    else if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.ProfilesPath))
-                    {
-                        _rootPath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Profiles");
+                        _rootPath = BrowserRuntimeBootstrap.GetProfilesRootPath();
                     }
                     else
                     {

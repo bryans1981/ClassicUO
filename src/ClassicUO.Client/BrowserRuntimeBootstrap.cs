@@ -162,11 +162,44 @@ namespace ClassicUO
             return !PlatformHelper.IsBrowser;
         }
 
+        public static string GetCrashLogRootPath()
+        {
+            return PlatformHelper.IsBrowser
+                ? BrowserVirtualPaths.CacheFile("logs")
+                : Path.Combine(CUOEnviroment.ExecutablePath, "Logs");
+        }
+
         public static string GetScreenshotRootPath()
         {
             return PlatformHelper.IsBrowser
                 ? BrowserVirtualPaths.CacheFile("client")
                 : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+        }
+
+        public static string GetSettingsFilePath()
+        {
+            return PlatformHelper.IsBrowser
+                ? BrowserVirtualPaths.ConfigFile("settings.json")
+                : Path.Combine(CUOEnviroment.ExecutablePath, "settings.json");
+        }
+
+        public static string GetProfilesRootPath()
+        {
+            return PlatformHelper.IsBrowser
+                ? BrowserVirtualPaths.ProfilesRoot
+                : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Profiles");
+        }
+
+        public static string GetUltimaOnlineDirectoryRoot()
+        {
+            return PlatformHelper.IsBrowser
+                ? BrowserVirtualPaths.AssetsRoot
+                : CUOEnviroment.ExecutablePath;
+        }
+
+        public static uint GetBrowserLocalIpDefault()
+        {
+            return 0x100007f;
         }
 
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)

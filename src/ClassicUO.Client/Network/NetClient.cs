@@ -1,5 +1,6 @@
 ﻿// SPDX-License-Identifier: BSD-2-Clause
 
+using ClassicUO;
 using ClassicUO.Network.Encryption;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Platforms;
@@ -67,7 +68,7 @@ namespace ClassicUO.Network
             {
                 if (PlatformHelper.IsBrowser)
                 {
-                    return 0x100007f;
+                    return BrowserRuntimeBootstrap.GetBrowserLocalIpDefault();
                 }
 
                 if (!_localIP.HasValue)

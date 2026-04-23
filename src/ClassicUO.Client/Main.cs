@@ -86,9 +86,7 @@ namespace ClassicUO
                 sb.AppendLine();
 
                 Log.Panic(e.ExceptionObject.ToString());
-                string path = PlatformHelper.IsBrowser
-                    ? BrowserVirtualPaths.CacheFile("logs")
-                    : Path.Combine(CUOEnviroment.ExecutablePath, "Logs");
+                string path = BrowserRuntimeBootstrap.GetCrashLogRootPath();
 
                 if (!FileSystemHelper.DirectoryExists(path))
                     FileSystemHelper.CreateDirectory(path);
@@ -156,9 +154,7 @@ namespace ClassicUO
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
             {
-                Settings.GlobalSettings.UltimaOnlineDirectory = PlatformHelper.IsBrowser
-                    ? BrowserVirtualPaths.AssetsRoot
-                    : CUOEnviroment.ExecutablePath;
+                Settings.GlobalSettings.UltimaOnlineDirectory = BrowserRuntimeBootstrap.GetUltimaOnlineDirectoryRoot();
             }
 
             uint flags = ValidateDesktopClientInstallation();

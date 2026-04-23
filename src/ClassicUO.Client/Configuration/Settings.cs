@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ClassicUO.Configuration.Json;
+using ClassicUO;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Platforms;
 using Microsoft.Xna.Framework;
@@ -106,12 +107,7 @@ namespace ClassicUO.Configuration
                 return Path.Combine(CUOEnviroment.ExecutablePath, CustomSettingsFilepath);
             }
 
-            if (PlatformHelper.IsBrowser)
-            {
-                return BrowserVirtualPaths.ConfigFile(SETTINGS_FILENAME);
-            }
-
-            return Path.Combine(CUOEnviroment.ExecutablePath, SETTINGS_FILENAME);
+            return BrowserRuntimeBootstrap.GetSettingsFilePath();
         }
 
 

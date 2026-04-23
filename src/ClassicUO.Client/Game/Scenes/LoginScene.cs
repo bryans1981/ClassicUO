@@ -68,7 +68,7 @@ namespace ClassicUO.Game.Scenes
         {
             base.Load();
 
-            Client.Game.Window.AllowUserResizing = !PlatformHelper.IsBrowser;
+            Client.Game.Window.AllowUserResizing = BrowserRuntimeBootstrap.ShouldAllowWindowResizing();
 
             _autoLogin = Settings.GlobalSettings.AutoLogin;
 
@@ -87,12 +87,12 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
-            if (!PlatformHelper.IsBrowser && Client.Game.IsWindowMaximized())
+            if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing() && Client.Game.IsWindowMaximized())
             {
                 Client.Game.RestoreWindow();
             }
 
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 int width = Client.Game.ScaleWithDpi(640);
                 int height = Client.Game.ScaleWithDpi(480);

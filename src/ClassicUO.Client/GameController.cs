@@ -57,7 +57,7 @@ namespace ClassicUO
             SetVSync(false);
 
             Window.ClientSizeChanged += WindowOnClientSizeChanged;
-            Window.AllowUserResizing = !PlatformHelper.IsBrowser;
+            Window.AllowUserResizing = BrowserRuntimeBootstrap.ShouldAllowWindowResizing();
             Window.Title = $"ClassicUO - {CUOEnviroment.Version}";
             IsMouseVisible = Settings.GlobalSettings?.RunMouseInASeparateThread ?? true;
 

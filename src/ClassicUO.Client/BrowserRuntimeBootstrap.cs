@@ -146,6 +146,11 @@ namespace ClassicUO
             BrowserFileSystemBootstrap.ConfigureReadOnlyAssetProvider(source);
         }
 
+        public static bool ShouldAllowWindowResizing()
+        {
+            return !PlatformHelper.IsBrowser;
+        }
+
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)
         {
             BrowserFileSystemBootstrap.ConfigureProvider(provider);

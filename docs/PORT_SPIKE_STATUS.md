@@ -455,6 +455,7 @@ Fifth 20-layer runtime batch remains the active work item. Today's close-out fix
 - 2026-04-22: The UO-directory fallback in `Main` now chooses the browser assets root directly when browser mode is active.
 - 2026-04-22: The frame-loop inactive-FPS check now relies on the profile flag directly; browser mode already normalizes that profile flag off.
 - 2026-04-22: The desktop browser-launch fallback now lives behind a helper, keeping the browser error path flat in `Main`.
+- 2026-04-23: Browser window-resize behavior now comes from `BrowserRuntimeBootstrap`, so the login/game scenes no longer hard-code the platform split.
 - 2026-04-21: Browser startup now skips OS language probing in browser mode and defaults to `ENU` when the language is unset.
 - 2026-04-21: Browser startup now forces `UseVerdata = false` so the browser client stays off desktop verdata loading paths.
 - 2026-04-21: Browser networking now returns loopback for `LocalIP` instead of probing a desktop socket endpoint.

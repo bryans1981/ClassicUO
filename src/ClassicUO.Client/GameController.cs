@@ -498,7 +498,7 @@ namespace ClassicUO
                 _suppressedDraw = true;
                 SuppressDraw();
 
-                if (!PlatformHelper.IsBrowser && !gameTime.IsRunningSlowly)
+                if (BrowserRuntimeBootstrap.ShouldUseDesktopIdleSleep() && !gameTime.IsRunningSlowly)
                 {
                     Thread.Sleep(1);
                 }

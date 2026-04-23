@@ -202,6 +202,11 @@ namespace ClassicUO
             return 0x100007f;
         }
 
+        public static bool ShouldIgnoreDesktopStartupArgumentOverrides()
+        {
+            return PlatformHelper.IsBrowser;
+        }
+
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)
         {
             BrowserFileSystemBootstrap.ConfigureProvider(provider);

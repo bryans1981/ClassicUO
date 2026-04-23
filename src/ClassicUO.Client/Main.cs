@@ -238,7 +238,7 @@ namespace ClassicUO
                         break;
 
                     case "highdpi":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring high-DPI override in browser mode.");
                             break;
@@ -249,7 +249,7 @@ namespace ClassicUO
                         break;
 
                     case "username":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring username override in browser mode.");
                             break;
@@ -260,7 +260,7 @@ namespace ClassicUO
                         break;
 
                     case "password":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring password override in browser mode.");
                             break;
@@ -271,7 +271,7 @@ namespace ClassicUO
                         break;
 
                     case "password_enc": // Non-standard setting, similar to `password` but for already encrypted password
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring encrypted password override in browser mode.");
                             break;
@@ -282,7 +282,7 @@ namespace ClassicUO
                         break;
 
                     case "ip":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring IP override in browser mode.");
                             break;
@@ -293,7 +293,7 @@ namespace ClassicUO
                         break;
 
                     case "port":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring port override in browser mode.");
                             break;
@@ -304,7 +304,7 @@ namespace ClassicUO
                         break;
 
                     case "ignore_relay_ip":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring relay-IP override in browser mode.");
                             break;
@@ -316,7 +316,7 @@ namespace ClassicUO
 
                     case "filesoverride":
                     case "uofilesoverride":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring files override in browser mode.");
                             break;
@@ -328,7 +328,7 @@ namespace ClassicUO
 
                     case "ultimaonlinedirectory":
                     case "uopath":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring Ultima Online directory override in browser mode.");
                             break;
@@ -339,7 +339,7 @@ namespace ClassicUO
                         break;
 
                     case "profilespath":
-                        if (PlatformHelper.IsBrowser)
+                        if (BrowserRuntimeBootstrap.ShouldIgnoreDesktopStartupArgumentOverrides())
                         {
                             Log.Trace("Ignoring profiles path override in browser mode.");
                             break;

@@ -269,7 +269,7 @@ namespace ClassicUO
 
         private void SetWindowPosition(int x, int y)
         {
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 return;
             }
@@ -296,7 +296,7 @@ namespace ClassicUO
 
         public void SetWindowBorderless(bool borderless)
         {
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 return;
             }
@@ -353,7 +353,7 @@ namespace ClassicUO
 
         public void MaximizeWindow()
         {
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 return;
             }
@@ -367,7 +367,7 @@ namespace ClassicUO
 
         public bool IsWindowMaximized()
         {
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 return false;
             }
@@ -379,7 +379,7 @@ namespace ClassicUO
 
         public void RestoreWindow()
         {
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 return;
             }
@@ -389,7 +389,7 @@ namespace ClassicUO
 
         public void SetWindowPositionBySettings()
         {
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 return;
             }

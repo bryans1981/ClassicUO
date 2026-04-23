@@ -691,27 +691,25 @@ namespace ClassicUO
 
         private static void ApplyDesktopStartupEnvironment()
         {
-            if (PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
-                return;
-            }
+                if (CUOEnviroment.IsHighDPI)
+                {
+                    Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "1");
+                }
 
-            if (CUOEnviroment.IsHighDPI)
-            {
-                Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "1");
+                // NOTE: this is a workaroud to fix d3d11 on windows 11 + scale windows
+                Environment.SetEnvironmentVariable("FNA3D_D3D11_FORCE_BITBLT", "1");
+                Environment.SetEnvironmentVariable("FNA3D_BACKBUFFER_SCALE_NEAREST", "1");
+                Environment.SetEnvironmentVariable("FNA3D_OPENGL_FORCE_COMPATIBILITY_PROFILE", "1");
+                Environment.SetEnvironmentVariable(SDL.SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
+                Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins"));
             }
-
-            // NOTE: this is a workaroud to fix d3d11 on windows 11 + scale windows
-            Environment.SetEnvironmentVariable("FNA3D_D3D11_FORCE_BITBLT", "1");
-            Environment.SetEnvironmentVariable("FNA3D_BACKBUFFER_SCALE_NEAREST", "1");
-            Environment.SetEnvironmentVariable("FNA3D_OPENGL_FORCE_COMPATIBILITY_PROFILE", "1");
-            Environment.SetEnvironmentVariable(SDL.SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
-            Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Plugins"));
         }
 
         private static uint ValidateDesktopClientInstallation()
         {
-            if (PlatformHelper.IsBrowser)
+            if (!BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 Log.Trace("Browser startup: skipping desktop UO-directory and client-version validation.");
                 return 0;
@@ -753,7 +751,7 @@ namespace ClassicUO
 
         private static void LaunchDesktopBrowserLink()
         {
-            if (!PlatformHelper.IsBrowser)
+            if (BrowserRuntimeBootstrap.ShouldAllowWindowResizing())
             {
                 PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
             }

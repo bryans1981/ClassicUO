@@ -170,6 +170,7 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - Prefer one-click actions that write readable local reports instead of manual copy/paste from the browser.
 - Move superseded checks into archived sections once they are no longer part of the active path.
 - Batch browser cleanup work in larger chunks by default; avoid one-item-at-a-time operator loops unless a blocker, build failure, or self-test failure requires it.
+- Keep non-blocking cleanup items in a separate later-work list so the live browser-app milestone stays the only active focus.
 - GitHub Actions `Build-Test` should ignore browser-spike and docs-only changes, and `Deploy` should only run after a successful `Build-Test` completion.
 
 ### Operator commands

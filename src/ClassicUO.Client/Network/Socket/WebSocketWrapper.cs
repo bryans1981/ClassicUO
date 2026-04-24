@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using ClassicUO.Utility.Platforms;
 using ClassicUO.Utility.Logging;
 using TcpSocket = System.Net.Sockets.Socket;
 using static System.Buffers.ArrayPool<byte>;
@@ -26,7 +27,9 @@ sealed class WebSocketWrapper : SocketWrapper
     private int _disconnectNotified;
 
     public override bool IsConnected => _webSocket?.State is WebSocketState.Connecting or WebSocketState.Open;
-    public override EndPoint LocalEndPoint => _rawSocket?.LocalEndPoint;
+    public override EndPoint LocalEndPoint => PlatformHelper.IsBrowser
+        ? new IPEndPoint(IPAddress.Loopback, 0)
+        : _rawSocket?.LocalEndPoint;
     public bool IsCanceled => _tokenSource.IsCancellationRequested;
 
     private CancellationTokenSource _tokenSource = new();
@@ -141,6 +144,15 @@ sealed class WebSocketWrapper : SocketWrapper
 
     private async Task ConnectWebSocketAsyncCore(Uri uri)
     {
+        if (PlatformHelper.IsBrowser)
+        {
+            _webSocket = new ClientWebSocket();
+            await _webSocket.ConnectAsync(uri, _tokenSource.Token);
+            Log.Trace($"Connected browser WebSocket: {uri}");
+            _receiveTask = StartReceiveAsync();
+            return;
+        }
+
         // Take control of creating the raw socket, turn off Nagle, also lets us peek at `Available` bytes.
         _rawSocket = new TcpSocket(SocketType.Stream, ProtocolType.Tcp)
         {
@@ -241,6 +253,9 @@ sealed class WebSocketWrapper : SocketWrapper
     // We peek the raw tcp socket available bytes, grow if the frame is bigger, we're naively assuming no compression.
     private void GrowReceiveBufferIfNeeded(ref byte[] buffer, ref Memory<byte> memory)
     {
+        if (_rawSocket == null)
+            return;
+
         if (_rawSocket.Available <= buffer.Length)
             return;
 

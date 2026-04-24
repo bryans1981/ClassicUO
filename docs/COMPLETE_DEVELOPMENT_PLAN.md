@@ -28,6 +28,7 @@ What is already proven:
 - browser-safe startup defaults are centralized in the main client
 - browser filesystem/storage seam exists
 - browser transport and websocket cleanup are in place
+- the main client can publish a `browser-wasm` app bundle locally with the WebAssembly workload installed
 - browser canvas host, frame pump, and input bridge exist in the spike path
 - local no-click self-test and compact report saving work
 - browser-only desktop assumptions have been reduced across startup, scenes, settings, and transport
@@ -62,6 +63,8 @@ Current status:
 
 - mostly complete for startup and transport
 - still active for any remaining launch blockers
+- local `browser-wasm` publish now produces `bin/<Configuration>/net10.0/browser-wasm/AppBundle`
+- websocket transport now avoids raw TCP socket setup in browser mode and uses browser-native `ClientWebSocket` connect behavior
 
 ### Milestone 2: Real Browser Rendering
 
@@ -277,4 +280,3 @@ When choosing the next task:
 ## Progress Summary
 
 The project is past the browser bootstrap and transport discovery phase. The remaining critical path is now the live browser client itself: rendering, input, session flow, gameplay, and persistence.
-

@@ -117,7 +117,9 @@ Current status:
 - The browser-native websocket runtime execution controller now performs a real browser websocket connect/read against the report host, giving us the first live websocket execution baseline before final browser runtime integration work.
  - The browser-native websocket runtime session controller now sits above that live websocket execution path and gives us the current browser-session handoff layer.
  - The browser-native runtime ready-state now sits above the browser runtime and gives us the current browser-runtime baseline exposed in the compact report.
- - The browser filesystem bootstrap contract now lives in `ClassicUO.Utility`, and the real client now checks for an attached browser storage provider at startup.
+- The browser filesystem bootstrap contract now lives in `ClassicUO.Utility`, and the real client now checks for an attached browser storage provider at startup.
+- The main client now has a repeatable `browser-wasm` publish path that produces a local app bundle through `scripts/browser-client-publish.ps1`.
+- Browser websocket transport now uses a browser-native connect path instead of raw TCP socket setup when running under `browser-wasm`.
  - The browser host now links the shared browser filesystem bootstrap helper and uses it to attach the browser storage provider through the shared seam.
   - The browser storage provider contract and provider implementations are now public in `ClassicUO.Utility`, which is the shared contract the browser client should consume.
   - The main client now owns a dedicated `BrowserRuntimeBootstrap` helper, which centralizes browser-safe defaults and future storage attachment hooks.

@@ -29,6 +29,8 @@ We have a working experimental browser host at `experiments/BrowserHost`.
 - browser asset readers for `tiledata.mul`, `cliloc.enu`, and `hues.mul`
 - client-facing browser asset service that now drives the current test panels instead of direct probe services
 - the browser filesystem bootstrap seam has been promoted into `ClassicUO.Utility`, and the main client now checks for an attached browser storage provider during startup
+- the main client now publishes a local `browser-wasm` app bundle through `scripts/browser-client-publish.ps1`
+- browser websocket transport now bypasses the raw TCP socket setup in browser mode and connects through browser-native `ClientWebSocket`
 - the browser host now links the shared browser filesystem bootstrap helper and attaches the provider through that helper
 - the browser storage provider contract and provider implementations are now public in `ClassicUO.Utility`
 - the main client now owns a dedicated `BrowserRuntimeBootstrap` helper for browser-safe defaults and storage seam checks

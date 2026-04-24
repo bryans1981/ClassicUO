@@ -61,10 +61,13 @@ Done when:
 
 Current status:
 
-- mostly complete for startup and transport
-- still active for any remaining launch blockers
+- mostly complete for startup, transport, and standalone local serving
+- main-client browser startup now reaches `GameController` construction in Chrome headless
 - local `browser-wasm` publish now produces `bin/<Configuration>/net10.0/browser-wasm/AppBundle`
+- `scripts/browser-client-start.ps1` now publishes and serves the product browser bundle at `http://localhost:5110/`
 - websocket transport now avoids raw TCP socket setup in browser mode and uses browser-native `ClientWebSocket` connect behavior
+- browser logging avoids unsupported console color APIs
+- browser startup attaches temporary rooted in-memory storage when no host storage provider is configured, so settings/profile writes no longer block launch
 
 ### Milestone 2: Real Browser Rendering
 
@@ -88,6 +91,8 @@ Current status:
 - active product milestone
 - partially proven in the spike path
 - still not finished in the main client path
+- current main-client blocker: FNA initializes SDL3 through native P/Invoke and fails in browser with `SDL3 was not found! Do you have fnalibs?`
+- next renderer work must resolve native SDL3/FNA3D browser integration or replace that path with a browser-native render host; serving the existing `_framework/SDL3.wasm` file alone does not satisfy the native dependency
 
 ### Milestone 3: Browser Input and Focus
 

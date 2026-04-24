@@ -138,13 +138,19 @@ namespace ClassicUO
 
             if (!BrowserFileSystemBootstrap.IsConfigured)
             {
-                Log.Warn("Browser storage provider is not configured yet. Browser startup will remain limited until the host attaches one.");
+                BrowserFileSystemBootstrap.ConfigureProvider(CreateDefaultBrowserStorageProvider());
+                Log.Warn("Browser storage provider was not configured by the host. Using temporary in-memory browser storage.");
             }
         }
 
         public static void AttachBrowserStorageProvider(IBrowserBinaryAssetSource source)
         {
-            BrowserFileSystemBootstrap.ConfigureReadOnlyAssetProvider(source);
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            BrowserFileSystemBootstrap.ConfigureProvider(CreateDefaultBrowserStorageProvider(source));
         }
 
         public static bool ShouldAllowWindowResizing()
@@ -240,6 +246,18 @@ namespace ClassicUO
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)
         {
             BrowserFileSystemBootstrap.ConfigureProvider(provider);
+        }
+
+        private static IBrowserStorageProvider CreateDefaultBrowserStorageProvider(IBrowserBinaryAssetSource assetsSource = null)
+        {
+            assetsSource ??= new InMemoryBrowserBinaryAssetSource();
+
+            return BrowserFileSystemBootstrap.CreateRootedProvider(
+                BrowserFileSystemBootstrap.CreateReadOnlyAssetProvider(assetsSource),
+                new InMemoryBrowserStorageProvider(),
+                new InMemoryBrowserStorageProvider(),
+                new InMemoryBrowserStorageProvider()
+            );
         }
     }
 

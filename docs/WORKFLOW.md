@@ -174,6 +174,10 @@ The default operator interaction for this project is:
 - The browser filesystem bootstrap seam now lives in `ClassicUO.Utility`; `ClassicUO.Client` now checks browser startup for an attached storage provider before continuing.
 - The main client now has a repeatable local `browser-wasm` publish path through `scripts/browser-client-publish.ps1`; this is part of the live browser application milestone.
 - Browser websocket transport now uses the browser-native `ClientWebSocket` path without creating a raw TCP socket when running in browser mode.
+- The main client now has a local product-browser URL at `http://localhost:5110/` after running `scripts/browser-client-start.ps1 -Configuration Debug -Port 5110`.
+- The main client browser runtime now passes the early managed startup blockers for console logging and temporary settings/profile storage.
+- Current active blocker is renderer/platform integration: FNA reaches SDL3 initialization and fails in browser because the native SDL3/FNA3D path is not yet correctly linked or replaced.
+- Next work should focus on the renderer/platform decision path, not additional synthetic browser-service chain growth.
 - The browser host now links the shared browser filesystem bootstrap helper, so the provider attachment path is owned by the shared seam instead of the experiment-only bridge.
 - The browser storage provider contract and the read-only/rooted provider implementations are now public in `ClassicUO.Utility`, so the browser client can consume them as shared infrastructure instead of host-private types.
 - The browser startup helper now lives in `ClassicUO.Client` as `BrowserRuntimeBootstrap`, which owns browser-safe defaults, provider checks, and future storage attachment hooks.

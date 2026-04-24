@@ -8,6 +8,33 @@ This document records only findings confirmed from the current repository conten
 
 ## Confirmed Findings
 
+### 0. The main client now has a local browser publish and serve path
+
+Files added or updated:
+
+- `scripts/browser-client-publish.ps1`
+- `scripts/browser-client-start.ps1`
+- `scripts/browser-client-stop.ps1`
+- `scripts/browser-client-serve.ps1`
+- `scripts/browser-client-index.html`
+
+Confirmed behavior:
+
+- `scripts/browser-client-publish.ps1 -Configuration Debug` produces `bin/Debug/net10.0/browser-wasm/AppBundle`.
+- `scripts/browser-client-start.ps1 -Configuration Debug -Port 5110` publishes the bundle and serves it at `http://localhost:5110/`.
+- The generated static shell loads `_framework/dotnet.js` and starts the main `cuo` browser runtime.
+
+Latest local Chrome headless result:
+
+- Browser runtime reaches managed ClassicUO startup and constructs toward `GameController`.
+- Fixed blockers: unsupported browser console color APIs and missing writable browser settings storage.
+- Current blocker: FNA platform initialization fails because SDL3 native P/Invoke is not available in the browser runtime: `SDL3 was not found! Do you have fnalibs?`
+
+Implication:
+
+- The current critical path has moved from browser packaging/startup into real browser rendering/platform integration.
+- The next product milestone is not more synthetic validation; it is resolving the SDL3/FNA3D browser-native dependency or replacing that path with a browser-native renderer host.
+
 ### 1. Browser support is claimed, but the browser packaging path is not exposed here
 
 The top-level README states that ClassicUO supports the browser. However, the repository content inspected so far does not include an obvious browser build script, browser-specific GitHub Actions job, or checked-in web artifact set such as `index.html`, `.wasm`, or web packaging templates.
@@ -93,22 +120,25 @@ Implication:
 
 ## Current Blockers
 
-### Blocker 1: Missing browser build pipeline
+### Blocker 1: FNA/SDL3 browser-native platform initialization
 
-We do not yet know:
+The local browser publish path now exists, but the running browser app fails when FNA tries to initialize SDL3.
 
-- what command produces the browser build
-- what runtime packager is used
-- what output files should be served
-- whether the build path depends on another repo or unpublished assets
+We need to determine whether the viable product path is:
 
-### Blocker 2: Unknown browser runtime bootstrap
+- compile/link native SDL3 and FNA3D correctly into the browser app,
+- consume an existing ClassicUO-compatible browser FNA layer from another public repo if available,
+- or bypass the desktop FNA platform layer with a browser-native render/input host.
 
-We do not yet know:
+### Blocker 2: Browser asset delivery and durable storage
 
-- how the browser-hosted app starts
-- how the unmanaged host/bootstrap layer is adapted for the browser target
-- how the asset directory expectation is represented in a browser environment
+The temporary rooted in-memory storage provider unblocks startup, but it is not final persistence.
+
+We still need:
+
+- real browser asset loading for private UO files,
+- durable browser-safe settings/profile storage,
+- and a repeatable hosted asset layout.
 
 ## Working Hypotheses
 

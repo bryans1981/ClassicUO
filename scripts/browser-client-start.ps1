@@ -4,7 +4,10 @@ param(
     [int]$Port = 5110,
     [string]$ProxyTarget = "127.0.0.1:2593",
     [string]$LoginUsername = "",
-    [string]$LoginPassword = ""
+    [string]$LoginPassword = "",
+    [switch]$OpenBrowser,
+    [string]$BrowserPath = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
+    [switch]$KeepBrowserOpen
 )
 
 $ErrorActionPreference = "Stop"
@@ -13,9 +16,11 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 $proxyProjectRoot = Join-Path $repoRoot 'tools\ws'
 $proxyPidFile = Join-Path $repoRoot 'tools\ws\.wsproxy.pid'
 $pidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-server.pid"
+$browserPidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-browser.pid"
 $bundlePath = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\AppBundle"
 $browserLoginPath = Join-Path $bundlePath "browser-login.json"
 $browserLoginAssetPath = Join-Path $bundlePath "uo\browser-login.json"
+$serverAlreadyRunning = $false
 
 function Test-ManagedProcess {
     param(
@@ -45,6 +50,49 @@ function Test-ManagedProcess {
     return $commandLine -like "*$ExpectedCommandLineToken*"
 }
 
+function Start-BrowserWindow {
+    param(
+        [string]$TargetUrl,
+        [string]$PreferredBrowserPath,
+        [switch]$PreserveBrowserOpen
+    )
+
+    $resolvedBrowserPath = $PreferredBrowserPath
+    if (-not (Test-Path $resolvedBrowserPath)) {
+        $fallbackEdgePath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+        if (Test-Path $fallbackEdgePath) {
+            $resolvedBrowserPath = $fallbackEdgePath
+        } else {
+            throw "Chrome was not found at $resolvedBrowserPath and Edge was not found at $fallbackEdgePath."
+        }
+    }
+
+    $browserProfileRoot = Join-Path $env:TEMP 'ClassicUO-BrowserClient'
+    $browserProfilePath = Join-Path $browserProfileRoot 'Profile'
+    Remove-Item -LiteralPath $browserProfilePath -Recurse -Force -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
+
+    $browserArguments = "--new-window --no-first-run --no-default-browser-check --disable-features=ChromeWhatsNewUI --user-data-dir=`"$browserProfilePath`""
+    $browserArguments += " --start-minimized"
+    $browserArguments += " `"$TargetUrl`""
+
+    $browserStartProcess = @{
+        FilePath = $resolvedBrowserPath
+        ArgumentList = $browserArguments
+        PassThru = $true
+        WindowStyle = 'Minimized'
+    }
+
+    $browserProc = Start-Process @browserStartProcess
+    $browserProc.Id | Set-Content $browserPidFile
+    Write-Host "Browser client window PID: $($browserProc.Id)"
+    Write-Host "Browser client window URL: $TargetUrl"
+
+    if (-not $PreserveBrowserOpen) {
+        Write-Host "Browser client window will be closed by scripts/browser-client-stop.ps1."
+    }
+}
+
 & (Join-Path $PSScriptRoot "browser-client-publish.ps1") -Configuration $Configuration
 
 if (-not [string]::IsNullOrWhiteSpace($LoginUsername) -and -not [string]::IsNullOrWhiteSpace($LoginPassword)) {
@@ -67,10 +115,10 @@ if (Test-Path $pidFile) {
 
     if ($existingProcess) {
         Write-Host "Browser client server is already running at http://localhost:$Port/ (PID $existingPid)."
-        exit 0
+        $serverAlreadyRunning = $true
+    } else {
+        Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue
     }
-
-    Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue
 }
 
 $proxyNode = Get-Command node -ErrorAction SilentlyContinue
@@ -95,9 +143,16 @@ if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $p
 
 $serveScript = Join-Path $PSScriptRoot "browser-client-serve.ps1"
 
-$process = Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$serveScript`" -BundlePath `"$bundlePath`" -Port $Port" -WorkingDirectory $repoRoot -PassThru
-$process.Id | Set-Content $pidFile
+if (-not $serverAlreadyRunning) {
+    $process = Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$serveScript`" -BundlePath `"$bundlePath`" -Port $Port" -WorkingDirectory $repoRoot -PassThru
+    $process.Id | Set-Content $pidFile
 
-Write-Host "Browser client URL: http://localhost:$Port/"
-Write-Host "Browser client server PID: $($process.Id)"
+    Write-Host "Browser client URL: http://localhost:$Port/"
+    Write-Host "Browser client server PID: $($process.Id)"
+} else {
+    Write-Host "Browser client URL: http://localhost:$Port/"
+}
+if ($OpenBrowser) {
+    Start-BrowserWindow -TargetUrl "http://localhost:$Port/" -PreferredBrowserPath $BrowserPath -PreserveBrowserOpen:$KeepBrowserOpen
+}
 Write-Host "To stop it, run: .\scripts\browser-client-stop.ps1"

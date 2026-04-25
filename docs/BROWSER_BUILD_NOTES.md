@@ -23,6 +23,7 @@ Confirmed behavior:
 - `scripts/browser-client-publish.ps1 -Configuration Debug` produces `bin/Debug/net10.0/browser-wasm/AppBundle`.
 - `scripts/browser-client-start.ps1 -Configuration Debug -Port 5110` publishes the bundle and serves it at `http://localhost:5110/`.
 - `scripts/browser-client-start.ps1` now also starts the local WebSocket proxy at `ws://127.0.0.1:2594` when `tools/ws/node_modules` is present.
+- `scripts/browser-client-start.ps1 -OpenBrowser` can launch a separate minimized browser window for the client, and `scripts/browser-client-stop.ps1` now closes that browser window along with the server and proxy.
 - The generated static shell loads `_framework/dotnet.js` and starts the browser runtime.
 
 Latest local Chrome headless result:

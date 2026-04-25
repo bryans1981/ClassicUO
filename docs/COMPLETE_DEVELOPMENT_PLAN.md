@@ -73,6 +73,7 @@ Current status:
 - websocket transport now avoids raw TCP socket setup in browser mode and uses browser-native `ClientWebSocket` connect behavior
 - browser logging avoids unsupported console color APIs
 - browser startup attaches temporary rooted in-memory storage when no host storage provider is configured, so settings/profile writes no longer block launch
+- `scripts/browser-client-start.ps1 -OpenBrowser` now launches a minimized external browser window and `scripts/browser-client-stop.ps1` closes it, so the repo owns the browser lifecycle instead of the Codex in-app panel
 - main-client browser startup now links native SDL2/FNA3D and creates a WebGL2/OpenGL ES 3 renderer in Chrome headless
 - browser asset staging now has a repo location at `browser-assets/uo/versions/<asset-version>/` and publish-time copy/manifest support into the bundle
 - browser file loading now avoids `MemoryMappedFile` in browser mode and falls back to stream reads for UO files

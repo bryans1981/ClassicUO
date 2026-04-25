@@ -269,10 +269,25 @@ namespace ClassicUO
                 return;
             }
 
-            string loginPath = BrowserVirtualPaths.ConfigFile("browser-login.json");
-            Log.Trace($"Browser login override: checking {loginPath}");
+            string[] candidatePaths =
+            {
+                BrowserVirtualPaths.AssetFile("browser-login.json"),
+                BrowserVirtualPaths.ConfigFile("browser-login.json")
+            };
 
-            if (!FileSystemHelper.FileExists(loginPath))
+            string loginPath = null;
+            foreach (string candidatePath in candidatePaths)
+            {
+                Log.Trace($"Browser login override: checking {candidatePath}");
+
+                if (FileSystemHelper.FileExists(candidatePath))
+                {
+                    loginPath = candidatePath;
+                    break;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(loginPath))
             {
                 Log.Trace("Browser login override: file not found.");
                 return;

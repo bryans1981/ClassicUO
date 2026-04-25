@@ -362,11 +362,10 @@
           }
 
           fsApi.mkdirTree(assetRoot);
-          fsApi.mkdirTree('/config');
 
           if (browserLoginJson) {
             try {
-              fsApi.writeFile('/config/browser-login.json', browserLoginJson);
+              fsApi.writeFile(`${assetRoot}/browser-login.json`, browserLoginJson);
               if (debugTrace) {
                 console.info('ClassicUO browser preRun: wrote browser-login.json override.');
               }

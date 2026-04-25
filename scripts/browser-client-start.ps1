@@ -14,6 +14,8 @@ $proxyProjectRoot = Join-Path $repoRoot 'tools\ws'
 $proxyPidFile = Join-Path $repoRoot 'tools\ws\.wsproxy.pid'
 $pidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-server.pid"
 $bundlePath = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\AppBundle"
+$browserLoginPath = Join-Path $bundlePath "browser-login.json"
+$browserLoginAssetPath = Join-Path $bundlePath "uo\browser-login.json"
 
 function Test-ManagedProcess {
     param(
@@ -44,6 +46,20 @@ function Test-ManagedProcess {
 }
 
 & (Join-Path $PSScriptRoot "browser-client-publish.ps1") -Configuration $Configuration
+
+if (-not [string]::IsNullOrWhiteSpace($LoginUsername) -and -not [string]::IsNullOrWhiteSpace($LoginPassword)) {
+    $loginPayload = [ordered]@{
+        username = $LoginUsername
+        password = $LoginPassword
+    } | ConvertTo-Json -Compress
+
+    Set-Content -LiteralPath $browserLoginPath -Value $loginPayload -Encoding UTF8
+    Set-Content -LiteralPath $browserLoginAssetPath -Value $loginPayload -Encoding UTF8
+    Write-Host "Browser login override: $LoginUsername"
+} elseif (Test-Path $browserLoginPath) {
+    Remove-Item -LiteralPath $browserLoginPath -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $browserLoginAssetPath -Force -ErrorAction SilentlyContinue
+}
 
 if (Test-Path $pidFile) {
     $existingPid = Get-Content $pidFile -ErrorAction SilentlyContinue
@@ -78,19 +94,6 @@ if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $p
 }
 
 $serveScript = Join-Path $PSScriptRoot "browser-client-serve.ps1"
-$browserLoginPath = Join-Path $bundlePath "browser-login.json"
-
-if (-not [string]::IsNullOrWhiteSpace($LoginUsername) -and -not [string]::IsNullOrWhiteSpace($LoginPassword)) {
-    $loginPayload = [ordered]@{
-        username = $LoginUsername
-        password = $LoginPassword
-    } | ConvertTo-Json -Compress
-
-    Set-Content -LiteralPath $browserLoginPath -Value $loginPayload -Encoding UTF8
-    Write-Host "Browser login override: $LoginUsername"
-} elseif (Test-Path $browserLoginPath) {
-    Remove-Item -LiteralPath $browserLoginPath -Force -ErrorAction SilentlyContinue
-}
 
 $process = Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$serveScript`" -BundlePath `"$bundlePath`" -Port $Port" -WorkingDirectory $repoRoot -PassThru
 $process.Id | Set-Content $pidFile

@@ -7,6 +7,7 @@ using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework;
 using System;
 using System.IO;
+using System.Text.Json;
 
 namespace ClassicUO
 {
@@ -258,6 +259,56 @@ namespace ClassicUO
             BrowserFileSystemBootstrap.ConfigureProvider(provider);
         }
 
+        public static void ApplyBrowserLoginOverride()
+        {
+            Log.Trace("Browser login override: entering.");
+
+            if (!BrowserFileSystemBootstrap.IsConfigured)
+            {
+                Log.Trace("Browser login override: storage provider is not configured.");
+                return;
+            }
+
+            string loginPath = BrowserVirtualPaths.ConfigFile("browser-login.json");
+            Log.Trace($"Browser login override: checking {loginPath}");
+
+            if (!FileSystemHelper.FileExists(loginPath))
+            {
+                Log.Trace("Browser login override: file not found.");
+                return;
+            }
+
+            try
+            {
+                string json = FileSystemHelper.ReadAllText(loginPath);
+
+                if (string.IsNullOrWhiteSpace(json))
+                {
+                    Log.Trace("Browser login override: file is empty.");
+                    return;
+                }
+
+                BrowserLoginBootstrapOptions options = JsonSerializer.Deserialize<BrowserLoginBootstrapOptions>(json);
+
+                if (options == null || string.IsNullOrWhiteSpace(options.Username))
+                {
+                    Log.Trace("Browser login override: username missing after deserialization.");
+                    return;
+                }
+
+                Settings.GlobalSettings.Username = options.Username;
+                Settings.GlobalSettings.Password = Crypter.Encrypt(options.Password ?? string.Empty);
+                Settings.GlobalSettings.SaveAccount = false;
+                Settings.GlobalSettings.AutoLogin = true;
+                CUOEnviroment.SkipLoginScreen = true;
+                Log.Trace($"Applied browser login override for '{options.Username}'.");
+            }
+            catch (Exception ex)
+            {
+                Log.Warn($"Failed to apply browser login override: {ex.Message}");
+            }
+        }
+
         private static IBrowserStorageProvider CreateDefaultBrowserStorageProvider(IBrowserBinaryAssetSource assetsSource = null)
         {
             assetsSource ??= new BrowserMountedBinaryAssetSource(BrowserVirtualPaths.AssetsRoot);
@@ -281,6 +332,15 @@ namespace ClassicUO
         public string ConfigRootPath { get; set; } = string.Empty;
         public string UltimaOnlineDirectory { get; set; } = string.Empty;
         public string ClientVersion { get; set; } = string.Empty;
+    }
+
+    internal sealed class BrowserLoginBootstrapOptions
+    {
+        [System.Text.Json.Serialization.JsonPropertyName("username")]
+        public string Username { get; set; } = string.Empty;
+
+        [System.Text.Json.Serialization.JsonPropertyName("password")]
+        public string Password { get; set; } = string.Empty;
     }
 
 }

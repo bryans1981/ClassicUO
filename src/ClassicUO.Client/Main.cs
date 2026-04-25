@@ -152,6 +152,8 @@ namespace ClassicUO
                 }
             }
 
+            BrowserRuntimeBootstrap.ApplyBrowserLoginOverride();
+
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))
             {
                 Settings.GlobalSettings.UltimaOnlineDirectory = BrowserRuntimeBootstrap.GetUltimaOnlineDirectoryRoot();

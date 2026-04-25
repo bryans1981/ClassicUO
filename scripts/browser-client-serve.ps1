@@ -47,6 +47,17 @@ try {
     while ($listener.IsListening) {
         $context = $listener.GetContext()
         $requestPath = [Uri]::UnescapeDataString($context.Request.Url.AbsolutePath.TrimStart("/"))
+        if ($context.Request.HttpMethod -eq 'POST' -and $requestPath.EndsWith('__browser-status', [System.StringComparison]::OrdinalIgnoreCase)) {
+            $reader = New-Object System.IO.StreamReader($context.Request.InputStream, $context.Request.ContentEncoding)
+            $body = $reader.ReadToEnd()
+            $reader.Dispose()
+            Add-Content -LiteralPath $logPath -Value ("STATUS {0}" -f $body)
+            $context.Response.StatusCode = 204
+            $context.Response.Close()
+            continue
+        }
+
+        Add-Content -LiteralPath $logPath -Value ("REQ {0}" -f $requestPath)
 
         if ([string]::IsNullOrWhiteSpace($requestPath)) {
             if ($buildPrefix) {
@@ -57,6 +68,13 @@ try {
             }
 
             $requestPath = "index.html"
+        }
+
+        if ($requestPath -match '^build/[^/]+/?$') {
+            $requestPath = "index.html"
+        }
+        elseif ($requestPath -match '^build/[^/]+/(.+)$') {
+            $requestPath = $Matches[1]
         }
 
         if ($buildPrefix -and $requestPath.StartsWith($buildPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {

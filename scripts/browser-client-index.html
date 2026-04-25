@@ -72,8 +72,10 @@
     const log = document.getElementById('log');
     const debugTrace = new URLSearchParams(location.search).has('debug') || localStorage.getItem('classicuo-browser-debug') === '1';
     const assetManifestUrl = './uo-manifest.json';
+    const browserLoginUrl = './browser-login.json';
     const assetRoot = '/uo';
     let assetPaths = [];
+    let browserLoginJson = '';
 
     const rewriteBrowserAssetUrl = (requestUrl) => {
       if (requestUrl === assetRoot || requestUrl.startsWith(`${assetRoot}/`)) {
@@ -129,6 +131,28 @@
     }
 
     const originalFetch = window.fetch.bind(window);
+    const reportStatus = async (stage, detail = '') => {
+      try {
+        await originalFetch('/__browser-status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          body: JSON.stringify({
+            stage,
+            detail,
+            url: location.href,
+            timestamp: new Date().toISOString()
+          })
+        });
+      } catch (error) {
+        if (debugTrace) {
+          console.warn(`status beacon failed: ${stage}`, error);
+        }
+      }
+    };
+
+    reportStatus('page-init');
     window.fetch = async (input, init) => {
       const requestUrl = typeof input === 'string' ? input : input?.url || String(input);
       const rewrittenUrl = rewriteBrowserAssetUrl(requestUrl);
@@ -338,6 +362,20 @@
           }
 
           fsApi.mkdirTree(assetRoot);
+          fsApi.mkdirTree('/config');
+
+          if (browserLoginJson) {
+            try {
+              fsApi.writeFile('/config/browser-login.json', browserLoginJson);
+              if (debugTrace) {
+                console.info('ClassicUO browser preRun: wrote browser-login.json override.');
+              }
+            } catch (error) {
+              console.error('ClassicUO browser preRun: failed to write browser-login.json override', error);
+              throw error;
+            }
+          }
+
           if (debugTrace) {
             console.info(`ClassicUO browser preRun: mounting ${assetPaths.length} assets into ${assetRoot}`);
           }
@@ -384,12 +422,26 @@
         const manifest = await manifestResponse.json();
         assetPaths = Array.isArray(manifest?.files) ? manifest.files : [];
 
+        reportStatus('manifest-loaded', String(assetPaths.length));
         status.textContent = `Queued ${assetPaths.length} browser assets from ${manifest.version || 'unknown version'}. Starting runtime...`;
       } else {
+        reportStatus('manifest-missing');
         status.textContent = 'No browser asset manifest found. Starting runtime without staged UO assets.';
       }
 
+      const browserLoginResponse = await fetch(browserLoginUrl, { cache: 'no-store' });
+      if (browserLoginResponse.ok) {
+        browserLoginJson = await browserLoginResponse.text();
+        reportStatus('browser-login-loaded', browserLoginJson ? 'present' : 'empty');
+        if (debugTrace) {
+          console.info('Loaded browser-login.json override.');
+        }
+      } else {
+        reportStatus('browser-login-missing');
+      }
+
       status.textContent = 'Starting ClassicUO browser runtime...';
+      reportStatus('runtime-create');
       const runtime = await dotnet
         .withConfig({
           debugLevel: 0
@@ -420,11 +472,14 @@
         .create();
 
       status.hidden = true;
+      reportStatus('runtime-runmain');
       await runtime.runMainAndExit();
       status.hidden = false;
+      reportStatus('runtime-exited');
       status.textContent = 'ClassicUO browser runtime exited.';
     } catch (error) {
       status.hidden = false;
+      reportStatus('runtime-failed', String(error?.stack || error));
       console.error(error);
       status.textContent = `ClassicUO browser runtime failed:\n${error?.stack || error}`;
     }

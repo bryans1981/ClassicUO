@@ -33,6 +33,7 @@ Latest local Chrome headless result:
 - The browser runtime now avoids `MemoryMappedFile` usage in browser mode and falls back to stream reads for UO files.
 - The latest browser self-test report in `docs/test-results/browser-self-test-latest.json` is green for the browser-spike harness.
 - The remaining work is now proving the full main-client gameplay path in browser mode, not just asset visibility or browser-safe file loading.
+- Test account for repeated login validation: `bryanstest` (password provided separately during test runs).
 
 Implication:
 

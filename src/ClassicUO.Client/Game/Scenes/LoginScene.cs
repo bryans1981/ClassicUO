@@ -76,7 +76,17 @@ namespace ClassicUO.Game.Scenes
             UIManager.Add(_currentGump = new LoginGump(_world, this));
 
             Client.Game.Audio.PlayMusic(Client.Game.Audio.LoginMusicIndex, false, true);
+            Log.Trace($"LoginScene.Load browser state: username={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.Username) ? "empty" : "present")}, password={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.Password) ? "empty" : "present")}, autoLogin={Settings.GlobalSettings.AutoLogin}, skipLogin={CUOEnviroment.SkipLoginScreen}");
 
+            if (PlatformHelper.IsBrowser
+                && !string.IsNullOrWhiteSpace(Settings.GlobalSettings.Username)
+                && !string.IsNullOrWhiteSpace(Crypter.Decrypt(Settings.GlobalSettings.Password)))
+            {
+                Log.Trace("Browser login scene: auto-connecting with staged credentials.");
+                CUOEnviroment.SkipLoginScreen = false;
+                Connect(Settings.GlobalSettings.Username, Crypter.Decrypt(Settings.GlobalSettings.Password));
+            }
+            else
             if (CanAutologin && CurrentLoginStep != LoginSteps.Main || CUOEnviroment.SkipLoginScreen)
             {
                 if (!string.IsNullOrEmpty(Settings.GlobalSettings.Username))

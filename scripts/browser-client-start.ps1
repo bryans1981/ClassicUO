@@ -1,7 +1,10 @@
 param(
     [ValidateSet("Debug", "Release")]
     [string]$Configuration = "Debug",
-    [int]$Port = 5110
+    [int]$Port = 5110,
+    [string]$ProxyTarget = "127.0.0.1:2593",
+    [string]$LoginUsername = "",
+    [string]$LoginPassword = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -65,15 +68,30 @@ if (Test-Path $proxyPidFile) {
 }
 
 if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $proxyProjectRoot 'node_modules'))) {
-    $proxyProc = Start-Process node -ArgumentList "proxy.mjs" -WorkingDirectory $proxyProjectRoot -PassThru
+    $proxyProc = Start-Process node -ArgumentList @('proxy.mjs', '--target', $ProxyTarget) -WorkingDirectory $proxyProjectRoot -PassThru
     $proxyProc.Id | Set-Content $proxyPidFile
     Write-Host "Local websocket proxy URL: ws://127.0.0.1:2594"
+    Write-Host "Local websocket proxy target: $ProxyTarget"
     Write-Host "Local websocket proxy PID: $($proxyProc.Id)"
 } elseif (-not (Test-Path (Join-Path $proxyProjectRoot 'node_modules'))) {
     Write-Host "Local websocket proxy dependencies are not installed yet. Run `npm install` in tools\ws to enable ws://127.0.0.1:2594."
 }
 
 $serveScript = Join-Path $PSScriptRoot "browser-client-serve.ps1"
+$browserLoginPath = Join-Path $bundlePath "browser-login.json"
+
+if (-not [string]::IsNullOrWhiteSpace($LoginUsername) -and -not [string]::IsNullOrWhiteSpace($LoginPassword)) {
+    $loginPayload = [ordered]@{
+        username = $LoginUsername
+        password = $LoginPassword
+    } | ConvertTo-Json -Compress
+
+    Set-Content -LiteralPath $browserLoginPath -Value $loginPayload -Encoding UTF8
+    Write-Host "Browser login override: $LoginUsername"
+} elseif (Test-Path $browserLoginPath) {
+    Remove-Item -LiteralPath $browserLoginPath -Force -ErrorAction SilentlyContinue
+}
+
 $process = Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$serveScript`" -BundlePath `"$bundlePath`" -Port $Port" -WorkingDirectory $repoRoot -PassThru
 $process.Id | Set-Content $pidFile
 

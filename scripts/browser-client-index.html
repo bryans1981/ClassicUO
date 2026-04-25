@@ -113,6 +113,15 @@
     const bindConsole = (method, level) => {
       const original = console[method].bind(console);
       console[method] = (...args) => {
+        const statusLine = args.length > 0 ? String(args[0]) : '';
+        if (statusLine.startsWith('BROWSER_STATUS ')) {
+          const payload = statusLine.substring('BROWSER_STATUS '.length);
+          const separatorIndex = payload.indexOf('|');
+          const stage = separatorIndex >= 0 ? payload.substring(0, separatorIndex) : payload;
+          const detail = separatorIndex >= 0 ? payload.substring(separatorIndex + 1) : '';
+          void reportStatus(stage, detail).catch(() => {});
+        }
+
         if (debugTrace) {
           appendLog(level, args);
         }
@@ -120,17 +129,36 @@
       };
     };
 
-    if (debugTrace) {
-      bindConsole('log', 'log');
-      bindConsole('debug', 'debug');
-      bindConsole('info', 'info');
-      bindConsole('warn', 'warn');
-      bindConsole('error', 'error');
-    } else {
+    bindConsole('log', 'log');
+    bindConsole('debug', 'debug');
+    bindConsole('info', 'info');
+    bindConsole('warn', 'warn');
+    bindConsole('error', 'error');
+
+    if (!debugTrace) {
       log.style.display = 'none';
     }
 
     const originalFetch = window.fetch.bind(window);
+    window.classicuoPostStatus = (stage, detail) => {
+      void originalFetch('/__browser-status', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+          stage,
+          detail,
+          url: location.href,
+          timestamp: new Date().toISOString()
+        })
+      }).catch(() => {
+        if (debugTrace) {
+          console.warn(`status beacon failed: ${stage}`);
+        }
+      });
+    };
+
     const reportStatus = async (stage, detail = '') => {
       try {
         await originalFetch('/__browser-status', {

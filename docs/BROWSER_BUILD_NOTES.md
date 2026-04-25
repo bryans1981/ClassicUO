@@ -35,6 +35,7 @@ Latest local Chrome headless result:
 - The latest browser self-test report in `docs/test-results/browser-self-test-latest.json` is green for the browser-spike harness.
 - The remaining work is now proving the full main-client gameplay path in browser mode, not just asset visibility or browser-safe file loading.
 - Test account for repeated login validation: `bryanstest` (password provided separately during test runs).
+- Managed browser telemetry now posts back through the host log via the browser console bridge. The latest live boot reaches `browser-startup` and `browser-bootstrap` before entering the long asset hydration phase.
 
 Implication:
 
@@ -158,6 +159,7 @@ Minimum next proof:
 - browser startup reaches managed game logging again
 - `Main` or the browser bootstrap path confirms the client is alive after the native runtime loads
 - the browser shell stops aborting before game initialization
+- the live run reaches `GameController.LoadContent` probes after asset hydration completes
 
 ### Blocker 2: Browser durable storage
 

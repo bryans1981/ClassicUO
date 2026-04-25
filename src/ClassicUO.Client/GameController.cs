@@ -108,6 +108,10 @@ namespace ClassicUO
             {
                 Log.Trace($"Browser startup contract consumed: storageConfigured={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}");
                 Log.Trace($"Browser runtime policy: mouseThread=false, fixedTimeStep=false, targetFps=60");
+                BrowserRuntimeStatusReporter.Report(
+                    "browser-bootstrap",
+                    $"storage={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}"
+                );
 
                 if (!_browserBootstrapState.StorageConfigured)
                 {
@@ -138,10 +142,12 @@ namespace ClassicUO
         protected override void LoadContent()
         {
             base.LoadContent();
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-start", string.Empty);
 
             Fonts.Initialize(GraphicsDevice);
             SolidColorTextureCache.Initialize(GraphicsDevice);
             Audio = new AudioManager();
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-audio-created", string.Empty);
 
             var bytes = Loader.GetBackgroundImage().ToArray();
             using var ms = new MemoryStream(bytes);
@@ -149,10 +155,16 @@ namespace ClassicUO
 #if false
             SetScene(new MainScene(this));
 #else
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-uo-load", string.Empty);
             UO.Load(this);
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-uo-load", string.Empty);
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-audio-init", string.Empty);
             Audio.Initialize();
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-audio-init", string.Empty);
             // TODO: temporary fix to avoid crash when laoding plugins
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-encryption", string.Empty);
             Settings.GlobalSettings.Encryption = (byte) NetClient.Socket.Load(UO.FileManager.Version, (EncryptionType) Settings.GlobalSettings.Encryption);
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-encryption", string.Empty);
 
             if (BrowserRuntimeBootstrap.ShouldSkipDesktopPluginLoading())
             {
@@ -172,7 +184,9 @@ namespace ClassicUO
                 Log.Trace("Done!");
             }
 
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-login-scene", string.Empty);
             SetScene(new LoginScene(UO.World));
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-login-scene", string.Empty);
 #endif
             SetWindowPositionBySettings();
         }
@@ -241,6 +255,7 @@ namespace ClassicUO
                 string username = Settings.GlobalSettings.Username;
                 string password = Crypter.Decrypt(Settings.GlobalSettings.Password);
                 Log.Trace("GameController.SetScene browser auto-login: scheduling login connect.");
+                BrowserRuntimeStatusReporter.Report("browser-set-scene", $"login auto-connect scheduled for {username}");
                 EnqueueAction(250, () => loginScene.Connect(username, password));
             }
         }

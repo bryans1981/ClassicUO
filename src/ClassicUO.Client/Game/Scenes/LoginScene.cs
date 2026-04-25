@@ -77,12 +77,17 @@ namespace ClassicUO.Game.Scenes
 
             Client.Game.Audio.PlayMusic(Client.Game.Audio.LoginMusicIndex, false, true);
             Log.Trace($"LoginScene.Load browser state: username={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.Username) ? "empty" : "present")}, password={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.Password) ? "empty" : "present")}, autoLogin={Settings.GlobalSettings.AutoLogin}, skipLogin={CUOEnviroment.SkipLoginScreen}");
+            BrowserRuntimeStatusReporter.Report(
+                "login-scene-load",
+                $"username={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.Username) ? "empty" : "present")}, password={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.Password) ? "empty" : "present")}, autoLogin={Settings.GlobalSettings.AutoLogin}, skipLogin={CUOEnviroment.SkipLoginScreen}"
+            );
 
             if (PlatformHelper.IsBrowser
                 && !string.IsNullOrWhiteSpace(Settings.GlobalSettings.Username)
                 && !string.IsNullOrWhiteSpace(Crypter.Decrypt(Settings.GlobalSettings.Password)))
             {
                 Log.Trace("Browser login scene: auto-connecting with staged credentials.");
+                BrowserRuntimeStatusReporter.Report("login-scene-connect", "auto-connect with staged credentials");
                 CUOEnviroment.SkipLoginScreen = false;
                 Connect(Settings.GlobalSettings.Username, Crypter.Decrypt(Settings.GlobalSettings.Password));
             }
@@ -314,6 +319,7 @@ namespace ClassicUO.Game.Scenes
             }
 
             Log.Trace($"Start login to: {Settings.GlobalSettings.IP},{Settings.GlobalSettings.Port}");
+            BrowserRuntimeStatusReporter.Report("login-connect", $"target={Settings.GlobalSettings.IP}:{Settings.GlobalSettings.Port}, reconnect={Reconnect}");
 
 
             if (!Reconnect)

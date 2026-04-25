@@ -174,8 +174,9 @@ Current status:
 - active product blocker has moved on from asset visibility
 - browser asset staging folder exists for versioned asset drops
 - the selected asset version is already being copied into the browser bundle as `/uo`
-- next task: resolve the browser-native bootstrap/runtime startup failure and restore managed startup logging
-- after the runtime starts cleanly, continue to login scene rendering and gameplay loading
+- managed browser startup telemetry now reports through the host log via the browser shell console bridge
+- the latest live boot reaches `browser-startup` and `browser-bootstrap` before asset hydration continues
+- next task: let the asset hydration phase finish and confirm the new `LoadContent` probes, then continue to login scene rendering and gameplay loading
 
 ### Milestone 6: First Playable World Loop
 
@@ -301,4 +302,4 @@ When choosing the next task:
 
 ## Progress Summary
 
-The project is past browser bootstrap, local serving, transport discovery, native renderer linking, and browser asset staging. The active critical path is now browser-native bootstrap/runtime startup, then managed login flow, input, session flow, gameplay, and persistence.
+The project is past browser bootstrap, local serving, transport discovery, native renderer linking, browser asset staging, and managed startup telemetry. The active critical path is now browser-native asset hydration/runtime startup completion, then managed login flow, input, session flow, gameplay, and persistence.

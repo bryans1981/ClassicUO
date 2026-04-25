@@ -12,6 +12,10 @@
       background: #101216;
       color: #f0f3f7;
       font-family: Segoe UI, sans-serif;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      overscroll-behavior: none;
     }
 
     #status {
@@ -28,27 +32,399 @@
       white-space: pre-wrap;
     }
 
+    #log {
+      position: fixed;
+      left: 16px;
+      top: 16px;
+      max-width: min(720px, calc(100vw - 32px));
+      max-height: min(50vh, calc(100vh - 32px));
+      margin: 0;
+      padding: 10px 12px;
+      overflow: auto;
+      background: rgba(12, 14, 18, 0.9);
+      border: 1px solid rgba(240, 243, 247, 0.12);
+      border-radius: 6px;
+      color: #cfd6df;
+      font-size: 12px;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      pointer-events: none;
+    }
+
     canvas {
       display: block;
       width: 100vw;
       height: 100vh;
+      touch-action: none;
+      outline: none;
     }
   </style>
 </head>
 <body>
+  <canvas id="classicuo-canvas" width="1280" height="720" tabindex="0"></canvas>
   <div id="status">Loading ClassicUO browser runtime...</div>
+  <pre id="log"></pre>
   <script type="module">
     import { dotnet } from './_framework/dotnet.js';
 
     const status = document.getElementById('status');
+    const canvas = document.getElementById('classicuo-canvas');
+    const log = document.getElementById('log');
+    const debugTrace = new URLSearchParams(location.search).has('debug') || localStorage.getItem('classicuo-browser-debug') === '1';
+    const assetManifestUrl = './uo-manifest.json';
+    const assetRoot = '/uo';
+    let assetPaths = [];
+
+    const rewriteBrowserAssetUrl = (requestUrl) => {
+      if (requestUrl === assetRoot || requestUrl.startsWith(`${assetRoot}/`)) {
+        return `.${requestUrl}`;
+      }
+
+      if (requestUrl === '/uo-manifest.json') {
+        return './uo-manifest.json';
+      }
+
+      return requestUrl;
+    };
+
+    const appendLog = (level, args) => {
+      const message = args.map((item) => {
+        if (item instanceof Error) {
+          return item.stack || item.message || String(item);
+        }
+
+        if (typeof item === 'object') {
+          try {
+            return JSON.stringify(item);
+          } catch {
+            return String(item);
+          }
+        }
+
+        return String(item);
+      }).join(' ');
+
+      log.textContent += `[${level}] ${message}\n`;
+      log.scrollTop = log.scrollHeight;
+    };
+
+    const bindConsole = (method, level) => {
+      const original = console[method].bind(console);
+      console[method] = (...args) => {
+        if (debugTrace) {
+          appendLog(level, args);
+        }
+        original(...args);
+      };
+    };
+
+    if (debugTrace) {
+      bindConsole('log', 'log');
+      bindConsole('debug', 'debug');
+      bindConsole('info', 'info');
+      bindConsole('warn', 'warn');
+      bindConsole('error', 'error');
+    } else {
+      log.style.display = 'none';
+    }
+
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (input, init) => {
+      const requestUrl = typeof input === 'string' ? input : input?.url || String(input);
+      const rewrittenUrl = rewriteBrowserAssetUrl(requestUrl);
+      const shouldTrace = debugTrace && (requestUrl.includes('/_framework/') || requestUrl.includes('/uo'));
+
+      if (shouldTrace) {
+        console.info(`fetch start: ${rewrittenUrl}`);
+      }
+
+      try {
+        const fetchInput = typeof input === 'string' ? rewrittenUrl : new Request(rewrittenUrl, input);
+        const response = await originalFetch(fetchInput, init);
+
+        if (shouldTrace && !response.ok) {
+          console.error(`fetch failed: ${rewrittenUrl} -> ${response.status} ${response.statusText}`);
+        }
+
+        if (shouldTrace) {
+          const originalArrayBuffer = response.arrayBuffer.bind(response);
+          const originalText = response.text.bind(response);
+          const originalJson = response.json.bind(response);
+          response.__classicuoRequestUrl = rewrittenUrl;
+
+          response.arrayBuffer = async () => {
+            console.info(`fetch body read: ${rewrittenUrl} -> arrayBuffer`);
+            try {
+              return await originalArrayBuffer();
+            } catch (error) {
+              console.error(`fetch body error: ${rewrittenUrl} -> arrayBuffer`, error);
+              throw error;
+            }
+          };
+
+          response.text = async () => {
+            console.info(`fetch body read: ${rewrittenUrl} -> text`);
+            try {
+              return await originalText();
+            } catch (error) {
+              console.error(`fetch body error: ${rewrittenUrl} -> text`, error);
+              throw error;
+            }
+          };
+
+          response.json = async () => {
+            console.info(`fetch body read: ${rewrittenUrl} -> json`);
+            try {
+              return await originalJson();
+            } catch (error) {
+              console.error(`fetch body error: ${rewrittenUrl} -> json`, error);
+              throw error;
+            }
+          };
+        }
+
+        return response;
+      } catch (error) {
+        if (shouldTrace) {
+          console.error(`fetch exception: ${requestUrl}`, error);
+        }
+
+        throw error;
+      }
+    };
+
+    const originalInstantiateStreaming = WebAssembly.instantiateStreaming.bind(WebAssembly);
+    WebAssembly.instantiateStreaming = async (source, imports) => {
+      const requestUrl = source?.__classicuoRequestUrl || source?.url || '';
+      if (debugTrace && requestUrl.includes('/_framework/')) {
+        console.info(`wasm instantiateStreaming: ${requestUrl}`);
+      }
+
+      try {
+        return await originalInstantiateStreaming(source, imports);
+      } catch (error) {
+        if (debugTrace && requestUrl.includes('/_framework/')) {
+          console.error(`wasm instantiateStreaming failed: ${requestUrl}`, error);
+        }
+
+        throw error;
+      }
+    };
+
+    const originalCompileStreaming = WebAssembly.compileStreaming.bind(WebAssembly);
+    WebAssembly.compileStreaming = async (source) => {
+      const requestUrl = source?.__classicuoRequestUrl || source?.url || '';
+      if (debugTrace && requestUrl.includes('/_framework/')) {
+        console.info(`wasm compileStreaming: ${requestUrl}`);
+      }
+
+      try {
+        return await originalCompileStreaming(source);
+      } catch (error) {
+        if (debugTrace && requestUrl.includes('/_framework/')) {
+          console.error(`wasm compileStreaming failed: ${requestUrl}`, error);
+        }
+
+        throw error;
+      }
+    };
+
+    const originalInstantiate = WebAssembly.instantiate.bind(WebAssembly);
+    WebAssembly.instantiate = async (source, imports) => {
+      const requestUrl = source?.__classicuoRequestUrl || source?.url || '';
+      if (debugTrace && requestUrl.includes('/_framework/')) {
+        console.info(`wasm instantiate: ${requestUrl}`);
+      }
+
+      try {
+        return await originalInstantiate(source, imports);
+      } catch (error) {
+        if (debugTrace && requestUrl.includes('/_framework/')) {
+          console.error(`wasm instantiate failed: ${requestUrl}`, error);
+        }
+
+        throw error;
+      }
+    };
+
+    const originalCompile = WebAssembly.compile.bind(WebAssembly);
+    WebAssembly.compile = async (bufferSource) => {
+      if (debugTrace) {
+        console.info('wasm compile invoked');
+      }
+
+      try {
+        return await originalCompile(bufferSource);
+      } catch (error) {
+        if (debugTrace) {
+          console.error('wasm compile failed', error);
+        }
+        throw error;
+      }
+    };
+
+    const originalOpen = XMLHttpRequest.prototype.open;
+    const originalSend = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.open = function (method, url, ...rest) {
+      const requestUrl = typeof url === 'string' ? url : String(url);
+      const rewrittenUrl = rewriteBrowserAssetUrl(requestUrl);
+      this.__classicuoRequestUrl = rewrittenUrl;
+      return originalOpen.call(this, method, rewrittenUrl, ...rest);
+    };
+
+    XMLHttpRequest.prototype.send = function (...args) {
+      const requestUrl = this.__classicuoRequestUrl || '';
+      const shouldTrace = requestUrl.includes('/_framework/') || requestUrl.includes('/uo');
+
+      if (shouldTrace) {
+        console.info(`xhr start: ${requestUrl}`);
+        this.addEventListener('load', () => {
+          console.info(`xhr load: ${requestUrl} -> ${this.status}`);
+        });
+        this.addEventListener('error', () => {
+          console.error(`xhr error: ${requestUrl} -> ${this.status}`);
+        });
+        this.addEventListener('abort', () => {
+          console.error(`xhr abort: ${requestUrl} -> ${this.status}`);
+        });
+      }
+
+      return originalSend.apply(this, args);
+    };
+
+    window.addEventListener('error', (event) => {
+      if (debugTrace) {
+        appendLog('window.error', [event.error || event.message || 'Unknown error']);
+      }
+    });
+
+    window.addEventListener('unhandledrejection', (event) => {
+      if (debugTrace) {
+        appendLog('unhandledrejection', [event.reason || 'Unknown rejection']);
+      }
+    });
+
+    const resizeCanvas = () => {
+      canvas.width = Math.max(1, window.innerWidth);
+      canvas.height = Math.max(1, window.innerHeight);
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('pointerdown', () => canvas.focus());
+    window.addEventListener('mousedown', () => canvas.focus());
+    window.addEventListener('touchstart', () => canvas.focus(), { passive: true });
+    window.addEventListener('keydown', () => canvas.focus());
+    canvas.addEventListener('pointerdown', () => canvas.focus());
+    canvas.addEventListener('mousedown', () => canvas.focus());
+    canvas.addEventListener('touchstart', () => canvas.focus(), { passive: true });
+    canvas.addEventListener('wheel', () => canvas.focus(), { passive: true });
+    canvas.addEventListener('contextmenu', (event) => event.preventDefault());
+    canvas.addEventListener('dragstart', (event) => event.preventDefault());
+    resizeCanvas();
+    canvas.focus();
+
+    const moduleConfig = {
+      canvas,
+      noAudioDecoding: true,
+      preRun: [
+        (module) => {
+          const fsApi = module?.FS ?? self.FS;
+
+          if (!fsApi) {
+            if (debugTrace) {
+              console.warn('ClassicUO browser preRun: browser FS is not available yet.');
+            }
+            return;
+          }
+
+          fsApi.mkdirTree(assetRoot);
+          if (debugTrace) {
+            console.info(`ClassicUO browser preRun: mounting ${assetPaths.length} assets into ${assetRoot}`);
+          }
+
+          for (let index = 0; index < assetPaths.length; index++) {
+            const path = assetPaths[index];
+            const directory = path.slice(0, path.lastIndexOf('/'));
+            const fileName = path.slice(path.lastIndexOf('/') + 1);
+
+            if (directory && directory !== path) {
+              fsApi.mkdirTree(directory);
+            }
+
+            try {
+      if (debugTrace && (index < 5 || index % 500 === 0)) {
+        console.info(`ClassicUO browser preRun: preloading ${index + 1}/${assetPaths.length} ${path}`);
+      }
+
+              fsApi.createPreloadedFile(directory || assetRoot, fileName, path, true, false);
+            } catch (error) {
+              console.error(`ClassicUO browser preRun: failed to preload ${path}`, error);
+              throw error;
+            }
+          }
+        },
+        (module) => {
+            if (debugTrace) {
+              console.info('ClassicUO browser preRun: createContext', typeof module?.createContext);
+            }
+            if (module?.createContext) {
+              module.createContext(canvas, true, true, {
+                alpha: false,
+              antialias: false,
+              majorVersion: 2
+            });
+          }
+        }
+      ]
+    };
 
     try {
+      const manifestResponse = await fetch(assetManifestUrl, { cache: 'no-store' });
+      if (manifestResponse.ok) {
+        const manifest = await manifestResponse.json();
+        assetPaths = Array.isArray(manifest?.files) ? manifest.files : [];
+
+        status.textContent = `Queued ${assetPaths.length} browser assets from ${manifest.version || 'unknown version'}. Starting runtime...`;
+      } else {
+        status.textContent = 'No browser asset manifest found. Starting runtime without staged UO assets.';
+      }
+
       status.textContent = 'Starting ClassicUO browser runtime...';
-      await dotnet
+      const runtime = await dotnet
+        .withConfig({
+          debugLevel: 0
+        })
+        .withResourceLoader((type, name, defaultUri, integrity, behavior) => {
+          if (debugTrace) {
+            console.info(`boot resource request: type=${type} behavior=${behavior} name=${name} uri=${defaultUri}`);
+          }
+
+          if (behavior === 'symbols') {
+            if (debugTrace) {
+              console.info(`Skipping debug symbol asset: ${name}`);
+            }
+            return Promise.resolve(new Response('', {
+              status: 200,
+              headers: {
+                'Content-Type': 'text/plain; charset=utf-8'
+              }
+            }));
+          }
+
+          return undefined;
+        })
+        .withDiagnosticTracing(debugTrace)
+        .withModuleConfig(moduleConfig)
+        .withDebugging(0)
         .withApplicationArgumentsFromQuery()
-        .run();
+        .create();
+
+      status.hidden = true;
+      await runtime.runMainAndExit();
+      status.hidden = false;
       status.textContent = 'ClassicUO browser runtime exited.';
     } catch (error) {
+      status.hidden = false;
       console.error(error);
       status.textContent = `ClassicUO browser runtime failed:\n${error?.stack || error}`;
     }

@@ -218,7 +218,7 @@ namespace ClassicUO.Game.Managers
 
         public void BuildContainerFile(bool force)
         {
-            string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+            string path = BrowserRuntimeBootstrap.GetClientDataRootPath();
 
             if (!FileSystemHelper.DirectoryExists(path))
             {

@@ -205,7 +205,7 @@ namespace ClassicUO.Game.Data
 
         public static void Load()
         {
-            string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+            string path = BrowserRuntimeBootstrap.GetClientDataRootPath();
 
             if (!FileSystemHelper.DirectoryExists(path))
             {

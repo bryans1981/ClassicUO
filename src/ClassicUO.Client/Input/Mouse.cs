@@ -1,11 +1,16 @@
 ﻿// SPDX-License-Identifier: BSD-2-Clause
 
+// Browser builds use a separate SDL-free partial implementation.
+#if !BROWSER_WASM
+using System;
+using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework;
 using SDL3;
+using ClassicUO.Utility.Platforms;
 
 namespace ClassicUO.Input
 {
-    internal static class Mouse
+    internal static partial class Mouse
     {
         public const int MOUSE_DELAY_DOUBLE_CLICK = 350;
 
@@ -41,7 +46,12 @@ namespace ClassicUO.Input
                     break;
             }
 
-            SDL.SDL_CaptureMouse(true);
+#if !BROWSER_WASM
+            if (!PlatformHelper.IsBrowser)
+            {
+                SDL.SDL_CaptureMouse(true);
+            }
+#endif
         }
 
         /* Log a button release event at the given time */
@@ -71,10 +81,12 @@ namespace ClassicUO.Input
                     break;
             }
 
-            if (!(LButtonPressed || RButtonPressed || MButtonPressed))
+#if !BROWSER_WASM
+            if (!(LButtonPressed || RButtonPressed || MButtonPressed) && !PlatformHelper.IsBrowser)
             {
                 SDL.SDL_CaptureMouse(false);
             }
+#endif
         }
 
         public static Point Position;
@@ -111,28 +123,69 @@ namespace ClassicUO.Input
 
         public static bool MouseInWindow { get; set; }
 
+        private static Point _rawPosition;
+
+        public static void SetPosition(int x, int y)
+        {
+            _rawPosition.X = x;
+            _rawPosition.Y = y;
+
+            if (PlatformHelper.IsBrowser)
+            {
+                Position = _rawPosition;
+            }
+        }
+
         public static void Update()
         {
+#if BROWSER_WASM
+            if (!_browserUpdateLogged)
+            {
+                _browserUpdateLogged = true;
+                Log.Trace($"Mouse.Update browser branch active: {PlatformHelper.IsBrowser}");
+            }
+            Position = _rawPosition;
+            IsDragging = LButtonPressed || RButtonPressed || MButtonPressed;
+            return;
+#else
+            if (PlatformHelper.IsBrowser)
+            {
+                if (!_browserUpdateLogged)
+                {
+                    _browserUpdateLogged = true;
+                    Log.Trace($"Mouse.Update browser runtime branch active: {PlatformHelper.IsBrowser}");
+                }
+                Position = _rawPosition;
+                IsDragging = LButtonPressed || RButtonPressed || MButtonPressed;
+                return;
+            }
+
             if (!MouseInWindow)
             {
                 SDL.SDL_GetGlobalMouseState(out float x, out float y);
                 SDL.SDL_GetWindowPosition(Client.Game.Window.Handle, out int winX, out int winY);
-                Position.X = (int)x - winX;
-                Position.Y = (int)y - winY;
+                _rawPosition.X = (int)x - winX;
+                _rawPosition.Y = (int)y - winY;
             }
             else
             {
                 SDL.SDL_GetMouseState(out float x, out float y);
-                Position.X = (int)x;
-                Position.Y = (int)y;
+                _rawPosition.X = (int)x;
+                _rawPosition.Y = (int)y;
             }
 
             // Scale the mouse coordinates for the faux-backbuffer and DPI settings
-            Position.X = (int) ((double) Position.X * (Client.Game.GraphicManager.PreferredBackBufferWidth / Client.Game.Window.ClientBounds.Width) / Client.Game.DpiScale);
+            int clientWidth = Math.Max(1, Client.Game.Window.ClientBounds.Width);
+            int clientHeight = Math.Max(1, Client.Game.Window.ClientBounds.Height);
+            Position.X = (int) ((double) _rawPosition.X * (Client.Game.GraphicManager.PreferredBackBufferWidth / clientWidth) / Client.Game.DpiScale);
 
-            Position.Y = (int) ((double) Position.Y * (Client.Game.GraphicManager.PreferredBackBufferHeight / Client.Game.Window.ClientBounds.Height) / Client.Game.DpiScale);
+            Position.Y = (int) ((double) _rawPosition.Y * (Client.Game.GraphicManager.PreferredBackBufferHeight / clientHeight) / Client.Game.DpiScale);
 
             IsDragging = LButtonPressed || RButtonPressed || MButtonPressed;
+#endif
         }
+
+        private static bool _browserUpdateLogged;
     }
 }
+#endif

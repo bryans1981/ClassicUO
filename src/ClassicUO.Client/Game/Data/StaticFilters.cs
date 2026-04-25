@@ -8,6 +8,8 @@ using ClassicUO.Configuration;
 using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using ClassicUO.Utility;
+using ClassicUO.Utility.Logging;
+using ClassicUO.Utility.Platforms;
 
 namespace ClassicUO.Game.Data
 {
@@ -30,7 +32,9 @@ namespace ClassicUO.Game.Data
 
         public static void Load(TileDataLoader tileData)
         {
-            string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+            string path = BrowserRuntimeBootstrap.GetClientDataRootPath();
+
+            Log.Trace($"StaticFilters cache root: {path}");
 
             if (!FileSystemHelper.DirectoryExists(path))
             {
@@ -101,7 +105,8 @@ namespace ClassicUO.Game.Data
             {
                 using (Stream treeStream = FileSystemHelper.OpenWrite(trees))
                 using (StreamWriter writer = new StreamWriter(treeStream))
-                using (StreamWriter writerveg = new StreamWriter(vegetation, true))
+                using (Stream vegetationStream = FileSystemHelper.OpenAppend(vegetation))
+                using (StreamWriter writerveg = new StreamWriter(vegetationStream))
                 {
                     ushort[] treeTiles =
                     {

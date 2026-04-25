@@ -16,6 +16,12 @@ namespace ClassicUO.IO
         
         public void Load()
         {
+            if (string.IsNullOrWhiteSpace(_OverrideFile) || BrowserVirtualPaths.Normalize(_OverrideFile) == BrowserVirtualPaths.Root)
+            {
+                Log.Trace("No Override File configured, ignoring.");
+                return;
+            }
+
             if (!FileSystemHelper.FileExists(_OverrideFile))
             {
                 Log.Trace($"No Override File found, ignoring.");

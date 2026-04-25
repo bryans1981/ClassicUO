@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace ClassicUO.Utility.Platforms
 {
@@ -31,6 +32,7 @@ namespace ClassicUO.Utility.Platforms
         bool FileExists(string path);
         string[] GetFiles(string path);
         string[] GetFiles(string path, string searchPattern);
+        Stream OpenReadStream(string path);
         bool TryReadFile(string path, out ReadOnlyMemory<byte> bytes);
     }
 
@@ -61,12 +63,12 @@ namespace ClassicUO.Utility.Platforms
         {
             string normalizedPath = BrowserFileSystem.NormalizePath(path);
 
-            if (!_source.TryReadFile(normalizedPath, out ReadOnlyMemory<byte> bytes))
+            if (!_source.FileExists(normalizedPath))
             {
                 throw new FileNotFoundException(normalizedPath);
             }
 
-            return new MemoryStream(bytes.ToArray(), writable: false);
+            return _source.OpenReadStream(normalizedPath);
         }
 
         public Stream OpenReadWrite(string path) => throw ReadOnly(path);
@@ -282,18 +284,50 @@ namespace ClassicUO.Utility.Platforms
             return BrowserVirtualPaths.Normalize(path);
         }
 
-        public bool FileExists(string path) => _provider?.FileExists(NormalizePath(path)) ?? false;
+        public bool FileExists(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
 
-        public bool DirectoryExists(string path) => _provider?.DirectoryExists(NormalizePath(path)) ?? false;
+            return _provider?.FileExists(NormalizePath(path)) ?? false;
+        }
+
+        public bool DirectoryExists(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+
+            return _provider?.DirectoryExists(NormalizePath(path)) ?? false;
+        }
 
         public void CreateDirectory(string path)
         {
             _provider?.CreateDirectory(NormalizePath(path));
         }
 
-        public string[] GetFiles(string path) => _provider?.GetFiles(NormalizePath(path)) ?? Array.Empty<string>();
+        public string[] GetFiles(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return Array.Empty<string>();
+            }
 
-        public string[] GetFiles(string path, string searchPattern) => _provider?.GetFiles(NormalizePath(path), searchPattern) ?? Array.Empty<string>();
+            return _provider?.GetFiles(NormalizePath(path)) ?? Array.Empty<string>();
+        }
+
+        public string[] GetFiles(string path, string searchPattern)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return Array.Empty<string>();
+            }
+
+            return _provider?.GetFiles(NormalizePath(path), searchPattern) ?? Array.Empty<string>();
+        }
 
         public Stream OpenRead(string path)
         {
@@ -634,6 +668,21 @@ namespace ClassicUO.Utility.Platforms
 
             bytes = default;
             return false;
+        }
+
+        public Stream OpenReadStream(string path)
+        {
+            if (TryReadFile(path, out ReadOnlyMemory<byte> bytes))
+            {
+                if (MemoryMarshal.TryGetArray(bytes, out ArraySegment<byte> segment) && segment.Array is not null)
+                {
+                    return new MemoryStream(segment.Array, segment.Offset, segment.Count, writable: false, publiclyVisible: true);
+                }
+
+                return new MemoryStream(bytes.ToArray(), writable: false);
+            }
+
+            throw new FileNotFoundException(BrowserFileSystem.NormalizePath(path));
         }
 
         private static string GetDirectoryName(string path)

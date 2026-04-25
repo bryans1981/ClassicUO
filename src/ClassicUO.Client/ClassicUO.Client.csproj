@@ -10,6 +10,21 @@
     <PlatformTarget Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">AnyCPU</PlatformTarget>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm' Or '$(BrowserWasmBuild)' == 'true'">
+    <DefineConstants>$(DefineConstants);BROWSER_WASM</DefineConstants>
+    <BrowserNativeDepsRoot>$(MSBuildThisFileDirectory)..\..\bin\native-browser\FNA3D-sdl2\</BrowserNativeDepsRoot>
+    <BrowserEmscriptenCacheRoot Condition="'$(WasmCachePath)' != ''">$(WasmCachePath)</BrowserEmscriptenCacheRoot>
+    <BrowserEmscriptenCacheRoot Condition="'$(BrowserEmscriptenCacheRoot)' == ''">$(LOCALAPPDATA)\ClassicUO\emscripten-cache\</BrowserEmscriptenCacheRoot>
+    <EmccMaximumHeapSize>1073741824</EmccMaximumHeapSize>
+    <EmccFlags>$(EmccFlags) -sUSE_SDL=2 -sMAX_WEBGL_VERSION=2 -sFULL_ES3=1</EmccFlags>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'browser-wasm'">
+    <NativeFileReference Include="$(BrowserNativeDepsRoot)libFNA3D.a" />
+    <NativeFileReference Include="$(BrowserNativeDepsRoot)libmojoshader.a" />
+    <NativeFileReference Include="$(BrowserEmscriptenCacheRoot)\sysroot\lib\wasm32-emscripten\libSDL2.a" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <OutputPath>$(ProjectDir)..\..\bin\Release\</OutputPath>
     <PublishDir>$(ProjectDir)..\..\bin\dist\</PublishDir>
@@ -18,7 +33,7 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <OutputPath>$(ProjectDir)..\..\bin\Debug\</OutputPath>
-    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
   </PropertyGroup>
 
 

@@ -118,13 +118,17 @@ namespace ClassicUO
             SetRefreshRate(Settings.GlobalSettings.FPS);
             _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
 
+#if !BROWSER_WASM
             _filter = HandleSdlEvent;
             SDL_SetEventFilter(_filter, IntPtr.Zero);
+#endif
 
+#if !BROWSER_WASM
             if (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true)
             {
                 Microsoft.Xna.Framework.Input.TextInputEXT.StartTextInput();
             }
+#endif
 
             _displayScale = DpiScale;
 
@@ -448,7 +452,15 @@ namespace ClassicUO
             Time.Ticks = (uint)gameTime.TotalGameTime.TotalMilliseconds;
             Time.Delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+#if BROWSER_WASM
+            if (PlatformHelper.IsBrowser && !_browserUpdateLogged)
+            {
+                _browserUpdateLogged = true;
+                Log.Trace("GameController.Update browser branch active.");
+            }
+
             Mouse.Update();
+#endif
 
             var data = NetClient.Socket.CollectAvailableData();
             var packetsCount = PacketHandlers.Handler.ParsePackets(NetClient.Socket, UO.World, data);
@@ -610,7 +622,11 @@ namespace ClassicUO
 
         public float DpiScale
         {
+#if BROWSER_WASM
+            get => ScreenScale;
+#else
             get => SDL_GetWindowDisplayScale(Window.Handle) * ScreenScale;
+#endif
         }
 
         public int ScaleWithDpi(int value, float previousDpi = 1)
@@ -779,6 +795,7 @@ namespace ClassicUO
                     break;
 
                 case SDL_EventType.SDL_EVENT_MOUSE_MOTION:
+                    Mouse.SetPosition((int)sdlEvent->motion.x, (int)sdlEvent->motion.y);
 
                     if (UO.GameCursor != null && !UO.GameCursor.AllowDrawSDLCursor)
                     {
@@ -786,7 +803,9 @@ namespace ClassicUO
                         UO.GameCursor.Graphic = 0xFFFF;
                     }
 
+#if BROWSER_WASM
                     Mouse.Update();
+#endif
 
                     if (Mouse.IsDragging)
                     {
@@ -799,7 +818,9 @@ namespace ClassicUO
                     break;
 
                 case SDL_EventType.SDL_EVENT_MOUSE_WHEEL:
+#if BROWSER_WASM
                     Mouse.Update();
+#endif
                     bool isScrolledUp = sdlEvent->wheel.y > 0;
 
                     Plugin.ProcessMouse(0, (int)sdlEvent->wheel.y);
@@ -814,6 +835,7 @@ namespace ClassicUO
                 case SDL_EventType.SDL_EVENT_MOUSE_BUTTON_DOWN:
                 {
                     SDL_MouseButtonEvent mouse = sdlEvent->button;
+                    Mouse.SetPosition((int)mouse.x, (int)mouse.y);
 
                     // The values in MouseButtonType are chosen to exactly match the SDL values
                     MouseButtonType buttonType = (MouseButtonType)mouse.button;
@@ -848,7 +870,9 @@ namespace ClassicUO
                     }
 
                     Mouse.ButtonPress(buttonType);
+#if BROWSER_WASM
                     Mouse.Update();
+#endif
 
                     uint ticks = Time.Ticks;
 
@@ -914,6 +938,7 @@ namespace ClassicUO
                 case SDL_EventType.SDL_EVENT_MOUSE_BUTTON_UP:
                 {
                     SDL_MouseButtonEvent mouse = sdlEvent->button;
+                    Mouse.SetPosition((int)mouse.x, (int)mouse.y);
 
                     // The values in MouseButtonType are chosen to exactly match the SDL values
                     MouseButtonType buttonType = (MouseButtonType)mouse.button;
@@ -955,7 +980,9 @@ namespace ClassicUO
                     }
 
                     Mouse.ButtonRelease(buttonType);
+#if !BROWSER_WASM
                     Mouse.Update();
+#endif
 
                     break;
                 }
@@ -1044,6 +1071,8 @@ namespace ClassicUO
                 }
             }
         }
+
+        private bool _browserUpdateLogged;
     }
 }
 

@@ -273,3 +273,6 @@ docs/test-results/browser-self-test-20*.json
 experiments/BrowserHost/.browserhost.pid
 experiments/BrowserHost.ReportHost/.reporthost.pid
 
+# Local-only browser game asset drops
+browser-assets/uo/versions/
+

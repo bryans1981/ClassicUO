@@ -326,7 +326,7 @@ namespace ClassicUO.Game.Data
 
         public static void BuildLightShaderFiles(bool force)
         {
-            string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+            string path = BrowserRuntimeBootstrap.GetClientDataRootPath();
 
             if (!FileSystemHelper.DirectoryExists(path))
             {
@@ -391,7 +391,7 @@ namespace ClassicUO.Game.Data
 
         public static void LoadLights()
         {
-            string path = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+            string path = BrowserRuntimeBootstrap.GetClientDataRootPath();
 
             if (!FileSystemHelper.DirectoryExists(path))
             {

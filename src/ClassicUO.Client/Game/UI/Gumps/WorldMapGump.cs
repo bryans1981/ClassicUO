@@ -45,10 +45,10 @@ namespace ClassicUO.Game.UI.Gumps
     {
         public const string USER_MARKERS_FILE = "userMarkers";
 
-        private static readonly string _mapFilesPath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
-        private static readonly string _mapIconsPath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client", "MapIcons");
-        private static readonly string _mapsCachePath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client", "MapsCache");
-        private static readonly string UserMarkersFilePath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client", $"{USER_MARKERS_FILE}.usr");
+        private static readonly string _mapFilesPath = BrowserRuntimeBootstrap.GetClientDataRootPath();
+        private static readonly string _mapIconsPath = Path.Combine(BrowserRuntimeBootstrap.GetClientDataRootPath(), "MapIcons");
+        private static readonly string _mapsCachePath = Path.Combine(BrowserRuntimeBootstrap.GetClientDataRootPath(), "MapsCache");
+        private static readonly string UserMarkersFilePath = Path.Combine(BrowserRuntimeBootstrap.GetClientDataRootPath(), $"{USER_MARKERS_FILE}.usr");
         private static readonly Dictionary<string, string> _mapCache = new();
         public static readonly List<WMapMarkerFile> _markerFiles = new List<WMapMarkerFile>();
         public static readonly Dictionary<string, Texture2D> _markerIcons = new Dictionary<string, Texture2D>();

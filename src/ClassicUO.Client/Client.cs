@@ -99,7 +99,7 @@ namespace ClassicUO
 
         public void Unload()
         {
-            FileManager.Dispose();
+            FileManager?.Dispose();
             World?.Map?.Destroy();
         }
 

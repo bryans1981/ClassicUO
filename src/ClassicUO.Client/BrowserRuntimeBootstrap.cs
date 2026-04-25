@@ -36,6 +36,8 @@ namespace ClassicUO
 
             Settings.GlobalSettings.UltimaOnlineDirectory = BrowserVirtualPaths.AssetsRoot;
             Settings.GlobalSettings.ProfilesPath = BrowserVirtualPaths.ProfilesRoot;
+            Environment.SetEnvironmentVariable("FNA_PLATFORM_BACKEND", "SDL2");
+            Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "OpenGL");
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.IP))
             {
@@ -82,6 +84,7 @@ namespace ClassicUO
             Settings.GlobalSettings.WindowPosition = new Point(0, 0);
             Settings.GlobalSettings.WindowSize = new Point(1280, 720);
             Settings.GlobalSettings.IgnoreRelayIp = true;
+            CUOEnviroment.NoServerPing = true;
         }
 
         public static void ApplyBrowserProfileDefaults(Profile profile)
@@ -182,6 +185,13 @@ namespace ClassicUO
                 : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
         }
 
+        public static string GetClientDataRootPath()
+        {
+            return PlatformHelper.IsBrowser
+                ? BrowserVirtualPaths.CacheFile("client")
+                : Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+        }
+
         public static string GetSettingsFilePath()
         {
             return PlatformHelper.IsBrowser
@@ -250,7 +260,7 @@ namespace ClassicUO
 
         private static IBrowserStorageProvider CreateDefaultBrowserStorageProvider(IBrowserBinaryAssetSource assetsSource = null)
         {
-            assetsSource ??= new InMemoryBrowserBinaryAssetSource();
+            assetsSource ??= new BrowserMountedBinaryAssetSource(BrowserVirtualPaths.AssetsRoot);
 
             return BrowserFileSystemBootstrap.CreateRootedProvider(
                 BrowserFileSystemBootstrap.CreateReadOnlyAssetProvider(assetsSource),

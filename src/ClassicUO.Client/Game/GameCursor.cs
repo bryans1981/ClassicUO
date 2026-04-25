@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using SDL3;
 using System;
 using System.Collections.Generic;
+using ClassicUO.Utility.Platforms;
 
 namespace ClassicUO.Game
 {
@@ -95,6 +96,13 @@ namespace ClassicUO.Game
         }
 
         public void CreateGraphic(float dpiScale) {
+            if (PlatformHelper.IsBrowser || !Settings.GlobalSettings.RunMouseInASeparateThread)
+            {
+                BuildCursorOffsets(dpiScale);
+                _needGraphicUpdate = true;
+                return;
+            }
+
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 16; j++)
@@ -122,6 +130,55 @@ namespace ClassicUO.Game
                 }
             }
             _needGraphicUpdate = true;
+        }
+
+        private void BuildCursorOffsets(float dpiScale)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 16; j++)
+                {
+                    ushort id = _cursorData[i, j];
+                    var artInfo = Client.Game.UO.FileManager.Arts.GetArt(id);
+
+                    if (artInfo.Pixels.IsEmpty)
+                    {
+                        continue;
+                    }
+
+                    int hotX = 0;
+                    int hotY = 0;
+                    int srcWidth = artInfo.Width;
+                    int srcHeight = artInfo.Height;
+
+                    for (int y = 0; y < srcHeight; y++)
+                    {
+                        for (int x = 0; x < srcWidth; x++)
+                        {
+                            uint pixel = artInfo.Pixels[y * srcWidth + x];
+
+                            if (pixel == 0xFF_00_FF_00)
+                            {
+                                if (x == 0)
+                                {
+                                    hotY = y;
+                                }
+
+                                if (y == 0)
+                                {
+                                    hotX = x;
+                                }
+                            }
+                        }
+                    }
+
+                    if (hotX != 0 || hotY != 0)
+                    {
+                        _cursorOffset[0, j] = (int)(hotX * dpiScale);
+                        _cursorOffset[1, j] = (int)(hotY * dpiScale);
+                    }
+                }
+            }
         }
 
         public ushort Graphic

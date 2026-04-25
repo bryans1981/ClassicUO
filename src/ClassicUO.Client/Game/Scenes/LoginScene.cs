@@ -919,10 +919,13 @@ namespace ClassicUO.Game.Scenes
     {
         private IPAddress _ipAddress;
         private IPAddress _ipAddressLittleEndian;
+#if !BROWSER_WASM
         private Ping _pinger = new Ping();
-        private bool _sending;
+        private static PingOptions _pingOptions = new PingOptions(64, true);
         private readonly bool[] _last10Results = new bool[10];
         private int _resultIndex;
+        private bool _sending;
+#endif
 
         private ServerListEntry()
         {
@@ -971,7 +974,9 @@ namespace ClassicUO.Game.Scenes
                 Log.Error(e.ToString());
             }
 
+#if !BROWSER_WASM
             entry._pinger.PingCompleted += entry.PingerOnPingCompleted;
+#endif
 
             return entry;
         }
@@ -987,10 +992,10 @@ namespace ClassicUO.Game.Scenes
         public IPStatus PingStatus;
 
         private static byte[] _buffData = new byte[32];
-        private static PingOptions _pingOptions = new PingOptions(64, true);
 
         public void DoPing()
         {
+#if !BROWSER_WASM
             if (_ipAddress != null && !_sending && _pinger != null)
             {
                 if (_resultIndex >= _last10Results.Length)
@@ -1017,8 +1022,10 @@ namespace ClassicUO.Game.Scenes
                     Dispose();
                 }
             }
+#endif
         }
 
+#if !BROWSER_WASM
         private void PingerOnPingCompleted(object sender, PingCompletedEventArgs e)
         {
             int index = (int) e.UserState;
@@ -1050,9 +1057,11 @@ namespace ClassicUO.Game.Scenes
 
             _sending = false;
         }
+#endif
 
         public void Dispose()
         {
+#if !BROWSER_WASM
             if (_pinger != null)
             {
                 _pinger.PingCompleted -= PingerOnPingCompleted;
@@ -1070,6 +1079,7 @@ namespace ClassicUO.Game.Scenes
                 _pinger.Dispose();
                 _pinger = null;
             }
+#endif
         }
     }
 

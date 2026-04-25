@@ -38,7 +38,31 @@ namespace ClassicUO.IO
         public uint ReadUInt32() { _position += sizeof(uint); return Reader.ReadUInt32(); }
         public long ReadInt64() { _position += sizeof(long); return Reader.ReadInt64(); }
         public ulong ReadUInt64() { _position += sizeof(ulong); return Reader.ReadUInt64(); }
-        public int Read(Span<byte> buffer) { _position += buffer.Length; return Reader.Read(buffer); }
+        public int Read(Span<byte> buffer)
+        {
+            int totalRead = 0;
+
+            while (totalRead < buffer.Length)
+            {
+                int read = Reader.Read(buffer.Slice(totalRead));
+
+                if (read <= 0)
+                {
+                    break;
+                }
+
+                totalRead += read;
+            }
+
+            _position += totalRead;
+
+            if (totalRead < buffer.Length)
+            {
+                throw new EndOfStreamException($"Unexpected end of stream while reading '{FilePath}'. Expected {buffer.Length} bytes, received {totalRead} bytes.");
+            }
+
+            return totalRead;
+        }
         public unsafe T Read<T>() where T : unmanaged
         {
             Unsafe.SkipInit<T>(out var v);

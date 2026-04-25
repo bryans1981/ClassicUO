@@ -22,18 +22,21 @@ Confirmed behavior:
 
 - `scripts/browser-client-publish.ps1 -Configuration Debug` produces `bin/Debug/net10.0/browser-wasm/AppBundle`.
 - `scripts/browser-client-start.ps1 -Configuration Debug -Port 5110` publishes the bundle and serves it at `http://localhost:5110/`.
-- The generated static shell loads `_framework/dotnet.js` and starts the main `cuo` browser runtime.
+- The generated static shell loads `_framework/dotnet.js` and starts the browser runtime.
 
 Latest local Chrome headless result:
 
-- Browser runtime reaches managed ClassicUO startup and constructs toward `GameController`.
-- Fixed blockers: unsupported browser console color APIs and missing writable browser settings storage.
-- Current blocker: FNA platform initialization fails because SDL3 native P/Invoke is not available in the browser runtime: `SDL3 was not found! Do you have fnalibs?`
+- Browser asset delivery is now working through the staged repo folder and bundle copy path.
+- The active asset set is selected through `browser-assets/uo/active-version.txt` and copied into the bundle as `/uo`.
+- Browser file requests for UO data are returning 200 responses.
+- The browser runtime now avoids `MemoryMappedFile` usage in browser mode and falls back to stream reads for UO files.
+- The latest browser self-test report in `docs/test-results/browser-self-test-latest.json` is green for the browser-spike harness.
+- The remaining work is now proving the full main-client gameplay path in browser mode, not just asset visibility or browser-safe file loading.
 
 Implication:
 
-- The current critical path has moved from browser packaging/startup into real browser rendering/platform integration.
-- The next product milestone is not more synthetic validation; it is resolving the SDL3/FNA3D browser-native dependency or replacing that path with a browser-native renderer host.
+- The current critical path has moved from asset staging and file-loading compatibility into full browser-client gameplay validation.
+- The next product milestone is proving the browser client can reach the actual game loop and scene flow with the real asset set.
 
 ### 1. Browser support is claimed, but the browser packaging path is not exposed here
 
@@ -118,27 +121,49 @@ Implication:
 - Our hosted solution must provide a valid asset directory model.
 - We cannot treat asset access as optional.
 
+### 6. Browser asset staging is now available in the repo
+
+Files inspected and updated:
+
+- `browser-assets/uo/versions/<version>/`
+- `browser-assets/uo/active-version.txt`
+- `scripts/browser-client-publish.ps1`
+
+Confirmed behavior:
+
+- multiple asset versions can be stored under `browser-assets/uo/versions/<version>/`
+- the active version can be switched without changing code
+- the publish step copies the selected version into the browser bundle as `/uo`
+- the browser shell now hides noisy tracing unless debug mode is enabled
+- browser input is being hardened for actual play with canvas focus, no page scroll, and no context menu
+- browser login ping polling is disabled so the shard list does not depend on unsupported browser-only network APIs
+- any asset drops under `browser-assets/uo/versions/` should stay local and be excluded from pushes
+
+Implication:
+
+- asset drops are no longer a blocking manual step in the runtime path
+- the remaining blocker is browser startup after the asset mount is already in place
+
 ## Current Blockers
 
-### Blocker 1: FNA/SDL3 browser-native platform initialization
+### Blocker 1: Browser-native bootstrap and runtime startup
 
-The local browser publish path now exists, but the running browser app fails when FNA tries to initialize SDL3.
+Asset delivery is now in place, but the browser runtime still aborts during startup with `mono_download_assets: undefined` before managed game startup is fully visible.
 
-We need to determine whether the viable product path is:
+Minimum next proof:
 
-- compile/link native SDL3 and FNA3D correctly into the browser app,
-- consume an existing ClassicUO-compatible browser FNA layer from another public repo if available,
-- or bypass the desktop FNA platform layer with a browser-native render/input host.
+- browser startup reaches managed game logging again
+- `Main` or the browser bootstrap path confirms the client is alive after the native runtime loads
+- the browser shell stops aborting before game initialization
 
-### Blocker 2: Browser asset delivery and durable storage
+### Blocker 2: Browser durable storage
 
 The temporary rooted in-memory storage provider unblocks startup, but it is not final persistence.
 
 We still need:
 
-- real browser asset loading for private UO files,
-- durable browser-safe settings/profile storage,
-- and a repeatable hosted asset layout.
+- durable browser-safe settings/profile storage
+- and a repeatable hosted asset layout for future versions
 
 ## Working Hypotheses
 
@@ -146,7 +171,7 @@ These are not yet confirmed:
 
 - The browser deployment may be maintained outside this repository or in a separate deploy repo.
 - The browser version may rely on a custom runtime/bootstrap arrangement not represented in the standard desktop workflows.
-- Asset access in the browser may require a virtual filesystem, preloading step, or HTTP-backed data layer.
+- Asset access in the browser requires a real virtual filesystem source; simply serving static files from the bundle does not automatically make them visible to synchronous `FileSystemHelper` calls.
 
 ## What This Means For Our Project
 
@@ -160,9 +185,9 @@ Until those three points are confirmed, any container work would be premature.
 
 ## Next Investigation Targets
 
-1. Inspect any remaining code paths related to bootstrap or host bindings that might hint at browser execution.
-2. Search upstream release/distribution references for a separate deployment repository or missing browser build process.
-3. If needed, inspect the public ClassicUO browser deployment behavior from the outside to infer expected runtime files and network calls.
+1. Inspect the browser bootstrap and native runtime startup path around `mono_download_assets`.
+2. Confirm whether any browser runtime configuration still expects a symbols or asset-download hook.
+3. Once startup is stable again, resume validation at managed client startup and login flow.
 
 ## Confirmed External Findings
 

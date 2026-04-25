@@ -32,6 +32,12 @@ What is already proven:
 - browser canvas host, frame pump, and input bridge exist in the spike path
 - local no-click self-test and compact report saving work
 - browser-only desktop assumptions have been reduced across startup, scenes, settings, and transport
+- browser asset staging now exists in `browser-assets/uo/versions/<version>/`
+- the selected asset version can be copied into the browser bundle as `/uo`
+- the live browser shell now suppresses nonessential tracing unless debug mode is enabled
+- browser canvas input is hardened for play: focus-on-pointer, no page scroll, no context menu
+- browser login ping polling is disabled so unsupported browser network APIs do not block shard list flow
+- browser asset version folders are treated as local-only drops and should not be pushed with code commits
 
 What is not finished:
 
@@ -62,12 +68,16 @@ Done when:
 Current status:
 
 - mostly complete for startup, transport, and standalone local serving
-- main-client browser startup now reaches `GameController` construction in Chrome headless
 - local `browser-wasm` publish now produces `bin/<Configuration>/net10.0/browser-wasm/AppBundle`
 - `scripts/browser-client-start.ps1` now publishes and serves the product browser bundle at `http://localhost:5110/`
 - websocket transport now avoids raw TCP socket setup in browser mode and uses browser-native `ClientWebSocket` connect behavior
 - browser logging avoids unsupported console color APIs
 - browser startup attaches temporary rooted in-memory storage when no host storage provider is configured, so settings/profile writes no longer block launch
+- main-client browser startup now links native SDL2/FNA3D and creates a WebGL2/OpenGL ES 3 renderer in Chrome headless
+- browser asset staging now has a repo location at `browser-assets/uo/versions/<asset-version>/` and publish-time copy/manifest support into the bundle
+- browser file loading now avoids `MemoryMappedFile` in browser mode and falls back to stream reads for UO files
+- the latest browser self-test report is green for the browser-spike harness
+- the current remaining product work is proving the full main-client gameplay loop in browser mode with the real asset set
 
 ### Milestone 2: Real Browser Rendering
 
@@ -90,9 +100,9 @@ Current status:
 
 - active product milestone
 - partially proven in the spike path
-- still not finished in the main client path
-- current main-client blocker: FNA initializes SDL3 through native P/Invoke and fails in browser with `SDL3 was not found! Do you have fnalibs?`
-- next renderer work must resolve native SDL3/FNA3D browser integration or replace that path with a browser-native render host; serving the existing `_framework/SDL3.wasm` file alone does not satisfy the native dependency
+- native browser renderer is now linked through SDL2/FNA3D static archives
+- Chrome headless confirms `FNA3D Driver: OpenGL`, `OpenGL ES 3.0 (WebGL 2.0)`, and `MojoShader Profile: glsles3`
+- remaining browser work is now gameplay-path validation, not SDL/FNA native linking or asset staging
 
 ### Milestone 3: Browser Input and Focus
 
@@ -115,6 +125,7 @@ Current status:
 
 - partially proven in the spike path
 - still active for product completion
+- desktop SDL3 event filtering and text input startup are now skipped in browser builds; browser input still needs a dedicated product path after first asset-backed render
 
 ### Milestone 4: Browser Networking and Session Flow
 
@@ -158,7 +169,11 @@ Done when:
 Current status:
 
 - foundational seam exists
-- full gameplay asset coverage still needs to be completed and verified
+- active product blocker has moved on from asset visibility
+- browser asset staging folder exists for versioned asset drops
+- the selected asset version is already being copied into the browser bundle as `/uo`
+- next task: resolve the browser-native bootstrap/runtime startup failure and restore managed startup logging
+- after the runtime starts cleanly, continue to login scene rendering and gameplay loading
 
 ### Milestone 6: First Playable World Loop
 
@@ -284,4 +299,4 @@ When choosing the next task:
 
 ## Progress Summary
 
-The project is past the browser bootstrap and transport discovery phase. The remaining critical path is now the live browser client itself: rendering, input, session flow, gameplay, and persistence.
+The project is past browser bootstrap, local serving, transport discovery, native renderer linking, and browser asset staging. The active critical path is now browser-native bootstrap/runtime startup, then managed login flow, input, session flow, gameplay, and persistence.

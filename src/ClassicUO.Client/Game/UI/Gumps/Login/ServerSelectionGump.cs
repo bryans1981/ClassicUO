@@ -272,7 +272,9 @@ namespace ClassicUO.Game.UI.Gumps.Login
             private readonly HoveredLabel _server_packet_loss;
             private readonly HoveredLabel _server_ping;
             private readonly HoveredLabel _serverName;
+#if !BROWSER_WASM
             private uint _pingCheckTime = 0;
+#endif
 
             public ServerEntryGump(ServerListEntry entry, byte font, ushort normal_hue, ushort selected_hue)
             {
@@ -369,6 +371,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
             {
                 base.Update();
 
+#if !BROWSER_WASM
                 if (CUOEnviroment.NoServerPing == false && _pingCheckTime < Time.Ticks)
                 {
                     _pingCheckTime = Time.Ticks + 2000;
@@ -403,6 +406,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
 
                     _server_packet_loss.Text = $"{_entry.PacketLoss}%";
                 }
+#endif
             }
         }
     }

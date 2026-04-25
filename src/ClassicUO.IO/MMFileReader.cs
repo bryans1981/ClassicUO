@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using ClassicUO.Utility.Platforms;
 
 namespace ClassicUO.IO
 {
@@ -15,7 +16,7 @@ namespace ClassicUO.IO
             if (Length <= 0)
                 return;
 
-            if (stream is FileStream fileStream)
+            if (stream is FileStream fileStream && !PlatformHelper.IsBrowser)
             {
                 _mmf = MemoryMappedFile.CreateFromFile
                 (

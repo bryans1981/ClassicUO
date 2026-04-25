@@ -21,7 +21,7 @@ namespace ClassicUO.Game.Managers
         private static ushort[] _winterGraphic;
         private static ushort[] _desolationGraphic;
 
-        private static readonly string _seasonsFilePath = Path.Combine(CUOEnviroment.ExecutablePath, "Data", "Client");
+        private static readonly string _seasonsFilePath = BrowserRuntimeBootstrap.GetClientDataRootPath();
         private static readonly string _seasonsFile = Path.Combine(_seasonsFilePath, "seasons.txt");
 
         static SeasonManager()

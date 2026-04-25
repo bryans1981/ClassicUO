@@ -71,10 +71,18 @@ try {
         }
 
         if ($requestPath -match '^build/[^/]+/?$') {
-            $requestPath = "index.html"
+            if ($buildPrefix) {
+                $requestPath = "$buildPrefixindex.html"
+            } else {
+                $requestPath = "index.html"
+            }
         }
         elseif ($requestPath -match '^build/[^/]+/(.+)$') {
-            $requestPath = $Matches[1]
+            if ($buildPrefix) {
+                $requestPath = "$buildPrefix$($Matches[1])"
+            } else {
+                $requestPath = $Matches[1]
+            }
         }
 
         if ($buildPrefix -and $requestPath.StartsWith($buildPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {

@@ -77,6 +77,7 @@ Current status:
 - browser asset staging now has a repo location at `browser-assets/uo/versions/<asset-version>/` and publish-time copy/manifest support into the bundle
 - browser file loading now avoids `MemoryMappedFile` in browser mode and falls back to stream reads for UO files
 - the latest browser self-test report is green for the browser-spike harness
+- `scripts/browser-client-start.ps1` now also launches the local WebSocket proxy when `tools/ws/node_modules` exists, which is the next local prerequisite for session flow testing
 - the current remaining product work is proving the full main-client gameplay loop in browser mode with the real asset set
 
 ### Milestone 2: Real Browser Rendering

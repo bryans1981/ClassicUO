@@ -6,6 +6,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
+$proxyPidFile = Join-Path $repoRoot "tools\ws\.wsproxy.pid"
 $pidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-server.pid"
 
 if (-not (Test-Path $pidFile)) {
@@ -24,3 +25,17 @@ if ($process) {
 }
 
 Remove-Item -LiteralPath $pidFile -Force -ErrorAction SilentlyContinue
+
+if (Test-Path $proxyPidFile) {
+    $proxyPidValue = Get-Content $proxyPidFile -ErrorAction SilentlyContinue
+    $proxyProcess = Get-Process -Id $proxyPidValue -ErrorAction SilentlyContinue
+
+    if ($proxyProcess) {
+        Stop-Process -Id $proxyPidValue -Force
+        Write-Host "Stopped websocket proxy process $proxyPidValue."
+    } else {
+        Write-Host "No running websocket proxy process was found."
+    }
+
+    Remove-Item -LiteralPath $proxyPidFile -Force -ErrorAction SilentlyContinue
+}

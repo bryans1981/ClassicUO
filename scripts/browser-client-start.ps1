@@ -50,6 +50,38 @@ function Test-ManagedProcess {
     return $commandLine -like "*$ExpectedCommandLineToken*"
 }
 
+function Stop-StaleBrowserServer {
+    param(
+        [int]$ListenPort
+    )
+
+    $connections = Get-NetTCPConnection -LocalPort $ListenPort -State Listen -ErrorAction SilentlyContinue
+    if (-not $connections) {
+        return
+    }
+
+    $connectionProcessIds = $connections.OwningProcess | Sort-Object -Unique
+    foreach ($connectionProcessId in $connectionProcessIds) {
+        if (-not $connectionProcessId) {
+            continue
+        }
+
+        $commandLine = $null
+        try {
+            $commandLine = (Get-CimInstance Win32_Process -Filter "ProcessId = $connectionProcessId").CommandLine
+        } catch {
+            $commandLine = $null
+        }
+
+        if ($commandLine -and $commandLine -notlike "*browser-client-serve.ps1*") {
+            continue
+        }
+
+        Stop-Process -Id $connectionProcessId -Force -ErrorAction SilentlyContinue
+        Write-Host "Stopped stale browser client server process $connectionProcessId listening on port $ListenPort."
+    }
+}
+
 function Start-BrowserWindow {
     param(
         [string]$TargetUrl,
@@ -69,18 +101,16 @@ function Start-BrowserWindow {
 
     $browserProfileRoot = Join-Path $env:TEMP 'ClassicUO-BrowserClient'
     $browserProfilePath = Join-Path $browserProfileRoot 'Profile'
-    Remove-Item -LiteralPath $browserProfilePath -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
 
     $browserArguments = "--new-window --no-first-run --no-default-browser-check --disable-features=ChromeWhatsNewUI --user-data-dir=`"$browserProfilePath`""
-    $browserArguments += " --start-minimized"
     $browserArguments += " `"$TargetUrl`""
 
     $browserStartProcess = @{
         FilePath = $resolvedBrowserPath
         ArgumentList = $browserArguments
         PassThru = $true
-        WindowStyle = 'Minimized'
+        WindowStyle = 'Normal'
     }
 
     $browserProc = Start-Process @browserStartProcess
@@ -104,9 +134,6 @@ if (-not [string]::IsNullOrWhiteSpace($LoginUsername) -and -not [string]::IsNull
     Set-Content -LiteralPath $browserLoginPath -Value $loginPayload -Encoding UTF8
     Set-Content -LiteralPath $browserLoginAssetPath -Value $loginPayload -Encoding UTF8
     Write-Host "Browser login override: $LoginUsername"
-} elseif (Test-Path $browserLoginPath) {
-    Remove-Item -LiteralPath $browserLoginPath -Force -ErrorAction SilentlyContinue
-    Remove-Item -LiteralPath $browserLoginAssetPath -Force -ErrorAction SilentlyContinue
 }
 
 if (Test-Path $pidFile) {
@@ -144,6 +171,8 @@ if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $p
 $serveScript = Join-Path $PSScriptRoot "browser-client-serve.ps1"
 
 if (-not $serverAlreadyRunning) {
+    Stop-StaleBrowserServer -ListenPort $Port
+
     $process = Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$serveScript`" -BundlePath `"$bundlePath`" -Port $Port" -WorkingDirectory $repoRoot -PassThru
     $process.Id | Set-Content $pidFile
 

@@ -328,3 +328,10 @@ Still missing or non-public:
 - Auth/session/backend stack used by the official service
 
 The local browser spike now also has an optional test websocket proxy in `tools/ws`, managed by `scripts/browser-spike-start.ps1` and `scripts/browser-spike-stop.ps1` when Node dependencies are installed.
+
+## Current Handoff State
+
+- The browser runtime now reaches `browser-initialize-before-browser-bootstrap-branch` and then exits.
+- The last confirmed suspicious area is the browser bootstrap block in `src/ClassicUO.Client/GameController.cs`.
+- Browser windows must be closed at the end of each test cycle so the session does not keep consuming local resources.
+- If a publish run hits linker OOM again, the next step is to recover the browser build path first, then resume the runtime probe from the current cut point.

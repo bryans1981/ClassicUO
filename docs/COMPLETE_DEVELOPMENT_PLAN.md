@@ -281,6 +281,13 @@ Current status:
 
 - explicitly deferred until after the browser product is viable
 
+## Handoff Notes
+
+- The browser runtime currently exits after `browser-initialize-before-browser-bootstrap-branch`.
+- The browser bootstrap block is the last confirmed active debug target.
+- Close the Edge window after each browser test run so the machine does not accumulate stale sessions.
+- If a publish build fails with linker OOM, recover the build path first, then resume from the current runtime cut point.
+
 ## Deferred Side Work
 
 These items should be recorded, not treated as active blockers, unless they directly block the live browser app:

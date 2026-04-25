@@ -212,18 +212,25 @@ namespace ClassicUO
             Debug.Assert(Game == null);
 
             Log.Trace("Running game...");
-
-            using (Game = new GameController(pluginHost, browserBootstrapState))
+            try
             {
-                // https://github.com/FNA-XNA/FNA/wiki/7:-FNA-Environment-Variables#fna_graphics_enable_highdpi
-                CUOEnviroment.IsHighDPI = Environment.GetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI") == "1";
-
-                if (CUOEnviroment.IsHighDPI)
+                using (Game = new GameController(pluginHost, browserBootstrapState))
                 {
-                    Log.Trace("HIGH DPI - ENABLED");
-                }
+                    // https://github.com/FNA-XNA/FNA/wiki/7:-FNA-Environment-Variables#fna_graphics_enable_highdpi
+                    CUOEnviroment.IsHighDPI = Environment.GetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI") == "1";
 
-                Game.Run();
+                    if (CUOEnviroment.IsHighDPI)
+                    {
+                        Log.Trace("HIGH DPI - ENABLED");
+                    }
+
+                    Game.Run();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Panic($"Client.Run failed: {ex}");
+                throw;
             }
 
             Log.Trace("Exiting game...");

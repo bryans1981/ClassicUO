@@ -10,23 +10,60 @@ if (-not $BundlePath) {
 }
 
 $resolvedBundle = (Resolve-Path -LiteralPath $BundlePath).Path
-$buildStampFile = Join-Path $resolvedBundle 'browser-build-stamp.txt'
-$buildStamp = if (Test-Path -LiteralPath $buildStampFile) {
-    (Get-Content -LiteralPath $buildStampFile -ErrorAction SilentlyContinue | Select-Object -First 1).Trim()
-} else {
-    ''
-}
-$buildPrefix = if ($buildStamp) { "build/$buildStamp/" } else { '' }
 $logPath = Join-Path $env:TEMP 'classicuo-browser-serve.log'
 $null = Remove-Item -LiteralPath $logPath -Force -ErrorAction SilentlyContinue
 $listener = [System.Net.HttpListener]::new()
 $listener.Prefixes.Add("http://localhost:$Port/")
 $listener.Start()
+Add-Content -LiteralPath $logPath -Value "SERVER STARTED $resolvedBundle"
+
+function Add-Content {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$LiteralPath,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Value
+    )
+
+    try {
+        $directory = Split-Path -Parent $LiteralPath
+        if ($directory -and -not (Test-Path -LiteralPath $directory)) {
+            New-Item -ItemType Directory -Force -Path $directory | Out-Null
+        }
+
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($Value + [Environment]::NewLine)
+        $stream = [System.IO.File]::Open($LiteralPath, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
+        try {
+            $stream.Write($bytes, 0, $bytes.Length)
+        } finally {
+            $stream.Dispose()
+        }
+    } catch {
+        # Logging must never take the server down.
+    }
+}
 
 Write-Host "Serving ClassicUO browser bundle from $resolvedBundle"
 Write-Host "URL: http://localhost:$Port/"
 if ($buildPrefix) {
     Write-Host "Build prefix: /$buildPrefix"
+}
+
+function Get-BuildPrefix {
+    param([string]$BundleRoot)
+
+    $buildStampFile = Join-Path $BundleRoot 'browser-build-stamp.txt'
+    if (-not (Test-Path -LiteralPath $buildStampFile)) {
+        return ''
+    }
+
+    $buildStamp = (Get-Content -LiteralPath $buildStampFile -ErrorAction SilentlyContinue | Select-Object -First 1).Trim()
+    if ([string]::IsNullOrWhiteSpace($buildStamp)) {
+        return ''
+    }
+
+    return "build/$buildStamp/"
 }
 
 function Get-ContentType {
@@ -43,10 +80,13 @@ function Get-ContentType {
     }
 }
 
+$buildPrefix = Get-BuildPrefix -BundleRoot $resolvedBundle
+
 try {
     while ($listener.IsListening) {
         $context = $listener.GetContext()
         $requestPath = [Uri]::UnescapeDataString($context.Request.Url.AbsolutePath.TrimStart("/"))
+        $buildPrefix = Get-BuildPrefix -BundleRoot $resolvedBundle
         if ($context.Request.HttpMethod -eq 'POST' -and $requestPath.EndsWith('__browser-status', [System.StringComparison]::OrdinalIgnoreCase)) {
             $reader = New-Object System.IO.StreamReader($context.Request.InputStream, $context.Request.ContentEncoding)
             $body = $reader.ReadToEnd()
@@ -108,7 +148,12 @@ try {
         $context.Response.Close()
     }
 }
+catch {
+    Add-Content -LiteralPath $logPath -Value ("SERVER EXCEPTION {0}" -f $_.Exception.ToString())
+    throw
+}
 finally {
+    Add-Content -LiteralPath $logPath -Value "SERVER STOPPED"
     $listener.Stop()
     $listener.Close()
 }

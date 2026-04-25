@@ -32,12 +32,12 @@ namespace ClassicUO
 
         private bool _ignoreNextTextInput;
         private readonly BrowserRuntimeBootstrapState _browserBootstrapState;
-        private readonly float[] _intervalFixedUpdate = new float[2];
+        private readonly float[] _intervalFixedUpdate;
         private double _totalElapsed, _currentFpsTime;
         private uint _totalFrames;
         private UltimaBatcher2D _uoSpriteBatch;
-        private RenderTargets _renderTargets = new();
-        private readonly RenderLists _renderLists = new();
+        private RenderTargets _renderTargets;
+        private readonly RenderLists _renderLists;
         private bool _suppressedDraw;
         private bool _pluginsInitialized = false;
         private float _displayScale;
@@ -45,30 +45,47 @@ namespace ClassicUO
         public GameController(IPluginHost pluginHost, BrowserRuntimeBootstrapState browserBootstrapState = null)
         {
             _browserBootstrapState = browserBootstrapState;
+            _intervalFixedUpdate = new float[2];
+            Log.Trace("GameController.ctor-after-interval-fixed-update");
+            _renderTargets = new RenderTargets();
+            Log.Trace("GameController.ctor-after-render-targets");
+            _renderLists = new RenderLists();
+            Log.Trace("GameController.ctor-after-render-lists");
+            UO = new UltimaOnline();
+            Log.Trace("GameController.ctor-after-uo");
+            FrameDelay = new uint[2];
+            Log.Trace("GameController.ctor-after-frame-delay");
+            _queuedActions = new List<(uint, Action)>();
+            Log.Trace("GameController.ctor-after-queued-actions");
             GraphicManager = new GraphicsDeviceManager(this);
+            Log.Trace("GameController.ctor-after-graphic-manager");
 
             GraphicManager.PreparingDeviceSettings += (sender, e) =>
             {
                 e.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage =
                     RenderTargetUsage.DiscardContents;
             };
+            Log.Trace("GameController.ctor-after-device-settings");
 
             GraphicManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
             SetVSync(false);
+            Log.Trace("GameController.ctor-after-vsync");
 
             Window.ClientSizeChanged += WindowOnClientSizeChanged;
             Window.AllowUserResizing = BrowserRuntimeBootstrap.ShouldAllowWindowResizing();
             Window.Title = $"ClassicUO - {CUOEnviroment.Version}";
             IsMouseVisible = Settings.GlobalSettings?.RunMouseInASeparateThread ?? true;
+            Log.Trace("GameController.ctor-after-window");
 
             IsFixedTimeStep = Settings.GlobalSettings?.FixedTimeStep ?? false;
             TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / Math.Max(1, Settings.GlobalSettings?.FPS > 0 ? Settings.GlobalSettings.FPS : 60));
             PluginHost = pluginHost;
+            Log.Trace("GameController.ctor-exit");
         }
 
         public Scene Scene { get; private set; }
         public AudioManager Audio { get; private set; }
-        public UltimaOnline UO { get; } = new UltimaOnline();
+        public UltimaOnline UO { get; }
         public IPluginHost PluginHost { get; private set; }
         public GraphicsDeviceManager GraphicManager { get; }
 
@@ -86,9 +103,9 @@ namespace ClassicUO
             }
         }
 
-        public readonly uint[] FrameDelay = new uint[2];
+        public readonly uint[] FrameDelay;
 
-        private readonly List<(uint, Action)> _queuedActions = new ();
+        private readonly List<(uint, Action)> _queuedActions;
 
         public void EnqueueAction(uint time, Action action)
         {
@@ -97,46 +114,84 @@ namespace ClassicUO
 
         protected override void Initialize()
         {
-            if (GraphicManager.GraphicsDevice.Adapter.IsProfileSupported(GraphicsProfile.HiDef))
+            try
             {
-                GraphicManager.GraphicsProfile = GraphicsProfile.HiDef;
-            }
+                Log.Trace("browser-initialize-enter");
 
-            GraphicManager.ApplyChanges();
+#if !BROWSER_WASM
+                if (GraphicManager.GraphicsDevice.Adapter.IsProfileSupported(GraphicsProfile.HiDef))
+                {
+                    GraphicManager.GraphicsProfile = GraphicsProfile.HiDef;
+                }
+#endif
 
-            if (_browserBootstrapState != null)
-            {
-                Log.Trace($"Browser startup contract consumed: storageConfigured={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}");
-                Log.Trace($"Browser runtime policy: mouseThread=false, fixedTimeStep=false, targetFps=60");
+                Log.Trace("browser-initialize-before-applychanges");
+                if (_browserBootstrapState != null && _browserBootstrapState.IsBrowser)
+                {
+                    Log.Trace("Skipping GraphicManager.ApplyChanges in browser mode.");
+                }
+                else
+                {
+                    GraphicManager.ApplyChanges();
+                }
                 BrowserRuntimeStatusReporter.Report(
-                    "browser-bootstrap",
-                    $"storage={_browserBootstrapState.StorageConfigured}, assets={_browserBootstrapState.AssetsRootPath}, profiles={_browserBootstrapState.ProfilesRootPath}, cache={_browserBootstrapState.CacheRootPath}, config={_browserBootstrapState.ConfigRootPath}"
+                    "browser-initialize-before-browser-bootstrap-branch",
+                    _browserBootstrapState != null ? $"browser={_browserBootstrapState.IsBrowser}, storage={_browserBootstrapState.StorageConfigured}" : "bootstrap=null"
                 );
 
-                if (!_browserBootstrapState.StorageConfigured)
+                if (_browserBootstrapState != null)
                 {
-                    Log.Warn("Browser storage provider is not configured. Browser runtime startup is limited.");
+                    if (!_browserBootstrapState.StorageConfigured)
+                    {
+                        Log.Warn("Browser storage provider is not configured. Browser runtime startup is limited.");
+                    }
                 }
-            }
+                BrowserRuntimeStatusReporter.Report(
+                    "browser-initialize-after-browser-bootstrap-branch",
+                    _browserBootstrapState != null ? $"browser={_browserBootstrapState.IsBrowser}, storage={_browserBootstrapState.StorageConfigured}" : "bootstrap=null"
+                );
 
-            SetRefreshRate(Settings.GlobalSettings.FPS);
-            _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
+                if (_browserBootstrapState != null && _browserBootstrapState.IsBrowser)
+                {
+                    Log.Trace("Skipping refresh-rate update in browser mode.");
+                }
+                else
+                {
+                    SetRefreshRate(Settings.GlobalSettings.FPS);
+                }
+
+                Log.Trace("browser-initialize-before-spritebatch");
+                BrowserRuntimeStatusReporter.Report("browser-initialize-before-spritebatch", string.Empty);
+                _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
+                BrowserRuntimeStatusReporter.Report("browser-initialize-after-spritebatch", string.Empty);
+                Log.Trace("browser-initialize-after-spritebatch");
 
 #if !BROWSER_WASM
-            _filter = HandleSdlEvent;
-            SDL_SetEventFilter(_filter, IntPtr.Zero);
+                _filter = HandleSdlEvent;
+                SDL_SetEventFilter(_filter, IntPtr.Zero);
 #endif
 
 #if !BROWSER_WASM
-            if (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true)
+                if (Settings.GlobalSettings?.RunMouseInASeparateThread ?? true)
+                {
+                    Microsoft.Xna.Framework.Input.TextInputEXT.StartTextInput();
+                }
+#endif
+
+                Log.Trace("browser-initialize-before-display-scale");
+                _displayScale = DpiScale;
+                BrowserRuntimeStatusReporter.Report("browser-initialize-after-display-scale", string.Empty);
+                Log.Trace("browser-initialize-after-display-scale");
+
+                Log.Trace("browser-initialize-before-base");
+                base.Initialize();
+                BrowserRuntimeStatusReporter.Report("browser-initialize-after-base", string.Empty);
+            }
+            catch (Exception ex)
             {
-                Microsoft.Xna.Framework.Input.TextInputEXT.StartTextInput();
+                BrowserRuntimeStatusReporter.Report("browser-initialize-failed", ex.ToString());
+                throw;
             }
-#endif
-
-            _displayScale = DpiScale;
-
-            base.Initialize();
         }
 
         protected override void LoadContent()

@@ -337,7 +337,18 @@ namespace ClassicUO.Game.Scenes
             NetClient.Socket.Disconnected -= OnNetClientDisconnected;
             NetClient.Socket.Connected += OnNetClientConnected;
             NetClient.Socket.Disconnected += OnNetClientDisconnected;
-            NetClient.Socket.Connect(Settings.GlobalSettings.IP, Settings.GlobalSettings.Port);
+
+            if (PlatformHelper.IsBrowser)
+            {
+                string targetIp = Settings.GlobalSettings.IP;
+                ushort targetPort = Settings.GlobalSettings.Port;
+                BrowserRuntimeStatusReporter.Report("login-connect-deferred", $"target={targetIp}:{targetPort}");
+                Client.Game.EnqueueAction(5000, () => NetClient.Socket.Connect(targetIp, targetPort));
+            }
+            else
+            {
+                NetClient.Socket.Connect(Settings.GlobalSettings.IP, Settings.GlobalSettings.Port);
+            }
         }
 
 

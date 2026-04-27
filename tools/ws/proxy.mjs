@@ -27,8 +27,9 @@ server.on('connection', (browserSocket, request) => {
   const browserAddress = request.socket.remoteAddress || 'unknown';
   console.log(`browser websocket open from ${browserAddress}`);
 
-  const targetSocket = net.createConnection({ host: targetHost, port: targetPort });
+  let targetSocket = null;
   let upstreamConnected = false;
+  const pendingBrowserMessages = [];
   let browserMessageCount = 0;
   let targetDataCount = 0;
 
@@ -43,9 +44,49 @@ server.on('connection', (browserSocket, request) => {
   };
 
   const closeTarget = () => {
-    if (!targetSocket.destroyed) {
+    if (targetSocket && !targetSocket.destroyed) {
       targetSocket.destroy();
     }
+  };
+
+  const ensureTargetSocket = () => {
+    if (targetSocket) {
+      return targetSocket;
+    }
+
+    targetSocket = net.createConnection({ host: targetHost, port: targetPort });
+
+    targetSocket.on('connect', () => {
+      upstreamConnected = true;
+      console.log(`connected to target ${targetHost}:${targetPort}`);
+
+      while (pendingBrowserMessages.length > 0) {
+        targetSocket.write(pendingBrowserMessages.shift());
+      }
+    });
+
+    targetSocket.on('data', (chunk) => {
+      targetDataCount += 1;
+      if (targetDataCount <= 10) {
+        console.log(`target data ${targetDataCount}: ${chunk.length} bytes`);
+      }
+
+      if (browserSocket.readyState === 1) {
+        browserSocket.send(chunk, { binary: true });
+      }
+    });
+
+    targetSocket.on('close', (hadError) => {
+      console.log(`target disconnected${hadError ? ' with error' : ''}`);
+      closeBrowser(1011, 'target disconnected');
+    });
+
+    targetSocket.on('error', (error) => {
+      console.warn(`target socket error: ${error?.message || error}`);
+      closeBrowser(1011, error?.message || 'target socket error');
+    });
+
+    return targetSocket;
   };
 
   browserSocket.on('message', (data, isBinary) => {
@@ -56,6 +97,9 @@ server.on('connection', (browserSocket, request) => {
     }
 
     if (!upstreamConnected) {
+      const payload = isBinary ? data : Buffer.from(data);
+      pendingBrowserMessages.push(payload);
+      ensureTargetSocket();
       return;
     }
 
@@ -70,32 +114,6 @@ server.on('connection', (browserSocket, request) => {
 
   browserSocket.on('error', (error) => {
     console.warn(`browser websocket error: ${error?.message || error}`);
-  });
-
-  targetSocket.on('connect', () => {
-    upstreamConnected = true;
-    console.log(`connected to target ${targetHost}:${targetPort}`);
-  });
-
-  targetSocket.on('data', (chunk) => {
-    targetDataCount += 1;
-    if (targetDataCount <= 10) {
-      console.log(`target data ${targetDataCount}: ${chunk.length} bytes`);
-    }
-
-    if (browserSocket.readyState === 1) {
-      browserSocket.send(chunk, { binary: true });
-    }
-  });
-
-  targetSocket.on('close', (hadError) => {
-    console.log(`target disconnected${hadError ? ' with error' : ''}`);
-    closeBrowser(1011, 'target disconnected');
-  });
-
-  targetSocket.on('error', (error) => {
-    console.warn(`target socket error: ${error?.message || error}`);
-    closeBrowser(1011, error?.message || 'target socket error');
   });
 
 });

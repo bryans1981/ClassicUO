@@ -311,17 +311,6 @@ namespace ClassicUO
             Scene = scene;
             Scene?.Load();
 
-            if (PlatformHelper.IsBrowser
-                && scene is LoginScene loginScene
-                && !string.IsNullOrWhiteSpace(Settings.GlobalSettings?.Username)
-                && !string.IsNullOrWhiteSpace(Crypter.Decrypt(Settings.GlobalSettings.Password)))
-            {
-                string username = Settings.GlobalSettings.Username;
-                string password = Crypter.Decrypt(Settings.GlobalSettings.Password);
-                Log.Trace("GameController.SetScene browser auto-login: scheduling login connect.");
-                BrowserRuntimeStatusReporter.Report("browser-set-scene", $"login auto-connect scheduled for {username}");
-                EnqueueAction(250, () => loginScene.Connect(username, password));
-            }
         }
 
         public void SetVSync(bool value)

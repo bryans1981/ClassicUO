@@ -129,7 +129,7 @@ function Start-BrowserWindow {
     $browserProfilePath = Join-Path $browserProfileRoot 'Profile'
     New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
 
-    $browserArguments = "--new-window --no-first-run --no-default-browser-check --disable-features=ChromeWhatsNewUI --user-data-dir=`"$browserProfilePath`""
+    $browserArguments = "--new-window --no-first-run --no-default-browser-check --disable-features=ChromeWhatsNewUI --disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows --user-data-dir=`"$browserProfilePath`""
     $browserArguments += " `"$TargetUrl`""
 
     $browserStartProcess = @{

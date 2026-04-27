@@ -270,6 +270,11 @@ namespace ClassicUO.Network
             {
                 //_socket.Send(data, 0, length);
                 _sendStream.Enqueue(message);
+
+                if (PlatformHelper.IsBrowser && (message[0] == 0xEF || message[0] == 0x80 || message[0] == 0x91))
+                {
+                    BrowserRuntimeStatusReporter.Report("browser-send-enqueued", $"id=0x{message[0]:X2}, queue={_sendStream.Length}, length={message.Length}");
+                }
             }
 
             Statistics.TotalBytesSent += (uint)message.Length;
@@ -293,6 +298,11 @@ namespace ClassicUO.Network
             {
                 lock (_sendStream)
                 {
+                    if (PlatformHelper.IsBrowser && _sendStream.Length > 0)
+                    {
+                        BrowserRuntimeStatusReporter.Report("browser-process-send", $"queue={_sendStream.Length}");
+                    }
+
                     while (_sendStream.Length > 0)
                     {
                         var read = _sendStream.Dequeue(_sendingBuffer, 0, _sendingBuffer.Length);
@@ -300,6 +310,11 @@ namespace ClassicUO.Network
                         if (read <= 0)
                         {
                             break;
+                        }
+
+                        if (PlatformHelper.IsBrowser && read > 0)
+                        {
+                            BrowserRuntimeStatusReporter.Report("browser-process-send-dequeue", $"read={read}, first=0x{_sendingBuffer[0]:X2}");
                         }
 
                         _socket.Send(_sendingBuffer, 0, read);

@@ -69,12 +69,14 @@ sealed class WebSocketWrapper : SocketWrapper
 
             if (PlatformHelper.IsBrowser)
             {
-                if (_browserSocketHandle == 0 || !_browserSocketConnected)
+                if (_browserSocketHandle == 0)
                 {
                     return;
                 }
 
+                BrowserRuntimeStatusReporter.Report("browser-socket-send-call", $"{_browserSocketHandle}:{count}");
                 BrowserWebSocketInterop.Send(_browserSocketHandle, copy, count);
+                BrowserRuntimeStatusReporter.Report("browser-socket-send-complete", $"{_browserSocketHandle}:{count}");
                 return;
             }
 
@@ -97,10 +99,12 @@ sealed class WebSocketWrapper : SocketWrapper
         }
         catch (WebSocketException ex)
         {
+            BrowserRuntimeStatusReporter.Report("browser-socket-send-error", $"WebSocketException:{ex.Message}");
             Log.Trace($"WebSocket send error: {ex.Message}");
         }
         catch (Exception ex)
         {
+            BrowserRuntimeStatusReporter.Report("browser-socket-send-error", $"{ex.GetType().Name}:{ex.Message}");
             Log.Trace($"Unexpected websocket send error: {ex}");
         }
         finally
@@ -141,22 +145,23 @@ sealed class WebSocketWrapper : SocketWrapper
             if (PlatformHelper.IsBrowser)
             {
                 await ConnectBrowserSocketAsync(uri);
+                BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", _browserSocketHandle != 0 ? "pending-open" : "pending");
+                return;
             }
             else
             {
                 await ConnectWebSocketAsyncCore(uri);
             }
 
-            var connectState = PlatformHelper.IsBrowser
-                ? (_browserSocketConnected ? "pending-open" : "pending")
-                : _webSocket?.State.ToString() ?? "null";
-            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", connectState);
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", _webSocket?.State.ToString() ?? "null");
 
             if (IsConnected)
+            {
                 InvokeOnConnected();
+            }
             else
             {
-                BrowserRuntimeStatusReporter.Report("browser-ws-connect-not-connected", connectState);
+                BrowserRuntimeStatusReporter.Report("browser-ws-connect-not-connected", _webSocket?.State.ToString() ?? "null");
                 InvokeOnError(SocketError.NotConnected);
             }
         }
@@ -379,28 +384,20 @@ sealed class WebSocketWrapper : SocketWrapper
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-async", uri.ToString());
         _browserSocketHandle = BrowserWebSocketInterop.Connect(uri.ToString());
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-handle", _browserSocketHandle.ToString());
-        _browserSocketConnected = true;
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "pending-open");
-        _receiveTask = StartBrowserReceiveAsync();
-        _ = MonitorBrowserSocketOpenAsync(uri, _browserSocketHandle, _tokenSource.Token);
-    }
+        Client.Game.EnqueueAction(10000, () =>
+        {
+            if (_browserSocketHandle == 0 || _tokenSource.IsCancellationRequested)
+            {
+                return;
+            }
 
-    private async Task MonitorBrowserSocketOpenAsync(Uri uri, int handle, CancellationToken cancellationToken)
-    {
-        try
-        {
-            await BrowserWebSocketInterop.WaitForOpenAsync(handle, cancellationToken);
-            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "open");
+            _browserSocketConnected = true;
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
             BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
-        }
-        catch (OperationCanceledException)
-        {
-            BrowserRuntimeStatusReporter.Report("browser-ws-connect-open-canceled", IsCanceled ? "requested" : "remote");
-        }
-        catch (Exception ex)
-        {
-            BrowserRuntimeStatusReporter.Report("browser-ws-connect-open-error", ex.GetType().Name);
-        }
+            InvokeOnConnected();
+            _receiveTask = StartBrowserReceiveAsync();
+        });
     }
 
     private async Task StartBrowserReceiveAsync()

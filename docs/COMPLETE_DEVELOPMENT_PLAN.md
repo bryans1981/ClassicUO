@@ -285,13 +285,13 @@ Current status:
 
 ## Handoff Notes
 
-- The browser runtime was exiting immediately after the early browser startup status beacon near `browser-initialize-before-browser-bootstrap-branch`.
-- That early JS-backed status beacon has been replaced with plain trace logging for the next validation pass.
-- The browser startup path in `src/ClassicUO.Client/GameController.cs` remains the active debug target until the next live run proves otherwise.
+- The browser runtime is past bootstrap and asset hydration, and login auto-connect is staged with `bryanstest`.
+- The browser socket transport is the remaining blocker: the first login packet still flushes while the browser websocket is still `CONNECTING`.
+- I tested deferred browser connect and deferred connected callbacks, but they did not produce a usable `OPEN` state before send.
 - Close the Edge window after each browser test run so the machine does not accumulate stale sessions.
 - Keep browser usage to one or two open windows or tabs at most during testing.
 - The repo-owned browser launcher closes any previously managed browser window before starting a new test session.
-- `browser-startup` now uses trace logging only, so browser bootstrap should not stall on the status bridge.
+- The next step is a transport decision, not another timing-only tweak.
 - If a publish build fails with linker OOM, recover the build path first, then resume from the current runtime cut point.
 
 ## Deferred Side Work
@@ -315,4 +315,4 @@ When choosing the next task:
 
 ## Progress Summary
 
-The project is past browser bootstrap, local serving, transport discovery, native renderer linking, browser asset staging, and managed startup telemetry. The active critical path is now browser-native asset hydration/runtime startup completion, then managed login flow, input, session flow, gameplay, and persistence.
+The project is past browser bootstrap, local serving, native renderer linking, browser asset staging, and managed startup telemetry. The active critical path is now browser transport readiness for login, then managed session flow, input, gameplay, and persistence.

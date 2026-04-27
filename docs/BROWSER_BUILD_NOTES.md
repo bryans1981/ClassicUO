@@ -334,8 +334,10 @@ The local browser spike now also has an optional test websocket proxy in `tools/
 
 - The browser runtime now loads the staged login override successfully and schedules auto-connect with `bryanstest`.
 - The browser-side websocket connect no longer blocks on `Task.Wait()` in browser mode, which removed the `Cannot wait on monitors on this runtime` failure.
-- The local websocket proxy now reaches `10.0.0.91:2593`, but the target disconnects immediately after connect, so the remaining blocker is backend/shard behavior rather than the browser client.
+- The local websocket proxy reaches `10.0.0.91:2593`, and the current blocker is browser-side transport timing: the first login packet still flushes while the browser websocket reports `CONNECTING`.
+- I tested multiple deferred-connect windows on the browser side, including queued connect and connected callbacks, but the browser socket still did not reach a usable `OPEN` state before the first login packet flush.
 - Browser windows must be closed at the end of each test cycle so the session does not keep consuming local resources.
 - Keep browser usage to one or two open windows or tabs at most during testing.
 - The repo-owned browser launcher now closes any previously managed browser window before starting a new test session.
+- The current next step is a transport decision, not more timing tweaks.
 - If a publish run hits linker OOM again, recover the browser build path first, then resume the runtime probe from the current cut point.

@@ -337,4 +337,5 @@ The local browser spike now also has an optional test websocket proxy in `tools/
 - Browser windows must be closed at the end of each test cycle so the session does not keep consuming local resources.
 - Keep browser usage to one or two open windows or tabs at most during testing.
 - The repo-owned browser launcher now closes any previously managed browser window before starting a new test session.
+- The `browser-startup` marker was moved to trace-only logging so it cannot block the browser bootstrap path.
 - If a publish run hits linker OOM again, the next step is to recover the browser build path first, then resume the runtime probe from the current cut point.

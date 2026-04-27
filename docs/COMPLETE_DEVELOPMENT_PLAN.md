@@ -289,6 +289,7 @@ Current status:
 - Close the Edge window after each browser test run so the machine does not accumulate stale sessions.
 - Keep browser usage to one or two open windows or tabs at most during testing.
 - The repo-owned browser launcher closes any previously managed browser window before starting a new test session.
+- `browser-startup` now uses trace logging only, so browser bootstrap should not stall on the status bridge.
 - If a publish build fails with linker OOM, recover the build path first, then resume from the current runtime cut point.
 
 ## Deferred Side Work

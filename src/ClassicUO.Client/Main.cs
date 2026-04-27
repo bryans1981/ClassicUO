@@ -153,8 +153,9 @@ namespace ClassicUO
             }
 
             BrowserRuntimeBootstrap.ApplyBrowserLoginOverride();
-            Log.Trace(
-                $"browser-startup browser={BrowserRuntimeBootstrap.CaptureState().IsBrowser}, storage={BrowserRuntimeBootstrap.CaptureState().StorageConfigured}, uo={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory) ? "empty" : "set")}, ip={Settings.GlobalSettings.IP}, port={Settings.GlobalSettings.Port}"
+            BrowserRuntimeStatusReporter.Report(
+                "browser-startup",
+                $"browser={BrowserRuntimeBootstrap.CaptureState().IsBrowser}, storage={BrowserRuntimeBootstrap.CaptureState().StorageConfigured}, uo={(string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory) ? "empty" : "set")}, ip={Settings.GlobalSettings.IP}, port={Settings.GlobalSettings.Port}"
             );
 
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.UltimaOnlineDirectory))

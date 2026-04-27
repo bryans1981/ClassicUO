@@ -196,7 +196,7 @@ namespace ClassicUO
         protected override void LoadContent()
         {
             base.LoadContent();
-            Log.Trace("game-loadcontent-start");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-start", string.Empty);
 
             Log.Trace("game-loadcontent-before-fonts");
             Fonts.Initialize(GraphicsDevice);
@@ -206,7 +206,7 @@ namespace ClassicUO
             Log.Trace("game-loadcontent-after-solid-cache");
             Log.Trace("game-loadcontent-before-audio-ctor");
             Audio = new AudioManager();
-            Log.Trace("game-loadcontent-audio-created");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-audio-created", string.Empty);
 
             Log.Trace("game-loadcontent-before-background");
             var bytes = Loader.GetBackgroundImage().ToArray();
@@ -216,16 +216,16 @@ namespace ClassicUO
 #if false
             SetScene(new MainScene(this));
 #else
-            Log.Trace("game-loadcontent-before-uo-load");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-uo-load", string.Empty);
             UO.Load(this);
-            Log.Trace("game-loadcontent-after-uo-load");
-            Log.Trace("game-loadcontent-before-audio-init");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-uo-load", string.Empty);
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-audio-init", string.Empty);
             Audio.Initialize();
-            Log.Trace("game-loadcontent-after-audio-init");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-audio-init", string.Empty);
             // TODO: temporary fix to avoid crash when laoding plugins
-            Log.Trace("game-loadcontent-before-encryption");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-encryption", string.Empty);
             Settings.GlobalSettings.Encryption = (byte) NetClient.Socket.Load(UO.FileManager.Version, (EncryptionType) Settings.GlobalSettings.Encryption);
-            Log.Trace("game-loadcontent-after-encryption");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-encryption", string.Empty);
 
             if (BrowserRuntimeBootstrap.ShouldSkipDesktopPluginLoading())
             {
@@ -245,9 +245,9 @@ namespace ClassicUO
                 Log.Trace("Done!");
             }
 
-            Log.Trace("game-loadcontent-before-login-scene");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-login-scene", string.Empty);
             SetScene(new LoginScene(UO.World));
-            Log.Trace("game-loadcontent-after-login-scene");
+            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-login-scene", string.Empty);
 #endif
             SetWindowPositionBySettings();
         }

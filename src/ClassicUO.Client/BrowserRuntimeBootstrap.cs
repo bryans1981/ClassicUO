@@ -261,11 +261,11 @@ namespace ClassicUO
 
         public static void ApplyBrowserLoginOverride()
         {
-            Log.Trace("Browser login override: entering.");
+            Console.WriteLine("BROWSER_STATUS browser-login-override-enter|");
 
             if (!BrowserFileSystemBootstrap.IsConfigured)
             {
-                Log.Trace("Browser login override: storage provider is not configured.");
+                Console.WriteLine("BROWSER_STATUS browser-login-override-storage-missing|");
                 return;
             }
 
@@ -278,7 +278,7 @@ namespace ClassicUO
             string loginPath = null;
             foreach (string candidatePath in candidatePaths)
             {
-                Log.Trace($"Browser login override: checking {candidatePath}");
+                Console.WriteLine($"BROWSER_STATUS browser-login-override-check|{candidatePath}");
 
                 if (FileSystemHelper.FileExists(candidatePath))
                 {
@@ -289,7 +289,7 @@ namespace ClassicUO
 
             if (string.IsNullOrWhiteSpace(loginPath))
             {
-                Log.Trace("Browser login override: file not found.");
+                Console.WriteLine("BROWSER_STATUS browser-login-override-missing|");
                 return;
             }
 
@@ -299,27 +299,44 @@ namespace ClassicUO
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    Log.Trace("Browser login override: file is empty.");
+                    Console.WriteLine($"BROWSER_STATUS browser-login-override-empty|{loginPath}");
                     return;
                 }
 
-                BrowserLoginBootstrapOptions options = JsonSerializer.Deserialize<BrowserLoginBootstrapOptions>(json);
+                string username = string.Empty;
+                string password = string.Empty;
 
-                if (options == null || string.IsNullOrWhiteSpace(options.Username))
+                using (JsonDocument document = JsonDocument.Parse(json))
                 {
-                    Log.Trace("Browser login override: username missing after deserialization.");
+                    JsonElement root = document.RootElement;
+
+                    if (root.TryGetProperty("username", out JsonElement usernameElement))
+                    {
+                        username = usernameElement.GetString() ?? string.Empty;
+                    }
+
+                    if (root.TryGetProperty("password", out JsonElement passwordElement))
+                    {
+                        password = passwordElement.GetString() ?? string.Empty;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(username))
+                {
+                    Console.WriteLine($"BROWSER_STATUS browser-login-override-invalid|{loginPath}");
                     return;
                 }
 
-                Settings.GlobalSettings.Username = options.Username;
-                Settings.GlobalSettings.Password = Crypter.Encrypt(options.Password ?? string.Empty);
+                Settings.GlobalSettings.Username = username;
+                Settings.GlobalSettings.Password = Crypter.Encrypt(password);
                 Settings.GlobalSettings.SaveAccount = false;
                 Settings.GlobalSettings.AutoLogin = true;
                 CUOEnviroment.SkipLoginScreen = true;
-                Log.Trace($"Applied browser login override for '{options.Username}'.");
+                Console.WriteLine($"BROWSER_STATUS browser-login-override-applied|{username}");
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"BROWSER_STATUS browser-login-override-failed|{ex.Message}");
                 Log.Warn($"Failed to apply browser login override: {ex.Message}");
             }
         }

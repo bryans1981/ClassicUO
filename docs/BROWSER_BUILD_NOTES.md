@@ -331,11 +331,9 @@ The local browser spike now also has an optional test websocket proxy in `tools/
 
 ## Current Handoff State
 
-- The browser runtime now reaches the browser bootstrap boundary and was exiting immediately after the early startup status beacon.
-- The early `BrowserRuntimeStatusReporter` call around `browser-initialize-before-browser-bootstrap-branch` has been replaced with plain trace logging for the next validation pass.
-- The next confirmed suspect is still the startup path in `src/ClassicUO.Client/GameController.cs`, but the test should now tell us whether the JS-backed status beacon was the trigger.
+- The browser runtime now loads the staged login override successfully and schedules auto-connect with `bryanstest`.
+- The browser-side websocket connect no longer blocks on `Task.Wait()` in browser mode, which removed the `Cannot wait on monitors on this runtime` failure.
 - Browser windows must be closed at the end of each test cycle so the session does not keep consuming local resources.
 - Keep browser usage to one or two open windows or tabs at most during testing.
 - The repo-owned browser launcher now closes any previously managed browser window before starting a new test session.
-- The `browser-startup` marker was moved to trace-only logging so it cannot block the browser bootstrap path.
-- If a publish run hits linker OOM again, the next step is to recover the browser build path first, then resume the runtime probe from the current cut point.
+- If a publish run hits linker OOM again, recover the browser build path first, then resume the runtime probe from the current cut point.

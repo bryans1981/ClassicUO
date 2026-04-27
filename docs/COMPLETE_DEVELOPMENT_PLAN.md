@@ -171,12 +171,12 @@ Done when:
 Current status:
 
 - foundational seam exists
-- active product blocker has moved on from asset visibility
+- active product blocker has moved from asset visibility to post-login session flow
 - browser asset staging folder exists for versioned asset drops
 - the selected asset version is already being copied into the browser bundle as `/uo`
 - managed browser startup telemetry now reports through the host log via the browser shell console bridge
-- the latest live boot reaches `browser-startup` and `browser-bootstrap` before asset hydration continues
-- next task: let the asset hydration phase finish and confirm the new `LoadContent` probes, then continue to login scene rendering and gameplay loading
+- the latest live boot reaches `login-scene-connect` and `browser-set-scene` after the staged credentials are applied
+- next task: confirm the first live session response after login, then continue toward the world loop and rendering path
 
 ### Milestone 6: First Playable World Loop
 

@@ -35,7 +35,16 @@ sealed class WebSocketWrapper : SocketWrapper
     private CancellationTokenSource _tokenSource = new();
     private CircularBuffer _receiveStream;
 
-    public override void Connect(Uri uri) => ConnectAsync(uri).Wait();
+    public override void Connect(Uri uri)
+    {
+        if (PlatformHelper.IsBrowser)
+        {
+            _ = ConnectAsync(uri);
+            return;
+        }
+
+        ConnectAsync(uri).Wait();
+    }
 
     public override void Send(byte[] buffer, int offset, int count)
     {

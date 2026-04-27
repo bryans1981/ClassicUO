@@ -225,7 +225,10 @@ namespace ClassicUO
             // TODO: temporary fix to avoid crash when laoding plugins
             BrowserRuntimeStatusReporter.Report("game-loadcontent-before-encryption", string.Empty);
             Settings.GlobalSettings.Encryption = (byte) NetClient.Socket.Load(UO.FileManager.Version, (EncryptionType) Settings.GlobalSettings.Encryption);
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-encryption", string.Empty);
+            BrowserRuntimeStatusReporter.Report(
+                "game-loadcontent-after-encryption",
+                $"version={UO.Version}, encryption={(EncryptionType) Settings.GlobalSettings.Encryption}, clientVersion={Settings.GlobalSettings.ClientVersion}"
+            );
 
             if (BrowserRuntimeBootstrap.ShouldSkipDesktopPluginLoading())
             {

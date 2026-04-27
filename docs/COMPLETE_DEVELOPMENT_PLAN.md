@@ -34,6 +34,7 @@ What is already proven:
 - browser-only desktop assumptions have been reduced across startup, scenes, settings, and transport
 - browser asset staging now exists in `browser-assets/uo/versions/<version>/`
 - the selected asset version can be copied into the browser bundle as `/uo`
+- the current active asset version is `Ultima Online Wicked Classic`
 - the live browser shell now suppresses nonessential tracing unless debug mode is enabled
 - browser canvas input is hardened for play: focus-on-pointer, no page scroll, no context menu
 - browser login ping polling is disabled so unsupported browser network APIs do not block shard list flow

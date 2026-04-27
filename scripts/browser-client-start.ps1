@@ -152,14 +152,30 @@ function Start-BrowserWindow {
 & (Join-Path $PSScriptRoot "browser-client-publish.ps1") -Configuration $Configuration
 
 if (-not [string]::IsNullOrWhiteSpace($LoginUsername) -and -not [string]::IsNullOrWhiteSpace($LoginPassword)) {
+    $browserLocalIp = $null
+    try {
+        $browserLocalIp = Get-NetIPConfiguration |
+            Where-Object { $_.IPv4DefaultGateway -and $_.IPv4Address } |
+            Sort-Object InterfaceMetric |
+            ForEach-Object { $_.IPv4Address.IPAddress } |
+            Where-Object { $_ -and $_ -notlike '127.*' -and $_ -notlike '169.254.*' -and $_ -ne '0.0.0.0' } |
+            Select-Object -First 1
+    } catch {
+        $browserLocalIp = $null
+    }
+
+    $browserLocalIpValue = if ($browserLocalIp) { $browserLocalIp } else { '127.0.0.1' }
+
     $loginPayload = [ordered]@{
         username = $LoginUsername
         password = $LoginPassword
+        localIp = $browserLocalIpValue
     } | ConvertTo-Json -Compress
 
     Set-Content -LiteralPath $browserLoginPath -Value $loginPayload -Encoding UTF8
     Set-Content -LiteralPath $browserLoginAssetPath -Value $loginPayload -Encoding UTF8
     Write-Host "Browser login override: $LoginUsername"
+    Write-Host "Browser local IP override: $browserLocalIpValue"
 }
 
 if (Test-Path $pidFile) {

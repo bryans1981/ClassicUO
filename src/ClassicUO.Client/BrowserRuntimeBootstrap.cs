@@ -7,12 +7,15 @@ using ClassicUO.Utility.Logging;
 using Microsoft.Xna.Framework;
 using System;
 using System.IO;
+using System.Net;
 using System.Text.Json;
 
 namespace ClassicUO
 {
     internal static class BrowserRuntimeBootstrap
     {
+        private static uint? _browserLocalIpOverride;
+
         public static BrowserRuntimeBootstrapState CaptureState()
         {
             return new BrowserRuntimeBootstrapState
@@ -52,14 +55,6 @@ namespace ClassicUO
 
             Settings.GlobalSettings.Port = 2594;
 
-            if (
-                string.IsNullOrWhiteSpace(Settings.GlobalSettings.ClientVersion)
-                || !ClientVersionHelper.IsClientVersionValid(Settings.GlobalSettings.ClientVersion, out _)
-            )
-            {
-                Settings.GlobalSettings.ClientVersion = ClientVersionHelper.ToVersionString(ClientVersion.CV_7010400);
-            }
-
             Settings.CustomSettingsFilepath = null;
             Settings.GlobalSettings.Plugins = Array.Empty<string>();
             Settings.GlobalSettings.UseVerdata = false;
@@ -75,7 +70,6 @@ namespace ClassicUO
             Settings.GlobalSettings.LastServerName = string.Empty;
             Settings.GlobalSettings.OverrideFile = string.Empty;
             Settings.GlobalSettings.ScreenScale = 1f;
-            Settings.GlobalSettings.Encryption = 0;
             if (string.IsNullOrWhiteSpace(Settings.GlobalSettings.Language))
             {
                 Settings.GlobalSettings.Language = "ENU";
@@ -86,6 +80,8 @@ namespace ClassicUO
             Settings.GlobalSettings.WindowSize = new Point(1280, 720);
             Settings.GlobalSettings.IgnoreRelayIp = true;
             CUOEnviroment.NoServerPing = true;
+
+            EnsureBrowserClientVersionFromAssets();
         }
 
         public static void ApplyBrowserProfileDefaults(Profile profile)
@@ -122,7 +118,6 @@ namespace ClassicUO
             settings.LastServerName = string.Empty;
             settings.OverrideFile = string.Empty;
             settings.ScreenScale = 1f;
-            settings.Encryption = 0;
             settings.IgnoreRelayIp = true;
             settings.RunMouseInASeparateThread = false;
             settings.FixedTimeStep = false;
@@ -216,7 +211,7 @@ namespace ClassicUO
 
         public static uint GetBrowserLocalIpDefault()
         {
-            return 0x100007f;
+            return _browserLocalIpOverride ?? 0x100007f;
         }
 
         public static bool ShouldUseBrowserLocalIpDefault()
@@ -257,6 +252,31 @@ namespace ClassicUO
         public static void ConfigureBrowserStorageProvider(IBrowserStorageProvider provider)
         {
             BrowserFileSystemBootstrap.ConfigureProvider(provider);
+        }
+
+        private static void EnsureBrowserClientVersionFromAssets()
+        {
+            if (!PlatformHelper.IsBrowser || Settings.GlobalSettings == null)
+            {
+                return;
+            }
+
+            var clientExePath = Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "client.exe");
+
+            if (ClientVersionHelper.TryParseFromFile(clientExePath, out var clientVersionText) &&
+                ClientVersionHelper.IsClientVersionValid(clientVersionText, out _))
+            {
+                if (!string.Equals(Settings.GlobalSettings.ClientVersion, clientVersionText, StringComparison.OrdinalIgnoreCase))
+                {
+                    Settings.GlobalSettings.ClientVersion = clientVersionText;
+                }
+
+                BrowserRuntimeStatusReporter.Report("browser-client-version", clientVersionText);
+                return;
+            }
+
+            BrowserRuntimeStatusReporter.Report("browser-client-version", "unresolved");
+            Log.Warn($"Browser startup: could not resolve client version from browser assets at {clientExePath}");
         }
 
         public static void ApplyBrowserLoginOverride()
@@ -319,6 +339,21 @@ namespace ClassicUO
                     {
                         password = passwordElement.GetString() ?? string.Empty;
                     }
+
+                    if (root.TryGetProperty("localIp", out JsonElement localIpElement))
+                    {
+                        string localIp = localIpElement.GetString() ?? string.Empty;
+
+                        if (IPAddress.TryParse(localIp, out IPAddress parsedLocalIp))
+                        {
+                            byte[] addressBytes = parsedLocalIp.MapToIPv4().GetAddressBytes();
+                            _browserLocalIpOverride = (uint) (addressBytes[0]
+                                | (addressBytes[1] << 8)
+                                | (addressBytes[2] << 16)
+                                | (addressBytes[3] << 24));
+                            BrowserRuntimeStatusReporter.Report("browser-local-ip", localIp);
+                        }
+                    }
                 }
 
                 if (string.IsNullOrWhiteSpace(username))
@@ -373,6 +408,9 @@ namespace ClassicUO
 
         [System.Text.Json.Serialization.JsonPropertyName("password")]
         public string Password { get; set; } = string.Empty;
+
+        [System.Text.Json.Serialization.JsonPropertyName("localIp")]
+        public string LocalIp { get; set; } = string.Empty;
     }
 
 }

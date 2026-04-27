@@ -29,6 +29,7 @@ Confirmed behavior:
 Latest local Chrome headless result:
 
 - Browser asset delivery is now working through the staged repo folder and bundle copy path.
+- Current active browser asset set: `Ultima Online Wicked Classic` from `browser-assets/uo/versions/Ultima Online Wicked Classic/`.
 - The active asset set is selected through `browser-assets/uo/active-version.txt` and copied into the bundle as `/uo`.
 - Browser file requests for UO data are returning 200 responses.
 - The browser runtime now avoids `MemoryMappedFile` usage in browser mode and falls back to stream reads for UO files.

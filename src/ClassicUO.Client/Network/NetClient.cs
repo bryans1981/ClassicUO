@@ -241,6 +241,16 @@ namespace ClassicUO.Network
                 return;
             }
 
+            if (PlatformHelper.IsBrowser)
+            {
+                byte packetId = message[0];
+
+                if (packetId == 0xEF || packetId == 0x80 || packetId == 0x91)
+                {
+                    BrowserRuntimeStatusReporter.Report("browser-send-packet", $"id=0x{packetId:X2}, length={message.Length}, skipEncryption={skipEncryption}");
+                }
+            }
+
             if (!ignorePlugin && !Plugin.ProcessSendPacket(ref message))
             {
                 return;

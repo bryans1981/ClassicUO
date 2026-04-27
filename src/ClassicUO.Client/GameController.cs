@@ -134,9 +134,10 @@ namespace ClassicUO
                 {
                     GraphicManager.ApplyChanges();
                 }
-                BrowserRuntimeStatusReporter.Report(
-                    "browser-initialize-before-browser-bootstrap-branch",
-                    _browserBootstrapState != null ? $"browser={_browserBootstrapState.IsBrowser}, storage={_browserBootstrapState.StorageConfigured}" : "bootstrap=null"
+                Log.Trace(
+                    _browserBootstrapState != null
+                        ? $"browser-initialize-before-browser-bootstrap-branch browser={_browserBootstrapState.IsBrowser}, storage={_browserBootstrapState.StorageConfigured}"
+                        : "browser-initialize-before-browser-bootstrap-branch bootstrap=null"
                 );
 
                 if (_browserBootstrapState != null)
@@ -146,9 +147,10 @@ namespace ClassicUO
                         Log.Warn("Browser storage provider is not configured. Browser runtime startup is limited.");
                     }
                 }
-                BrowserRuntimeStatusReporter.Report(
-                    "browser-initialize-after-browser-bootstrap-branch",
-                    _browserBootstrapState != null ? $"browser={_browserBootstrapState.IsBrowser}, storage={_browserBootstrapState.StorageConfigured}" : "bootstrap=null"
+                Log.Trace(
+                    _browserBootstrapState != null
+                        ? $"browser-initialize-after-browser-bootstrap-branch browser={_browserBootstrapState.IsBrowser}, storage={_browserBootstrapState.StorageConfigured}"
+                        : "browser-initialize-after-browser-bootstrap-branch bootstrap=null"
                 );
 
                 if (_browserBootstrapState != null && _browserBootstrapState.IsBrowser)

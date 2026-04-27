@@ -283,8 +283,9 @@ Current status:
 
 ## Handoff Notes
 
-- The browser runtime currently exits after `browser-initialize-before-browser-bootstrap-branch`.
-- The browser bootstrap block is the last confirmed active debug target.
+- The browser runtime was exiting immediately after the early browser startup status beacon near `browser-initialize-before-browser-bootstrap-branch`.
+- That early JS-backed status beacon has been replaced with plain trace logging for the next validation pass.
+- The browser startup path in `src/ClassicUO.Client/GameController.cs` remains the active debug target until the next live run proves otherwise.
 - Close the Edge window after each browser test run so the machine does not accumulate stale sessions.
 - If a publish build fails with linker OOM, recover the build path first, then resume from the current runtime cut point.
 

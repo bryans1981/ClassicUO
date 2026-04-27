@@ -206,6 +206,7 @@
         socket.binaryType = 'arraybuffer';
         let openNotified = false;
         let closedNotified = false;
+        let lastReadyState = socket.readyState;
 
         browserSockets.set(socketHandle, {
           socket,
@@ -245,6 +246,11 @@
         };
 
         const openPoll = window.setInterval(() => {
+          if (socket.readyState !== lastReadyState) {
+            lastReadyState = socket.readyState;
+            void reportStatus('browser-socket-readystate', `${socketHandle}:${socket.readyState}`);
+          }
+
           if (socket.readyState === WebSocket.OPEN) {
             window.clearInterval(openPoll);
             notifyOpen();
@@ -271,13 +277,13 @@
           }
         });
 
-        socket.addEventListener('close', () => {
+        socket.addEventListener('close', (event) => {
           const entry = browserSockets.get(socketHandle);
           if (entry) {
             entry.closed = true;
           }
           window.clearInterval(openPoll);
-          void reportStatus('browser-socket-close-event', `${socketHandle}:${socket.readyState}`);
+          void reportStatus('browser-socket-close-event', `${socketHandle}:${event.code}:${event.reason || ''}:${event.wasClean ? 'clean' : 'unclean'}`);
           notifyClose();
         });
 

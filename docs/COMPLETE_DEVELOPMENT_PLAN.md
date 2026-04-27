@@ -287,6 +287,8 @@ Current status:
 - That early JS-backed status beacon has been replaced with plain trace logging for the next validation pass.
 - The browser startup path in `src/ClassicUO.Client/GameController.cs` remains the active debug target until the next live run proves otherwise.
 - Close the Edge window after each browser test run so the machine does not accumulate stale sessions.
+- Keep browser usage to one or two open windows or tabs at most during testing.
+- The repo-owned browser launcher closes any previously managed browser window before starting a new test session.
 - If a publish build fails with linker OOM, recover the build path first, then resume from the current runtime cut point.
 
 ## Deferred Side Work

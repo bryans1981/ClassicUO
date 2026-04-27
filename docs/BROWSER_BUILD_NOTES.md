@@ -335,4 +335,6 @@ The local browser spike now also has an optional test websocket proxy in `tools/
 - The early `BrowserRuntimeStatusReporter` call around `browser-initialize-before-browser-bootstrap-branch` has been replaced with plain trace logging for the next validation pass.
 - The next confirmed suspect is still the startup path in `src/ClassicUO.Client/GameController.cs`, but the test should now tell us whether the JS-backed status beacon was the trigger.
 - Browser windows must be closed at the end of each test cycle so the session does not keep consuming local resources.
+- Keep browser usage to one or two open windows or tabs at most during testing.
+- The repo-owned browser launcher now closes any previously managed browser window before starting a new test session.
 - If a publish run hits linker OOM again, the next step is to recover the browser build path first, then resume the runtime probe from the current cut point.

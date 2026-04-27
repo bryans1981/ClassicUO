@@ -82,6 +82,32 @@ function Stop-StaleBrowserServer {
     }
 }
 
+function Stop-ManagedBrowserWindow {
+    param(
+        [string]$PidFilePath
+    )
+
+    if (-not (Test-Path $PidFilePath)) {
+        return
+    }
+
+    $browserPidValue = Get-Content $PidFilePath -ErrorAction SilentlyContinue
+    if (-not $browserPidValue) {
+        Remove-Item -LiteralPath $PidFilePath -Force -ErrorAction SilentlyContinue
+        return
+    }
+
+    $browserProcess = Get-Process -Id $browserPidValue -ErrorAction SilentlyContinue
+    if ($browserProcess) {
+        Stop-Process -Id $browserPidValue -Force
+        Write-Host "Stopped previous browser client window process $browserPidValue."
+    } else {
+        Write-Host "No running browser client window process was found for PID $browserPidValue."
+    }
+
+    Remove-Item -LiteralPath $PidFilePath -Force -ErrorAction SilentlyContinue
+}
+
 function Start-BrowserWindow {
     param(
         [string]$TargetUrl,
@@ -167,6 +193,8 @@ if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $p
 } elseif (-not (Test-Path (Join-Path $proxyProjectRoot 'node_modules'))) {
     Write-Host "Local websocket proxy dependencies are not installed yet. Run `npm install` in tools\ws to enable ws://127.0.0.1:2594."
 }
+
+$null = Stop-ManagedBrowserWindow -PidFilePath $browserPidFile
 
 $serveScript = Join-Path $PSScriptRoot "browser-client-serve.ps1"
 

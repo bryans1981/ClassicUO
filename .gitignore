@@ -276,4 +276,5 @@ experiments/BrowserHost.ReportHost/.reporthost.pid
 # Local-only browser game asset drops
 browser-assets/uo/versions/
 tools/ws/.wsproxy.pid
+browser-assets/browser-login.json
 

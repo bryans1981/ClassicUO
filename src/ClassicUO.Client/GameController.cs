@@ -162,12 +162,6 @@ namespace ClassicUO
                     SetRefreshRate(Settings.GlobalSettings.FPS);
                 }
 
-                Log.Trace("browser-initialize-before-spritebatch");
-                BrowserRuntimeStatusReporter.Report("browser-initialize-before-spritebatch", string.Empty);
-                _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
-                BrowserRuntimeStatusReporter.Report("browser-initialize-after-spritebatch", string.Empty);
-                Log.Trace("browser-initialize-after-spritebatch");
-
 #if !BROWSER_WASM
                 _filter = HandleSdlEvent;
                 SDL_SetEventFilter(_filter, IntPtr.Zero);
@@ -182,12 +176,15 @@ namespace ClassicUO
 
                 Log.Trace("browser-initialize-before-display-scale");
                 _displayScale = DpiScale;
-                BrowserRuntimeStatusReporter.Report("browser-initialize-after-display-scale", string.Empty);
                 Log.Trace("browser-initialize-after-display-scale");
 
                 Log.Trace("browser-initialize-before-base");
                 base.Initialize();
-                BrowserRuntimeStatusReporter.Report("browser-initialize-after-base", string.Empty);
+                Log.Trace("browser-initialize-after-base");
+
+                Log.Trace("browser-initialize-before-spritebatch");
+                _uoSpriteBatch = new UltimaBatcher2D(GraphicsDevice);
+                Log.Trace("browser-initialize-after-spritebatch");
             }
             catch (Exception ex)
             {
@@ -199,29 +196,36 @@ namespace ClassicUO
         protected override void LoadContent()
         {
             base.LoadContent();
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-start", string.Empty);
+            Log.Trace("game-loadcontent-start");
 
+            Log.Trace("game-loadcontent-before-fonts");
             Fonts.Initialize(GraphicsDevice);
+            Log.Trace("game-loadcontent-after-fonts");
+            Log.Trace("game-loadcontent-before-solid-cache");
             SolidColorTextureCache.Initialize(GraphicsDevice);
+            Log.Trace("game-loadcontent-after-solid-cache");
+            Log.Trace("game-loadcontent-before-audio-ctor");
             Audio = new AudioManager();
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-audio-created", string.Empty);
+            Log.Trace("game-loadcontent-audio-created");
 
+            Log.Trace("game-loadcontent-before-background");
             var bytes = Loader.GetBackgroundImage().ToArray();
             using var ms = new MemoryStream(bytes);
             _renderTargets.InitializeBackground(Texture2D.FromStream(GraphicsDevice, ms));
+            Log.Trace("game-loadcontent-after-background");
 #if false
             SetScene(new MainScene(this));
 #else
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-uo-load", string.Empty);
+            Log.Trace("game-loadcontent-before-uo-load");
             UO.Load(this);
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-uo-load", string.Empty);
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-audio-init", string.Empty);
+            Log.Trace("game-loadcontent-after-uo-load");
+            Log.Trace("game-loadcontent-before-audio-init");
             Audio.Initialize();
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-audio-init", string.Empty);
+            Log.Trace("game-loadcontent-after-audio-init");
             // TODO: temporary fix to avoid crash when laoding plugins
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-encryption", string.Empty);
+            Log.Trace("game-loadcontent-before-encryption");
             Settings.GlobalSettings.Encryption = (byte) NetClient.Socket.Load(UO.FileManager.Version, (EncryptionType) Settings.GlobalSettings.Encryption);
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-encryption", string.Empty);
+            Log.Trace("game-loadcontent-after-encryption");
 
             if (BrowserRuntimeBootstrap.ShouldSkipDesktopPluginLoading())
             {
@@ -241,9 +245,9 @@ namespace ClassicUO
                 Log.Trace("Done!");
             }
 
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-before-login-scene", string.Empty);
+            Log.Trace("game-loadcontent-before-login-scene");
             SetScene(new LoginScene(UO.World));
-            BrowserRuntimeStatusReporter.Report("game-loadcontent-after-login-scene", string.Empty);
+            Log.Trace("game-loadcontent-after-login-scene");
 #endif
             SetWindowPositionBySettings();
         }

@@ -50,6 +50,7 @@ if ($LASTEXITCODE -ne 0) {
 $bundlePath = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\AppBundle"
 $buildStamp = Get-Date -Format "yyyyMMddHHmmss"
 $buildStampFile = Join-Path $bundlePath "browser-build-stamp.txt"
+$browserLoginSource = Join-Path $repoRoot "browser-assets\browser-login.json"
 
 if (-not (Test-Path $bundlePath)) {
     throw "Browser app bundle was not produced at $bundlePath"
@@ -87,6 +88,12 @@ $manifest = [ordered]@{
 
 $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $bundleManifestPath -Encoding utf8
 Set-Content -LiteralPath $buildStampFile -Value $buildStamp -Encoding utf8
+
+if (Test-Path -LiteralPath $browserLoginSource) {
+    Copy-Item -LiteralPath $browserLoginSource -Destination (Join-Path $bundlePath "browser-login.json") -Force
+    Copy-Item -LiteralPath $browserLoginSource -Destination (Join-Path $bundleAssetRoot "browser-login.json") -Force
+    Write-Host "Browser login override source: $browserLoginSource"
+}
 
 $bootJsPath = Join-Path $bundlePath "_framework\dotnet.boot.js"
 if (Test-Path -LiteralPath $bootJsPath) {

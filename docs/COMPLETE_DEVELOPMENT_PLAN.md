@@ -176,7 +176,8 @@ Current status:
 - the selected asset version is already being copied into the browser bundle as `/uo`
 - managed browser startup telemetry now reports through the host log via the browser shell console bridge
 - the latest live boot reaches `login-scene-connect` and `browser-set-scene` after the staged credentials are applied
-- next task: confirm the first live session response after login, then continue toward the world loop and rendering path
+- the local websocket proxy now reaches `10.0.0.91:2593`, but the target disconnects immediately after connect
+- next task: confirm the correct shard/backend endpoint or required server-side setup, then continue toward the world loop and rendering path
 
 ### Milestone 6: First Playable World Loop
 

@@ -175,6 +175,8 @@ if (Test-Path $pidFile) {
 }
 
 $proxyNode = Get-Command node -ErrorAction SilentlyContinue
+$proxyStdoutLog = Join-Path $env:TEMP 'classicuo-browser-proxy.stdout.log'
+$proxyStderrLog = Join-Path $env:TEMP 'classicuo-browser-proxy.stderr.log'
 if (Test-Path $proxyPidFile) {
     $existingProxyPid = Get-Content $proxyPidFile -ErrorAction SilentlyContinue
     if (Test-ManagedProcess -PidValue $existingProxyPid -ExpectedCommandLineToken 'proxy.mjs') {
@@ -185,11 +187,14 @@ if (Test-Path $proxyPidFile) {
 }
 
 if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $proxyProjectRoot 'node_modules'))) {
-    $proxyProc = Start-Process node -ArgumentList @('proxy.mjs', '--target', $ProxyTarget) -WorkingDirectory $proxyProjectRoot -PassThru
+    Remove-Item -LiteralPath $proxyStdoutLog, $proxyStderrLog -Force -ErrorAction SilentlyContinue
+    $proxyProc = Start-Process node -ArgumentList @('proxy.mjs', '--target', $ProxyTarget) -WorkingDirectory $proxyProjectRoot -PassThru -RedirectStandardOutput $proxyStdoutLog -RedirectStandardError $proxyStderrLog
     $proxyProc.Id | Set-Content $proxyPidFile
     Write-Host "Local websocket proxy URL: ws://127.0.0.1:2594"
     Write-Host "Local websocket proxy target: $ProxyTarget"
     Write-Host "Local websocket proxy PID: $($proxyProc.Id)"
+    Write-Host "Local websocket proxy stdout: $proxyStdoutLog"
+    Write-Host "Local websocket proxy stderr: $proxyStderrLog"
 } elseif (-not (Test-Path (Join-Path $proxyProjectRoot 'node_modules'))) {
     Write-Host "Local websocket proxy dependencies are not installed yet. Run `npm install` in tools\ws to enable ws://127.0.0.1:2594."
 }

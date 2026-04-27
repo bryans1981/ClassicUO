@@ -141,6 +141,14 @@ namespace ClassicUO.Network
             if (!Uri.TryCreate(addr, UriKind.RelativeOrAbsolute, out var uri))
                 throw new UriFormatException($"NetClient::Connect() invalid Uri {addr}");
 
+            if (isWebsocketAddress && uri.IsDefaultPort && port != 0)
+            {
+                uri = new UriBuilder(uri)
+                {
+                    Port = port
+                }.Uri;
+            }
+
             Log.Trace($"Connecting to {uri}");
 
             // First connected socket sets the type for any future sockets.

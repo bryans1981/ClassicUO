@@ -25,8 +25,12 @@ sealed class WebSocketWrapper : SocketWrapper
     private TcpSocket _rawSocket;
     private Task _receiveTask;
     private int _disconnectNotified;
+    private int _browserSocketHandle;
+    private bool _browserSocketConnected;
 
-    public override bool IsConnected => _webSocket?.State is WebSocketState.Connecting or WebSocketState.Open;
+    public override bool IsConnected => PlatformHelper.IsBrowser
+        ? _browserSocketConnected
+        : _webSocket?.State is WebSocketState.Connecting or WebSocketState.Open;
     public override EndPoint LocalEndPoint => PlatformHelper.IsBrowser
         ? new IPEndPoint(IPAddress.Loopback, 0)
         : _rawSocket?.LocalEndPoint;
@@ -39,6 +43,7 @@ sealed class WebSocketWrapper : SocketWrapper
     {
         if (PlatformHelper.IsBrowser)
         {
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-begin", uri.ToString());
             _ = ConnectAsync(uri);
             return;
         }
@@ -57,7 +62,23 @@ sealed class WebSocketWrapper : SocketWrapper
     {
         try
         {
-            if (_webSocket == null || _tokenSource == null || _tokenSource.IsCancellationRequested)
+            if (_tokenSource == null || _tokenSource.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if (PlatformHelper.IsBrowser)
+            {
+                if (_browserSocketHandle == 0 || !_browserSocketConnected)
+                {
+                    return;
+                }
+
+                BrowserWebSocketInterop.Send(_browserSocketHandle, copy, count);
+                return;
+            }
+
+            if (_webSocket == null)
             {
                 return;
             }
@@ -112,18 +133,36 @@ sealed class WebSocketWrapper : SocketWrapper
         _receiveTask = null;
         _receiveStream = new CircularBuffer();
         _disconnectNotified = 0;
+        _browserSocketHandle = 0;
+        _browserSocketConnected = false;
 
         try
         {
-            await ConnectWebSocketAsyncCore(uri);
+            if (PlatformHelper.IsBrowser)
+            {
+                await ConnectBrowserSocketAsync(uri);
+            }
+            else
+            {
+                await ConnectWebSocketAsyncCore(uri);
+            }
+
+            var connectState = PlatformHelper.IsBrowser
+                ? (_browserSocketConnected ? "pending-open" : "pending")
+                : _webSocket?.State.ToString() ?? "null";
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", connectState);
 
             if (IsConnected)
                 InvokeOnConnected();
             else
+            {
+                BrowserRuntimeStatusReporter.Report("browser-ws-connect-not-connected", connectState);
                 InvokeOnError(SocketError.NotConnected);
+            }
         }
         catch (WebSocketException ex)
         {
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-error", $"{ex.GetType().Name}:{ex.Message}");
             SocketError error = ex.InnerException?.InnerException switch
             {
                 SocketException socketException => socketException.SocketErrorCode,
@@ -135,6 +174,7 @@ sealed class WebSocketWrapper : SocketWrapper
         }
         catch (Exception ex)
         {
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-error", $"{ex.GetType().Name}:{ex.Message}");
             Log.Error($"Unknown Error {ex.GetType().Name} while connecting to {uri} {ex}");
             InvokeOnError(SocketError.SocketError);
         }
@@ -155,11 +195,7 @@ sealed class WebSocketWrapper : SocketWrapper
     {
         if (PlatformHelper.IsBrowser)
         {
-            _webSocket = new ClientWebSocket();
-            await _webSocket.ConnectAsync(uri, _tokenSource.Token);
-            Log.Trace($"Connected browser WebSocket: {uri}");
-            _receiveTask = StartReceiveAsync();
-            return;
+            throw new InvalidOperationException("Browser websocket connect should use ConnectBrowserSocketAsync().");
         }
 
         // Take control of creating the raw socket, turn off Nagle, also lets us peek at `Available` bytes.
@@ -207,6 +243,12 @@ sealed class WebSocketWrapper : SocketWrapper
 
     private async Task StartReceiveAsync()
     {
+        if (PlatformHelper.IsBrowser)
+        {
+            await StartBrowserReceiveAsync();
+            return;
+        }
+
         var buffer = Shared.Rent(4096);
         var memory = buffer.AsMemory();
         var position = 0;
@@ -239,10 +281,12 @@ sealed class WebSocketWrapper : SocketWrapper
         catch (OperationCanceledException)
         {
             Log.Trace("WebSocket OperationCanceledException on websocket " + (IsCanceled ? "(was requested)" : "(remote cancelled)"));
+            BrowserRuntimeStatusReporter.Report("browser-ws-receive-canceled", IsCanceled ? "requested" : "remote");
         }
         catch (Exception e)
         {
             Log.Trace($"WebSocket error in StartReceiveAsync {e}");
+            BrowserRuntimeStatusReporter.Report("browser-ws-receive-error", e.GetType().Name);
             InvokeOnError(SocketError.SocketError);
         }
         finally
@@ -280,9 +324,30 @@ sealed class WebSocketWrapper : SocketWrapper
 
     public override void Disconnect()
     {
+        BrowserRuntimeStatusReporter.Report("browser-ws-disconnect", PlatformHelper.IsBrowser
+            ? (_browserSocketHandle != 0 ? (_browserSocketConnected ? "open" : "pending") : "null")
+            : _webSocket?.State.ToString() ?? "null");
         if (_tokenSource != null && !_tokenSource.IsCancellationRequested)
         {
             _tokenSource.Cancel();
+        }
+
+        if (PlatformHelper.IsBrowser && _browserSocketHandle != 0)
+        {
+            try
+            {
+                BrowserWebSocketInterop.Close(_browserSocketHandle);
+            }
+            catch
+            {
+                // Best effort.
+            }
+            finally
+            {
+                BrowserWebSocketInterop.Unregister(_browserSocketHandle);
+                _browserSocketHandle = 0;
+                _browserSocketConnected = false;
+            }
         }
 
         try
@@ -305,6 +370,103 @@ sealed class WebSocketWrapper : SocketWrapper
             _rawSocket = null;
             _receiveStream = null;
             _receiveTask = null;
+            _browserSocketConnected = false;
+        }
+    }
+
+    private async Task ConnectBrowserSocketAsync(Uri uri)
+    {
+        BrowserRuntimeStatusReporter.Report("browser-ws-connect-async", uri.ToString());
+        _browserSocketHandle = BrowserWebSocketInterop.Connect(uri.ToString());
+        BrowserRuntimeStatusReporter.Report("browser-ws-connect-handle", _browserSocketHandle.ToString());
+        _browserSocketConnected = true;
+        BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "pending-open");
+        _receiveTask = StartBrowserReceiveAsync();
+        _ = MonitorBrowserSocketOpenAsync(uri, _browserSocketHandle, _tokenSource.Token);
+    }
+
+    private async Task MonitorBrowserSocketOpenAsync(Uri uri, int handle, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await BrowserWebSocketInterop.WaitForOpenAsync(handle, cancellationToken);
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "open");
+            BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
+        }
+        catch (OperationCanceledException)
+        {
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-open-canceled", IsCanceled ? "requested" : "remote");
+        }
+        catch (Exception ex)
+        {
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-open-error", ex.GetType().Name);
+        }
+    }
+
+    private async Task StartBrowserReceiveAsync()
+    {
+        try
+        {
+            while (IsConnected && !_tokenSource.IsCancellationRequested)
+            {
+                var drainedAny = false;
+                while (BrowserWebSocketInterop.TryDequeue(_browserSocketHandle, out var received) && received is { Length: > 0 })
+                {
+                    drainedAny = true;
+                    lock (_receiveStream)
+                    {
+                        _receiveStream.Enqueue(received, 0, received.Length);
+                    }
+                }
+
+                if (drainedAny)
+                {
+                    continue;
+                }
+
+                if (BrowserWebSocketInterop.IsClosed(_browserSocketHandle))
+                {
+                    BrowserRuntimeStatusReporter.Report("browser-ws-receive-closed", "closed");
+                    break;
+                }
+
+                await BrowserWebSocketInterop.WaitForMessageAsync(_browserSocketHandle, _tokenSource.Token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            BrowserRuntimeStatusReporter.Report("browser-ws-receive-canceled", IsCanceled ? "requested" : "remote");
+        }
+        catch (Exception ex)
+        {
+            BrowserRuntimeStatusReporter.Report("browser-ws-receive-error", ex.GetType().Name);
+            Log.Trace($"WebSocket error in browser receive loop {ex}");
+            InvokeOnError(SocketError.SocketError);
+        }
+        finally
+        {
+            if (_browserSocketHandle != 0)
+            {
+                try
+                {
+                    BrowserWebSocketInterop.Close(_browserSocketHandle);
+                }
+                catch
+                {
+                    // Best effort.
+                }
+                finally
+                {
+                    BrowserWebSocketInterop.Unregister(_browserSocketHandle);
+                    _browserSocketHandle = 0;
+                    _browserSocketConnected = false;
+                }
+            }
+        }
+
+        if (!IsCanceled)
+        {
+            InvokeOnError(SocketError.ConnectionReset);
         }
     }
 

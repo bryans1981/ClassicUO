@@ -180,6 +180,166 @@
       }
     };
 
+    const browserSockets = new Map();
+    let nextBrowserSocketHandle = 1;
+    let managedBrowserSocketExports = null;
+
+    const callManagedBrowserSocket = (method, ...args) => {
+      const bridge = managedBrowserSocketExports?.ClassicUO?.Network?.Socket?.BrowserWebSocketInterop;
+      const callback = bridge?.[method];
+      if (typeof callback === 'function') {
+        try {
+          callback(...args);
+        } catch (error) {
+          void reportStatus('browser-socket-callback-error', `${method}:${String(error?.stack || error)}`);
+          console.error(`browser websocket managed callback failed for ${method}`, error);
+        }
+      } else {
+        void reportStatus('browser-socket-callback-missing', method);
+      }
+    };
+
+    const browserSocketModule = {
+      connect: (handle, url) => {
+        const socketHandle = handle || nextBrowserSocketHandle++;
+        const socket = new WebSocket(url);
+        socket.binaryType = 'arraybuffer';
+        let openNotified = false;
+        let closedNotified = false;
+
+        browserSockets.set(socketHandle, {
+          socket,
+          queue: [],
+          pendingSends: []
+        });
+
+        const flushPendingSends = () => {
+          const entry = browserSockets.get(socketHandle);
+          if (!entry || entry.socket.readyState !== WebSocket.OPEN || entry.pendingSends.length === 0) {
+            return;
+          }
+
+          while (entry.pendingSends.length > 0) {
+            entry.socket.send(entry.pendingSends.shift());
+          }
+        };
+
+        const notifyOpen = () => {
+          if (openNotified) {
+            return;
+          }
+
+          openNotified = true;
+          void reportStatus('browser-socket-open-event', String(socketHandle));
+          callManagedBrowserSocket('OnOpen', socketHandle);
+          flushPendingSends();
+        };
+
+        const notifyClose = () => {
+          if (closedNotified) {
+            return;
+          }
+
+          closedNotified = true;
+          callManagedBrowserSocket('OnClose', socketHandle);
+        };
+
+        const openPoll = window.setInterval(() => {
+          if (socket.readyState === WebSocket.OPEN) {
+            window.clearInterval(openPoll);
+            notifyOpen();
+          } else if (socket.readyState === WebSocket.CLOSED) {
+            window.clearInterval(openPoll);
+            notifyClose();
+          }
+        }, 25);
+
+        socket.addEventListener('message', async (event) => {
+          const entry = browserSockets.get(socketHandle);
+          if (!entry) {
+            return;
+          }
+
+          try {
+            const bytes = event.data instanceof ArrayBuffer
+              ? new Uint8Array(event.data)
+              : new Uint8Array(await event.data.arrayBuffer());
+            entry.queue.push(bytes);
+            callManagedBrowserSocket('OnMessage', socketHandle, bytes);
+          } catch (error) {
+            console.error(`browser websocket message decode failed for ${url}`, error);
+          }
+        });
+
+        socket.addEventListener('close', () => {
+          const entry = browserSockets.get(socketHandle);
+          if (entry) {
+            entry.closed = true;
+          }
+          window.clearInterval(openPoll);
+          void reportStatus('browser-socket-close-event', `${socketHandle}:${socket.readyState}`);
+          notifyClose();
+        });
+
+        socket.addEventListener('error', (error) => {
+          console.error(`browser websocket error for ${url}`, error);
+          void reportStatus('browser-socket-error-event', `${socketHandle}:${String(error?.message || error || 'browser websocket error')}`);
+          callManagedBrowserSocket('OnError', socketHandle, String(error?.message || error || 'browser websocket error'));
+        });
+
+        socket.addEventListener('open', () => {
+          window.clearInterval(openPoll);
+          notifyOpen();
+        });
+
+        return socketHandle;
+      },
+      send: (handle, bytes, count) => {
+        const entry = browserSockets.get(handle);
+        if (!entry) {
+          throw new Error(`browser websocket handle ${handle} not found`);
+        }
+
+        const payload = bytes instanceof Uint8Array ? bytes.subarray(0, count) : new Uint8Array(bytes).subarray(0, count);
+        const copy = payload.slice();
+
+        if (entry.socket.readyState === WebSocket.OPEN) {
+          entry.socket.send(copy);
+          return;
+        }
+
+        if (entry.socket.readyState === WebSocket.CONNECTING) {
+          entry.pendingSends.push(copy);
+          void reportStatus('browser-socket-send-queued', `${handle}:${copy.length}`);
+          return;
+        }
+
+        throw new Error(`browser websocket is not open for handle ${handle}`);
+      },
+      receive: (handle) => {
+        const entry = browserSockets.get(handle);
+        if (!entry || entry.queue.length === 0) {
+          return null;
+        }
+
+        return entry.queue.shift();
+      },
+      close: (handle) => {
+        const entry = browserSockets.get(handle);
+        if (!entry) {
+          return;
+        }
+
+        try {
+          entry.socket.close();
+        } catch (error) {
+          console.warn(`browser websocket close failed for handle ${handle}`, error);
+        } finally {
+          browserSockets.delete(handle);
+        }
+      }
+    };
+
     window.addEventListener('error', (event) => {
       const detail = event.error instanceof Error
         ? (event.error.stack || event.error.message || String(event.error))
@@ -523,6 +683,22 @@
         .withDebugging(0)
         .withApplicationArgumentsFromQuery()
         .create();
+
+      managedBrowserSocketExports = await runtime.getAssemblyExports('cuo');
+      reportStatus('browser-socket-exports', Object.keys(managedBrowserSocketExports || {}).join(','));
+      if (managedBrowserSocketExports?.ClassicUO) {
+        reportStatus('browser-socket-classicuo', Object.keys(managedBrowserSocketExports.ClassicUO || {}).join(','));
+        if (managedBrowserSocketExports.ClassicUO?.Network) {
+          reportStatus('browser-socket-network', Object.keys(managedBrowserSocketExports.ClassicUO.Network || {}).join(','));
+          if (managedBrowserSocketExports.ClassicUO.Network?.Socket) {
+            reportStatus('browser-socket-socket', Object.keys(managedBrowserSocketExports.ClassicUO.Network.Socket || {}).join(','));
+            if (managedBrowserSocketExports.ClassicUO.Network.Socket?.BrowserWebSocketInterop) {
+              reportStatus('browser-socket-interop', Object.keys(managedBrowserSocketExports.ClassicUO.Network.Socket.BrowserWebSocketInterop || {}).join(','));
+            }
+          }
+        }
+      }
+      runtime.setModuleImports('classicuo.browser-socket', browserSocketModule);
 
       status.hidden = true;
       reportStatus('runtime-runmain');

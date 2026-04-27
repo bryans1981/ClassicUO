@@ -681,6 +681,21 @@ namespace ClassicUO.Game.Scenes
             ushort port = p.ReadUInt16BE();
             uint seed = p.ReadUInt32BE();
 
+            if (PlatformHelper.IsBrowser)
+            {
+                BrowserRuntimeStatusReporter.Report("browser-relay-ignore", $"ip={ip}, port={port}, seed={seed}");
+                NetClient.Socket.Encryption?.Initialize(false, seed);
+                NetClient.Socket.EnableCompression();
+                unsafe
+                {
+                    Span<byte> b = stackalloc byte[4] { (byte)(seed >> 24), (byte)(seed >> 16), (byte)(seed >> 8), (byte)seed };
+                    NetClient.Socket.Send(b, true, true);
+                }
+
+                NetClient.Socket.Send_SecondLogin(Account, Password, seed);
+                return;
+            }
+
             NetClient.Socket.Disconnect();
             NetClient.Socket.Connected -= OnNetClientConnected;
 

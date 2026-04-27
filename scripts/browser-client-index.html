@@ -207,6 +207,18 @@
         let openNotified = false;
         let closedNotified = false;
         let lastReadyState = socket.readyState;
+        let rafPollActive = true;
+
+        void reportStatus('browser-socket-state-created', `${socketHandle}:${socket.readyState}:${socket.url}`);
+        window.setTimeout(() => {
+          void reportStatus('browser-socket-state-delay-250', `${socketHandle}:${socket.readyState}:${socket.bufferedAmount}`);
+        }, 250);
+        window.setTimeout(() => {
+          void reportStatus('browser-socket-state-delay-1000', `${socketHandle}:${socket.readyState}:${socket.bufferedAmount}`);
+        }, 1000);
+        window.setTimeout(() => {
+          void reportStatus('browser-socket-state-delay-3000', `${socketHandle}:${socket.readyState}:${socket.bufferedAmount}`);
+        }, 3000);
 
         browserSockets.set(socketHandle, {
           socket,
@@ -260,6 +272,33 @@
           }
         }, 25);
 
+        const rafPoll = () => {
+          if (!rafPollActive) {
+            return;
+          }
+
+          if (socket.readyState !== lastReadyState) {
+            lastReadyState = socket.readyState;
+            void reportStatus('browser-socket-readystate', `${socketHandle}:${socket.readyState}`);
+          }
+
+          if (socket.readyState === WebSocket.OPEN) {
+            rafPollActive = false;
+            notifyOpen();
+            return;
+          }
+
+          if (socket.readyState === WebSocket.CLOSED) {
+            rafPollActive = false;
+            notifyClose();
+            return;
+          }
+
+          window.requestAnimationFrame(rafPoll);
+        };
+
+        window.requestAnimationFrame(rafPoll);
+
         socket.addEventListener('message', async (event) => {
           const entry = browserSockets.get(socketHandle);
           if (!entry) {
@@ -283,6 +322,7 @@
             entry.closed = true;
           }
           window.clearInterval(openPoll);
+          rafPollActive = false;
           void reportStatus('browser-socket-close-event', `${socketHandle}:${event.code}:${event.reason || ''}:${event.wasClean ? 'clean' : 'unclean'}`);
           notifyClose();
         });
@@ -295,6 +335,7 @@
 
         socket.addEventListener('open', () => {
           window.clearInterval(openPoll);
+          rafPollActive = false;
           notifyOpen();
         });
 

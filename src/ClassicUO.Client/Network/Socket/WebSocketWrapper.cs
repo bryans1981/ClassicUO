@@ -385,19 +385,20 @@ sealed class WebSocketWrapper : SocketWrapper
         _browserSocketHandle = BrowserWebSocketInterop.Connect(uri.ToString());
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-handle", _browserSocketHandle.ToString());
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "pending-open");
-        Client.Game.EnqueueAction(10000, () =>
-        {
-            if (_browserSocketHandle == 0 || _tokenSource.IsCancellationRequested)
-            {
-                return;
-            }
+        BrowserRuntimeStatusReporter.Report("browser-ws-await-open", _browserSocketHandle.ToString());
 
-            _browserSocketConnected = true;
-            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
-            BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
-            InvokeOnConnected();
-            _receiveTask = StartBrowserReceiveAsync();
-        });
+        await BrowserWebSocketInterop.WaitForOpenAsync(_browserSocketHandle, _tokenSource.Token);
+
+        if (_browserSocketHandle == 0 || _tokenSource.IsCancellationRequested)
+        {
+            return;
+        }
+
+        _browserSocketConnected = true;
+        BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
+        BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
+        InvokeOnConnected();
+        _receiveTask = StartBrowserReceiveAsync();
     }
 
     private async Task StartBrowserReceiveAsync()

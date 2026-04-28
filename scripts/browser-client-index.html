@@ -467,8 +467,7 @@
         });
 
         if (!entry.openNotified && !entry.closedNotified) {
-          void reportStatus('browser-socket-open-forced', `${socketHandle}:${socket.readyState}`);
-          notifyOpen();
+          void reportStatus('browser-socket-open-probe', `${socketHandle}:${socket.readyState}`);
         }
 
         return socketHandle;

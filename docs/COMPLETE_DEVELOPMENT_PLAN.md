@@ -287,6 +287,7 @@ Current status:
 
 - The browser runtime is past bootstrap and asset hydration, and login auto-connect is staged with `bryanstest`.
 - The browser socket transport is the remaining blocker: the first login packet still flushes while the browser websocket is still `CONNECTING`.
+- The browser websocket handshake now blocks on a real open signal before the first login send, replacing the earlier forced-open shortcut.
 - I tested deferred browser connect and deferred connected callbacks, but they did not produce a usable `OPEN` state before send.
 - Close the Edge window after each browser test run so the machine does not accumulate stale sessions.
 - Keep browser usage to one or two open windows or tabs at most during testing.

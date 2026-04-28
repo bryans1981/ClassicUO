@@ -336,6 +336,7 @@ The local browser spike now also has an optional test websocket proxy in `tools/
 - The browser-side websocket connect no longer blocks on `Task.Wait()` in browser mode, which removed the `Cannot wait on monitors on this runtime` failure.
 - The browser websocket handshake now waits for a real open signal before the first login send instead of relying on a forced early open notification.
 - The local websocket proxy reaches `10.0.0.91:2593`, and the current blocker is browser-side transport timing: the first login packet still flushes while the browser websocket reports `CONNECTING`.
+- The latest poll-based handshake change still does not surface a usable browser-open state; the proxy sees the browser connection, but the managed side keeps polling `browser-ws-await-open-poll` without reaching `browser-ws-connected`.
 - I tested multiple deferred-connect windows on the browser side, including queued connect and connected callbacks, but the browser socket still did not reach a usable `OPEN` state before the first login packet flush.
 - Browser windows must be closed at the end of each test cycle so the session does not keep consuming local resources.
 - Keep browser usage to one or two open windows or tabs at most during testing.

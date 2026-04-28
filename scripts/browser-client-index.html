@@ -523,6 +523,10 @@
         } finally {
           browserSockets.delete(handle);
         }
+      },
+      isOpen: (handle) => {
+        const entry = browserSockets.get(handle);
+        return !!entry && !entry.closedNotified && entry.socket.readyState === WebSocket.OPEN;
       }
     };
 

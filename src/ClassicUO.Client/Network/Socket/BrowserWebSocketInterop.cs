@@ -28,6 +28,9 @@ internal static partial class BrowserWebSocketInterop
     [JSImport("close", "classicuo.browser-socket")]
     internal static partial void Close(int handle);
 
+    [JSImport("isOpen", "classicuo.browser-socket")]
+    internal static partial bool IsOpen(int handle);
+
     internal static Task WaitForOpenAsync(int handle, CancellationToken cancellationToken)
     {
         return GetState(handle).Opened.Task.WaitAsync(cancellationToken);

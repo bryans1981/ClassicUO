@@ -387,18 +387,37 @@ sealed class WebSocketWrapper : SocketWrapper
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "pending-open");
         BrowserRuntimeStatusReporter.Report("browser-ws-await-open", _browserSocketHandle.ToString());
 
-        await BrowserWebSocketInterop.WaitForOpenAsync(_browserSocketHandle, _tokenSource.Token);
+        var handle = _browserSocketHandle;
 
-        if (_browserSocketHandle == 0 || _tokenSource.IsCancellationRequested)
+        void PollOpen()
         {
-            return;
+            if (_browserSocketHandle != handle || _tokenSource.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if (BrowserWebSocketInterop.IsClosed(handle))
+            {
+                BrowserRuntimeStatusReporter.Report("browser-ws-connect-closed", handle.ToString());
+                return;
+            }
+
+            if (!BrowserWebSocketInterop.IsOpen(handle))
+            {
+                BrowserRuntimeStatusReporter.Report("browser-ws-await-open-poll", handle.ToString());
+                Client.Game.EnqueueAction(100, PollOpen);
+                return;
+            }
+
+            _browserSocketConnected = true;
+            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
+            BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
+            InvokeOnConnected();
+            _receiveTask = StartBrowserReceiveAsync();
         }
 
-        _browserSocketConnected = true;
-        BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
-        BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
-        InvokeOnConnected();
-        _receiveTask = StartBrowserReceiveAsync();
+        Client.Game.EnqueueAction(100, PollOpen);
+        await Task.CompletedTask;
     }
 
     private async Task StartBrowserReceiveAsync()

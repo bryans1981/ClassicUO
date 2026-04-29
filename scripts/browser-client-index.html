@@ -185,6 +185,148 @@
     let nextBrowserSocketHandle = 1;
     let managedBrowserSocketExports = null;
 
+    const createBrowserSocketWorker = () => {
+      const source = `
+        const sockets = new Map();
+
+        const report = (type, handle, extra = {}) => {
+          self.postMessage({ type, handle, ...extra });
+        };
+
+        self.onmessage = async (event) => {
+          const message = event.data || {};
+          const handle = message.handle;
+          const entry = sockets.get(handle);
+
+          if (message.type === 'connect') {
+            if (entry) {
+              return;
+            }
+
+            const next = {
+              socket: null,
+              pending: [],
+              closed: false
+            };
+
+            sockets.set(handle, next);
+            report('ready', handle, {});
+
+            try {
+              const socket = new WebSocket(message.url);
+              socket.binaryType = 'arraybuffer';
+              next.socket = socket;
+
+              socket.addEventListener('open', () => {
+                report('open', handle, { readyState: socket.readyState });
+
+                while (next.pending.length > 0 && socket.readyState === WebSocket.OPEN) {
+                  const payload = next.pending.shift();
+                  try {
+                    socket.send(payload);
+                    report('sent', handle, { length: payload?.byteLength || payload?.length || 0 });
+                  } catch (error) {
+                    next.pending.unshift(payload);
+                    report('error', handle, { message: String(error?.message || error || 'send failed') });
+                    break;
+                  }
+                }
+              });
+
+              socket.addEventListener('message', async (event) => {
+                try {
+                  const bytes = event.data instanceof ArrayBuffer
+                    ? new Uint8Array(event.data)
+                    : new Uint8Array(await event.data.arrayBuffer());
+                  report('message', handle, { bytes }, [bytes.buffer]);
+                } catch (error) {
+                  report('error', handle, { message: String(error?.message || error || 'browser websocket message decode failed') });
+                }
+              });
+
+              socket.addEventListener('close', (event) => {
+                next.closed = true;
+                report('close', handle, {
+                  code: event.code,
+                  reason: event.reason || '',
+                  clean: event.wasClean ? 'clean' : 'unclean'
+                });
+                sockets.delete(handle);
+              });
+
+              socket.addEventListener('error', (event) => {
+                report('error', handle, { message: String(event?.message || event || 'browser websocket error') });
+              });
+            } catch (error) {
+              report('error', handle, { message: String(error?.message || error || 'connect failed') });
+            }
+            return;
+          }
+
+          if (!entry) {
+            return;
+          }
+
+          if (message.type === 'send') {
+            const payload = message.bytes instanceof Uint8Array
+              ? message.bytes.subarray(0, message.count)
+              : new Uint8Array(message.bytes).subarray(0, message.count);
+            const copy = payload.slice();
+
+            if (entry.socket && entry.socket.readyState === WebSocket.OPEN) {
+              try {
+                entry.socket.send(copy);
+                report('sent', handle, { length: copy.length });
+              } catch (error) {
+                entry.pending.push(copy);
+                report('error', handle, { message: String(error?.message || error || 'send failed') });
+              }
+              return;
+            }
+
+            entry.pending.push(copy);
+            report('queued', handle, { length: copy.length });
+            return;
+          }
+
+          if (message.type === 'flush') {
+            if (entry.socket && entry.socket.readyState === WebSocket.OPEN) {
+              while (entry.pending.length > 0) {
+                const payload = entry.pending.shift();
+                try {
+                  entry.socket.send(payload);
+                  report('sent', handle, { length: payload?.length || payload?.byteLength || 0 });
+                } catch (error) {
+                  entry.pending.unshift(payload);
+                  report('error', handle, { message: String(error?.message || error || 'flush failed') });
+                  break;
+                }
+              }
+            }
+            report('flushed', handle, { pending: entry.pending.length });
+            return;
+          }
+
+          if (message.type === 'close') {
+            try {
+              entry.closed = true;
+              entry.socket?.close();
+            } catch (error) {
+              report('error', handle, { message: String(error?.message || error || 'close failed') });
+            } finally {
+              sockets.delete(handle);
+            }
+          }
+        };
+      `;
+
+      const blob = new Blob([source], { type: 'text/javascript' });
+      const workerUrl = URL.createObjectURL(blob);
+      const worker = new Worker(workerUrl);
+      worker._browserSocketWorkerUrl = workerUrl;
+      return worker;
+    };
+
     const flushPendingSends = (socketHandle) => {
       const entry = browserSockets.get(socketHandle);
       if (!entry || entry.pendingSends.length === 0) {
@@ -228,127 +370,72 @@
     const browserSocketModule = {
       connect: (handle, url) => {
         const socketHandle = handle || nextBrowserSocketHandle++;
-        const socket = new WebSocket(url);
-        socket.binaryType = 'arraybuffer';
         const entry = {
-          socket,
-          queue: [],
-          pendingSends: [],
+          worker: createBrowserSocketWorker(),
           openNotified: false,
           closedNotified: false,
-          flushTimer: null
+          pendingSends: []
         };
-
-        void reportStatus('browser-socket-state-created', `${socketHandle}:${socket.readyState}:${socket.url}`);
-        entry.flushTimer = window.setInterval(() => {
-          flushPendingSends(socketHandle);
-        }, 25);
 
         browserSockets.set(socketHandle, entry);
 
-        const notifyOpen = () => {
-          if (entry.openNotified) {
-            flushPendingSends(socketHandle);
-            return;
+        entry.worker.onmessage = (event) => {
+          const message = event.data || {};
+          switch (message.type) {
+            case 'ready':
+              void reportStatus('browser-socket-worker-ready', String(socketHandle));
+              break;
+            case 'open':
+              if (!entry.openNotified) {
+                entry.openNotified = true;
+                void reportStatus('browser-socket-open-event', String(socketHandle));
+                callManagedBrowserSocket('OnOpen', socketHandle);
+              }
+              break;
+            case 'message':
+              callManagedBrowserSocket('OnMessage', socketHandle, message.bytes);
+              break;
+            case 'close':
+              if (!entry.closedNotified) {
+                entry.closedNotified = true;
+                void reportStatus('browser-socket-close-event', `${socketHandle}:${message.code || 0}:${message.reason || ''}:${message.clean || 'unclean'}`);
+                callManagedBrowserSocket('OnClose', socketHandle);
+              }
+              break;
+            case 'error':
+              void reportStatus('browser-socket-error-event', `${socketHandle}:${String(message.message || 'browser websocket error')}`);
+              callManagedBrowserSocket('OnError', socketHandle, String(message.message || 'browser websocket error'));
+              break;
+            case 'queued':
+              void reportStatus('browser-socket-send-queued', `${socketHandle}:${message.length || 0}`);
+              break;
+            case 'sent':
+              void reportStatus('browser-socket-send-flushed', `${socketHandle}:${message.length || 0}`);
+              break;
+            case 'flushed':
+              void reportStatus('browser-socket-flush-attempt', `${socketHandle}:${message.pending || 0}`);
+              break;
           }
-
-          entry.openNotified = true;
-          void reportStatus('browser-socket-open-event', String(socketHandle));
-          callManagedBrowserSocket('OnOpen', socketHandle);
-          flushPendingSends(socketHandle);
+        };
+        entry.worker.onerror = (error) => {
+          void reportStatus('browser-socket-worker-error', `${socketHandle}:${String(error?.message || error || 'worker error')}`);
         };
 
-        const notifyClose = () => {
-          if (entry.closedNotified) {
-            return;
-          }
-
-          entry.closedNotified = true;
-          if (entry.flushTimer !== null) {
-            window.clearInterval(entry.flushTimer);
-            entry.flushTimer = null;
-          }
-          callManagedBrowserSocket('OnClose', socketHandle);
-        };
-
-        socket.addEventListener('message', async (event) => {
-          const entry = browserSockets.get(socketHandle);
-          if (!entry) {
-            return;
-          }
-
-          try {
-            const bytes = event.data instanceof ArrayBuffer
-              ? new Uint8Array(event.data)
-              : new Uint8Array(await event.data.arrayBuffer());
-            entry.queue.push(bytes);
-            callManagedBrowserSocket('OnMessage', socketHandle, bytes);
-          } catch (error) {
-            console.error(`browser websocket message decode failed for ${url}`, error);
-          }
-        });
-
-        socket.addEventListener('close', (event) => {
-          const entry = browserSockets.get(socketHandle);
-          if (entry) {
-            entry.closed = true;
-          }
-          if (entry?.flushTimer !== null) {
-            window.clearInterval(entry.flushTimer);
-            entry.flushTimer = null;
-          }
-          void reportStatus('browser-socket-close-event', `${socketHandle}:${event.code}:${event.reason || ''}:${event.wasClean ? 'clean' : 'unclean'}`);
-          notifyClose();
-        });
-
-        socket.addEventListener('error', (error) => {
-          console.error(`browser websocket error for ${url}`, error);
-          if (entry.flushTimer !== null) {
-            window.clearInterval(entry.flushTimer);
-            entry.flushTimer = null;
-          }
-          void reportStatus('browser-socket-error-event', `${socketHandle}:${String(error?.message || error || 'browser websocket error')}`);
-          callManagedBrowserSocket('OnError', socketHandle, String(error?.message || error || 'browser websocket error'));
-        });
-
-        socket.addEventListener('open', () => {
-          void reportStatus('browser-socket-open-dom', `${socketHandle}:${socket.readyState}`);
-          notifyOpen();
-        });
-
-        if (!entry.openNotified && !entry.closedNotified) {
-          void reportStatus('browser-socket-open-probe', `${socketHandle}:${socket.readyState}`);
-        }
-
+        void reportStatus('browser-socket-state-created', `${socketHandle}:worker:${url}`);
+        entry.worker.postMessage({ type: 'connect', handle: socketHandle, url });
         return socketHandle;
       },
       send: (handle, bytes, count) => {
-          const entry = browserSockets.get(handle);
-          if (!entry) {
-            throw new Error(`browser websocket handle ${handle} not found`);
-          }
+        const entry = browserSockets.get(handle);
+        if (!entry) {
+          throw new Error(`browser websocket handle ${handle} not found`);
+        }
 
-          const payload = bytes instanceof Uint8Array ? bytes.subarray(0, count) : new Uint8Array(bytes).subarray(0, count);
-          const copy = payload.slice();
-          void reportStatus('browser-socket-send-called', `${handle}:${copy.length}:${entry.socket.readyState}:${entry.openNotified ? 'openNotified' : 'notifiedPending'}`);
-
-          if (entry.socket.readyState === WebSocket.OPEN) {
-            entry.socket.send(copy);
-            void reportStatus('browser-socket-send-flushed', `${handle}:${copy.length}`);
-            return;
-          }
-
-          if (entry.socket.readyState === WebSocket.CONNECTING) {
-            entry.pendingSends.push(copy);
-            void reportStatus('browser-socket-send-queued', `${handle}:${copy.length}`);
-            return;
-          }
-
-          if (entry.openNotified) {
-            flushPendingSends(handle);
-          }
-          throw new Error(`browser websocket is not open for handle ${handle}`);
-        },
+        const payload = bytes instanceof Uint8Array ? bytes.subarray(0, count) : new Uint8Array(bytes).subarray(0, count);
+        const copy = payload.slice();
+        void reportStatus('browser-socket-send-called', `${handle}:${copy.length}:${entry.openNotified ? 'openNotified' : 'pending'}`);
+        entry.worker.postMessage({ type: 'send', handle, bytes: copy, count: copy.length }, [copy.buffer]);
+      },
       receive: (handle) => {
         const entry = browserSockets.get(handle);
         if (!entry || entry.queue.length === 0) {
@@ -364,11 +451,11 @@
         }
 
         try {
-          if (entry.flushTimer !== null) {
-            window.clearInterval(entry.flushTimer);
-            entry.flushTimer = null;
+          entry.worker.postMessage({ type: 'close', handle });
+          entry.worker.terminate();
+          if (entry.worker._browserSocketWorkerUrl) {
+            URL.revokeObjectURL(entry.worker._browserSocketWorkerUrl);
           }
-          entry.socket.close();
         } catch (error) {
           console.warn(`browser websocket close failed for handle ${handle}`, error);
         } finally {
@@ -381,12 +468,17 @@
           return 0;
         }
 
-        flushPendingSends(handle);
-        return entry.pendingSends.length;
+        entry.worker.postMessage({ type: 'flush', handle });
+        return 0;
       },
       isOpen: (handle) => {
         const entry = browserSockets.get(handle);
-        return !!entry && !entry.closedNotified && entry.socket.readyState === WebSocket.OPEN;
+        const isOpen = !!entry && !entry.closedNotified && entry.openNotified;
+        void reportStatus('browser-socket-isopen-call', `${handle}:${isOpen ? 'open' : 'pending'}`);
+        if (isOpen) {
+          void reportStatus('browser-socket-isopen-true', String(handle));
+        }
+        return isOpen;
       },
       proxyReady: (handle) => {
         const entry = browserSockets.get(handle);

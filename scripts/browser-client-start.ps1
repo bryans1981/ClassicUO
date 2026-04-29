@@ -6,6 +6,7 @@ param(
     [string]$LoginUsername = "",
     [string]$LoginPassword = "",
     [switch]$OpenBrowser,
+    [switch]$Headless,
     [string]$BrowserPath = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
     [switch]$KeepBrowserOpen
 )
@@ -131,6 +132,9 @@ function Start-BrowserWindow {
     New-Item -ItemType Directory -Force -Path $browserProfilePath | Out-Null
 
     $browserArguments = "--new-window --no-first-run --no-default-browser-check --disable-features=ChromeWhatsNewUI --disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows --user-data-dir=`"$browserProfilePath`""
+    if ($Headless) {
+        $browserArguments = "--headless=new --disable-gpu --window-size=1280,720 --no-first-run --no-default-browser-check --disable-features=ChromeWhatsNewUI --disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows --user-data-dir=`"$browserProfilePath`""
+    }
     $browserArguments += " `"$TargetUrl`""
 
     $browserStartProcess = @{
@@ -146,6 +150,11 @@ function Start-BrowserWindow {
     Write-Host "Browser client window URL: $TargetUrl"
 
     try {
+        if ($Headless) {
+            Write-Host "Browser client is running headless."
+            return
+        }
+
         Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;

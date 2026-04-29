@@ -300,6 +300,8 @@ Current status:
 - The repo-owned browser launcher closes any previously managed browser window before starting a new test session.
 - The next step is a transport decision, not another timing-only tweak.
 - If a publish build fails with linker OOM, recover the build path first, then resume from the current runtime cut point.
+- The latest worker-backed and headless browser runs still did not surface reliable browser open or timer callbacks, even though the proxy kept the browser websocket open and the managed client reached `browser-ws-connected`.
+- The next investigation should focus on the browser runtime execution environment itself, especially timer and worker behavior in this harness, before adding more socket-side retries.
 
 ## Deferred Side Work
 

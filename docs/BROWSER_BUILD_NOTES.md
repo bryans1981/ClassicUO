@@ -347,3 +347,5 @@ The local browser spike now also has an optional test websocket proxy in `tools/
 - The repo-owned browser launcher now closes any previously managed browser window before starting a new test session.
 - The current next step is a transport decision, not more timing tweaks.
 - If a publish run hits linker OOM again, recover the browser build path first, then resume the runtime probe from the current cut point.
+- The latest experiment kept the proxy open and the managed client connected, but the browser page still never emitted reliable open/timer callbacks even after trying immediate connect, delayed connect, headless launch, and a worker-backed socket bridge.
+- The next investigation should focus on the browser runtime environment itself, especially timer/worker execution in this harness, before adding more socket-side retries.

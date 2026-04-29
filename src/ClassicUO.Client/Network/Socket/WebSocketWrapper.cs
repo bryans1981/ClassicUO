@@ -147,10 +147,8 @@ sealed class WebSocketWrapper : SocketWrapper
                 await ConnectBrowserSocketAsync(uri);
                 if (_browserSocketHandle != 0)
                 {
-                    await WaitForBrowserProxyReadyAsync(_browserSocketHandle, _tokenSource.Token);
-                    await WaitForBrowserSocketOpenAsync(_browserSocketHandle, _tokenSource.Token);
+                    BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "proxy-ready");
                     _browserSocketConnected = true;
-                    BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
                     BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
                     InvokeOnConnected();
                     _receiveTask = StartBrowserReceiveAsync();
@@ -406,22 +404,6 @@ sealed class WebSocketWrapper : SocketWrapper
             }
 
             await Task.Delay(100, cancellationToken);
-        }
-    }
-
-    private async Task WaitForBrowserSocketOpenAsync(int handle, CancellationToken cancellationToken)
-    {
-        BrowserRuntimeStatusReporter.Report("browser-ws-wait-open", handle.ToString());
-
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            if (BrowserWebSocketInterop.IsOpen(handle))
-            {
-                BrowserRuntimeStatusReporter.Report("browser-ws-open", handle.ToString());
-                return;
-            }
-
-            await Task.Delay(50, cancellationToken);
         }
     }
 

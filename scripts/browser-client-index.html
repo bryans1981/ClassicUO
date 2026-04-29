@@ -73,6 +73,7 @@
     const debugTrace = new URLSearchParams(location.search).has('debug') || localStorage.getItem('classicuo-browser-debug') === '1';
     const assetManifestUrl = './uo-manifest.json';
     const browserLoginUrl = './browser-login.json';
+    const browserProxyReadyUrl = './browser-proxy-ready.json';
     const assetRoot = '/uo';
     let assetPaths = [];
     let browserLoginJson = '';
@@ -180,54 +181,34 @@
       }
     };
 
-      const browserSockets = new Map();
-      let nextBrowserSocketHandle = 1;
-      let managedBrowserSocketExports = null;
+    const browserSockets = new Map();
+    let nextBrowserSocketHandle = 1;
+    let managedBrowserSocketExports = null;
 
-      const schedulePendingFlush = (socketHandle) => {
-        const entry = browserSockets.get(socketHandle);
-        if (!entry || entry.closedNotified || entry.pendingFlushTimer !== null) {
-          return;
+    const flushPendingSends = (socketHandle) => {
+      const entry = browserSockets.get(socketHandle);
+      if (!entry || entry.pendingSends.length === 0) {
+        return;
+      }
+
+      void reportStatus('browser-socket-flush-attempt', `${socketHandle}:${entry.socket.readyState}:${entry.pendingSends.length}`);
+
+      if (entry.socket.readyState !== WebSocket.OPEN) {
+        return;
+      }
+
+      while (entry.pendingSends.length > 0) {
+        const payload = entry.pendingSends.shift();
+        try {
+          entry.socket.send(payload);
+          void reportStatus('browser-socket-send-flushed', `${socketHandle}:${payload.length}`);
+        } catch (error) {
+          entry.pendingSends.unshift(payload);
+          void reportStatus('browser-socket-send-retry', `${socketHandle}:${String(error?.message || error || 'send failed')}`);
+          break;
         }
-
-        queueMicrotask(() => {
-          const currentEntry = browserSockets.get(socketHandle);
-          if (!currentEntry || currentEntry.closedNotified || currentEntry.pendingFlushTimer === null) {
-            return;
-          }
-
-          window.clearTimeout(currentEntry.pendingFlushTimer);
-          currentEntry.pendingFlushTimer = null;
-          flushPendingSends(socketHandle);
-        });
-
-        entry.pendingFlushTimer = window.setTimeout(() => {
-          entry.pendingFlushTimer = null;
-          flushPendingSends(socketHandle);
-        }, 25);
-      };
-
-      const flushPendingSends = (socketHandle) => {
-        const entry = browserSockets.get(socketHandle);
-        if (!entry || entry.pendingSends.length === 0) {
-          return;
-        }
-
-        void reportStatus('browser-socket-flush-attempt', `${socketHandle}:${entry.socket.readyState}:${entry.pendingSends.length}`);
-
-        while (entry.pendingSends.length > 0) {
-          const payload = entry.pendingSends.shift();
-          try {
-            entry.socket.send(payload);
-            void reportStatus('browser-socket-send-flushed', `${socketHandle}:${payload.length}`);
-          } catch (error) {
-            entry.pendingSends.unshift(payload);
-            void reportStatus('browser-socket-send-retry', `${socketHandle}:${String(error?.message || error || 'send failed')}`);
-            schedulePendingFlush(socketHandle);
-            break;
-          }
-        }
-      };
+      }
+    };
 
     const callManagedBrowserSocket = (method, ...args) => {
       const bridge = managedBrowserSocketExports?.ClassicUO?.Network?.Socket?.BrowserWebSocketInterop;
@@ -249,33 +230,19 @@
         const socketHandle = handle || nextBrowserSocketHandle++;
         const socket = new WebSocket(url);
         socket.binaryType = 'arraybuffer';
-        let lastReadyState = socket.readyState;
-        let rafPollActive = true;
-        let openFallback = null;
-        let stateHeartbeat = null;
         const entry = {
           socket,
           queue: [],
           pendingSends: [],
           openNotified: false,
           closedNotified: false,
-          pendingFlushTimer: null
+          flushTimer: null
         };
 
         void reportStatus('browser-socket-state-created', `${socketHandle}:${socket.readyState}:${socket.url}`);
-        window.setTimeout(() => {
-          void reportStatus('browser-socket-state-delay-250', `${socketHandle}:${socket.readyState}:${socket.bufferedAmount}`);
-        }, 250);
-        window.setTimeout(() => {
-          void reportStatus('browser-socket-state-delay-1000', `${socketHandle}:${socket.readyState}:${socket.bufferedAmount}`);
-        }, 1000);
-        window.setTimeout(() => {
-          void reportStatus('browser-socket-state-delay-3000', `${socketHandle}:${socket.readyState}:${socket.bufferedAmount}`);
-        }, 3000);
-
-        stateHeartbeat = window.setInterval(() => {
-          void reportStatus('browser-socket-state-heartbeat', `${socketHandle}:${socket.readyState}:${socket.bufferedAmount}`);
-        }, 1000);
+        entry.flushTimer = window.setInterval(() => {
+          flushPendingSends(socketHandle);
+        }, 25);
 
         browserSockets.set(socketHandle, entry);
 
@@ -286,18 +253,6 @@
           }
 
           entry.openNotified = true;
-          if (openFallback !== null) {
-            window.clearTimeout(openFallback);
-            openFallback = null;
-          }
-          if (stateHeartbeat !== null) {
-            window.clearInterval(stateHeartbeat);
-            stateHeartbeat = null;
-          }
-          if (entry.pendingFlushTimer !== null) {
-            window.clearTimeout(entry.pendingFlushTimer);
-            entry.pendingFlushTimer = null;
-          }
           void reportStatus('browser-socket-open-event', String(socketHandle));
           callManagedBrowserSocket('OnOpen', socketHandle);
           flushPendingSends(socketHandle);
@@ -309,89 +264,12 @@
           }
 
           entry.closedNotified = true;
+          if (entry.flushTimer !== null) {
+            window.clearInterval(entry.flushTimer);
+            entry.flushTimer = null;
+          }
           callManagedBrowserSocket('OnClose', socketHandle);
         };
-
-        const openChannel = new MessageChannel();
-        const pollOpenViaChannel = () => {
-          if (entry.openNotified || entry.closedNotified) {
-            return;
-          }
-
-          if (socket.readyState !== lastReadyState) {
-            lastReadyState = socket.readyState;
-            void reportStatus('browser-socket-readystate', `${socketHandle}:${socket.readyState}`);
-          }
-
-          if (socket.readyState === WebSocket.OPEN) {
-            void reportStatus('browser-socket-open-channel', String(socketHandle));
-            notifyOpen();
-            return;
-          }
-
-          if (socket.readyState === WebSocket.CLOSED) {
-            notifyClose();
-            return;
-          }
-
-          openChannel.port2.postMessage(0);
-        };
-        openChannel.port1.onmessage = pollOpenViaChannel;
-        openChannel.port2.postMessage(0);
-
-        const openPoll = window.setInterval(() => {
-          if (socket.readyState !== lastReadyState) {
-            lastReadyState = socket.readyState;
-            void reportStatus('browser-socket-readystate', `${socketHandle}:${socket.readyState}`);
-          }
-
-          if (socket.readyState === WebSocket.OPEN) {
-            void reportStatus('browser-socket-open-poll', String(socketHandle));
-            window.clearInterval(openPoll);
-            notifyOpen();
-          } else if (socket.readyState === WebSocket.CLOSED) {
-            window.clearInterval(openPoll);
-            notifyClose();
-          }
-        }, 25);
-
-        openFallback = window.setTimeout(() => {
-          if (entry.openNotified || entry.closedNotified) {
-            return;
-          }
-
-          if (socket.readyState === WebSocket.CONNECTING) {
-            void reportStatus('browser-socket-open-fallback', `${socketHandle}:${socket.readyState}`);
-          }
-        }, 250);
-
-        const rafPoll = () => {
-          if (!rafPollActive) {
-            return;
-          }
-
-          if (socket.readyState !== lastReadyState) {
-            lastReadyState = socket.readyState;
-            void reportStatus('browser-socket-readystate', `${socketHandle}:${socket.readyState}`);
-          }
-
-          if (socket.readyState === WebSocket.OPEN) {
-            void reportStatus('browser-socket-open-raf', String(socketHandle));
-            rafPollActive = false;
-            notifyOpen();
-            return;
-          }
-
-          if (socket.readyState === WebSocket.CLOSED) {
-            rafPollActive = false;
-            notifyClose();
-            return;
-          }
-
-          window.requestAnimationFrame(rafPoll);
-        };
-
-        window.requestAnimationFrame(rafPoll);
 
         socket.addEventListener('message', async (event) => {
           const entry = browserSockets.get(socketHandle);
@@ -415,33 +293,19 @@
           if (entry) {
             entry.closed = true;
           }
-          if (openFallback !== null) {
-            window.clearTimeout(openFallback);
-            openFallback = null;
+          if (entry?.flushTimer !== null) {
+            window.clearInterval(entry.flushTimer);
+            entry.flushTimer = null;
           }
-          if (entry?.pendingFlushTimer !== null) {
-            window.clearTimeout(entry.pendingFlushTimer);
-            entry.pendingFlushTimer = null;
-          }
-          window.clearInterval(openPoll);
-          rafPollActive = false;
           void reportStatus('browser-socket-close-event', `${socketHandle}:${event.code}:${event.reason || ''}:${event.wasClean ? 'clean' : 'unclean'}`);
           notifyClose();
         });
 
         socket.addEventListener('error', (error) => {
           console.error(`browser websocket error for ${url}`, error);
-          if (openFallback !== null) {
-            window.clearTimeout(openFallback);
-            openFallback = null;
-          }
-          if (stateHeartbeat !== null) {
-            window.clearInterval(stateHeartbeat);
-            stateHeartbeat = null;
-          }
-          if (entry.pendingFlushTimer !== null) {
-            window.clearTimeout(entry.pendingFlushTimer);
-            entry.pendingFlushTimer = null;
+          if (entry.flushTimer !== null) {
+            window.clearInterval(entry.flushTimer);
+            entry.flushTimer = null;
           }
           void reportStatus('browser-socket-error-event', `${socketHandle}:${String(error?.message || error || 'browser websocket error')}`);
           callManagedBrowserSocket('OnError', socketHandle, String(error?.message || error || 'browser websocket error'));
@@ -449,20 +313,6 @@
 
         socket.addEventListener('open', () => {
           void reportStatus('browser-socket-open-dom', `${socketHandle}:${socket.readyState}`);
-          if (openFallback !== null) {
-            window.clearTimeout(openFallback);
-            openFallback = null;
-          }
-          if (stateHeartbeat !== null) {
-            window.clearInterval(stateHeartbeat);
-            stateHeartbeat = null;
-          }
-          if (entry.pendingFlushTimer !== null) {
-            window.clearTimeout(entry.pendingFlushTimer);
-            entry.pendingFlushTimer = null;
-          }
-          window.clearInterval(openPoll);
-          rafPollActive = false;
           notifyOpen();
         });
 
@@ -472,7 +322,7 @@
 
         return socketHandle;
       },
-        send: (handle, bytes, count) => {
+      send: (handle, bytes, count) => {
           const entry = browserSockets.get(handle);
           if (!entry) {
             throw new Error(`browser websocket handle ${handle} not found`);
@@ -491,15 +341,12 @@
           if (entry.socket.readyState === WebSocket.CONNECTING) {
             entry.pendingSends.push(copy);
             void reportStatus('browser-socket-send-queued', `${handle}:${copy.length}`);
-            if (entry.openNotified) {
-              flushPendingSends(handle);
-            } else {
-              schedulePendingFlush(handle);
-            }
             return;
           }
 
-          schedulePendingFlush(handle);
+          if (entry.openNotified) {
+            flushPendingSends(handle);
+          }
           throw new Error(`browser websocket is not open for handle ${handle}`);
         },
       receive: (handle) => {
@@ -517,6 +364,10 @@
         }
 
         try {
+          if (entry.flushTimer !== null) {
+            window.clearInterval(entry.flushTimer);
+            entry.flushTimer = null;
+          }
           entry.socket.close();
         } catch (error) {
           console.warn(`browser websocket close failed for handle ${handle}`, error);
@@ -524,9 +375,43 @@
           browserSockets.delete(handle);
         }
       },
+      flushPending: (handle) => {
+        const entry = browserSockets.get(handle);
+        if (!entry) {
+          return 0;
+        }
+
+        flushPendingSends(handle);
+        return entry.pendingSends.length;
+      },
       isOpen: (handle) => {
         const entry = browserSockets.get(handle);
         return !!entry && !entry.closedNotified && entry.socket.readyState === WebSocket.OPEN;
+      },
+      proxyReady: (handle) => {
+        const entry = browserSockets.get(handle);
+        if (!entry || entry.closedNotified) {
+          return false;
+        }
+
+        void reportStatus('browser-socket-proxy-ready-call', String(handle));
+        try {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', `${browserProxyReadyUrl}?t=${Date.now()}`, false);
+          xhr.send(null);
+
+          if (xhr.status < 200 || xhr.status >= 300) {
+            void reportStatus('browser-socket-proxy-ready-return', `${handle}:${xhr.status}`);
+            return false;
+          }
+
+          const readyState = JSON.parse(xhr.responseText || 'null');
+          void reportStatus('browser-socket-proxy-ready-return', `${handle}:${readyState?.connected === true ? 'connected' : 'waiting'}`);
+          return readyState?.connected === true;
+        } catch {
+          void reportStatus('browser-socket-proxy-ready-return', `${handle}:error`);
+          return false;
+        }
       }
     };
 

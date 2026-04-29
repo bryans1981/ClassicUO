@@ -145,7 +145,21 @@ sealed class WebSocketWrapper : SocketWrapper
             if (PlatformHelper.IsBrowser)
             {
                 await ConnectBrowserSocketAsync(uri);
-                BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", _browserSocketHandle != 0 ? "pending-open" : "pending");
+                if (_browserSocketHandle != 0)
+                {
+                    await WaitForBrowserProxyReadyAsync(_browserSocketHandle, _tokenSource.Token);
+                    await WaitForBrowserSocketOpenAsync(_browserSocketHandle, _tokenSource.Token);
+                    _browserSocketConnected = true;
+                    BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
+                    BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
+                    InvokeOnConnected();
+                    _receiveTask = StartBrowserReceiveAsync();
+                }
+                else
+                {
+                    BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "pending");
+                    InvokeOnError(SocketError.NotConnected);
+                }
                 return;
             }
             else
@@ -379,6 +393,38 @@ sealed class WebSocketWrapper : SocketWrapper
         }
     }
 
+    private async Task WaitForBrowserProxyReadyAsync(int handle, CancellationToken cancellationToken)
+    {
+        BrowserRuntimeStatusReporter.Report("browser-ws-wait-proxy-ready", handle.ToString());
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (BrowserWebSocketInterop.ProxyReady(handle))
+            {
+                BrowserRuntimeStatusReporter.Report("browser-ws-proxy-ready", handle.ToString());
+                return;
+            }
+
+            await Task.Delay(100, cancellationToken);
+        }
+    }
+
+    private async Task WaitForBrowserSocketOpenAsync(int handle, CancellationToken cancellationToken)
+    {
+        BrowserRuntimeStatusReporter.Report("browser-ws-wait-open", handle.ToString());
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (BrowserWebSocketInterop.IsOpen(handle))
+            {
+                BrowserRuntimeStatusReporter.Report("browser-ws-open", handle.ToString());
+                return;
+            }
+
+            await Task.Delay(50, cancellationToken);
+        }
+    }
+
     private async Task ConnectBrowserSocketAsync(Uri uri)
     {
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-async", uri.ToString());
@@ -386,37 +432,6 @@ sealed class WebSocketWrapper : SocketWrapper
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-handle", _browserSocketHandle.ToString());
         BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "pending-open");
         BrowserRuntimeStatusReporter.Report("browser-ws-await-open", _browserSocketHandle.ToString());
-
-        var handle = _browserSocketHandle;
-
-        void PollOpen()
-        {
-            if (_browserSocketHandle != handle || _tokenSource.IsCancellationRequested)
-            {
-                return;
-            }
-
-            if (BrowserWebSocketInterop.IsClosed(handle))
-            {
-                BrowserRuntimeStatusReporter.Report("browser-ws-connect-closed", handle.ToString());
-                return;
-            }
-
-            if (!BrowserWebSocketInterop.IsOpen(handle))
-            {
-                BrowserRuntimeStatusReporter.Report("browser-ws-await-open-poll", handle.ToString());
-                Client.Game.EnqueueAction(100, PollOpen);
-                return;
-            }
-
-            _browserSocketConnected = true;
-            BrowserRuntimeStatusReporter.Report("browser-ws-connect-state", "connected");
-            BrowserRuntimeStatusReporter.Report("browser-ws-connected", uri.ToString());
-            InvokeOnConnected();
-            _receiveTask = StartBrowserReceiveAsync();
-        }
-
-        Client.Game.EnqueueAction(100, PollOpen);
         await Task.CompletedTask;
     }
 

@@ -1,4 +1,6 @@
 import net from 'node:net';
+import fs from 'node:fs';
+import path from 'node:path';
 import ws from 'ws';
 
 const { Server: WebSocketServer } = ws;
@@ -6,6 +8,8 @@ const { Server: WebSocketServer } = ws;
 const args = process.argv.slice(2);
 const targetIndex = args.indexOf('--target');
 const target = targetIndex >= 0 && args[targetIndex + 1] ? args[targetIndex + 1] : '127.0.0.1:2593';
+const readyFileIndex = args.indexOf('--ready-file');
+const readyFile = readyFileIndex >= 0 && args[readyFileIndex + 1] ? args[readyFileIndex + 1] : '';
 const [targetHost, targetPortRaw] = target.split(':');
 const targetPort = Number.parseInt(targetPortRaw || '2593', 10);
 const sourceHost = '127.0.0.1';
@@ -14,6 +18,42 @@ const sourcePort = 2594;
 if (!targetHost || Number.isNaN(targetPort)) {
   throw new Error(`Invalid --target value: ${target}`);
 }
+
+const clearReadyFile = () => {
+  if (!readyFile) {
+    return;
+  }
+
+  try {
+    if (fs.existsSync(readyFile)) {
+      fs.unlinkSync(readyFile);
+    }
+  } catch (error) {
+    console.warn(`failed to remove ready marker ${readyFile}: ${error?.message || error}`);
+  }
+};
+
+const writeReadyFile = (payload) => {
+  if (!readyFile) {
+    return;
+  }
+
+  try {
+    fs.mkdirSync(path.dirname(readyFile), { recursive: true });
+    fs.writeFileSync(readyFile, JSON.stringify(payload, null, 2));
+    console.log(`ready marker written ${readyFile}`);
+  } catch (error) {
+    console.error(`failed to write ready marker ${readyFile}: ${error?.message || error}`);
+  }
+};
+
+clearReadyFile();
+writeReadyFile({
+  connected: false,
+  browserAddress: '',
+  target,
+  timestamp: new Date().toISOString()
+});
 
 const server = new WebSocketServer({
   host: sourceHost,
@@ -26,6 +66,12 @@ console.log(`proxying from ${sourceHost}:${sourcePort} to ${targetHost}:${target
 server.on('connection', (browserSocket, request) => {
   const browserAddress = request.socket.remoteAddress || 'unknown';
   console.log(`browser websocket open from ${browserAddress}`);
+  writeReadyFile({
+    connected: true,
+    browserAddress,
+    target,
+    timestamp: new Date().toISOString()
+  });
 
   let targetSocket = null;
   let upstreamConnected = false;

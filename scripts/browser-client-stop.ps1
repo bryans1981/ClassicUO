@@ -9,6 +9,7 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 $proxyPidFile = Join-Path $repoRoot "tools\ws\.wsproxy.pid"
 $pidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-server.pid"
 $browserPidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-browser.pid"
+$proxyReadyFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\AppBundle\browser-proxy-ready.json"
 
 if (-not (Test-Path $pidFile)) {
     Write-Host "No browser client server PID file found."
@@ -53,4 +54,8 @@ if (Test-Path $browserPidFile) {
     }
 
     Remove-Item -LiteralPath $browserPidFile -Force -ErrorAction SilentlyContinue
+}
+
+if (Test-Path $proxyReadyFile) {
+    Remove-Item -LiteralPath $proxyReadyFile -Force -ErrorAction SilentlyContinue
 }

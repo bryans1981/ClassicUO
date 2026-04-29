@@ -31,6 +31,12 @@ internal static partial class BrowserWebSocketInterop
     [JSImport("isOpen", "classicuo.browser-socket")]
     internal static partial bool IsOpen(int handle);
 
+    [JSImport("proxyReady", "classicuo.browser-socket")]
+    internal static partial bool ProxyReady(int handle);
+
+    [JSImport("flushPending", "classicuo.browser-socket")]
+    internal static partial int FlushPending(int handle);
+
     internal static Task WaitForOpenAsync(int handle, CancellationToken cancellationToken)
     {
         return GetState(handle).Opened.Task.WaitAsync(cancellationToken);

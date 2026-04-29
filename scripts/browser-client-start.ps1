@@ -18,6 +18,7 @@ $proxyPidFile = Join-Path $repoRoot 'tools\ws\.wsproxy.pid'
 $pidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-server.pid"
 $browserPidFile = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\.browser-client-browser.pid"
 $bundlePath = Join-Path $repoRoot "bin\$Configuration\net10.0\browser-wasm\AppBundle"
+$proxyReadyFile = Join-Path $bundlePath 'browser-proxy-ready.json'
 $browserLoginPath = Join-Path $bundlePath "browser-login.json"
 $browserLoginAssetPath = Join-Path $bundlePath "uo\browser-login.json"
 $serverAlreadyRunning = $false
@@ -144,6 +145,40 @@ function Start-BrowserWindow {
     Write-Host "Browser client window PID: $($browserProc.Id)"
     Write-Host "Browser client window URL: $TargetUrl"
 
+    try {
+        Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+
+public static class ClassicUOBrowserWindowNative
+{
+    [DllImport("user32.dll")]
+    public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    public static extern bool SetForegroundWindow(IntPtr hWnd);
+}
+"@ -ErrorAction SilentlyContinue
+
+        $windowHandle = [IntPtr]::Zero
+        $windowDeadline = [DateTime]::UtcNow.AddSeconds(10)
+        while ($windowHandle -eq [IntPtr]::Zero -and [DateTime]::UtcNow -lt $windowDeadline) {
+            Start-Sleep -Milliseconds 250
+            $browserProc.Refresh()
+            $windowHandle = $browserProc.MainWindowHandle
+        }
+
+        if ($windowHandle -ne [IntPtr]::Zero) {
+            [ClassicUOBrowserWindowNative]::ShowWindowAsync($windowHandle, 5) | Out-Null
+            [ClassicUOBrowserWindowNative]::SetForegroundWindow($windowHandle) | Out-Null
+            Write-Host "Browser client window foreground request sent."
+        } else {
+            Write-Host "Browser client window handle was not available for foregrounding."
+        }
+    } catch {
+        Write-Host "Browser client window foreground request failed: $($_.Exception.Message)"
+    }
+
     if (-not $PreserveBrowserOpen) {
         Write-Host "Browser client window will be closed by scripts/browser-client-stop.ps1."
     }
@@ -204,7 +239,9 @@ if (Test-Path $proxyPidFile) {
 
 if (-not (Test-Path $proxyPidFile) -and $proxyNode -and (Test-Path (Join-Path $proxyProjectRoot 'node_modules'))) {
     Remove-Item -LiteralPath $proxyStdoutLog, $proxyStderrLog -Force -ErrorAction SilentlyContinue
-    $proxyProc = Start-Process node -ArgumentList @('proxy.mjs', '--target', $ProxyTarget) -WorkingDirectory $proxyProjectRoot -PassThru -RedirectStandardOutput $proxyStdoutLog -RedirectStandardError $proxyStderrLog
+    Remove-Item -LiteralPath $proxyReadyFile -Force -ErrorAction SilentlyContinue
+    $proxyArguments = "proxy.mjs --target $ProxyTarget --ready-file `"$proxyReadyFile`""
+    $proxyProc = Start-Process node -ArgumentList $proxyArguments -WorkingDirectory $proxyProjectRoot -PassThru -RedirectStandardOutput $proxyStdoutLog -RedirectStandardError $proxyStderrLog
     $proxyProc.Id | Set-Content $proxyPidFile
     Write-Host "Local websocket proxy URL: ws://127.0.0.1:2594"
     Write-Host "Local websocket proxy target: $ProxyTarget"

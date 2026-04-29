@@ -152,6 +152,11 @@ Current status:
 
 - transport foundations are proven
 - product login/session flow still needs to be completed
+- browser-ready marker polling is now wired through `browser-proxy-ready.json`
+- the proxy-ready file path argument must remain quoted because the repo root contains spaces
+- latest validation shows the proxy comes up and the ready file flips to `connected:true`, but the browser WebSocket still remains in `CONNECTING` when the first packet is sent, so the packet queues instead of reaching the relay target
+- the current run also adds a managed `browser-ws-wait-open` gate and a launcher foreground request, but the browser-side `open` event still does not arrive before the first login send
+- next validation step is to resolve the browser event/open transition so the queued login packet can flush
 
 ### Milestone 5: Asset Loading and Runtime Data
 
@@ -317,4 +322,4 @@ When choosing the next task:
 
 ## Progress Summary
 
-The project is past browser bootstrap, local serving, native renderer linking, browser asset staging, and managed startup telemetry. The active critical path is now browser transport readiness for login, then managed session flow, input, gameplay, and persistence.
+The project is past browser bootstrap, local serving, native renderer linking, browser asset staging, and managed startup telemetry. The active critical path is still browser transport readiness for login, but the latest run shows the proxy accepting the browser websocket while the managed delayed-connect callback never reaches `browser-ws-connected`. The next steps remain managed session flow, input, gameplay, and persistence once that transport gap is closed.

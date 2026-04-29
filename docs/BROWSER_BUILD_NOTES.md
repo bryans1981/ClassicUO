@@ -37,6 +37,10 @@ Latest local Chrome headless result:
 - The remaining work is now proving the full main-client gameplay path in browser mode, not just asset visibility or browser-safe file loading.
 - Test account for repeated login validation: `bryanstest` (password provided separately during test runs).
 - Managed browser telemetry now posts back through the host log via the browser console bridge. The latest live boot reaches `browser-startup` and `browser-bootstrap` before entering the long asset hydration phase.
+- The proxy readiness marker is now a real JSON file in `bin/Release/net10.0/browser-wasm/AppBundle/browser-proxy-ready.json`, and the browser runtime can read it back through the `proxyReady()` bridge.
+- The `--ready-file` proxy argument had to be quoted because the repo path contains spaces. Without that, the proxy wrote `D:\Git` instead of the full ready marker path.
+- Current blocker after the proxy-ready fix: the browser socket still reports `CONNECTING` when the first login packet is sent, so the packet is queued even though the proxy is already open. That looks like a browser-session focus/timing issue in the active test environment rather than another ready-file wiring bug.
+- Latest validation also added a browser-open wait gate and a launcher foreground request, but the browser-side `open` event still has not arrived before the first login send. The relay side is healthy; the remaining blocker is the browser event/open transition itself.
 
 Implication:
 
@@ -335,9 +339,9 @@ The local browser spike now also has an optional test websocket proxy in `tools/
 - The browser runtime now loads the staged login override successfully and schedules auto-connect with `bryanstest`.
 - The browser-side websocket connect no longer blocks on `Task.Wait()` in browser mode, which removed the `Cannot wait on monitors on this runtime` failure.
 - The browser websocket handshake now waits for a real open signal before the first login send instead of relying on a forced early open notification.
-- The local websocket proxy reaches `10.0.0.91:2593`, and the current blocker is browser-side transport timing: the first login packet still flushes while the browser websocket reports `CONNECTING`.
-- The latest poll-based handshake change still does not surface a usable browser-open state; the proxy sees the browser connection, but the managed side keeps polling `browser-ws-await-open-poll` without reaching `browser-ws-connected`.
-- I tested multiple deferred-connect windows on the browser side, including queued connect and connected callbacks, but the browser socket still did not reach a usable `OPEN` state before the first login packet flush.
+- The proxy still reaches the browser websocket open event, but the managed browser socket never reaches a durable usable-open state for login.
+- The latest delayed-connect attempt now records `browser-ws-connect-delay`, but the follow-up `browser-ws-connected` callback does not appear, so the client never moves into a real browser login session.
+- The browser socket still reports `CONNECTING` when the first login packet is queued, and the browser-side transport remains the active blocker.
 - Browser windows must be closed at the end of each test cycle so the session does not keep consuming local resources.
 - Keep browser usage to one or two open windows or tabs at most during testing.
 - The repo-owned browser launcher now closes any previously managed browser window before starting a new test session.
